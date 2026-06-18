@@ -1,0 +1,42 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Milesight CT103",
+	"protocolId": "lorawan",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "lorawan",
+		"gatewayId": "",
+		"region": "EU868",
+		"macVersion": "1.0.3",
+		"class": "A",
+		"activation": "otaa",
+		"devEui": "24E124CT10300000",
+		"joinEui": "A840410000000201",
+		"appKey": "5572404C696E6B4C6F52613230313823",
+		"nwkKey": "",
+		"devAddr": "",
+		"nwkSKey": "",
+		"appSKey": ""
+	},
+	"attributes": {
+		"manufacturer": "Milesight",
+		"model": "CT103"
+	},
+	"events": [
+		{
+			"id": "uplink",
+			"name": "Sensor data uplink",
+			"lorawan": {
+				"fport": 85,
+				"confirmed": false,
+				"payloadHex": "0397{{randInt(10000000,99999999)}}0498{{randInt(1000,9999)}}0967{{randInt(10000000,99999999)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 15,
+				"unit": "minutes"
+			}
+		}
+	]
+}

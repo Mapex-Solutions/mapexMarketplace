@@ -1,0 +1,47 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-am304l",
+	"model": "AM304L",
+	"name": {
+		"en-US": "AM304L Milesight LoRaWAN Sensor",
+		"pt-BR": "AM304L Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight AM304L — LoRaWAN (Class A) sensor that monitors CO₂, temperature, humidity, air quality, light and occupancy / motion. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the AM300 series.)",
+		"pt-BR": "Milesight AM304L — sensor LoRaWAN (Classe A) que monitora CO₂, temperatura, umidade, qualidade do ar, luminosidade e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série AM300.)"
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"co2",
+		"temperature",
+		"humidity",
+		"air_quality",
+		"light",
+		"motion"
+	],
+	"tags": [
+		"co2",
+		"temperature",
+		"humidity",
+		"air_quality",
+		"light",
+		"motion",
+		"milesight"
+	],
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": ""
+	},
+	"files": {
+		"datasheet": "",
+		"manual": "",
+		"datasheetUrl": "",
+		"manualUrl": ""
+	},
+	"collectedAt": "2026-06-18T20:26:09.342Z"
+}

@@ -1,0 +1,37 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-ct103",
+	"model": "CT103",
+	"name": {
+		"en-US": "CT103 Milesight LoRaWAN Sensor",
+		"pt-BR": "CT103 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight CT103 — LoRaWAN (Class A) sensor that monitors electrical current. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the CT10X series.)",
+		"pt-BR": "Milesight CT103 — sensor LoRaWAN (Classe A) que monitora corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série CT10X.)"
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"current"
+	],
+	"tags": [
+		"current",
+		"milesight"
+	],
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/ct10x-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/ct10x-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T20:26:09.342Z"
+}

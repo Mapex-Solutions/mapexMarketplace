@@ -1,0 +1,37 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-ts601",
+	"model": "TS601",
+	"name": {
+		"en-US": "TS601 Milesight LoRaWAN Sensor",
+		"pt-BR": "TS601 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight TS601 — LoRaWAN (Class A) sensor that monitors temperature. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the TS60X series.)",
+		"pt-BR": "Milesight TS601 — sensor LoRaWAN (Classe A) que monitora temperatura. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série TS60X.)"
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature"
+	],
+	"tags": [
+		"temperature",
+		"milesight"
+	],
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": ""
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/ts60x-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/ts60x-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T20:26:09.342Z"
+}

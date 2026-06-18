@@ -66,6 +66,222 @@
 			"hasManual": false
 		},
 		{
+			"id": "milesight-am304l",
+			"model": "AM304L",
+			"slug": "am304l",
+			"name": {
+				"en-US": "AM304L Milesight LoRaWAN Sensor",
+				"pt-BR": "AM304L Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight AM304L — LoRaWAN (Class A) sensor that monitors CO₂, temperature, humidity, air quality, light and occupancy / motion. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the AM300 series.)",
+				"pt-BR": "Milesight AM304L — sensor LoRaWAN (Classe A) que monitora CO₂, temperatura, umidade, qualidade do ar, luminosidade e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série AM300.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"co2",
+				"temperature",
+				"humidity",
+				"air_quality",
+				"light",
+				"motion"
+			],
+			"tags": [
+				"co2",
+				"temperature",
+				"humidity",
+				"air_quality",
+				"light",
+				"motion",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": true,
+			"hasManual": false
+		},
+		{
+			"id": "milesight-am305l",
+			"model": "AM305L",
+			"slug": "am305l",
+			"name": {
+				"en-US": "AM305L Milesight LoRaWAN Sensor",
+				"pt-BR": "AM305L Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight AM305L — LoRaWAN (Class A) sensor that monitors CO₂, temperature, humidity, air quality, light and occupancy / motion. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the AM300 series.)",
+				"pt-BR": "Milesight AM305L — sensor LoRaWAN (Classe A) que monitora CO₂, temperatura, umidade, qualidade do ar, luminosidade e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série AM300.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"co2",
+				"temperature",
+				"humidity",
+				"air_quality",
+				"light",
+				"motion"
+			],
+			"tags": [
+				"co2",
+				"temperature",
+				"humidity",
+				"air_quality",
+				"light",
+				"motion",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": true,
+			"hasManual": false
+		},
+		{
+			"id": "milesight-am307",
+			"model": "AM307",
+			"slug": "am307",
+			"name": {
+				"en-US": "AM307 Milesight LoRaWAN Sensor",
+				"pt-BR": "AM307 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight AM307 — LoRaWAN (Class A) sensor that monitors CO₂, temperature, humidity, air quality, light and occupancy / motion. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the AM300 series.)",
+				"pt-BR": "Milesight AM307 — sensor LoRaWAN (Classe A) que monitora CO₂, temperatura, umidade, qualidade do ar, luminosidade e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série AM300.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"co2",
+				"temperature",
+				"humidity",
+				"air_quality",
+				"light",
+				"motion"
+			],
+			"tags": [
+				"co2",
+				"temperature",
+				"humidity",
+				"air_quality",
+				"light",
+				"motion",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": true,
+			"hasManual": false
+		},
+		{
+			"id": "milesight-am307l",
+			"model": "AM307L",
+			"slug": "am307l",
+			"name": {
+				"en-US": "AM307L Milesight LoRaWAN Sensor",
+				"pt-BR": "AM307L Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight AM307L — LoRaWAN (Class A) sensor that monitors CO₂, temperature, humidity, air quality, light and occupancy / motion. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the AM300 series.)",
+				"pt-BR": "Milesight AM307L — sensor LoRaWAN (Classe A) que monitora CO₂, temperatura, umidade, qualidade do ar, luminosidade e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série AM300.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"co2",
+				"temperature",
+				"humidity",
+				"air_quality",
+				"light",
+				"motion"
+			],
+			"tags": [
+				"co2",
+				"temperature",
+				"humidity",
+				"air_quality",
+				"light",
+				"motion",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": true,
+			"hasManual": false
+		},
+		{
+			"id": "milesight-am308",
+			"model": "AM308",
+			"slug": "am308",
+			"name": {
+				"en-US": "AM308 Milesight LoRaWAN Sensor",
+				"pt-BR": "AM308 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight AM308 — LoRaWAN (Class A) sensor that monitors CO₂, temperature, humidity, air quality, light and occupancy / motion. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the AM300 series.)",
+				"pt-BR": "Milesight AM308 — sensor LoRaWAN (Classe A) que monitora CO₂, temperatura, umidade, qualidade do ar, luminosidade e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série AM300.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"co2",
+				"temperature",
+				"humidity",
+				"air_quality",
+				"light",
+				"motion"
+			],
+			"tags": [
+				"co2",
+				"temperature",
+				"humidity",
+				"air_quality",
+				"light",
+				"motion",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": true,
+			"hasManual": false
+		},
+		{
+			"id": "milesight-am308l",
+			"model": "AM308L",
+			"slug": "am308l",
+			"name": {
+				"en-US": "AM308L Milesight LoRaWAN Sensor",
+				"pt-BR": "AM308L Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight AM308L — LoRaWAN (Class A) sensor that monitors CO₂, temperature, humidity, air quality, light and occupancy / motion. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the AM300 series.)",
+				"pt-BR": "Milesight AM308L — sensor LoRaWAN (Classe A) que monitora CO₂, temperatura, umidade, qualidade do ar, luminosidade e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série AM300.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"co2",
+				"temperature",
+				"humidity",
+				"air_quality",
+				"light",
+				"motion"
+			],
+			"tags": [
+				"co2",
+				"temperature",
+				"humidity",
+				"air_quality",
+				"light",
+				"motion",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": true,
+			"hasManual": false
+		},
+		{
 			"id": "milesight-at101",
 			"model": "AT101",
 			"slug": "at101",
@@ -89,6 +305,162 @@
 				"door",
 				"location",
 				"tilt",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ct101",
+			"model": "CT101",
+			"slug": "ct101",
+			"name": {
+				"en-US": "CT101 Milesight LoRaWAN Sensor",
+				"pt-BR": "CT101 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight CT101 — LoRaWAN (Class A) sensor that monitors electrical current. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the CT10X series.)",
+				"pt-BR": "Milesight CT101 — sensor LoRaWAN (Classe A) que monitora corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série CT10X.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"current"
+			],
+			"tags": [
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"image": "images/device.jpg",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ct103",
+			"model": "CT103",
+			"slug": "ct103",
+			"name": {
+				"en-US": "CT103 Milesight LoRaWAN Sensor",
+				"pt-BR": "CT103 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight CT103 — LoRaWAN (Class A) sensor that monitors electrical current. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the CT10X series.)",
+				"pt-BR": "Milesight CT103 — sensor LoRaWAN (Classe A) que monitora corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série CT10X.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"current"
+			],
+			"tags": [
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"image": "images/device.jpg",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ct105",
+			"model": "CT105",
+			"slug": "ct105",
+			"name": {
+				"en-US": "CT105 Milesight LoRaWAN Sensor",
+				"pt-BR": "CT105 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight CT105 — LoRaWAN (Class A) sensor that monitors electrical current. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the CT10X series.)",
+				"pt-BR": "Milesight CT105 — sensor LoRaWAN (Classe A) que monitora corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série CT10X.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"current"
+			],
+			"tags": [
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"image": "images/device.jpg",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ct303",
+			"model": "CT303",
+			"slug": "ct303",
+			"name": {
+				"en-US": "CT303 Milesight LoRaWAN Sensor",
+				"pt-BR": "CT303 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight CT303 — LoRaWAN (Class A) sensor that monitors electrical current. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the CT3XX series.)",
+				"pt-BR": "Milesight CT303 — sensor LoRaWAN (Classe A) que monitora corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série CT3XX.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"current"
+			],
+			"tags": [
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ct305",
+			"model": "CT305",
+			"slug": "ct305",
+			"name": {
+				"en-US": "CT305 Milesight LoRaWAN Sensor",
+				"pt-BR": "CT305 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight CT305 — LoRaWAN (Class A) sensor that monitors electrical current. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the CT3XX series.)",
+				"pt-BR": "Milesight CT305 — sensor LoRaWAN (Classe A) que monitora corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série CT3XX.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"current"
+			],
+			"tags": [
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ct310",
+			"model": "CT310",
+			"slug": "ct310",
+			"name": {
+				"en-US": "CT310 Milesight LoRaWAN Sensor",
+				"pt-BR": "CT310 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight CT310 — LoRaWAN (Class A) sensor that monitors electrical current. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the CT3XX series.)",
+				"pt-BR": "Milesight CT310 — sensor LoRaWAN (Classe A) que monitora corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série CT3XX.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"current"
+			],
+			"tags": [
+				"current",
 				"milesight"
 			],
 			"icon": "",
@@ -458,6 +830,32 @@
 			"hasManual": true
 		},
 		{
+			"id": "milesight-em410-rdl",
+			"model": "EM410-RDL",
+			"slug": "em410-rdl",
+			"name": {
+				"en-US": "EM410-RDL Milesight LoRaWAN Sensor",
+				"pt-BR": "EM410-RDL Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM410-RDL — LoRaWAN (Class A) sensor that monitors distance / level. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM410-RDL — sensor LoRaWAN (Classe A) que monitora distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"distance",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": true,
+			"hasManual": false
+		},
+		{
 			"id": "milesight-em500-co2",
 			"model": "EM500-CO2",
 			"slug": "em500-co2",
@@ -748,6 +1146,110 @@
 			"hasManual": true
 		},
 		{
+			"id": "milesight-ts301",
+			"model": "TS301",
+			"slug": "ts301",
+			"name": {
+				"en-US": "TS301 Milesight LoRaWAN Sensor",
+				"pt-BR": "TS301 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight TS301 — LoRaWAN (Class A) sensor that monitors temperature. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the TS30X series.)",
+				"pt-BR": "Milesight TS301 — sensor LoRaWAN (Classe A) que monitora temperatura. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série TS30X.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"temperature",
+				"milesight"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ts302",
+			"model": "TS302",
+			"slug": "ts302",
+			"name": {
+				"en-US": "TS302 Milesight LoRaWAN Sensor",
+				"pt-BR": "TS302 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight TS302 — LoRaWAN (Class A) sensor that monitors temperature. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the TS30X series.)",
+				"pt-BR": "Milesight TS302 — sensor LoRaWAN (Classe A) que monitora temperatura. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série TS30X.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"temperature",
+				"milesight"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ts601",
+			"model": "TS601",
+			"slug": "ts601",
+			"name": {
+				"en-US": "TS601 Milesight LoRaWAN Sensor",
+				"pt-BR": "TS601 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight TS601 — LoRaWAN (Class A) sensor that monitors temperature. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the TS60X series.)",
+				"pt-BR": "Milesight TS601 — sensor LoRaWAN (Classe A) que monitora temperatura. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série TS60X.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"temperature",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ts602",
+			"model": "TS602",
+			"slug": "ts602",
+			"name": {
+				"en-US": "TS602 Milesight LoRaWAN Sensor",
+				"pt-BR": "TS602 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight TS602 — LoRaWAN (Class A) sensor that monitors temperature. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the TS60X series.)",
+				"pt-BR": "Milesight TS602 — sensor LoRaWAN (Classe A) que monitora temperatura. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série TS60X.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"temperature",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
 			"id": "milesight-vs121",
 			"model": "VS121",
 			"slug": "vs121",
@@ -889,6 +1391,62 @@
 				"light",
 				"motion",
 				"temperature",
+				"milesight"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-vs340",
+			"model": "VS340",
+			"slug": "vs340",
+			"name": {
+				"en-US": "VS340 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS340 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS340 — LoRaWAN (Class A) sensor that monitors people counts and occupancy / motion. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the VS34X series.)",
+				"pt-BR": "Milesight VS340 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série VS34X.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"passage_counter",
+				"motion"
+			],
+			"tags": [
+				"passage_counter",
+				"motion",
+				"milesight"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-vs341",
+			"model": "VS341",
+			"slug": "vs341",
+			"name": {
+				"en-US": "VS341 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS341 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS341 — LoRaWAN (Class A) sensor that monitors people counts and occupancy / motion. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the VS34X series.)",
+				"pt-BR": "Milesight VS341 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série VS34X.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"passage_counter",
+				"motion"
+			],
+			"tags": [
+				"passage_counter",
+				"motion",
 				"milesight"
 			],
 			"icon": "",
@@ -1281,6 +1839,58 @@
 				"button",
 				"temperature",
 				"water_leak",
+				"milesight"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws513",
+			"model": "WS513",
+			"slug": "ws513",
+			"name": {
+				"en-US": "WS513 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS513 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS513 — LoRaWAN (Class A) sensor that monitors relay / dry-contact state. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the WS51X series.)",
+				"pt-BR": "Milesight WS513 — sensor LoRaWAN (Classe A) que monitora relé / contato seco. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série WS51X.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"dry_contact"
+			],
+			"tags": [
+				"dry_contact",
+				"milesight"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws515",
+			"model": "WS515",
+			"slug": "ws515",
+			"name": {
+				"en-US": "WS515 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS515 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS515 — LoRaWAN (Class A) sensor that monitors relay / dry-contact state. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the WS51X series.)",
+				"pt-BR": "Milesight WS515 — sensor LoRaWAN (Classe A) que monitora relé / contato seco. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série WS51X.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"dry_contact"
+			],
+			"tags": [
+				"dry_contact",
 				"milesight"
 			],
 			"icon": "",

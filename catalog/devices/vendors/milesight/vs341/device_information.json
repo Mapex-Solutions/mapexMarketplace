@@ -1,0 +1,39 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-vs341",
+	"model": "VS341",
+	"name": {
+		"en-US": "VS341 Milesight LoRaWAN Sensor",
+		"pt-BR": "VS341 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight VS341 — LoRaWAN (Class A) sensor that monitors people counts and occupancy / motion. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the VS34X series.)",
+		"pt-BR": "Milesight VS341 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série VS34X.)"
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"passage_counter",
+		"motion"
+	],
+	"tags": [
+		"passage_counter",
+		"motion",
+		"milesight"
+	],
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/vs34x-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/vs34x-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T20:26:09.342Z"
+}

@@ -1,0 +1,37 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-ts302",
+	"model": "TS302",
+	"name": {
+		"en-US": "TS302 Milesight LoRaWAN Sensor",
+		"pt-BR": "TS302 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight TS302 — LoRaWAN (Class A) sensor that monitors temperature. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the TS30X series.)",
+		"pt-BR": "Milesight TS302 — sensor LoRaWAN (Classe A) que monitora temperatura. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série TS30X.)"
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature"
+	],
+	"tags": [
+		"temperature",
+		"milesight"
+	],
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/ts30x-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/ts30x-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T20:26:09.342Z"
+}

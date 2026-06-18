@@ -1,0 +1,43 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-vs351",
+	"model": "VS351",
+	"name": {
+		"en-US": "VS351 Milesight LoRaWAN Sensor",
+		"pt-BR": "VS351 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight VS351 — LoRaWAN (Class A) sensor that monitors temperature, people counts and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight VS351 — sensor LoRaWAN (Classe A) que monitora temperatura, contagem de pessoas e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature",
+		"passage_counter",
+		"current"
+	],
+	"tags": [
+		"temperature",
+		"passage_counter",
+		"current",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/vs351-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/vs351-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/vs351"
+}

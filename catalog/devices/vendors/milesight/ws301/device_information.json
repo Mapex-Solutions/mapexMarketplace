@@ -1,0 +1,49 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-ws301",
+	"model": "WS301",
+	"name": {
+		"en-US": "WS301 Milesight LoRaWAN Sensor",
+		"pt-BR": "WS301 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight WS301 — LoRaWAN (Class A) sensor that monitors open/close status, button presses, electrical current, distance / level, temperature and wind. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WS301 — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento, acionamentos de botão, corrente elétrica, distância / nível, temperatura e vento. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"door",
+		"button",
+		"current",
+		"distance",
+		"temperature",
+		"wind"
+	],
+	"tags": [
+		"door",
+		"button",
+		"current",
+		"distance",
+		"temperature",
+		"wind",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/ws301-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/ws301-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/ws301"
+}

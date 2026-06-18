@@ -1,0 +1,43 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-ws156",
+	"model": "WS156",
+	"name": {
+		"en-US": "WS156 Milesight LoRaWAN Sensor",
+		"pt-BR": "WS156 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight WS156 — LoRaWAN (Class A) sensor that monitors button presses, distance / level and temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WS156 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, distância / nível e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"button",
+		"distance",
+		"temperature"
+	],
+	"tags": [
+		"button",
+		"distance",
+		"temperature",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/ws136&ws156-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/ws136&ws156-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/ws156"
+}

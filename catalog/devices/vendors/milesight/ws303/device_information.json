@@ -1,0 +1,45 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-ws303",
+	"model": "WS303",
+	"name": {
+		"en-US": "WS303 Milesight LoRaWAN Sensor",
+		"pt-BR": "WS303 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight WS303 — LoRaWAN (Class A) sensor that monitors water leaks, button presses, electrical current and temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WS303 — sensor LoRaWAN (Classe A) que monitora vazamento de água, acionamentos de botão, corrente elétrica e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"water_leak",
+		"button",
+		"current",
+		"temperature"
+	],
+	"tags": [
+		"water_leak",
+		"button",
+		"current",
+		"temperature",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/ws303-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/ws303-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/ws303"
+}

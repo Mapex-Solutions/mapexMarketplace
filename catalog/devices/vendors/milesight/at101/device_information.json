@@ -1,0 +1,45 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-at101",
+	"model": "AT101",
+	"name": {
+		"en-US": "AT101 Milesight LoRaWAN Sensor",
+		"pt-BR": "AT101 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight AT101 — LoRaWAN (Class A) sensor that monitors open/close status, button presses, GPS location and tilt / angle. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight AT101 — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento, acionamentos de botão, localização GPS e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"door",
+		"button",
+		"location",
+		"tilt"
+	],
+	"tags": [
+		"door",
+		"button",
+		"location",
+		"tilt",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/at101-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/at101-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/at101"
+}

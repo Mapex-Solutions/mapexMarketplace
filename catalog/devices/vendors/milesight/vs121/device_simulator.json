@@ -11,8 +11,8 @@
 		"macVersion": "1.0.3",
 		"class": "A",
 		"activation": "otaa",
-		"devEui": "24E124000000C001",
-		"joinEui": "24E124C0002C0001",
+		"devEui": "24E124VS12100000",
+		"joinEui": "A840410000000201",
 		"appKey": "5572404C696E6B4C6F52613230313823",
 		"nwkKey": "",
 		"devAddr": "",
@@ -25,16 +25,16 @@
 	},
 	"events": [
 		{
-			"id": "uplink-passage",
-			"name": "Passage count uplink",
+			"id": "uplink",
+			"name": "Sensor data uplink",
 			"lorawan": {
 				"fport": 85,
 				"confirmed": false,
-				"payloadHex": "04c9{{randInt(0,20)}}00057d{{randInt(0,20)}}00"
+				"payloadHex": "04c9{{randInt(1000,9999)}}05cc{{randInt(10000000,99999999)}}09da{{randInt(10000000,99999999)}}0ada{{randInt(10000000,99999999)}}0bda{{randInt(10000000,99999999)}}0cda{{randInt(10000000,99999999)}}0dcc{{randInt(10000000,99999999)}}0ee4{{randInt(10000000,99999999)}}"
 			},
 			"schedule": {
 				"enabled": false,
-				"every": 5,
+				"every": 15,
 				"unit": "minutes"
 			}
 		}

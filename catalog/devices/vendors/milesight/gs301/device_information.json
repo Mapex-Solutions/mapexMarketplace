@@ -1,0 +1,41 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-gs301",
+	"model": "GS301",
+	"name": {
+		"en-US": "GS301 Milesight LoRaWAN Sensor",
+		"pt-BR": "GS301 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight GS301 — LoRaWAN (Class A) sensor that monitors button presses and distance / level. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight GS301 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão e distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"button",
+		"distance"
+	],
+	"tags": [
+		"button",
+		"distance",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/gs301-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/gs301-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/gs301"
+}

@@ -1,0 +1,42 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Milesight VS360",
+	"protocolId": "lorawan",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "lorawan",
+		"gatewayId": "",
+		"region": "EU868",
+		"macVersion": "1.0.3",
+		"class": "A",
+		"activation": "otaa",
+		"devEui": "24E124VS36000000",
+		"joinEui": "A840410000000201",
+		"appKey": "5572404C696E6B4C6F52613230313823",
+		"nwkKey": "",
+		"devAddr": "",
+		"nwkSKey": "",
+		"appSKey": ""
+	},
+	"attributes": {
+		"manufacturer": "Milesight",
+		"model": "VS360"
+	},
+	"events": [
+		{
+			"id": "uplink",
+			"name": "Sensor data uplink",
+			"lorawan": {
+				"fport": 85,
+				"confirmed": false,
+				"payloadHex": "0175{{randInt(10,99)}}0275{{randInt(10,99)}}04cc{{randInt(10000000,99999999)}}05cc{{randInt(10000000,99999999)}}0aef{{randInt(10000000,99999999)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 15,
+				"unit": "minutes"
+			}
+		}
+	]
+}

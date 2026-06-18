@@ -1,0 +1,47 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-am102",
+	"model": "AM102",
+	"name": {
+		"en-US": "AM102 Milesight LoRaWAN Sensor",
+		"pt-BR": "AM102 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight AM102 — LoRaWAN (Class A) sensor that monitors temperature, humidity, open/close status, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight AM102 — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, status de abertura/fechamento, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature",
+		"humidity",
+		"door",
+		"button",
+		"current"
+	],
+	"tags": [
+		"temperature",
+		"humidity",
+		"door",
+		"button",
+		"current",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/am102-and-am102l-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/am102&am102l-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/am102"
+}

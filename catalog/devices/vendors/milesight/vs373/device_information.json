@@ -1,0 +1,47 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-vs373",
+	"model": "VS373",
+	"name": {
+		"en-US": "VS373 Milesight LoRaWAN Sensor",
+		"pt-BR": "VS373 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight VS373 — LoRaWAN (Class A) sensor that monitors distance / level, electrical current, rainfall, soil moisture and temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight VS373 — sensor LoRaWAN (Classe A) que monitora distância / nível, corrente elétrica, chuva, umidade do solo e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"distance",
+		"current",
+		"rainfall",
+		"soil_moisture",
+		"temperature"
+	],
+	"tags": [
+		"distance",
+		"current",
+		"rainfall",
+		"soil_moisture",
+		"temperature",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/vs373-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/vs373-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/vs373"
+}

@@ -8,15 +8,742 @@
 	},
 	"items": [
 		{
+			"id": "milesight-am102",
+			"model": "AM102",
+			"slug": "am102",
+			"name": {
+				"en-US": "AM102 Milesight LoRaWAN Sensor",
+				"pt-BR": "AM102 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight AM102 — LoRaWAN (Class A) sensor that monitors temperature, humidity, open/close status, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight AM102 — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, status de abertura/fechamento, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"door",
+				"button",
+				"current"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"door",
+				"button",
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-am103-am103l",
+			"model": "AM103-AM103L",
+			"slug": "am103-am103l",
+			"name": {
+				"en-US": "AM103-AM103L Milesight LoRaWAN Sensor",
+				"pt-BR": "AM103-AM103L Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight AM103-AM103L — LoRaWAN (Class A) sensor that monitors air quality. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight AM103-AM103L — sensor LoRaWAN (Classe A) que monitora qualidade do ar. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"air_quality"
+			],
+			"tags": [
+				"air_quality",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-at101",
+			"model": "AT101",
+			"slug": "at101",
+			"name": {
+				"en-US": "AT101 Milesight LoRaWAN Sensor",
+				"pt-BR": "AT101 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight AT101 — LoRaWAN (Class A) sensor that monitors open/close status, button presses, GPS location and tilt / angle. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight AT101 — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento, acionamentos de botão, localização GPS e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"door",
+				"button",
+				"location",
+				"tilt"
+			],
+			"tags": [
+				"door",
+				"button",
+				"location",
+				"tilt",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-cth01",
+			"model": "CTH01",
+			"slug": "cth01",
+			"name": {
+				"en-US": "CTH01 Milesight LoRaWAN Sensor",
+				"pt-BR": "CTH01 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight CTH01 — LoRaWAN (Class A) sensor that monitors electrical current, open/close status, rainfall and soil moisture. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight CTH01 — sensor LoRaWAN (Classe A) que monitora corrente elétrica, status de abertura/fechamento, chuva e umidade do solo. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"current",
+				"door",
+				"rainfall",
+				"soil_moisture"
+			],
+			"tags": [
+				"current",
+				"door",
+				"rainfall",
+				"soil_moisture",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em300-cl",
+			"model": "EM300-CL",
+			"slug": "em300-cl",
+			"name": {
+				"en-US": "EM300-CL Milesight LoRaWAN Sensor",
+				"pt-BR": "EM300-CL Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM300-CL — LoRaWAN (Class A) sensor that monitors distance / level. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM300-CL — sensor LoRaWAN (Classe A) que monitora distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"distance",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em300-di",
+			"model": "EM300-DI",
+			"slug": "em300-di",
+			"name": {
+				"en-US": "EM300-DI Milesight LoRaWAN Sensor",
+				"pt-BR": "EM300-DI Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM300-DI — LoRaWAN (Class A) sensor that monitors people counts, dry-contact state, button presses, electrical current, flow rate and temperature. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM300-DI — sensor LoRaWAN (Classe A) que monitora contagem de pessoas, estado de contato seco, acionamentos de botão, corrente elétrica, vazão e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"passage_counter",
+				"dry_contact",
+				"button",
+				"current",
+				"flow",
+				"temperature"
+			],
+			"tags": [
+				"passage_counter",
+				"dry_contact",
+				"button",
+				"current",
+				"flow",
+				"temperature",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em300-mcs",
+			"model": "EM300-MCS",
+			"slug": "em300-mcs",
+			"name": {
+				"en-US": "EM300-MCS Milesight LoRaWAN Sensor",
+				"pt-BR": "EM300-MCS Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM300-MCS — LoRaWAN (Class A) sensor that monitors open/close status, button presses, electrical current and temperature. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM300-MCS — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento, acionamentos de botão, corrente elétrica e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"door",
+				"button",
+				"current",
+				"temperature"
+			],
+			"tags": [
+				"door",
+				"button",
+				"current",
+				"temperature",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em300-mld",
+			"model": "EM300-MLD",
+			"slug": "em300-mld",
+			"name": {
+				"en-US": "EM300-MLD Milesight LoRaWAN Sensor",
+				"pt-BR": "EM300-MLD Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM300-MLD — LoRaWAN (Class A) sensor that monitors water leaks. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM300-MLD — sensor LoRaWAN (Classe A) que monitora vazamento de água. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"water_leak"
+			],
+			"tags": [
+				"water_leak",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em300-sld-zld",
+			"model": "EM300-SLD-ZLD",
+			"slug": "em300-sld-zld",
+			"name": {
+				"en-US": "EM300-SLD-ZLD Milesight LoRaWAN Sensor",
+				"pt-BR": "EM300-SLD-ZLD Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM300-SLD-ZLD — LoRaWAN (Class A) sensor that monitors water leaks. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM300-SLD-ZLD — sensor LoRaWAN (Classe A) que monitora vazamento de água. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"water_leak"
+			],
+			"tags": [
+				"water_leak",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
 			"id": "milesight-em300-th",
 			"model": "EM300-TH",
 			"slug": "em300-th",
-			"name": "EM300-TH Temperature & Humidity Sensor",
-			"description": "Indoor LoRaWAN sensor reporting temperature and relative humidity on a battery that lasts years.",
+			"name": {
+				"en-US": "EM300-TH Milesight LoRaWAN Sensor",
+				"pt-BR": "EM300-TH Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM300-TH — LoRaWAN (Class A) sensor that monitors temperature, humidity, open/close status, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM300-TH — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, status de abertura/fechamento, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+			},
 			"protocol": "lorawan",
-			"readingTypes": ["temperature", "humidity"],
-			"tags": ["indoor", "battery", "climate"],
-			"icon": "mdi-thermometer",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"door",
+				"button",
+				"current"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"door",
+				"button",
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em320-th",
+			"model": "EM320-TH",
+			"slug": "em320-th",
+			"name": {
+				"en-US": "EM320-TH Milesight LoRaWAN Sensor",
+				"pt-BR": "EM320-TH Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM320-TH — LoRaWAN (Class A) sensor that monitors temperature, humidity, button presses, electrical current and open/close status. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM320-TH — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, acionamentos de botão, corrente elétrica e status de abertura/fechamento. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"button",
+				"current",
+				"door"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"button",
+				"current",
+				"door",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em320-tilt",
+			"model": "EM320-TILT",
+			"slug": "em320-tilt",
+			"name": {
+				"en-US": "EM320-TILT Milesight LoRaWAN Sensor",
+				"pt-BR": "EM320-TILT Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM320-TILT — LoRaWAN (Class A) sensor that monitors vibration, button presses, electrical current, temperature and tilt / angle. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM320-TILT — sensor LoRaWAN (Classe A) que monitora vibração, acionamentos de botão, corrente elétrica, temperatura e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"vibration",
+				"button",
+				"current",
+				"temperature",
+				"tilt"
+			],
+			"tags": [
+				"vibration",
+				"button",
+				"current",
+				"temperature",
+				"tilt",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em400-mud",
+			"model": "EM400-MUD",
+			"slug": "em400-mud",
+			"name": {
+				"en-US": "EM400-MUD Milesight LoRaWAN Sensor",
+				"pt-BR": "EM400-MUD Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM400-MUD — LoRaWAN (Class A) sensor that monitors distance / level, button presses, electrical current, open/close status, temperature and tilt / angle. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM400-MUD — sensor LoRaWAN (Classe A) que monitora distância / nível, acionamentos de botão, corrente elétrica, status de abertura/fechamento, temperatura e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance",
+				"button",
+				"current",
+				"door",
+				"temperature",
+				"tilt"
+			],
+			"tags": [
+				"distance",
+				"button",
+				"current",
+				"door",
+				"temperature",
+				"tilt",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em400-tld",
+			"model": "EM400-TLD",
+			"slug": "em400-tld",
+			"name": {
+				"en-US": "EM400-TLD Milesight LoRaWAN Sensor",
+				"pt-BR": "EM400-TLD Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM400-TLD — LoRaWAN (Class A) sensor that monitors distance / level, button presses, electrical current, open/close status, light / illuminance, temperature and tilt / angle. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM400-TLD — sensor LoRaWAN (Classe A) que monitora distância / nível, acionamentos de botão, corrente elétrica, status de abertura/fechamento, luminosidade, temperatura e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance",
+				"button",
+				"current",
+				"door",
+				"light",
+				"temperature",
+				"tilt"
+			],
+			"tags": [
+				"distance",
+				"button",
+				"current",
+				"door",
+				"light",
+				"temperature",
+				"tilt",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em400-udl",
+			"model": "EM400-UDL",
+			"slug": "em400-udl",
+			"name": {
+				"en-US": "EM400-UDL Milesight LoRaWAN Sensor",
+				"pt-BR": "EM400-UDL Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM400-UDL — LoRaWAN (Class A) sensor that monitors open/close status, distance / level, button presses, electrical current, temperature and tilt / angle. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM400-UDL — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento, distância / nível, acionamentos de botão, corrente elétrica, temperatura e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"door",
+				"distance",
+				"button",
+				"current",
+				"temperature",
+				"tilt"
+			],
+			"tags": [
+				"door",
+				"distance",
+				"button",
+				"current",
+				"temperature",
+				"tilt",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em500-co2",
+			"model": "EM500-CO2",
+			"slug": "em500-co2",
+			"name": {
+				"en-US": "EM500-CO2 Milesight LoRaWAN Sensor",
+				"pt-BR": "EM500-CO2 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM500-CO2 — LoRaWAN (Class A) sensor that monitors open/close status, CO₂, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM500-CO2 — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento, CO₂, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"door",
+				"co2",
+				"button",
+				"current"
+			],
+			"tags": [
+				"door",
+				"co2",
+				"button",
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em500-lgt",
+			"model": "EM500-LGT",
+			"slug": "em500-lgt",
+			"name": {
+				"en-US": "EM500-LGT Milesight LoRaWAN Sensor",
+				"pt-BR": "EM500-LGT Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM500-LGT — LoRaWAN (Class A) sensor that monitors open/close status, button presses, electrical current and light / illuminance. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM500-LGT — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento, acionamentos de botão, corrente elétrica e luminosidade. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"door",
+				"button",
+				"current",
+				"light"
+			],
+			"tags": [
+				"door",
+				"button",
+				"current",
+				"light",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em500-pp",
+			"model": "EM500-PP",
+			"slug": "em500-pp",
+			"name": {
+				"en-US": "EM500-PP Milesight LoRaWAN Sensor",
+				"pt-BR": "EM500-PP Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM500-PP — LoRaWAN (Class A) sensor that monitors air quality, button presses, electrical current and pressure. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM500-PP — sensor LoRaWAN (Classe A) que monitora qualidade do ar, acionamentos de botão, corrente elétrica e pressão. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"air_quality",
+				"button",
+				"current",
+				"pressure"
+			],
+			"tags": [
+				"air_quality",
+				"button",
+				"current",
+				"pressure",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em500-pt100",
+			"model": "EM500-PT100",
+			"slug": "em500-pt100",
+			"name": {
+				"en-US": "EM500-PT100 Milesight LoRaWAN Sensor",
+				"pt-BR": "EM500-PT100 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM500-PT100 — LoRaWAN (Class A) sensor that monitors temperature, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM500-PT100 — sensor LoRaWAN (Classe A) que monitora temperatura, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"button",
+				"current"
+			],
+			"tags": [
+				"temperature",
+				"button",
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em500-smtc",
+			"model": "EM500-SMTC",
+			"slug": "em500-smtc",
+			"name": {
+				"en-US": "EM500-SMTC Milesight LoRaWAN Sensor",
+				"pt-BR": "EM500-SMTC Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM500-SMTC — LoRaWAN (Class A) sensor that monitors temperature, button presses, conductivity (EC), electrical current and soil moisture. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM500-SMTC — sensor LoRaWAN (Classe A) que monitora temperatura, acionamentos de botão, condutividade (EC), corrente elétrica e umidade do solo. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"button",
+				"conductivity",
+				"current",
+				"soil_moisture"
+			],
+			"tags": [
+				"temperature",
+				"button",
+				"conductivity",
+				"current",
+				"soil_moisture",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em500-swl",
+			"model": "EM500-SWL",
+			"slug": "em500-swl",
+			"name": {
+				"en-US": "EM500-SWL Milesight LoRaWAN Sensor",
+				"pt-BR": "EM500-SWL Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM500-SWL — LoRaWAN (Class A) sensor that monitors water leaks, distance / level, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM500-SWL — sensor LoRaWAN (Classe A) que monitora vazamento de água, distância / nível, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"water_leak",
+				"distance",
+				"button",
+				"current"
+			],
+			"tags": [
+				"water_leak",
+				"distance",
+				"button",
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-em500-udl",
+			"model": "EM500-UDL",
+			"slug": "em500-udl",
+			"name": {
+				"en-US": "EM500-UDL Milesight LoRaWAN Sensor",
+				"pt-BR": "EM500-UDL Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight EM500-UDL — LoRaWAN (Class A) sensor that monitors distance / level, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight EM500-UDL — sensor LoRaWAN (Classe A) que monitora distância / nível, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance",
+				"button",
+				"current"
+			],
+			"tags": [
+				"distance",
+				"button",
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-gs301",
+			"model": "GS301",
+			"slug": "gs301",
+			"name": {
+				"en-US": "GS301 Milesight LoRaWAN Sensor",
+				"pt-BR": "GS301 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight GS301 — LoRaWAN (Class A) sensor that monitors button presses and distance / level. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight GS301 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão e distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"button",
+				"distance"
+			],
+			"tags": [
+				"button",
+				"distance",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ts101",
+			"model": "TS101",
+			"slug": "ts101",
+			"name": {
+				"en-US": "TS101 Milesight LoRaWAN Sensor",
+				"pt-BR": "TS101 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight TS101 — LoRaWAN (Class A) sensor that monitors temperature and button presses. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight TS101 — sensor LoRaWAN (Classe A) que monitora temperatura e acionamentos de botão. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"button"
+			],
+			"tags": [
+				"temperature",
+				"button",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ts201",
+			"model": "TS201",
+			"slug": "ts201",
+			"name": {
+				"en-US": "TS201 Milesight LoRaWAN Sensor",
+				"pt-BR": "TS201 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight TS201 — LoRaWAN (Class A) sensor that monitors temperature, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight TS201 — sensor LoRaWAN (Classe A) que monitora temperatura, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"button",
+				"current"
+			],
+			"tags": [
+				"temperature",
+				"button",
+				"current",
+				"milesight"
+			],
+			"icon": "",
 			"hasCodec": true,
 			"hasManual": true
 		},
@@ -24,12 +751,747 @@
 			"id": "milesight-vs121",
 			"model": "VS121",
 			"slug": "vs121",
-			"name": "VS121 AI People Counter",
-			"description": "Ceiling-mounted LoRaWAN sensor that counts people passing through an entrance.",
+			"name": {
+				"en-US": "VS121 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS121 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS121 — LoRaWAN (Class A) sensor that monitors people counts, button presses, flow rate, light / illuminance and occupancy / motion. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight VS121 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas, acionamentos de botão, vazão, luminosidade e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85."
+			},
 			"protocol": "lorawan",
-			"readingTypes": ["passage_counter"],
-			"tags": ["occupancy", "ceiling", "ai"],
-			"icon": "mdi-counter",
+			"readingTypes": [
+				"passage_counter",
+				"button",
+				"flow",
+				"light",
+				"motion"
+			],
+			"tags": [
+				"passage_counter",
+				"button",
+				"flow",
+				"light",
+				"motion",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-vs133",
+			"model": "VS133",
+			"slug": "vs133",
+			"name": {
+				"en-US": "VS133 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS133 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS133 — LoRaWAN (Class A) sensor that monitors people counts, button presses, electrical current and distance / level. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight VS133 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas, acionamentos de botão, corrente elétrica e distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"passage_counter",
+				"button",
+				"current",
+				"distance"
+			],
+			"tags": [
+				"passage_counter",
+				"button",
+				"current",
+				"distance",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-vs133-vs135",
+			"model": "VS133-VS135",
+			"slug": "vs133-vs135",
+			"name": {
+				"en-US": "VS133-VS135 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS133-VS135 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS133-VS135 — LoRaWAN (Class A) sensor that monitors people counts. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight VS133-VS135 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"passage_counter"
+			],
+			"tags": [
+				"passage_counter",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-vs135",
+			"model": "VS135",
+			"slug": "vs135",
+			"name": {
+				"en-US": "VS135 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS135 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS135 — LoRaWAN (Class A) sensor that monitors people counts, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight VS135 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"passage_counter",
+				"button",
+				"current"
+			],
+			"tags": [
+				"passage_counter",
+				"button",
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-vs330",
+			"model": "VS330",
+			"slug": "vs330",
+			"name": {
+				"en-US": "VS330 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS330 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS330 — LoRaWAN (Class A) sensor that monitors people counts, button presses, electrical current, light / illuminance, occupancy / motion, temperature and tilt / angle. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight VS330 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas, acionamentos de botão, corrente elétrica, luminosidade, ocupação / movimento, temperatura e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"passage_counter",
+				"button",
+				"current",
+				"light",
+				"motion",
+				"temperature",
+				"tilt"
+			],
+			"tags": [
+				"passage_counter",
+				"button",
+				"current",
+				"light",
+				"motion",
+				"temperature",
+				"tilt",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-vs350",
+			"model": "VS350",
+			"slug": "vs350",
+			"name": {
+				"en-US": "VS350 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS350 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS350 — LoRaWAN (Class A) sensor that monitors people counts, electrical current, open/close status, flow rate, occupancy / motion and temperature. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight VS350 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas, corrente elétrica, status de abertura/fechamento, vazão, ocupação / movimento e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"passage_counter",
+				"current",
+				"door",
+				"flow",
+				"motion",
+				"temperature"
+			],
+			"tags": [
+				"passage_counter",
+				"current",
+				"door",
+				"flow",
+				"motion",
+				"temperature",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-vs351",
+			"model": "VS351",
+			"slug": "vs351",
+			"name": {
+				"en-US": "VS351 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS351 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS351 — LoRaWAN (Class A) sensor that monitors temperature, people counts and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight VS351 — sensor LoRaWAN (Classe A) que monitora temperatura, contagem de pessoas e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"passage_counter",
+				"current"
+			],
+			"tags": [
+				"temperature",
+				"passage_counter",
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-vs360",
+			"model": "VS360",
+			"slug": "vs360",
+			"name": {
+				"en-US": "VS360 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS360 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS360 — LoRaWAN (Class A) sensor that monitors people counts, open/close status, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight VS360 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas, status de abertura/fechamento, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"passage_counter",
+				"door",
+				"button",
+				"current"
+			],
+			"tags": [
+				"passage_counter",
+				"door",
+				"button",
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-vs370",
+			"model": "VS370",
+			"slug": "vs370",
+			"name": {
+				"en-US": "VS370 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS370 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS370 — LoRaWAN (Class A) sensor that monitors people counts, distance / level, button presses, electrical current and occupancy / motion. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight VS370 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas, distância / nível, acionamentos de botão, corrente elétrica e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"passage_counter",
+				"distance",
+				"button",
+				"current",
+				"motion"
+			],
+			"tags": [
+				"passage_counter",
+				"distance",
+				"button",
+				"current",
+				"motion",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-vs373",
+			"model": "VS373",
+			"slug": "vs373",
+			"name": {
+				"en-US": "VS373 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS373 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS373 — LoRaWAN (Class A) sensor that monitors distance / level, electrical current, rainfall, soil moisture and temperature. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight VS373 — sensor LoRaWAN (Classe A) que monitora distância / nível, corrente elétrica, chuva, umidade do solo e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance",
+				"current",
+				"rainfall",
+				"soil_moisture",
+				"temperature"
+			],
+			"tags": [
+				"distance",
+				"current",
+				"rainfall",
+				"soil_moisture",
+				"temperature",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws101",
+			"model": "WS101",
+			"slug": "ws101",
+			"name": {
+				"en-US": "WS101 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS101 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS101 — LoRaWAN (Class A) sensor that monitors button presses, distance / level, temperature and water leaks. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WS101 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, distância / nível, temperatura e vazamento de água. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"button",
+				"distance",
+				"temperature",
+				"water_leak"
+			],
+			"tags": [
+				"button",
+				"distance",
+				"temperature",
+				"water_leak",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws156",
+			"model": "WS156",
+			"slug": "ws156",
+			"name": {
+				"en-US": "WS156 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS156 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS156 — LoRaWAN (Class A) sensor that monitors button presses, distance / level and temperature. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WS156 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, distância / nível e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"button",
+				"distance",
+				"temperature"
+			],
+			"tags": [
+				"button",
+				"distance",
+				"temperature",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws201",
+			"model": "WS201",
+			"slug": "ws201",
+			"name": {
+				"en-US": "WS201 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS201 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS201 — LoRaWAN (Class A) sensor that monitors distance / level, button presses, electrical current and temperature. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WS201 — sensor LoRaWAN (Classe A) que monitora distância / nível, acionamentos de botão, corrente elétrica e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance",
+				"button",
+				"current",
+				"temperature"
+			],
+			"tags": [
+				"distance",
+				"button",
+				"current",
+				"temperature",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws202",
+			"model": "WS202",
+			"slug": "ws202",
+			"name": {
+				"en-US": "WS202 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS202 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS202 — LoRaWAN (Class A) sensor that monitors occupancy / motion, electrical current and light / illuminance. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WS202 — sensor LoRaWAN (Classe A) que monitora ocupação / movimento, corrente elétrica e luminosidade. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"motion",
+				"current",
+				"light"
+			],
+			"tags": [
+				"motion",
+				"current",
+				"light",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws203",
+			"model": "WS203",
+			"slug": "ws203",
+			"name": {
+				"en-US": "WS203 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS203 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS203 — LoRaWAN (Class A) sensor that monitors temperature, humidity, occupancy / motion, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WS203 — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, ocupação / movimento, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"motion",
+				"button",
+				"current"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"motion",
+				"button",
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws301",
+			"model": "WS301",
+			"slug": "ws301",
+			"name": {
+				"en-US": "WS301 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS301 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS301 — LoRaWAN (Class A) sensor that monitors open/close status, button presses, electrical current, distance / level, temperature and wind. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WS301 — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento, acionamentos de botão, corrente elétrica, distância / nível, temperatura e vento. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"door",
+				"button",
+				"current",
+				"distance",
+				"temperature",
+				"wind"
+			],
+			"tags": [
+				"door",
+				"button",
+				"current",
+				"distance",
+				"temperature",
+				"wind",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws302",
+			"model": "WS302",
+			"slug": "ws302",
+			"name": {
+				"en-US": "WS302 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS302 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS302 — LoRaWAN (Class A) sensor that monitors distance / level, electrical current and noise level. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WS302 — sensor LoRaWAN (Classe A) que monitora distância / nível, corrente elétrica e nível de ruído. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance",
+				"current",
+				"noise"
+			],
+			"tags": [
+				"distance",
+				"current",
+				"noise",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws303",
+			"model": "WS303",
+			"slug": "ws303",
+			"name": {
+				"en-US": "WS303 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS303 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS303 — LoRaWAN (Class A) sensor that monitors water leaks, button presses, electrical current and temperature. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WS303 — sensor LoRaWAN (Classe A) que monitora vazamento de água, acionamentos de botão, corrente elétrica e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"water_leak",
+				"button",
+				"current",
+				"temperature"
+			],
+			"tags": [
+				"water_leak",
+				"button",
+				"current",
+				"temperature",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws523",
+			"model": "WS523",
+			"slug": "ws523",
+			"name": {
+				"en-US": "WS523 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS523 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS523 — LoRaWAN (Class A) sensor that monitors LoRaWAN sensor data. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WS523 — sensor LoRaWAN (Classe A) que monitora dados de sensor LoRaWAN. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"dry_contact",
+				"current"
+			],
+			"tags": [
+				"dry_contact",
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws558",
+			"model": "WS558",
+			"slug": "ws558",
+			"name": {
+				"en-US": "WS558 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS558 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS558 — LoRaWAN (Class A) sensor that monitors electrical current, light / illuminance, rainfall and soil moisture. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WS558 — sensor LoRaWAN (Classe A) que monitora corrente elétrica, luminosidade, chuva e umidade do solo. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"current",
+				"light",
+				"rainfall",
+				"soil_moisture"
+			],
+			"tags": [
+				"current",
+				"light",
+				"rainfall",
+				"soil_moisture",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-wt101",
+			"model": "WT101",
+			"slug": "wt101",
+			"name": {
+				"en-US": "WT101 Milesight LoRaWAN Sensor",
+				"pt-BR": "WT101 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WT101 — LoRaWAN (Class A) sensor that monitors temperature, button presses, electrical current, light / illuminance and water leaks. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WT101 — sensor LoRaWAN (Classe A) que monitora temperatura, acionamentos de botão, corrente elétrica, luminosidade e vazamento de água. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"button",
+				"current",
+				"light",
+				"water_leak"
+			],
+			"tags": [
+				"temperature",
+				"button",
+				"current",
+				"light",
+				"water_leak",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-wt201",
+			"model": "WT201",
+			"slug": "wt201",
+			"name": {
+				"en-US": "WT201 Milesight LoRaWAN Sensor",
+				"pt-BR": "WT201 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WT201 — LoRaWAN (Class A) sensor that monitors temperature, electrical current and open/close status. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WT201 — sensor LoRaWAN (Classe A) que monitora temperatura, corrente elétrica e status de abertura/fechamento. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"current",
+				"door"
+			],
+			"tags": [
+				"temperature",
+				"current",
+				"door",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-wt303-wt304",
+			"model": "WT303-WT304",
+			"slug": "wt303-wt304",
+			"name": {
+				"en-US": "WT303-WT304 Milesight LoRaWAN Sensor",
+				"pt-BR": "WT303-WT304 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WT303-WT304 — LoRaWAN (Class A) sensor that monitors temperature, button presses and light / illuminance. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WT303-WT304 — sensor LoRaWAN (Classe A) que monitora temperatura, acionamentos de botão e luminosidade. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"button",
+				"light"
+			],
+			"tags": [
+				"temperature",
+				"button",
+				"light",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-wt401",
+			"model": "WT401",
+			"slug": "wt401",
+			"name": {
+				"en-US": "WT401 Milesight LoRaWAN Sensor",
+				"pt-BR": "WT401 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WT401 — LoRaWAN (Class A) sensor that monitors temperature, button presses, electrical current, humidity and occupancy / motion. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WT401 — sensor LoRaWAN (Classe A) que monitora temperatura, acionamentos de botão, corrente elétrica, umidade e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"button",
+				"current",
+				"humidity",
+				"motion"
+			],
+			"tags": [
+				"temperature",
+				"button",
+				"current",
+				"humidity",
+				"motion",
+				"milesight"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-wts506",
+			"model": "WTS506",
+			"slug": "wts506",
+			"name": {
+				"en-US": "WTS506 Milesight LoRaWAN Sensor",
+				"pt-BR": "WTS506 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WTS506 — LoRaWAN (Class A) sensor that monitors button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight WTS506 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"button",
+				"current"
+			],
+			"tags": [
+				"button",
+				"current",
+				"milesight"
+			],
+			"icon": "",
 			"hasCodec": true,
 			"hasManual": true
 		}

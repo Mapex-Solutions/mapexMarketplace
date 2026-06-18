@@ -1,0 +1,47 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-wt401",
+	"model": "WT401",
+	"name": {
+		"en-US": "WT401 Milesight LoRaWAN Sensor",
+		"pt-BR": "WT401 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight WT401 — LoRaWAN (Class A) sensor that monitors temperature, button presses, electrical current, humidity and occupancy / motion. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WT401 — sensor LoRaWAN (Classe A) que monitora temperatura, acionamentos de botão, corrente elétrica, umidade e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature",
+		"button",
+		"current",
+		"humidity",
+		"motion"
+	],
+	"tags": [
+		"temperature",
+		"button",
+		"current",
+		"humidity",
+		"motion",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/wt401-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/wt401-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/wt401"
+}

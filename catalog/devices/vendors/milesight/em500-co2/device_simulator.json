@@ -1,0 +1,42 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Milesight EM500-CO2",
+	"protocolId": "lorawan",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "lorawan",
+		"gatewayId": "",
+		"region": "EU868",
+		"macVersion": "1.0.3",
+		"class": "A",
+		"activation": "otaa",
+		"devEui": "24E124EM500CO200",
+		"joinEui": "A840410000000201",
+		"appKey": "5572404C696E6B4C6F52613230313823",
+		"nwkKey": "",
+		"devAddr": "",
+		"nwkSKey": "",
+		"appSKey": ""
+	},
+	"attributes": {
+		"manufacturer": "Milesight",
+		"model": "EM500-CO2"
+	},
+	"events": [
+		{
+			"id": "uplink",
+			"name": "Sensor data uplink",
+			"lorawan": {
+				"fport": 85,
+				"confirmed": false,
+				"payloadHex": "0175{{randInt(10,99)}}0367{{randInt(1000,9999)}}0468{{randInt(10,99)}}057d{{randInt(1000,9999)}}0673{{randInt(1000,9999)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 15,
+				"unit": "minutes"
+			}
+		}
+	]
+}

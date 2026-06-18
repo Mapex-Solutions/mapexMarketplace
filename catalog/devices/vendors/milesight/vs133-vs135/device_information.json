@@ -1,0 +1,37 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-vs133-vs135",
+	"model": "VS133-VS135",
+	"name": {
+		"en-US": "VS133-VS135 Milesight LoRaWAN Sensor",
+		"pt-BR": "VS133-VS135 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight VS133-VS135 — LoRaWAN (Class A) sensor that monitors people counts. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight VS133-VS135 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"passage_counter"
+	],
+	"tags": [
+		"passage_counter",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheetUrl": "https://www.milesight.com/support/resources/document-center",
+		"manualUrl": "https://www.milesight.com/support/resources/document-center"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/vs133-vs135"
+}

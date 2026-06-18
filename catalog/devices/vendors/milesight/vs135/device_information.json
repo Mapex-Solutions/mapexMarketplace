@@ -1,0 +1,43 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-vs135",
+	"model": "VS135",
+	"name": {
+		"en-US": "VS135 Milesight LoRaWAN Sensor",
+		"pt-BR": "VS135 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight VS135 — LoRaWAN (Class A) sensor that monitors people counts, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight VS135 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"passage_counter",
+		"button",
+		"current"
+	],
+	"tags": [
+		"passage_counter",
+		"button",
+		"current",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/vs135-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/vs135-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/vs135"
+}

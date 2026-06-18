@@ -1,0 +1,37 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-am103-am103l",
+	"model": "AM103-AM103L",
+	"name": {
+		"en-US": "AM103-AM103L Milesight LoRaWAN Sensor",
+		"pt-BR": "AM103-AM103L Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight AM103-AM103L — LoRaWAN (Class A) sensor that monitors air quality. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight AM103-AM103L — sensor LoRaWAN (Classe A) que monitora qualidade do ar. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"air_quality"
+	],
+	"tags": [
+		"air_quality",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheetUrl": "https://www.milesight.com/support/resources/document-center",
+		"manualUrl": "https://www.milesight.com/support/resources/document-center"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/am103-am103l"
+}

@@ -1,0 +1,49 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-em400-mud",
+	"model": "EM400-MUD",
+	"name": {
+		"en-US": "EM400-MUD Milesight LoRaWAN Sensor",
+		"pt-BR": "EM400-MUD Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight EM400-MUD — LoRaWAN (Class A) sensor that monitors distance / level, button presses, electrical current, open/close status, temperature and tilt / angle. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight EM400-MUD — sensor LoRaWAN (Classe A) que monitora distância / nível, acionamentos de botão, corrente elétrica, status de abertura/fechamento, temperatura e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"distance",
+		"button",
+		"current",
+		"door",
+		"temperature",
+		"tilt"
+	],
+	"tags": [
+		"distance",
+		"button",
+		"current",
+		"door",
+		"temperature",
+		"tilt",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/em400-mud-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/em400-mud-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/em400-mud"
+}

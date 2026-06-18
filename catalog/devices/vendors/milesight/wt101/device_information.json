@@ -1,0 +1,47 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-wt101",
+	"model": "WT101",
+	"name": {
+		"en-US": "WT101 Milesight LoRaWAN Sensor",
+		"pt-BR": "WT101 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight WT101 — LoRaWAN (Class A) sensor that monitors temperature, button presses, electrical current, light / illuminance and water leaks. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WT101 — sensor LoRaWAN (Classe A) que monitora temperatura, acionamentos de botão, corrente elétrica, luminosidade e vazamento de água. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature",
+		"button",
+		"current",
+		"light",
+		"water_leak"
+	],
+	"tags": [
+		"temperature",
+		"button",
+		"current",
+		"light",
+		"water_leak",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/wt101-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/wt101-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/wt101"
+}

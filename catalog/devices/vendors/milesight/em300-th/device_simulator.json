@@ -11,8 +11,8 @@
 		"macVersion": "1.0.3",
 		"class": "A",
 		"activation": "otaa",
-		"devEui": "24E124000000A001",
-		"joinEui": "24E124C0002A0001",
+		"devEui": "24E124EM300TH000",
+		"joinEui": "A840410000000201",
 		"appKey": "5572404C696E6B4C6F52613230313823",
 		"nwkKey": "",
 		"devAddr": "",
@@ -25,12 +25,12 @@
 	},
 	"events": [
 		{
-			"id": "uplink-th",
-			"name": "Temperature & humidity uplink",
+			"id": "uplink",
+			"name": "Sensor data uplink",
 			"lorawan": {
 				"fport": 85,
 				"confirmed": false,
-				"payloadHex": "0167{{randInt(180,260)}}0268{{randInt(40,70)}}"
+				"payloadHex": "0175{{randInt(10,99)}}0367{{randInt(1000,9999)}}0468{{randInt(10,99)}}"
 			},
 			"schedule": {
 				"enabled": false,

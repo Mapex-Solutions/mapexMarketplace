@@ -2,11 +2,30 @@
 	"$schema": "mapex-device-information/v1",
 	"id": "milesight-em300-th",
 	"model": "EM300-TH",
-	"name": "EM300-TH Temperature & Humidity Sensor",
-	"description": "Indoor LoRaWAN sensor reporting temperature and relative humidity. Designed for offices, server rooms and cold-chain monitoring with multi-year battery life.",
+	"name": {
+		"en-US": "EM300-TH Milesight LoRaWAN Sensor",
+		"pt-BR": "EM300-TH Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight EM300-TH — LoRaWAN (Class A) sensor that monitors temperature, humidity, open/close status, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight EM300-TH — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, status de abertura/fechamento, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+	},
 	"protocol": "lorawan",
-	"readingTypes": ["temperature", "humidity"],
-	"tags": ["indoor", "battery", "climate"],
+	"readingTypes": [
+		"temperature",
+		"humidity",
+		"door",
+		"button",
+		"current"
+	],
+	"tags": [
+		"temperature",
+		"humidity",
+		"door",
+		"button",
+		"current",
+		"milesight"
+	],
 	"version": "1.0.0",
 	"vendor": {
 		"slug": "milesight",
@@ -14,10 +33,15 @@
 		"site": "https://www.milesight.com",
 		"support": "https://support.milesight-iot.com"
 	},
-	"images": { "device": "images/device.png" },
+	"images": {
+		"device": "images/device.jpg"
+	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
-		"manual": "files/manual.pdf"
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/em300-th-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/em300-th-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-16"
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/em300-th"
 }

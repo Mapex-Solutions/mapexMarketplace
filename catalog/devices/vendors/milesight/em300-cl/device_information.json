@@ -1,0 +1,38 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-em300-cl",
+	"model": "EM300-CL",
+	"name": {
+		"en-US": "EM300-CL Milesight LoRaWAN Sensor",
+		"pt-BR": "EM300-CL Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight EM300-CL — LoRaWAN (Class A) sensor that monitors distance / level. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight EM300-CL — sensor LoRaWAN (Classe A) que monitora distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"distance"
+	],
+	"tags": [
+		"distance",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/em300-cl-datasheet-en.pdf",
+		"manualUrl": "https://www.milesight.com/support/resources/document-center"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/em300-cl"
+}

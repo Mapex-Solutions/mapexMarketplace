@@ -1,0 +1,45 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-em500-swl",
+	"model": "EM500-SWL",
+	"name": {
+		"en-US": "EM500-SWL Milesight LoRaWAN Sensor",
+		"pt-BR": "EM500-SWL Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight EM500-SWL — LoRaWAN (Class A) sensor that monitors water leaks, distance / level, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight EM500-SWL — sensor LoRaWAN (Classe A) que monitora vazamento de água, distância / nível, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"water_leak",
+		"distance",
+		"button",
+		"current"
+	],
+	"tags": [
+		"water_leak",
+		"distance",
+		"button",
+		"current",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/em500-swl-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/em500-swl-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/em500-swl"
+}

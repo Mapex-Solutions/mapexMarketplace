@@ -1,0 +1,37 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-em300-sld-zld",
+	"model": "EM300-SLD-ZLD",
+	"name": {
+		"en-US": "EM300-SLD-ZLD Milesight LoRaWAN Sensor",
+		"pt-BR": "EM300-SLD-ZLD Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight EM300-SLD-ZLD — LoRaWAN (Class A) sensor that monitors water leaks. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight EM300-SLD-ZLD — sensor LoRaWAN (Classe A) que monitora vazamento de água. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"water_leak"
+	],
+	"tags": [
+		"water_leak",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheetUrl": "https://www.milesight.com/support/resources/document-center",
+		"manualUrl": "https://www.milesight.com/support/resources/document-center"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/em300-sld-zld"
+}

@@ -32,6 +32,7 @@
 		{ "value": "location", "label": "Location / GPS", "icon": "mdi-map-marker" },
 		{ "value": "wind", "label": "Wind", "icon": "mdi-weather-windy" },
 		{ "value": "rainfall", "label": "Rainfall", "icon": "mdi-weather-pouring" },
-		{ "value": "noise", "label": "Noise / sound", "icon": "mdi-volume-high" }
+		{ "value": "noise", "label": "Noise / sound", "icon": "mdi-volume-high" },
+		{ "value": "light", "label": "Light / illuminance", "icon": "mdi-brightness-6" }
 	]
 }

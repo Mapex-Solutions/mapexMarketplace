@@ -1,0 +1,47 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-ws203",
+	"model": "WS203",
+	"name": {
+		"en-US": "WS203 Milesight LoRaWAN Sensor",
+		"pt-BR": "WS203 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight WS203 — LoRaWAN (Class A) sensor that monitors temperature, humidity, occupancy / motion, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WS203 — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, ocupação / movimento, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature",
+		"humidity",
+		"motion",
+		"button",
+		"current"
+	],
+	"tags": [
+		"temperature",
+		"humidity",
+		"motion",
+		"button",
+		"current",
+		"milesight"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/ws203-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/ws203-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/ws203"
+}

@@ -1,0 +1,15 @@
+# Build-context ignore (BuildKit reads this file next to the Dockerfile).
+# Context is the parent dir of both repos, so paths are repo-prefixed.
+# Keep it lean: the 591 MB catalog is mounted at runtime, not built in.
+**/.git
+**/.github
+**/.claude
+**/node_modules
+mapexMarketplace/catalog
+mapexMarketplace/data
+mapexMarketplace/bin
+mapexMarketplace/images
+mapexMarketplace/INTERNALS
+mapexMarketplace/deployment
+mapexGoKit/bin
+mapexGoKit/INTERNALS

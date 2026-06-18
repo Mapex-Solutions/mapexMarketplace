@@ -1,0 +1,29 @@
+# Standalone deployment of the marketplace catalog service.
+#
+# Lightweight image (Go binary only). The catalog bundles and the disposable
+# SQLite index live in volumes, so the catalog runs independently and updates
+# without rebuilding the image. The port is published on localhost only — nginx
+# terminates TLS and proxies to it, which also keeps it off the public firewall.
+services:
+  marketplace:
+    build:
+      context: ../..                                  # parent dir holding mapexMarketplace + mapexGoKit (local replace)
+      dockerfile: mapexMarketplace/deployment/Dockerfile
+    image: mapex-marketplace:latest
+    container_name: mapex-marketplace
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6060:6060"                          # localhost only → nginx proxies; never public (UFW-safe)
+    environment:
+      GO_ENV: production
+      HTTP_ADDRESS: 0.0.0.0                            # bind all inside the container so the host mapping reaches it
+      HTTP_PORT: "6060"
+      CATALOG_DIR: /catalog
+      CATALOG_INDEX_PATH: /data/catalog-index.db
+      CORS_ORIGINS: "*"
+    volumes:
+      - ../catalog:/catalog:ro                         # bundles: JSON + PDFs/images/codecs (read-only)
+      - mp-data:/data                                  # disposable SQLite search index (rebuilt on boot)
+
+volumes:
+  mp-data:

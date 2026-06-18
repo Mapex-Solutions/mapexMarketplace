@@ -20,6 +20,7 @@ type CatalogItem struct {
 	ReadingTypes  []string
 	Tags          []string
 	Icon          string
+	Image         string
 	HasCodec      bool
 	HasManual     bool
 }

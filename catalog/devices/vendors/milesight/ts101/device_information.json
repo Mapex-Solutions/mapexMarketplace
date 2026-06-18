@@ -7,17 +7,17 @@
 		"pt-BR": "TS101 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight TS101 — LoRaWAN (Class A) sensor that monitors temperature and button presses. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight TS101 — sensor LoRaWAN (Classe A) que monitora temperatura e acionamentos de botão. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight TS101 — LoRaWAN (Class A) sensor that monitors button presses and temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight TS101 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"temperature",
-		"button"
+		"button",
+		"temperature"
 	],
 	"tags": [
-		"temperature",
 		"button",
+		"temperature",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -36,6 +36,6 @@
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/ts101-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/ts101-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/ts101"
 }

@@ -7,24 +7,22 @@
 		"pt-BR": "VS350 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight VS350 — LoRaWAN (Class A) sensor that monitors people counts, electrical current, open/close status, flow rate, occupancy / motion and temperature. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight VS350 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas, corrente elétrica, status de abertura/fechamento, vazão, ocupação / movimento e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight VS350 — LoRaWAN (Class A) sensor that monitors open/close status, flow rate, occupancy / motion, people counts and temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight VS350 — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento, vazão, ocupação / movimento, contagem de pessoas e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"passage_counter",
-		"current",
 		"door",
 		"flow",
 		"motion",
+		"passage_counter",
 		"temperature"
 	],
 	"tags": [
-		"passage_counter",
-		"current",
 		"door",
 		"flow",
 		"motion",
+		"passage_counter",
 		"temperature",
 		"milesight"
 	],
@@ -35,15 +33,13 @@
 		"site": "https://www.milesight.com",
 		"support": "https://support.milesight-iot.com"
 	},
-	"images": {
-		"device": "images/device.jpg"
-	},
+	"images": {},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
 		"manual": "files/manual.pdf",
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/vs350-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/vs350-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/vs350"
 }

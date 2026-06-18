@@ -7,18 +7,16 @@
 		"pt-BR": "WS302 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight WS302 — LoRaWAN (Class A) sensor that monitors distance / level, electrical current and noise level. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight WS302 — sensor LoRaWAN (Classe A) que monitora distância / nível, corrente elétrica e nível de ruído. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight WS302 — LoRaWAN (Class A) sensor that monitors distance / level and noise level. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WS302 — sensor LoRaWAN (Classe A) que monitora distância / nível e nível de ruído. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
 		"distance",
-		"current",
 		"noise"
 	],
 	"tags": [
 		"distance",
-		"current",
 		"noise",
 		"milesight"
 	],
@@ -30,7 +28,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.jpg"
+		"device": "images/device.png"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
@@ -38,6 +36,6 @@
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/ws302-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/ws302-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/ws302"
 }

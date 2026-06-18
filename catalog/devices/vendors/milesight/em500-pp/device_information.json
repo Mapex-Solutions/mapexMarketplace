@@ -7,20 +7,18 @@
 		"pt-BR": "EM500-PP Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight EM500-PP — LoRaWAN (Class A) sensor that monitors air quality, button presses, electrical current and pressure. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight EM500-PP — sensor LoRaWAN (Classe A) que monitora qualidade do ar, acionamentos de botão, corrente elétrica e pressão. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight EM500-PP — LoRaWAN (Class A) sensor that monitors air quality, button presses and pressure. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight EM500-PP — sensor LoRaWAN (Classe A) que monitora qualidade do ar, acionamentos de botão e pressão. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
 		"air_quality",
 		"button",
-		"current",
 		"pressure"
 	],
 	"tags": [
 		"air_quality",
 		"button",
-		"current",
 		"pressure",
 		"milesight"
 	],
@@ -32,7 +30,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.jpg"
+		"device": "images/device.png"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
@@ -40,6 +38,6 @@
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/em500-pp-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/em500-pp-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/em500-pp"
 }

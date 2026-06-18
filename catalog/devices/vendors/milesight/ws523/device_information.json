@@ -7,8 +7,8 @@
 		"pt-BR": "WS523 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight WS523 — LoRaWAN (Class A) sensor that monitors LoRaWAN sensor data. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight WS523 — sensor LoRaWAN (Classe A) que monitora dados de sensor LoRaWAN. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight WS523 — LoRaWAN (Class A) sensor that monitors dry-contact state. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WS523 — sensor LoRaWAN (Classe A) que monitora estado de contato seco. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
@@ -28,12 +28,9 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.jpg"
+		"device": "images/device.png"
 	},
-	"files": {
-		"datasheetUrl": "https://www.milesight.com/support/resources/document-center",
-		"manualUrl": "https://www.milesight.com/support/resources/document-center"
-	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"files": {},
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/ws523"
 }

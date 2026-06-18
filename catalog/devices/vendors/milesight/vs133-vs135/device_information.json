@@ -25,13 +25,8 @@
 		"site": "https://www.milesight.com",
 		"support": "https://support.milesight-iot.com"
 	},
-	"images": {
-		"device": "images/device.png"
-	},
-	"files": {
-		"datasheetUrl": "https://www.milesight.com/support/resources/document-center",
-		"manualUrl": "https://www.milesight.com/support/resources/document-center"
-	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"images": {},
+	"files": {},
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/vs133-vs135"
 }

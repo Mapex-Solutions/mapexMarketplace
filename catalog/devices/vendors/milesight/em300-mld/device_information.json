@@ -30,9 +30,8 @@
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
-		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/em300-mld-datasheet-en.pdf",
-		"manualUrl": "https://www.milesight.com/support/resources/document-center"
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/em300-mld-datasheet-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/em300-mld"
 }

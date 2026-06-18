@@ -7,21 +7,19 @@
 		"pt-BR": "EM500-CO2 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight EM500-CO2 — LoRaWAN (Class A) sensor that monitors open/close status, CO₂, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight EM500-CO2 — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento, CO₂, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight EM500-CO2 — LoRaWAN (Class A) sensor that monitors button presses, CO₂ and open/close status. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight EM500-CO2 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, CO₂ e status de abertura/fechamento. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"door",
-		"co2",
 		"button",
-		"current"
+		"co2",
+		"door"
 	],
 	"tags": [
-		"door",
-		"co2",
 		"button",
-		"current",
+		"co2",
+		"door",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -32,7 +30,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.jpg"
+		"device": "images/device.png"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
@@ -40,6 +38,6 @@
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/em500-co2-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/em500-co2-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/em500-co2"
 }

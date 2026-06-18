@@ -20,6 +20,7 @@ const ddlDeviceCatalog = `CREATE TABLE IF NOT EXISTS device_catalog (
 	reading_types TEXT NOT NULL,
 	tags TEXT NOT NULL,
 	icon TEXT NOT NULL,
+	image TEXT NOT NULL,
 	has_codec INTEGER NOT NULL,
 	has_manual INTEGER NOT NULL
 )`
@@ -32,11 +33,11 @@ const dropDeviceCatalog = `DROP TABLE IF EXISTS device_catalog`
 
 // insertDeviceCatalog inserts one index row.
 const insertDeviceCatalog = `INSERT INTO device_catalog
-	(id, vendor, vendor_name, model, slug, name_en, name_pt, description_en, description_pt, protocol, reading_types, tags, icon, has_codec, has_manual)
-	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	(id, vendor, vendor_name, model, slug, name_en, name_pt, description_en, description_pt, protocol, reading_types, tags, icon, image, has_codec, has_manual)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
 // selectColumns is the column list returned by listing queries, in scan order.
-const selectColumns = "id, vendor, vendor_name, model, slug, name_en, name_pt, description_en, description_pt, protocol, reading_types, tags, icon, has_codec, has_manual"
+const selectColumns = "id, vendor, vendor_name, model, slug, name_en, name_pt, description_en, description_pt, protocol, reading_types, tags, icon, image, has_codec, has_manual"
 
 // fileCatalogConfig is the per-marketplace config (facet vocabulary) at the
 // devices catalog root.

@@ -7,20 +7,18 @@
 		"pt-BR": "EM300-MCS Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight EM300-MCS — LoRaWAN (Class A) sensor that monitors open/close status, button presses, electrical current and temperature. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight EM300-MCS — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento, acionamentos de botão, corrente elétrica e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight EM300-MCS — LoRaWAN (Class A) sensor that monitors button presses, open/close status and temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight EM300-MCS — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, status de abertura/fechamento e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"door",
 		"button",
-		"current",
+		"door",
 		"temperature"
 	],
 	"tags": [
-		"door",
 		"button",
-		"current",
+		"door",
 		"temperature",
 		"milesight"
 	],
@@ -40,6 +38,6 @@
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/em300-mcs-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/em300-mcs-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/em300-mcs"
 }

@@ -7,23 +7,21 @@
 		"pt-BR": "EM300-TH Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight EM300-TH — LoRaWAN (Class A) sensor that monitors temperature, humidity, open/close status, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight EM300-TH — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, status de abertura/fechamento, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight EM300-TH — LoRaWAN (Class A) sensor that monitors button presses, open/close status, humidity and temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight EM300-TH — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, status de abertura/fechamento, umidade e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"temperature",
-		"humidity",
-		"door",
 		"button",
-		"current"
+		"door",
+		"humidity",
+		"temperature"
 	],
 	"tags": [
-		"temperature",
-		"humidity",
-		"door",
 		"button",
-		"current",
+		"door",
+		"humidity",
+		"temperature",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -34,7 +32,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.jpg"
+		"device": "images/device.png"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
@@ -42,6 +40,6 @@
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/em300-th-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/em300-th-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/em300-th"
 }

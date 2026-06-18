@@ -64,6 +64,7 @@ func (s *DevicesService) mapItem(item *entities.CatalogItem, lang string) dtos.C
 		ReadingTypes: item.ReadingTypes,
 		Tags:         item.Tags,
 		Icon:         item.Icon,
+		Image:        item.Image,
 		HasCodec:     item.HasCodec,
 		HasManual:    item.HasManual,
 	}

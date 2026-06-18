@@ -7,21 +7,15 @@
 		"pt-BR": "WS558 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight WS558 — LoRaWAN (Class A) sensor that monitors electrical current, light / illuminance, rainfall and soil moisture. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight WS558 — sensor LoRaWAN (Classe A) que monitora corrente elétrica, luminosidade, chuva e umidade do solo. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight WS558 — LoRaWAN (Class A) sensor that monitors light / illuminance. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WS558 — sensor LoRaWAN (Classe A) que monitora luminosidade. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"current",
-		"light",
-		"rainfall",
-		"soil_moisture"
+		"light"
 	],
 	"tags": [
-		"current",
 		"light",
-		"rainfall",
-		"soil_moisture",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -40,6 +34,6 @@
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/ws558-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/ws558-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/ws558"
 }

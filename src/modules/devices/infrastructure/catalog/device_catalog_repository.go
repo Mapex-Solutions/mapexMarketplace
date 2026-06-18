@@ -220,6 +220,7 @@ func (a *adapter) readManifests() ([]entities.CatalogItem, error) {
 				ReadingTypes:  item.ReadingTypes,
 				Tags:          item.Tags,
 				Icon:          item.Icon,
+				Image:         item.Image,
 				HasCodec:      item.HasCodec,
 				HasManual:     item.HasManual,
 			})
@@ -243,7 +244,7 @@ func (a *adapter) replaceIndex(ctx context.Context, items []entities.CatalogItem
 		if _, err := tx.ExecContext(ctx, insertDeviceCatalog,
 			item.ID, item.Vendor, item.VendorName, item.Model, item.Slug, item.NameEN, item.NamePT,
 			item.DescriptionEN, item.DescriptionPT, item.Protocol, wrapTokens(item.ReadingTypes), wrapTokens(item.Tags),
-			item.Icon, boolToInt(item.HasCodec), boolToInt(item.HasManual),
+			item.Icon, item.Image, boolToInt(item.HasCodec), boolToInt(item.HasManual),
 		); err != nil {
 			_ = tx.Rollback()
 			return 0, err
@@ -381,7 +382,7 @@ func scanItems(rows *sql.Rows) ([]entities.CatalogItem, error) {
 		)
 		if err := rows.Scan(
 			&item.ID, &item.Vendor, &item.VendorName, &item.Model, &item.Slug, &item.NameEN, &item.NamePT,
-			&item.DescriptionEN, &item.DescriptionPT, &item.Protocol, &readingTypes, &tags, &item.Icon, &hasCodec, &hasManual,
+			&item.DescriptionEN, &item.DescriptionPT, &item.Protocol, &readingTypes, &tags, &item.Icon, &item.Image, &hasCodec, &hasManual,
 		); err != nil {
 			return nil, err
 		}

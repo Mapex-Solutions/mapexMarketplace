@@ -36,6 +36,7 @@ type manifestItem struct {
 	ReadingTypes []string      `json:"readingTypes"`
 	Tags         []string      `json:"tags"`
 	Icon         string        `json:"icon"`
+	Image        string        `json:"image"`
 	HasCodec     bool          `json:"hasCodec"`
 	HasManual    bool          `json:"hasManual"`
 }

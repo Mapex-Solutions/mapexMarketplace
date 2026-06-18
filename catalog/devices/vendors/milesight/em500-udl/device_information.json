@@ -7,19 +7,17 @@
 		"pt-BR": "EM500-UDL Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight EM500-UDL — LoRaWAN (Class A) sensor that monitors distance / level, button presses and electrical current. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight EM500-UDL — sensor LoRaWAN (Classe A) que monitora distância / nível, acionamentos de botão e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight EM500-UDL — LoRaWAN (Class A) sensor that monitors button presses and distance / level. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight EM500-UDL — sensor LoRaWAN (Classe A) que monitora acionamentos de botão e distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"distance",
 		"button",
-		"current"
+		"distance"
 	],
 	"tags": [
-		"distance",
 		"button",
-		"current",
+		"distance",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -29,15 +27,13 @@
 		"site": "https://www.milesight.com",
 		"support": "https://support.milesight-iot.com"
 	},
-	"images": {
-		"device": "images/device.png"
-	},
+	"images": {},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
 		"manual": "files/manual.pdf",
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/em500-udl-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/em500-udl-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/em500-udl"
 }

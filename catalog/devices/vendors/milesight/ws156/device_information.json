@@ -30,14 +30,9 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.jpg"
+		"device": "images/device.png"
 	},
-	"files": {
-		"datasheet": "files/datasheet.pdf",
-		"manual": "files/manual.pdf",
-		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/ws136&ws156-datasheet-en.pdf",
-		"manualUrl": "https://resource.milesight.com/milesight/iot/document/ws136&ws156-user-guide-en.pdf"
-	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"files": {},
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/ws156"
 }

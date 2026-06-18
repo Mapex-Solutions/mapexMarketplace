@@ -7,19 +7,17 @@
 		"pt-BR": "WS202 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight WS202 — LoRaWAN (Class A) sensor that monitors occupancy / motion, electrical current and light / illuminance. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight WS202 — sensor LoRaWAN (Classe A) que monitora ocupação / movimento, corrente elétrica e luminosidade. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight WS202 — LoRaWAN (Class A) sensor that monitors light / illuminance and occupancy / motion. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WS202 — sensor LoRaWAN (Classe A) que monitora luminosidade e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"motion",
-		"current",
-		"light"
+		"light",
+		"motion"
 	],
 	"tags": [
-		"motion",
-		"current",
 		"light",
+		"motion",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -38,6 +36,6 @@
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/ws202-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/ws202-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/ws202"
 }

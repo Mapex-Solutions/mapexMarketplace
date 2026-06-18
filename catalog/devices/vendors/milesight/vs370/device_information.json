@@ -7,22 +7,18 @@
 		"pt-BR": "VS370 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight VS370 — LoRaWAN (Class A) sensor that monitors people counts, distance / level, button presses, electrical current and occupancy / motion. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight VS370 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas, distância / nível, acionamentos de botão, corrente elétrica e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight VS370 — LoRaWAN (Class A) sensor that monitors button presses, distance / level and occupancy / motion. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight VS370 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, distância / nível e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"passage_counter",
-		"distance",
 		"button",
-		"current",
+		"distance",
 		"motion"
 	],
 	"tags": [
-		"passage_counter",
-		"distance",
 		"button",
-		"current",
+		"distance",
 		"motion",
 		"milesight"
 	],
@@ -33,15 +29,13 @@
 		"site": "https://www.milesight.com",
 		"support": "https://support.milesight-iot.com"
 	},
-	"images": {
-		"device": "images/device.png"
-	},
+	"images": {},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
 		"manual": "files/manual.pdf",
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/vs370-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/vs370-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/vs370"
 }

@@ -7,25 +7,21 @@
 		"pt-BR": "EM400-TLD Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight EM400-TLD — LoRaWAN (Class A) sensor that monitors distance / level, button presses, electrical current, open/close status, light / illuminance, temperature and tilt / angle. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight EM400-TLD — sensor LoRaWAN (Classe A) que monitora distância / nível, acionamentos de botão, corrente elétrica, status de abertura/fechamento, luminosidade, temperatura e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight EM400-TLD — LoRaWAN (Class A) sensor that monitors button presses, distance / level, open/close status, temperature and tilt / angle. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight EM400-TLD — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, distância / nível, status de abertura/fechamento, temperatura e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"distance",
 		"button",
-		"current",
+		"distance",
 		"door",
-		"light",
 		"temperature",
 		"tilt"
 	],
 	"tags": [
-		"distance",
 		"button",
-		"current",
+		"distance",
 		"door",
-		"light",
 		"temperature",
 		"tilt",
 		"milesight"
@@ -38,7 +34,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.jpg"
+		"device": "images/device.png"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
@@ -46,6 +42,6 @@
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/em400-tld-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/em400-tld-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/em400-tld"
 }

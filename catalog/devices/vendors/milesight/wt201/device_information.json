@@ -7,19 +7,17 @@
 		"pt-BR": "WT201 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight WT201 — LoRaWAN (Class A) sensor that monitors temperature, electrical current and open/close status. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight WT201 — sensor LoRaWAN (Classe A) que monitora temperatura, corrente elétrica e status de abertura/fechamento. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight WT201 — LoRaWAN (Class A) sensor that monitors open/close status and temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WT201 — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"temperature",
-		"current",
-		"door"
+		"door",
+		"temperature"
 	],
 	"tags": [
-		"temperature",
-		"current",
 		"door",
+		"temperature",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -30,7 +28,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.png"
+		"device": "images/device.jpg"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
@@ -38,6 +36,6 @@
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/wt201-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/wt201-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/wt201"
 }

@@ -7,27 +7,21 @@
 		"pt-BR": "VS330 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight VS330 — LoRaWAN (Class A) sensor that monitors people counts, button presses, electrical current, light / illuminance, occupancy / motion, temperature and tilt / angle. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight VS330 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas, acionamentos de botão, corrente elétrica, luminosidade, ocupação / movimento, temperatura e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight VS330 — LoRaWAN (Class A) sensor that monitors button presses, light / illuminance, occupancy / motion and temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight VS330 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, luminosidade, ocupação / movimento e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"passage_counter",
 		"button",
-		"current",
 		"light",
 		"motion",
-		"temperature",
-		"tilt"
+		"temperature"
 	],
 	"tags": [
-		"passage_counter",
 		"button",
-		"current",
 		"light",
 		"motion",
 		"temperature",
-		"tilt",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -38,7 +32,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.jpg"
+		"device": "images/device.png"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
@@ -46,6 +40,6 @@
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/vs330-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/vs330-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/vs330"
 }

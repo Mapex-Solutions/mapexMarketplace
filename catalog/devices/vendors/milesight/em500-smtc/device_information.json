@@ -7,23 +7,21 @@
 		"pt-BR": "EM500-SMTC Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight EM500-SMTC — LoRaWAN (Class A) sensor that monitors temperature, button presses, conductivity (EC), electrical current and soil moisture. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight EM500-SMTC — sensor LoRaWAN (Classe A) que monitora temperatura, acionamentos de botão, condutividade (EC), corrente elétrica e umidade do solo. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight EM500-SMTC — LoRaWAN (Class A) sensor that monitors button presses, conductivity (EC), soil moisture and temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight EM500-SMTC — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, condutividade (EC), umidade do solo e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"temperature",
 		"button",
 		"conductivity",
-		"current",
-		"soil_moisture"
+		"soil_moisture",
+		"temperature"
 	],
 	"tags": [
-		"temperature",
 		"button",
 		"conductivity",
-		"current",
 		"soil_moisture",
+		"temperature",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -42,6 +40,6 @@
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/em500-smtc-datasheet-en.pdf",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/em500-smtc-user-guide-en.pdf"
 	},
-	"collectedAt": "2026-06-18T12:02:26.295Z",
+	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/em500-smtc"
 }

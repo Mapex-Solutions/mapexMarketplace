@@ -17,8 +17,11 @@ type CatalogItem struct {
 	ReadingTypes []string `json:"readingTypes"`
 	Tags         []string `json:"tags"`
 	Icon         string   `json:"icon"`
-	HasCodec     bool     `json:"hasCodec"`
-	HasManual    bool     `json:"hasManual"`
+	// Image is the device photo's bundle-relative path (e.g. "images/device.png");
+	// the client builds the asset URL from vendor+slug. Empty when none was harvested.
+	Image     string `json:"image"`
+	HasCodec  bool   `json:"hasCodec"`
+	HasManual bool   `json:"hasManual"`
 }
 
 // CatalogQuery carries the listing filters and pagination read from the query

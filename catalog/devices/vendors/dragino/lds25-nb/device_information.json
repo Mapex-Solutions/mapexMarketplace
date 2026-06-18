@@ -1,0 +1,40 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-lds25-nb",
+	"model": "LDS25-NB",
+	"name": {
+		"en-US": "LDS25-NB NB-IoT LiDAR ToF Distance Sensor",
+		"pt-BR": "LDS25-NB NB-IoT Sensor de Distância LiDAR ToF"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors distance / level. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"distance"
+	],
+	"tags": [
+		"nb-iot",
+		"distance",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/o1o1p7hi5944kcarqlfxi/AFUsOVnCkKjzd7Nr26AWzfw?rlkey=gf4z64ffhuw0zlkpwbin56y1f&st=79psz9q6&dl=0",
+		"manualUrl": "https://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/LDS25-NB--NB-IoT_LiDAR_ToF_Distance_Auto-Clean_Sensor/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/distance-level-sensor/item/349-lds25-nb.html"
+}

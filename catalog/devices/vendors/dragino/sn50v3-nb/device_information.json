@@ -1,0 +1,40 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-sn50v3-nb",
+	"model": "SN50v3-NB",
+	"name": {
+		"en-US": "SN50v3-NB NB-IoT Universal Sensor Node",
+		"pt-BR": "SN50v3-NB NB-IoT Nó Sensor Universal"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"temperature"
+	],
+	"tags": [
+		"nb-iot",
+		"temperature",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/1o7bmh5sgi3i59u/AABCiYR2xbix86-sNvvpbJ8Za?dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/SN50v3-NB_NB-IoT_Sensor_Node_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/nb-iot/item/291-sn50v3-nb.html"
+}

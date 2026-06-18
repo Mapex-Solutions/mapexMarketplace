@@ -1,0 +1,40 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-sw3l-nb",
+	"model": "SW3L-NB",
+	"name": {
+		"en-US": "SW3L-NB NB-IoT Flow Sensor",
+		"pt-BR": "SW3L-NB NB-IoT Sensor de Vazão"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors flow rate. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora vazão. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"flow"
+	],
+	"tags": [
+		"nb-iot",
+		"flow",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/ac9rei14nbi79jb/AABKWmiF_HzaTe99atg9Dww2a?dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/SW3L-NB_NB-IoT_Flow_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/water-meter-flow-sensor/item/305-sw3l-nb.html"
+}

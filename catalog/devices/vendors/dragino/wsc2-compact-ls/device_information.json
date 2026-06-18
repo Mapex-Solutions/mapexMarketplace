@@ -1,0 +1,47 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-wsc2-compact-ls",
+	"model": "WSC2-Compact-LS",
+	"name": {
+		"en-US": "WSC2-Compact-LS LoRaWAN Weather Station Kit",
+		"pt-BR": "WSC2-Compact-LS LoRaWAN Kit de Estação Meteorológica"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors temperature, humidity, pressure, wind and rainfall. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura, umidade, pressão, vento e chuva. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature",
+		"humidity",
+		"pressure",
+		"wind",
+		"rainfall"
+	],
+	"tags": [
+		"temperature",
+		"humidity",
+		"pressure",
+		"wind",
+		"rainfall",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/m3v60n778jafb6j7axvwx/ANnLm8cgX4X0qW5WX0T19og?rlkey=eisfcp4kf0inizsqblkj1aqw6&st=pngj7hcn&dl=0",
+		"manualUrl": "https://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/WSC2-Compact-L--Weather_Station_Kit_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/agriculture-weather-station/item/356-wsc2-compact-ls.html"
+}

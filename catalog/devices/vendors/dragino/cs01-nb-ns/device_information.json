@@ -1,0 +1,42 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-cs01-nb-ns",
+	"model": "CS01-NB/NS",
+	"name": {
+		"en-US": "CS01-NB/NS NB-IoT 4-Channel Current Sensor Converter",
+		"pt-BR": "CS01-NB/NS NB-IoT Conversor de Corrente de 4 Canais"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors electrical current. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora corrente elétrica. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"current"
+	],
+	"tags": [
+		"nb-iot",
+		"current",
+		"clamp",
+		"4-channel",
+		"energy"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/7c5j1z0y2kx4sxvw200q7/ANbSic1AeWu_LCd6j3lh-Gk?rlkey=lz145ks92h3j9hcroptet6u3o&st=qfst46v9&dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/CS01-NBNS_NB-IoT_4_Channels_Current_Sensor_Converter_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/distance-level-sensor/item/338-cs01-nb-ns.html"
+}

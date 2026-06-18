@@ -1,0 +1,39 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-ltc1-ltc2-lb-ls",
+	"model": "LTC1/LTC2-LB/LS",
+	"name": {
+		"en-US": "LTC1/LTC2-LB/LS LoRaWAN Temperature Transmitter",
+		"pt-BR": "LTC1/LTC2-LB/LS LoRaWAN Transmissor de Temperatura"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature"
+	],
+	"tags": [
+		"temperature",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/know17vmtsxbvzjjrrnz2/AIbnW3Iy6CKE0vHxNV20Isw?rlkey=6jcu8qyqgqrwvrom14m6w8q3b&st=cj85ozw6&dl=0",
+		"manualUrl": "https://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/LTC1LTC2-LBLS--LoRaWAN_Temperature_Transmitter_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/temperature-humidity-sensor/item/343-ltc1-ltc2-lb-ls.html"
+}

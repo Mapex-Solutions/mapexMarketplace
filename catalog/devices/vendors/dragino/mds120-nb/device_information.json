@@ -1,0 +1,40 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-mds120-nb",
+	"model": "MDS120-NB",
+	"name": {
+		"en-US": "MDS120-NB NB-IoT Microwave Radar Distance Sensor",
+		"pt-BR": "MDS120-NB NB-IoT Sensor de Distância por Radar de Micro-ondas"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors distance / level. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"distance"
+	],
+	"tags": [
+		"nb-iot",
+		"distance",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/1h29tmx4t0p8bs9/AAA01JC_QrgSZQmh41FfaXeLa?dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/MDS120-NB_NB-IoT_Microwave_Radar_Distance_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/distance-level-sensor/item/298-mds120-nb.html"
+}

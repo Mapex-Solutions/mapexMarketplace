@@ -1,0 +1,126 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Dragino CPL03-LB/LS",
+	"protocolId": "lorawan",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "lorawan",
+		"gatewayId": "",
+		"region": "EU868",
+		"macVersion": "1.0.3",
+		"class": "A",
+		"activation": "otaa",
+		"devEui": "A8404100000C0301",
+		"joinEui": "A840410000000101",
+		"appKey": "5572404C696E6B4C6F52613230313823",
+		"nwkKey": "",
+		"devAddr": "",
+		"nwkSKey": "",
+		"appSKey": ""
+	},
+	"attributes": {
+		"manufacturer": "Dragino",
+		"model": "CPL03-LB/LS"
+	},
+	"events": [
+		{
+			"id": "status",
+			"name": "Device status",
+			"lorawan": {
+				"fport": 5,
+				"confirmed": false,
+				"payloadHex": "0a010001000b{{randInt(40,49)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "config",
+			"name": "Sensor configuration",
+			"lorawan": {
+				"fport": 4,
+				"confirmed": false,
+				"payloadHex": "{{randInt(10,99)}}001c2000"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "openclose",
+			"name": "Real-time open/close status",
+			"lorawan": {
+				"fport": 2,
+				"confirmed": false,
+				"payloadHex": "0{{randInt(8,9)}}0000{{randInt(10,99)}}0000{{randInt(10,99)}}68{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 15,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "historical",
+			"name": "Historical open/close event",
+			"lorawan": {
+				"fport": 3,
+				"confirmed": false,
+				"payloadHex": "0{{randInt(8,9)}}0000{{randInt(10,99)}}0000{{randInt(10,99)}}68{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "pulse",
+			"name": "Pulse counting mode",
+			"lorawan": {
+				"fport": 6,
+				"confirmed": false,
+				"payloadHex": "0b4906{{randInt(10,99)}}{{randInt(10,99)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "interrupt",
+			"name": "Interrupt mode",
+			"lorawan": {
+				"fport": 7,
+				"confirmed": false,
+				"payloadHex": "0b45{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "people",
+			"name": "Bi-direction people counter",
+			"lorawan": {
+				"fport": 8,
+				"confirmed": false,
+				"payloadHex": "0b4908{{randInt(10,99)}}{{randInt(10,99)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		}
+	]
+}

@@ -1,0 +1,42 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Milesight VS121",
+	"protocolId": "lorawan",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "lorawan",
+		"gatewayId": "",
+		"region": "EU868",
+		"macVersion": "1.0.3",
+		"class": "A",
+		"activation": "otaa",
+		"devEui": "24E124000000C001",
+		"joinEui": "24E124C0002C0001",
+		"appKey": "5572404C696E6B4C6F52613230313823",
+		"nwkKey": "",
+		"devAddr": "",
+		"nwkSKey": "",
+		"appSKey": ""
+	},
+	"attributes": {
+		"manufacturer": "Milesight",
+		"model": "VS121"
+	},
+	"events": [
+		{
+			"id": "uplink-passage",
+			"name": "Passage count uplink",
+			"lorawan": {
+				"fport": 85,
+				"confirmed": false,
+				"payloadHex": "04c9{{randInt(0,20)}}00057d{{randInt(0,20)}}00"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 5,
+				"unit": "minutes"
+			}
+		}
+	]
+}

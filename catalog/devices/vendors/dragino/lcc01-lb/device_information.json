@@ -1,0 +1,41 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-lcc01-lb",
+	"model": "LCC01-LB",
+	"name": {
+		"en-US": "LCC01-LB LoRaWAN Load Cell Converter",
+		"pt-BR": "LCC01-LB LoRaWAN Conversor de Célula de Carga"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors weight. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora peso. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"weight"
+	],
+	"tags": [
+		"weight",
+		"load-cell",
+		"strain-gauge",
+		"scale"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/kkhmqcnh8pthgwna1vsje/h?rlkey=34uh91qgefo87vfq4w30zrk8o&dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/LCC01-LB_LoRaWAN_Load_Cell_Converter_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/distance-level-sensor/item/323-lcc01-lb.html"
+}

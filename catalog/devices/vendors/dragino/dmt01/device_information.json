@@ -1,0 +1,41 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-dmt01",
+	"model": "DMT01",
+	"name": {
+		"en-US": "DMT01 LoRaWAN Wireless Meat Thermometer",
+		"pt-BR": "DMT01 LoRaWAN Termômetro de Carne Sem Fio"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature"
+	],
+	"tags": [
+		"temperature",
+		"thermometer",
+		"food-safety",
+		"probe"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/d8pp1c32bb00nmgigmojt/AC8g-_intWZbJywYxpwwELc?rlkey=74e572wyvrjvl0obnqabyg6ps&st=69jfu7yt&dl=0",
+		"manualUrl": "https://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/DMT01/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/temperature-humidity-sensor/item/367-dmt01.html"
+}

@@ -1,0 +1,61 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Dragino D23-NB",
+	"protocolId": "mqtt",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "mqtt",
+		"brokerUrl": "",
+		"clientId": "",
+		"baseTopic": "dragino/d23-nb",
+		"authMode": "none",
+		"username": "",
+		"password": "",
+		"tlsCertPem": "",
+		"tlsKeyPem": "",
+		"tlsCaPem": "",
+		"receiveEnabled": false,
+		"subscriptions": []
+	},
+	"attributes": {
+		"manufacturer": "Dragino",
+		"model": "D23-NB"
+	},
+	"events": [
+		{
+			"id": "status",
+			"name": "Device status",
+			"mqtt": {
+				"topic": "dragino/d23-nb/status",
+				"qos": 0,
+				"retain": false,
+				"bodyMode": "raw",
+				"bodyFields": [],
+				"body": "{\"IMEI\":\"{{randInt(100000000000000,999999999999999)}}\",\"IMSI\":\"{{randInt(100000000000000,999999999999999)}}\",\"Model\":\"D23-NB\",\"fw_version\":\"1.0.0\",\"battery\":3.{{randInt(10,45)}},\"signal\":{{randInt(5,31)}},\"time\":\"2026/06/18 {{randInt(10,23)}}:{{randInt(10,59)}}:{{randInt(10,59)}}\"}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 12,
+				"unit": "hours"
+			}
+		},
+		{
+			"id": "uplink-temp",
+			"name": "Temperature uplink",
+			"mqtt": {
+				"topic": "dragino/d23-nb/up",
+				"qos": 0,
+				"retain": false,
+				"bodyMode": "raw",
+				"bodyFields": [],
+				"body": "{\"IMEI\": \"{{randInt(100000000000000,999999999999999)}}\", \"Model\": \"D23-NB\", \"temperature\": \"{{randInt(15,35)}}.{{randInt(0,9)}}\", \"bat\": \"3.{{randInt(0,6)}}\"}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 1,
+				"unit": "hours"
+			}
+		}
+	]
+}

@@ -1,0 +1,42 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-sph01-nb",
+	"model": "SPH01-NB",
+	"name": {
+		"en-US": "SPH01-NB NB-IoT Soil pH Sensor",
+		"pt-BR": "SPH01-NB NB-IoT Sensor de pH do Solo"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors pH and temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora pH e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"ph",
+		"temperature"
+	],
+	"tags": [
+		"nb-iot",
+		"ph",
+		"temperature",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/5ewkin48iltcozw/AADQCCytVpEycQveF27t-IAga?dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/SPH01-NB_NB-IoT_Soil_pH_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/agriculture-weather-station/item/307-sph01-nb.html"
+}

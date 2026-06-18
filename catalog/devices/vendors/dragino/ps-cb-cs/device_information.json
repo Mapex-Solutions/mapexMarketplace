@@ -1,0 +1,40 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-ps-cb-cs",
+	"model": "PS-CB/CS",
+	"name": {
+		"en-US": "PS-CB/CS Cat-1 Pressure Sensor",
+		"pt-BR": "PS-CB/CS Cat-1 Sensor de Pressão"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors pressure. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora pressão. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"pressure"
+	],
+	"tags": [
+		"nb-iot",
+		"pressure",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/7h5zj0v0e7o288505e8pg/AACMUgABQ1U4HKtbQVFsusE?rlkey=9qslb4hg65j9ipruvhc6ar5ft&st=0i9nmuqu&dl=0",
+		"manualUrl": "https://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/PS-CBCS--NB-IoTLTE-M_AirWater_Pressure_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/distance-level-sensor/item/381-ps-cb-cs.html"
+}

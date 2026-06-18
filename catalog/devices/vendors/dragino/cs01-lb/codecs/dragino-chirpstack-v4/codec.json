@@ -1,0 +1,14 @@
+{
+	"$schema": "mapex-device-codec/v1",
+	"id": "dragino-chirpstack-v4",
+	"name": "Dragino ChirpStack v4 (official)",
+	"source": "vendor",
+	"official": true,
+	"default": true,
+	"target": "chirpstack-v4",
+	"language": "javascript",
+	"files": {
+		"decoder": "decoder.js"
+	},
+	"sourceUrl": "https://raw.githubusercontent.com/dragino/dragino-end-node-decoder/main/CS01-LB/CS01-LB_V1.0_ChirpstackV4_decoder.txt"
+}

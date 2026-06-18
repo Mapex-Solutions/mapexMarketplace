@@ -1,0 +1,40 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-d20-nb-d20s-nb",
+	"model": "D20-NB/D20S-NB",
+	"name": {
+		"en-US": "D20-NB / D20S-NB NB-IoT Temperature Sensor",
+		"pt-BR": "D20-NB / D20S-NB NB-IoT Sensor de Temperatura"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"temperature"
+	],
+	"tags": [
+		"nb-iot",
+		"temperature",
+		"probe"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/7sq6d27nuv6xyo3/AAD3OQtAUCikY2ydP9OZ5gNIa?dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/D20-NB_D20S-NB_D22-NB_D23-NB_NB-IoT_Temperature_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/temperature-humidity-sensor/item/292-d20-nb-d20s-nb.html"
+}

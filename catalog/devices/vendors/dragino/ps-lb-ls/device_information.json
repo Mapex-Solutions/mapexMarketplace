@@ -1,0 +1,39 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-ps-lb-ls",
+	"model": "PS-LB/LS",
+	"name": {
+		"en-US": "PS-LB/LS LoRaWAN Pressure Sensor",
+		"pt-BR": "PS-LB/LS LoRaWAN Sensor de Pressão"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors pressure. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora pressão. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"pressure"
+	],
+	"tags": [
+		"pressure",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/6f4ip1growtvbfv/AAD3coVnmZV-KrSg2ViLEPjNa?dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/PS-LB%20--%20LoRaWAN%20Pressure%20Sensor/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/distance-level-sensor/item/384-ps-lb-ls.html"
+}

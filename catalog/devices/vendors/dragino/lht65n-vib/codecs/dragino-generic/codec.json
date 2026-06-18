@@ -1,0 +1,14 @@
+{
+	"$schema": "mapex-device-codec/v1",
+	"id": "dragino-generic",
+	"name": "Dragino Generic (official)",
+	"source": "vendor",
+	"official": true,
+	"default": false,
+	"target": "generic",
+	"language": "javascript",
+	"files": {
+		"decoder": "decoder.js"
+	},
+	"sourceUrl": "https://raw.githubusercontent.com/dragino/dragino-end-node-decoder/main/LHT65N/LHT65N-ChiprstackV4-1.5.6_decoder.txt"
+}

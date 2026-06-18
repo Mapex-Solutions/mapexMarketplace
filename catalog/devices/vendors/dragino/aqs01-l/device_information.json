@@ -1,0 +1,44 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-aqs01-l",
+	"model": "AQS01-L",
+	"name": {
+		"en-US": "AQS01-L Indoor CO₂ / Temperature / Humidity Sensor",
+		"pt-BR": "AQS01-L Sensor Interno de CO₂ / Temperatura / Umidade"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors CO₂, temperature, humidity and air quality. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora CO₂, temperatura, umidade e qualidade do ar. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"co2",
+		"temperature",
+		"humidity",
+		"air_quality"
+	],
+	"tags": [
+		"indoor",
+		"co2",
+		"air-quality",
+		"climate"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/2bj4hw36t96j7uinx2qx0/h?rlkey=ie62vk3bl1wah2kh97m6iz009&dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/AQS01-L_LoRaWAN_Indoor_CO2_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/water-air-quality-sensor/item/325-aqs01-l.html"
+}

@@ -1,0 +1,41 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-dds20-lb-ls",
+	"model": "DDS20-LB/LS",
+	"name": {
+		"en-US": "DDS20-LB/LS LoRaWAN Ultrasonic Liquid Level Sensor",
+		"pt-BR": "DDS20-LB/LS LoRaWAN Sensor Ultrassônico de Nível de Líquido"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors distance / level. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"distance"
+	],
+	"tags": [
+		"distance",
+		"level",
+		"liquid",
+		"ultrasonic"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/h7mzvi2dpl4qava/AACkQ2HHU88T2EENMv1duV4za?dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/DDS20-LB_LoRaWAN_Ultrasonic_Liquid_Level_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/distance-level-sensor/item/273-dds20-lb-ls.html"
+}

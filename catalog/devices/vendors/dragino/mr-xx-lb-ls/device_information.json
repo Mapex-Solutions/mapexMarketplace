@@ -1,0 +1,39 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-mr-xx-lb-ls",
+	"model": "MR-XX-LB/LS",
+	"name": {
+		"en-US": "MR-XX-LB/LS LoRaWAN Microwave Radar Distance Sensor",
+		"pt-BR": "MR-XX-LB/LS LoRaWAN Sensor de Distância por Radar de Micro-ondas"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors distance / level. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"distance"
+	],
+	"tags": [
+		"distance",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/x3mmg542tv6ypa2vpd2xm/AGpqDm-5jkdn3lT8NtKH8mc?rlkey=hz9bsmvlwwug8e5ngbshh71zv&st=18exf5qb&dl=0",
+		"manualUrl": "https://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/MR-031225-LBLS_LoRaWAN_Microwave_Radar_Distance_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/distance-level-sensor/item/376-mr-xx-lb-ls.html"
+}

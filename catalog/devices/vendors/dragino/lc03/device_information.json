@@ -1,0 +1,43 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-lc03",
+	"model": "LC03",
+	"name": {
+		"en-US": "LC03 LoRaWAN Smart Socket",
+		"pt-BR": "LC03 LoRaWAN Tomada Inteligente"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors electrical current and dry-contact state. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora corrente elétrica e estado de contato seco. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"current",
+		"dry_contact"
+	],
+	"tags": [
+		"socket",
+		"plug",
+		"control",
+		"current",
+		"power"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/b3nwunmg9xeciymb3w4fk/AP81BRnEFkGrT5Q3oYkxLDE?rlkey=wdh32mwqmkc6hvxgdvqe9wm8x&st=jcxioho0&dl=0",
+		"manualUrl": "https://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/LC03_LoRaWAN_Socket_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/lora-lorawan-end-node/item/362-lc03.html"
+}

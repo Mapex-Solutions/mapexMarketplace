@@ -1,0 +1,42 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-s31-cb-s31b-cb",
+	"model": "S31-CB/S31B-CB",
+	"name": {
+		"en-US": "S31-CB/S31B-CB Cat-1 Temperature & Humidity Sensor",
+		"pt-BR": "S31-CB/S31B-CB Cat-1 Sensor de Temperatura e Umidade"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors temperature and humidity. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora temperatura e umidade. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"temperature",
+		"humidity"
+	],
+	"tags": [
+		"nb-iot",
+		"temperature",
+		"humidity",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/r2r40ovwngf90jzbvci2q/ACXmqEMJ9POpRBUdtGiqqKQ?rlkey=m5cm8auvfwsk68hzc4193ykek&st=cxbzbocx&dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/S31-CBS31B-CB--NB-IoTLTE-M_Temperature%26Humidity_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/temperature-humidity-sensor/item/336-s31-cb-s31b-cb.html"
+}

@@ -1,0 +1,39 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-t68dl",
+	"model": "T68DL",
+	"name": {
+		"en-US": "T68DL LoRaWAN Temperature Sensor",
+		"pt-BR": "T68DL LoRaWAN Sensor de Temperatura"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature"
+	],
+	"tags": [
+		"temperature",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/i1j8sooc0a61fac9ryv8n/AGID6Tm8OWwgO1ADMHfBZkg?rlkey=61wwahlvysmkzzxr4fbj8taxz&st=2qmuj0zy&dl=0",
+		"manualUrl": "https://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/T68DL_LoRaWAN_Temperature_Sensor_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/temperature-humidity-sensor/item/352-t68dl.html"
+}

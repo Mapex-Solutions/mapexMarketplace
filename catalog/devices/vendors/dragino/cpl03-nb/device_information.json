@@ -1,0 +1,42 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-cpl03-nb",
+	"model": "CPL03-NB",
+	"name": {
+		"en-US": "CPL03-NB NB-IoT Pulse / Contact Sensor",
+		"pt-BR": "CPL03-NB NB-IoT Sensor de Pulso / Contato"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors open/close status and dry-contact state. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora status de abertura/fechamento e estado de contato seco. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"door",
+		"dry_contact"
+	],
+	"tags": [
+		"nb-iot",
+		"door",
+		"dry-contact",
+		"pulse-counter"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/xs8a6addxpvz0qp/AABEDmBYS8hEFlMkcI7GwuVIa?dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/CPL03-NB_NB-IoT_Pulse_Contact_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/lorawan-nb-iot-door-sensor-water-leak/item/308-cpl03-nb.html"
+}

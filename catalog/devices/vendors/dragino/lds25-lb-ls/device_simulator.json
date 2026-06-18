@@ -1,0 +1,70 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Dragino LDS25-LB/LS",
+	"protocolId": "lorawan",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "lorawan",
+		"gatewayId": "",
+		"region": "EU868",
+		"macVersion": "1.0.3",
+		"class": "A",
+		"activation": "otaa",
+		"devEui": "A8404100103CD857",
+		"joinEui": "A840410000000101",
+		"appKey": "5572404C696E6B4C6F52613230313823",
+		"nwkKey": "",
+		"devAddr": "",
+		"nwkSKey": "",
+		"appSKey": ""
+	},
+	"attributes": {
+		"manufacturer": "Dragino",
+		"model": "LDS25-LB/LS"
+	},
+	"events": [
+		{
+			"id": "status",
+			"name": "Device status",
+			"lorawan": {
+				"fport": 5,
+				"confirmed": false,
+				"payloadHex": "0a010001000b{{randInt(40,49)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "data",
+			"name": "Sensor data uplink",
+			"lorawan": {
+				"fport": 2,
+				"confirmed": false,
+				"payloadHex": "0b45{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 15,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "datalog",
+			"name": "Datalog record",
+			"lorawan": {
+				"fport": 3,
+				"confirmed": false,
+				"payloadHex": "0b45{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		}
+	]
+}

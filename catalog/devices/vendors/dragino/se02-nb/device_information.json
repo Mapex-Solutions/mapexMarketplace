@@ -1,0 +1,44 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-se02-nb",
+	"model": "SE02-NB",
+	"name": {
+		"en-US": "SE02-NB NB-IoT Soil Moisture & EC Sensor",
+		"pt-BR": "SE02-NB NB-IoT Sensor de Umidade e Condutividade (EC) do Solo"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors soil moisture, electrical conductivity (EC) and temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora umidade do solo, condutividade elétrica (EC) e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"soil_moisture",
+		"conductivity",
+		"temperature"
+	],
+	"tags": [
+		"nb-iot",
+		"soil_moisture",
+		"conductivity",
+		"temperature",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/7lprhyf73610fr3swcmsn/ABbYazzDbGNfYHh82loQNPI?rlkey=f2zzniblwkzga60enyam8cdmz&st=wx1c32bs&dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/SE02-NB_NB-IoT_Soil_Moisture%26EC_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/agriculture-weather-station/item/334-se02-nb.html"
+}

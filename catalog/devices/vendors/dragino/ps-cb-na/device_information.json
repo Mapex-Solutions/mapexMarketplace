@@ -1,0 +1,40 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-ps-cb-na",
+	"model": "PS-CB-NA",
+	"name": {
+		"en-US": "PS-CB-NA Cat-1 Analog Sensor",
+		"pt-BR": "PS-CB-NA Cat-1 Sensor Analógico"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors analog voltage. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora tensão analógica. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"voltage"
+	],
+	"tags": [
+		"nb-iot",
+		"voltage",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/138lnlz2d4f18cblbuep0/AMa4NQvkG6T2ch36aEh8DTI?rlkey=plagc5mo2xbw2i0b3v4wxb40v&st=fmlxyz33&dl=0",
+		"manualUrl": "https://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/PS-CB-NA--NB-IoTLTE-M_Analog_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/nb-iot/item/382-ps-cb-na.html"
+}

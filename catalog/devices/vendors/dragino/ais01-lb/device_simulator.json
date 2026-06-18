@@ -1,0 +1,98 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Dragino AIS01-LB",
+	"protocolId": "lorawan",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "lorawan",
+		"gatewayId": "",
+		"region": "EU868",
+		"macVersion": "1.0.3",
+		"class": "A",
+		"activation": "otaa",
+		"devEui": "A8404100000A1501",
+		"joinEui": "A840410000000101",
+		"appKey": "5572404C696E6B4C6F52613230313823",
+		"nwkKey": "",
+		"devAddr": "",
+		"nwkSKey": "",
+		"appSKey": ""
+	},
+	"attributes": {
+		"manufacturer": "Dragino",
+		"model": "AIS01-LB"
+	},
+	"events": [
+		{
+			"id": "status",
+			"name": "Device status",
+			"lorawan": {
+				"fport": 5,
+				"confirmed": false,
+				"payloadHex": "0a010001000b{{randInt(40,49)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "count",
+			"name": "Identified count uplink",
+			"lorawan": {
+				"fport": 2,
+				"confirmed": false,
+				"payloadHex": "0c{{randInt(10,99)}}00{{randInt(10,99)}}00{{randInt(10,99)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 15,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "image",
+			"name": "Image upload chunk",
+			"lorawan": {
+				"fport": 3,
+				"confirmed": false,
+				"payloadHex": "03{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}{{randInt(10,99)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "clock",
+			"name": "Clock logging record",
+			"lorawan": {
+				"fport": 4,
+				"confirmed": false,
+				"payloadHex": "04{{randInt(10,23)}}{{randInt(10,59)}}{{randInt(10,59)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "datalog",
+			"name": "Datalog record",
+			"lorawan": {
+				"fport": 6,
+				"confirmed": false,
+				"payloadHex": "0c{{randInt(10,99)}}00{{randInt(10,99)}}00{{randInt(10,99)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		}
+	]
+}

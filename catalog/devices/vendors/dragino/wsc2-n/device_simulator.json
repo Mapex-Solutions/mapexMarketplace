@@ -1,0 +1,61 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Dragino WSC2-N",
+	"protocolId": "mqtt",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "mqtt",
+		"brokerUrl": "",
+		"clientId": "",
+		"baseTopic": "dragino/wsc2-n",
+		"authMode": "none",
+		"username": "",
+		"password": "",
+		"tlsCertPem": "",
+		"tlsKeyPem": "",
+		"tlsCaPem": "",
+		"receiveEnabled": false,
+		"subscriptions": []
+	},
+	"attributes": {
+		"manufacturer": "Dragino",
+		"model": "WSC2-N"
+	},
+	"events": [
+		{
+			"id": "status",
+			"name": "Device status",
+			"mqtt": {
+				"topic": "dragino/wsc2-n/status",
+				"qos": 0,
+				"retain": false,
+				"bodyMode": "raw",
+				"bodyFields": [],
+				"body": "{\"IMEI\":\"{{randInt(100000000000000,999999999999999)}}\",\"IMSI\":\"{{randInt(100000000000000,999999999999999)}}\",\"Model\":\"WSC2-N\",\"fw_version\":\"1.0.0\",\"battery\":3.{{randInt(10,45)}},\"signal\":{{randInt(5,31)}},\"time\":\"2026/06/18 {{randInt(10,23)}}:{{randInt(10,59)}}:{{randInt(10,59)}}\"}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 12,
+				"unit": "hours"
+			}
+		},
+		{
+			"id": "data",
+			"name": "Sensor data uplink",
+			"mqtt": {
+				"topic": "dragino/wsc2-n/up",
+				"qos": 0,
+				"retain": false,
+				"bodyMode": "raw",
+				"bodyFields": [],
+				"body": "{\"IMEI\":\"{{randInt(100000000000000,999999999999999)}}\",\"IMSI\":\"{{randInt(100000000000000,999999999999999)}}\",\"Model\":\"WSC2-N\",\"payload_ver\":{{randInt(0,100)}},\"rain_count\":{{randInt(0,500)}},\"wind_speed\":{{randInt(0,30)}},\"wind_level\":{{randInt(0,1)}},\"wind_direction\":{{randInt(0,30)}},\"wind_angel\":{{randInt(0,30)}},\"humidity\":{{randInt(30,90)}},\"battery\":3.{{randInt(10,45)}},\"signal\":{{randInt(5,31)}},\"time\":\"2026/06/18 {{randInt(10,23)}}:{{randInt(10,59)}}:{{randInt(10,59)}}\"}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 1,
+				"unit": "hours"
+			}
+		}
+	]
+}

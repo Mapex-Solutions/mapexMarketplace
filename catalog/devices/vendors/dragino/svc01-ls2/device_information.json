@@ -1,0 +1,34 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-svc01-ls2",
+	"model": "SVC01-LS2",
+	"name": {
+		"en-US": "SVC01-LS2 LoRaWAN Sensor",
+		"pt-BR": "SVC01-LS2 LoRaWAN Sensor"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) converter with configurable sensor inputs — the readings depend on the attached probe. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Conversor LoRaWAN (Classe A) com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [],
+	"tags": [
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/d9gkhmlevvgq8i8mp2wh5/AKqW_29sMnWsusN2FrL2iJU?rlkey=42bvomughc5rlcjh3h527ju2c&st=beegfiwi&dl=0"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/lora-lorawan-end-node/item/392-svc01-ls2.html"
+}

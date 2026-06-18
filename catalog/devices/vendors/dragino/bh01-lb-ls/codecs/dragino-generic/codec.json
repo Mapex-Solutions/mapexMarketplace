@@ -1,0 +1,14 @@
+{
+	"$schema": "mapex-device-codec/v1",
+	"id": "dragino-generic",
+	"name": "Dragino Generic (official)",
+	"source": "vendor",
+	"official": true,
+	"default": false,
+	"target": "generic",
+	"language": "javascript",
+	"files": {
+		"decoder": "decoder.js"
+	},
+	"sourceUrl": "https://raw.githubusercontent.com/dragino/dragino-end-node-decoder/main/BH01-LB/BH01_Decode_V1.0.2.txt"
+}

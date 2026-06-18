@@ -1,0 +1,61 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Dragino S31-CB/S31B-CB",
+	"protocolId": "mqtt",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "mqtt",
+		"brokerUrl": "",
+		"clientId": "",
+		"baseTopic": "dragino/s31-cb-s31b-cb",
+		"authMode": "none",
+		"username": "",
+		"password": "",
+		"tlsCertPem": "",
+		"tlsKeyPem": "",
+		"tlsCaPem": "",
+		"receiveEnabled": false,
+		"subscriptions": []
+	},
+	"attributes": {
+		"manufacturer": "Dragino",
+		"model": "S31-CB/S31B-CB"
+	},
+	"events": [
+		{
+			"id": "status",
+			"name": "Device status",
+			"mqtt": {
+				"topic": "dragino/s31-cb-s31b-cb/status",
+				"qos": 0,
+				"retain": false,
+				"bodyMode": "raw",
+				"bodyFields": [],
+				"body": "{\"IMEI\":\"{{randInt(100000000000000,999999999999999)}}\",\"IMSI\":\"{{randInt(100000000000000,999999999999999)}}\",\"Model\":\"S31-CB/S31B-CB\",\"fw_version\":\"1.0.0\",\"battery\":3.{{randInt(10,45)}},\"signal\":{{randInt(5,31)}},\"time\":\"2026/06/18 {{randInt(10,23)}}:{{randInt(10,59)}}:{{randInt(10,59)}}\"}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 12,
+				"unit": "hours"
+			}
+		},
+		{
+			"id": "data",
+			"name": "Sensor data uplink",
+			"mqtt": {
+				"topic": "dragino/s31-cb-s31b-cb/up",
+				"qos": 0,
+				"retain": false,
+				"bodyMode": "raw",
+				"bodyFields": [],
+				"body": "{\"IMEI\":\"{{randInt(100000000000000,999999999999999)}}\",\"IMSI\":\"{{randInt(100000000000000,999999999999999)}}\",\"Model\":\"S31-CB/S31B-CB\",\"temperature\":{{randInt(15,35)}}.{{randInt(0,9)}},\"humidity\":{{randInt(30,90)}},\"interrupt\":{{randInt(0,1)}},\"interrupt_level\":{{randInt(0,1)}},\"count\":{{randInt(0,500)}},\"latitude\":{{randInt(0,100)}},\"longitude\":{{randInt(0,100)}},\"gps_time\":\"{{randInt(0,100)}}\",\"battery\":3.{{randInt(10,45)}},\"signal\":{{randInt(5,31)}},\"time\":\"2026/06/18 {{randInt(10,23)}}:{{randInt(10,59)}}:{{randInt(10,59)}}\"}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 1,
+				"unit": "hours"
+			}
+		}
+	]
+}

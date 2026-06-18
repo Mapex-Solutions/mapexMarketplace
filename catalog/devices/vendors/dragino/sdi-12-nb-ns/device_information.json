@@ -1,0 +1,37 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-sdi-12-nb-ns",
+	"model": "SDI-12-NB/NS",
+	"name": {
+		"en-US": "SDI-12-NB/NS NB-IoT SDI-12 Converter",
+		"pt-BR": "SDI-12-NB/NS NB-IoT Conversor SDI-12"
+	},
+	"description": {
+		"en-US": "NB-IoT converter with configurable sensor inputs — the readings depend on the attached probe. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Conversor NB-IoT com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [],
+	"tags": [
+		"nb-iot",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/m5i3n5mtb7fq758/AAB2_g2IHy8WR4nNlO9nntuka?dl=0",
+		"manualUrl": "https://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/SDI-12-NBNS_SDI-12_to_NB-IoT_Converter_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/agriculture-weather-station/item/315-sdi-12-nb-ns.html"
+}

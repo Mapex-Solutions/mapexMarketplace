@@ -1,0 +1,40 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-ts01-nb",
+	"model": "TS01-NB",
+	"name": {
+		"en-US": "TS01-NB NB-IoT Tilting Sensor",
+		"pt-BR": "TS01-NB NB-IoT Sensor de Inclinação"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors tilt angle. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora ângulo de inclinação. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"tilt"
+	],
+	"tags": [
+		"nb-iot",
+		"tilt",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/ro55d00bal71glw/AACXB4InayNx3F-cqgvgRadka?dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/TS01-NB_NB-IoT_Tilting_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/lora-lorawan-end-node/item/314-ts01-nb.html"
+}

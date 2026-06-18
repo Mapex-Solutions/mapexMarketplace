@@ -1,0 +1,44 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-wqs-cb",
+	"model": "WQS-CB/CS",
+	"name": {
+		"en-US": "WQS-CB/CS Cat-1 Water Quality Sensor",
+		"pt-BR": "WQS-CB/CS Cat-1 Sensor de Qualidade da Água"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors pH, electrical conductivity (EC) and temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora pH, condutividade elétrica (EC) e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"ph",
+		"conductivity",
+		"temperature"
+	],
+	"tags": [
+		"nb-iot",
+		"ph",
+		"conductivity",
+		"temperature",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/o9dkrphqkcflvqvjd5t1w/AEgIty9y5xnX5kvAfMBEWyc?rlkey=e8acy216kggttv4wtxr1ixnwb&st=kaoyrfbr&dl=0",
+		"manualUrl": "https://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/WQS-CBCS--NB-IoTLTE-M_Water_Quality_Sensor_Transmitter_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/water-air-quality-sensor/item/347-wqs-cb.html"
+}

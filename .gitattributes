@@ -1,0 +1,14 @@
+# Marketplace bundle assets are binary and large (vendor datasheets/manuals are
+# image-heavy PDFs). Keep them at full quality but out of the git pack: git-LFS
+# versions a text pointer and stores the blob in LFS, so the repo and every clone
+# stay light while the working tree (and the Go service that serves the files)
+# sees the real bytes. Run `git lfs install` once, then commit normally.
+catalog/**/*.pdf filter=lfs diff=lfs merge=lfs -text
+catalog/**/*.png filter=lfs diff=lfs merge=lfs -text
+catalog/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+catalog/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+
+# Codec sources and the JSON catalog stay as normal text (diffable, reviewable).
+*.js text
+*.json text
+*.go text

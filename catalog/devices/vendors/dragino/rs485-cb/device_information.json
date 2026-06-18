@@ -1,0 +1,37 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-rs485-cb",
+	"model": "RS485-CB",
+	"name": {
+		"en-US": "RS485-CB Cat-1 RS485/UART Converter",
+		"pt-BR": "RS485-CB Cat-1 Conversor RS485/UART"
+	},
+	"description": {
+		"en-US": "NB-IoT converter with configurable sensor inputs — the readings depend on the attached probe. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Conversor NB-IoT com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [],
+	"tags": [
+		"nb-iot",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/bfr0r895zlafue1tkwdi6/AKhz3eeD8lK84DnAOpCWAg4?rlkey=40v4qby8ob4bc2413j8mg1llq&st=tde97lnx&dl=0",
+		"manualUrl": "https://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/RS485-CB--RS485UART_to_NB-IoT_Converter_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/nb-iot/item/355-rs485-cb.html"
+}

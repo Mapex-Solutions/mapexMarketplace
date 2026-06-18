@@ -1,0 +1,14 @@
+{
+	"$schema": "mapex-device-codec/v1",
+	"id": "dragino-generic",
+	"name": "Dragino Generic (official)",
+	"source": "vendor",
+	"official": true,
+	"default": true,
+	"target": "generic",
+	"language": "javascript",
+	"files": {
+		"decoder": "decoder.js"
+	},
+	"sourceUrl": "https://raw.githubusercontent.com/dragino/dragino-end-node-decoder/main/SE0X-LB/SE0X-LB%20decoder.txt"
+}

@@ -1,0 +1,84 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Dragino DS03A-LB/LS",
+	"protocolId": "lorawan",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "lorawan",
+		"gatewayId": "",
+		"region": "EU868",
+		"macVersion": "1.0.3",
+		"class": "A",
+		"activation": "otaa",
+		"devEui": "A84041000006351C",
+		"joinEui": "A840410000000101",
+		"appKey": "5572404C696E6B4C6F52613230313823",
+		"nwkKey": "",
+		"devAddr": "",
+		"nwkSKey": "",
+		"appSKey": ""
+	},
+	"attributes": {
+		"manufacturer": "Dragino",
+		"model": "DS03A-LB/LS"
+	},
+	"events": [
+		{
+			"id": "status",
+			"name": "Device status",
+			"lorawan": {
+				"fport": 5,
+				"confirmed": false,
+				"payloadHex": "0a010001000b{{randInt(40,49)}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "config",
+			"name": "Sensor configuration",
+			"lorawan": {
+				"fport": 4,
+				"confirmed": false,
+				"payloadHex": "{{randInt(10,99)}}001c2000"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "openclose",
+			"name": "Real-time open/close status",
+			"lorawan": {
+				"fport": 2,
+				"confirmed": false,
+				"payloadHex": "0b49010{{randInt(0,1)}}0000{{randInt(10,99)}}00000000"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 15,
+				"unit": "minutes"
+			}
+		},
+		{
+			"id": "historical",
+			"name": "Historical door open/close event",
+			"lorawan": {
+				"fport": 3,
+				"confirmed": false,
+				"payloadHex": "0b49010{{randInt(0,1)}}0000{{randInt(10,99)}}00000000"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 60,
+				"unit": "minutes"
+			}
+		}
+	]
+}

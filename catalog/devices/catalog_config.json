@@ -1,0 +1,37 @@
+{
+	"$schema": "mapex-device-catalog-config/v1",
+	"protocols": [
+		{ "value": "lorawan", "label": "LoRaWAN" },
+		{ "value": "nbiot", "label": "NB-IoT" },
+		{ "value": "http", "label": "HTTP" },
+		{ "value": "mqtt", "label": "MQTT" }
+	],
+	"readingTypes": [
+		{ "value": "temperature", "label": "Temperature", "icon": "mdi-thermometer" },
+		{ "value": "humidity", "label": "Humidity", "icon": "mdi-water-percent" },
+		{ "value": "co2", "label": "CO₂", "icon": "mdi-molecule-co2" },
+		{ "value": "air_quality", "label": "Air quality", "icon": "mdi-air-filter" },
+		{ "value": "pressure", "label": "Pressure", "icon": "mdi-gauge" },
+		{ "value": "distance", "label": "Distance / level", "icon": "mdi-arrow-expand-vertical" },
+		{ "value": "door", "label": "Door / open-close", "icon": "mdi-door" },
+		{ "value": "water_leak", "label": "Water leak", "icon": "mdi-water-alert" },
+		{ "value": "motion", "label": "Motion", "icon": "mdi-motion-sensor" },
+		{ "value": "vibration", "label": "Vibration", "icon": "mdi-vibrate" },
+		{ "value": "dry_contact", "label": "Dry contact", "icon": "mdi-electric-switch" },
+		{ "value": "passage_counter", "label": "Passage counter", "icon": "mdi-counter" },
+		{ "value": "current", "label": "Electric current", "icon": "mdi-current-ac" },
+		{ "value": "weight", "label": "Weight / load", "icon": "mdi-weight" },
+		{ "value": "voltage", "label": "Voltage / analog", "icon": "mdi-flash-triangle" },
+		{ "value": "soil_moisture", "label": "Soil moisture", "icon": "mdi-sprout" },
+		{ "value": "conductivity", "label": "Conductivity (EC)", "icon": "mdi-lightning-bolt" },
+		{ "value": "ph", "label": "pH", "icon": "mdi-ph" },
+		{ "value": "leaf_moisture", "label": "Leaf moisture", "icon": "mdi-leaf" },
+		{ "value": "flow", "label": "Flow rate", "icon": "mdi-waves-arrow-right" },
+		{ "value": "tilt", "label": "Tilt / angle", "icon": "mdi-angle-acute" },
+		{ "value": "button", "label": "Push button", "icon": "mdi-gesture-tap-button" },
+		{ "value": "location", "label": "Location / GPS", "icon": "mdi-map-marker" },
+		{ "value": "wind", "label": "Wind", "icon": "mdi-weather-windy" },
+		{ "value": "rainfall", "label": "Rainfall", "icon": "mdi-weather-pouring" },
+		{ "value": "noise", "label": "Noise / sound", "icon": "mdi-volume-high" }
+	]
+}

@@ -1,0 +1,2308 @@
+{
+	"$schema": "mapex-device-vendor-catalog/v1",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"items": [
+		{
+			"id": "dragino-ais01-lb",
+			"model": "AIS01-LB",
+			"slug": "ais01-lb",
+			"name": {
+				"en-US": "AIS01-LB AI Image Recognition Counter",
+				"pt-BR": "AIS01-LB Contador por Reconhecimento de Imagem (IA)"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors people/passage counts. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora contagem de passagem. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"passage_counter"
+			],
+			"tags": [
+				"ai",
+				"camera",
+				"counting",
+				"battery"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-aqs01-l",
+			"model": "AQS01-L",
+			"slug": "aqs01-l",
+			"name": {
+				"en-US": "AQS01-L Indoor CO₂ / Temperature / Humidity Sensor",
+				"pt-BR": "AQS01-L Sensor Interno de CO₂ / Temperatura / Umidade"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors CO₂, temperature, humidity and air quality. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora CO₂, temperatura, umidade e qualidade do ar. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"co2",
+				"temperature",
+				"humidity",
+				"air_quality"
+			],
+			"tags": [
+				"indoor",
+				"co2",
+				"air-quality",
+				"climate"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-bh01-lb-ls",
+			"model": "BH01-LB/LS",
+			"slug": "bh01-lb-ls",
+			"name": {
+				"en-US": "BH01-LB/LS BLE to LoRaWAN Hub",
+				"pt-BR": "BH01-LB/LS Hub BLE para LoRaWAN"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors temperature and humidity. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura e umidade. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity"
+			],
+			"tags": [
+				"ble",
+				"hub",
+				"gateway",
+				"bridge"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-cpl03-lb-ls",
+			"model": "CPL03-LB/LS",
+			"slug": "cpl03-lb-ls",
+			"name": {
+				"en-US": "CPL03-LB/LS Outdoor Open/Close & Dry Contact Sensor",
+				"pt-BR": "CPL03-LB/LS Sensor Externo de Abertura/Fechamento e Contato Seco"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors open/close status and dry-contact state. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento e estado de contato seco. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"door",
+				"dry_contact"
+			],
+			"tags": [
+				"outdoor",
+				"door",
+				"dry-contact",
+				"pulse-counter"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-cpl03-nb",
+			"model": "CPL03-NB",
+			"slug": "cpl03-nb",
+			"name": {
+				"en-US": "CPL03-NB NB-IoT Pulse / Contact Sensor",
+				"pt-BR": "CPL03-NB NB-IoT Sensor de Pulso / Contato"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors open/close status and dry-contact state. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora status de abertura/fechamento e estado de contato seco. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"door",
+				"dry_contact"
+			],
+			"tags": [
+				"nb-iot",
+				"door",
+				"dry-contact",
+				"pulse-counter"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-cs01-lb",
+			"model": "CS01-LB",
+			"slug": "cs01-lb",
+			"name": {
+				"en-US": "CS01-LB LoRaWAN Clamp Current Sensor",
+				"pt-BR": "CS01-LB LoRaWAN Sensor de Corrente tipo Garra"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors electrical current. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora corrente elétrica. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"current"
+			],
+			"tags": [
+				"current",
+				"clamp",
+				"energy",
+				"ct"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-cs01-nb-ns",
+			"model": "CS01-NB/NS",
+			"slug": "cs01-nb-ns",
+			"name": {
+				"en-US": "CS01-NB/NS NB-IoT 4-Channel Current Sensor Converter",
+				"pt-BR": "CS01-NB/NS NB-IoT Conversor de Corrente de 4 Canais"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors electrical current. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora corrente elétrica. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"current"
+			],
+			"tags": [
+				"nb-iot",
+				"current",
+				"clamp",
+				"4-channel",
+				"energy"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-d20-nb-d20s-nb",
+			"model": "D20-NB/D20S-NB",
+			"slug": "d20-nb-d20s-nb",
+			"name": {
+				"en-US": "D20-NB / D20S-NB NB-IoT Temperature Sensor",
+				"pt-BR": "D20-NB / D20S-NB NB-IoT Sensor de Temperatura"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"temperature",
+				"probe"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-d22-nb",
+			"model": "D22-NB",
+			"slug": "d22-nb",
+			"name": {
+				"en-US": "D22-NB NB-IoT Temperature Sensor",
+				"pt-BR": "D22-NB NB-IoT Sensor de Temperatura"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"temperature",
+				"probe"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-d23-nb",
+			"model": "D23-NB",
+			"slug": "d23-nb",
+			"name": {
+				"en-US": "D23-NB NB-IoT Temperature Sensor",
+				"pt-BR": "D23-NB NB-IoT Sensor de Temperatura"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"temperature",
+				"probe"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-dds04-lb-ls",
+			"model": "DDS04-LB/LS",
+			"slug": "dds04-lb-ls",
+			"name": {
+				"en-US": "DDS04-LB/LS LoRaWAN 4-Channel Distance Detection Sensor",
+				"pt-BR": "DDS04-LB/LS LoRaWAN Sensor de Detecção de Distância de 4 Canais"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors distance / level. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"distance",
+				"level",
+				"4-channel",
+				"ultrasonic"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-dds04-nb",
+			"model": "DDS04-NB",
+			"slug": "dds04-nb",
+			"name": {
+				"en-US": "DDS04-NB NB-IoT 4-Channel Distance Detection Sensor",
+				"pt-BR": "DDS04-NB NB-IoT Sensor de Detecção de Distância de 4 Canais"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors distance / level. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"nb-iot",
+				"distance",
+				"level",
+				"4-channel"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-dds20-lb-ls",
+			"model": "DDS20-LB/LS",
+			"slug": "dds20-lb-ls",
+			"name": {
+				"en-US": "DDS20-LB/LS LoRaWAN Ultrasonic Liquid Level Sensor",
+				"pt-BR": "DDS20-LB/LS LoRaWAN Sensor Ultrassônico de Nível de Líquido"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors distance / level. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"distance",
+				"level",
+				"liquid",
+				"ultrasonic"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-dds20-nb",
+			"model": "DDS20-NB",
+			"slug": "dds20-nb",
+			"name": {
+				"en-US": "DDS20-NB NB-IoT Ultrasonic Liquid Level Sensor",
+				"pt-BR": "DDS20-NB NB-IoT Sensor Ultrassônico de Nível de Líquido"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors distance / level. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"nb-iot",
+				"distance",
+				"level",
+				"liquid",
+				"ultrasonic"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-dds45-lb-ls-lorawan-distance-detection-sensor",
+			"model": "DDS45-LB/LS",
+			"slug": "dds45-lb-ls-lorawan-distance-detection-sensor",
+			"name": {
+				"en-US": "DDS45-LB/LS LoRaWAN Distance Detection Sensor",
+				"pt-BR": "DDS45-LB/LS LoRaWAN Sensor de Detecção de Distância"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors distance / level and temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance",
+				"temperature"
+			],
+			"tags": [
+				"distance",
+				"level",
+				"ultrasonic",
+				"temperature"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-dds45-nb",
+			"model": "DDS45-NB",
+			"slug": "dds45-nb",
+			"name": {
+				"en-US": "DDS45-NB NB-IoT Distance Detection Sensor",
+				"pt-BR": "DDS45-NB NB-IoT Sensor de Detecção de Distância"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors distance / level and temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora distância / nível e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"distance",
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"distance",
+				"level",
+				"ultrasonic",
+				"temperature"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-dds75-lb-ls-lorawan-distance-detection-sensor",
+			"model": "DDS75-LB/LS",
+			"slug": "dds75-lb-ls-lorawan-distance-detection-sensor",
+			"name": {
+				"en-US": "DDS75-LB/LS LoRaWAN Distance Detection Sensor",
+				"pt-BR": "DDS75-LB/LS LoRaWAN Sensor de Detecção de Distância"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors distance / level and temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance",
+				"temperature"
+			],
+			"tags": [
+				"distance",
+				"level",
+				"ultrasonic",
+				"temperature"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-dds75-nb",
+			"model": "DDS75-NB",
+			"slug": "dds75-nb",
+			"name": {
+				"en-US": "DDS75-NB NB-IoT Distance Detection Sensor",
+				"pt-BR": "DDS75-NB NB-IoT Sensor de Detecção de Distância"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors distance / level and temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora distância / nível e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"distance",
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"distance",
+				"level",
+				"ultrasonic",
+				"temperature"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-dishsense",
+			"model": "DishSense",
+			"slug": "dishsense",
+			"name": {
+				"en-US": "DishSense LoRaWAN Dishwasher Wireless Thermometer",
+				"pt-BR": "DishSense LoRaWAN Termômetro Sem Fio para Lava-louças"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"temperature",
+				"thermometer",
+				"food-safety",
+				"dishwasher"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-dmt01",
+			"model": "DMT01",
+			"slug": "dmt01",
+			"name": {
+				"en-US": "DMT01 LoRaWAN Wireless Meat Thermometer",
+				"pt-BR": "DMT01 LoRaWAN Termômetro de Carne Sem Fio"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"temperature",
+				"thermometer",
+				"food-safety",
+				"probe"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-ds03a-lb-ls",
+			"model": "DS03A-LB/LS",
+			"slug": "ds03a-lb-ls",
+			"name": {
+				"en-US": "DS03A-LB/LS LoRaWAN Door Sensor",
+				"pt-BR": "DS03A-LB/LS LoRaWAN Sensor de Porta"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors open/close status. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"door"
+			],
+			"tags": [
+				"door",
+				"open-close",
+				"magnetic"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-ds03a-nb",
+			"model": "DS03A-NB",
+			"slug": "ds03a-nb",
+			"name": {
+				"en-US": "DS03A-NB NB-IoT Door Sensor",
+				"pt-BR": "DS03A-NB NB-IoT Sensor de Porta"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors open/close status. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora status de abertura/fechamento. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"door"
+			],
+			"tags": [
+				"nb-iot",
+				"door",
+				"open-close",
+				"magnetic"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-ds20l",
+			"model": "DS20L",
+			"slug": "ds20l",
+			"name": {
+				"en-US": "DS20L LoRaWAN Distance & Thermocouple Sensor",
+				"pt-BR": "DS20L LoRaWAN Sensor de Distância e Termopar"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors distance / level and temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance",
+				"temperature"
+			],
+			"tags": [
+				"distance",
+				"level",
+				"temperature",
+				"thermocouple"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lc01",
+			"model": "LC01",
+			"slug": "lc01",
+			"name": {
+				"en-US": "LC01 LoRaWAN Relay Controller",
+				"pt-BR": "LC01 LoRaWAN Controlador de Relé"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors electrical current and dry-contact state. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora corrente elétrica e estado de contato seco. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"current",
+				"dry_contact"
+			],
+			"tags": [
+				"relay",
+				"control",
+				"current",
+				"actuator"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lc03",
+			"model": "LC03",
+			"slug": "lc03",
+			"name": {
+				"en-US": "LC03 LoRaWAN Smart Socket",
+				"pt-BR": "LC03 LoRaWAN Tomada Inteligente"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors electrical current and dry-contact state. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora corrente elétrica e estado de contato seco. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"current",
+				"dry_contact"
+			],
+			"tags": [
+				"socket",
+				"plug",
+				"control",
+				"current",
+				"power"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lcc01-lb",
+			"model": "LCC01-LB",
+			"slug": "lcc01-lb",
+			"name": {
+				"en-US": "LCC01-LB LoRaWAN Load Cell Converter",
+				"pt-BR": "LCC01-LB LoRaWAN Conversor de Célula de Carga"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors weight. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora peso. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"weight"
+			],
+			"tags": [
+				"weight",
+				"load-cell",
+				"strain-gauge",
+				"scale"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lds12-lb-ls",
+			"model": "LDS12-LB/LS",
+			"slug": "lds12-lb-ls",
+			"name": {
+				"en-US": "LDS12-LB/LS LoRaWAN LiDAR ToF Distance Sensor",
+				"pt-BR": "LDS12-LB/LS LoRaWAN Sensor de Distância LiDAR ToF"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors distance / level. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"distance",
+				"level",
+				"lidar",
+				"tof"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lds12-nb",
+			"model": "LDS12-NB",
+			"slug": "lds12-nb",
+			"name": {
+				"en-US": "LDS12-NB NB-IoT LiDAR ToF Distance Sensor",
+				"pt-BR": "LDS12-NB NB-IoT Sensor de Distância LiDAR ToF"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors distance / level. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"nb-iot",
+				"distance",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lds25-lb-ls",
+			"model": "LDS25-LB/LS",
+			"slug": "lds25-lb-ls",
+			"name": {
+				"en-US": "LDS25-LB/LS LoRaWAN LiDAR Distance Auto-Clean Sensor",
+				"pt-BR": "LDS25-LB/LS LoRaWAN Sensor de Distância LiDAR com Autolimpeza"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors distance / level. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"distance",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lds25-nb",
+			"model": "LDS25-NB",
+			"slug": "lds25-nb",
+			"name": {
+				"en-US": "LDS25-NB NB-IoT LiDAR ToF Distance Sensor",
+				"pt-BR": "LDS25-NB NB-IoT Sensor de Distância LiDAR ToF"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors distance / level. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"nb-iot",
+				"distance",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lds40-lb-ls",
+			"model": "LDS40-LB/LS",
+			"slug": "lds40-lb-ls",
+			"name": {
+				"en-US": "LDS40-LB/LS LoRaWAN LiDAR ToF Distance Sensor",
+				"pt-BR": "LDS40-LB/LS LoRaWAN Sensor de Distância LiDAR ToF"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors distance / level. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"distance",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lds40-nb",
+			"model": "LDS40-NB",
+			"slug": "lds40-nb",
+			"name": {
+				"en-US": "LDS40-NB NB-IoT LiDAR ToF Distance Sensor",
+				"pt-BR": "LDS40-NB NB-IoT Sensor de Distância LiDAR ToF"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors distance / level. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"nb-iot",
+				"distance",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lht65",
+			"model": "LHT65",
+			"slug": "lht65",
+			"name": "LHT65 Temperature & Humidity Sensor",
+			"description": "LoRaWAN sensor with a built-in humidity sensor and an external temperature probe, suited for outdoor and industrial monitoring.",
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity"
+			],
+			"tags": [
+				"probe",
+				"battery",
+				"climate"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lht65n-s-ds",
+			"model": "LHT65N-S-DS",
+			"slug": "lht65n-s-ds",
+			"name": {
+				"en-US": "LHT65N-S-DS Temperature, Humidity & Door / Water-Leak Sensor",
+				"pt-BR": "LHT65N-S-DS Sensor de Temperatura, Umidade, Porta e Vazamento de Água"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors temperature, humidity, open/close status and water leaks. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura, umidade, status de abertura/fechamento e vazamento de água. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"door",
+				"water_leak"
+			],
+			"tags": [
+				"battery",
+				"door",
+				"leak",
+				"climate",
+				"probe"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lht65n-vib",
+			"model": "LHT65N-VIB",
+			"slug": "lht65n-vib",
+			"name": {
+				"en-US": "LHT65N-VIB LoRaWAN Vibration Sensor",
+				"pt-BR": "LHT65N-VIB LoRaWAN Sensor de Vibração"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors vibration and temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora vibração e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"vibration",
+				"temperature"
+			],
+			"tags": [
+				"vibration",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lht65n-s-dc",
+			"model": "LHT65N-S-DC",
+			"slug": "lht65n-s-dc",
+			"name": {
+				"en-US": "LHT65N/S-DC LoRaWAN Temperature & Humidity Sensor",
+				"pt-BR": "LHT65N/S-DC LoRaWAN Sensor de Temperatura e Umidade"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors temperature and humidity. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura e umidade. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lms01-lb-ls",
+			"model": "LMS01-LB/LS",
+			"slug": "lms01-lb-ls",
+			"name": {
+				"en-US": "LMS01-LB/LS LoRaWAN Leaf Moisture Sensor",
+				"pt-BR": "LMS01-LB/LS LoRaWAN Sensor de Umidade Foliar"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors leaf moisture and temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora umidade foliar e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"leaf_moisture",
+				"temperature"
+			],
+			"tags": [
+				"leaf_moisture",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lms01-nb",
+			"model": "LMS01-NB",
+			"slug": "lms01-nb",
+			"name": {
+				"en-US": "LMS01-NB NB-IoT Leaf Moisture Sensor",
+				"pt-BR": "LMS01-NB NB-IoT Sensor de Umidade Foliar"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors leaf moisture and temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora umidade foliar e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"leaf_moisture",
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"leaf_moisture",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lpt01",
+			"model": "LPT01",
+			"slug": "lpt01",
+			"name": {
+				"en-US": "LPT01 LoRaWAN Handheld Food Thermometer",
+				"pt-BR": "LPT01 LoRaWAN Termômetro de Alimentos Portátil"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-ltc1-ltc2-cb-cs",
+			"model": "LTC1/LTC2-CB/CS",
+			"slug": "ltc1-ltc2-cb-cs",
+			"name": {
+				"en-US": "LTC1/LTC2-CB/CS Cat-1 Temperature Transmitter",
+				"pt-BR": "LTC1/LTC2-CB/CS Cat-1 Transmissor de Temperatura"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-ltc1-ltc2-lb-ls",
+			"model": "LTC1/LTC2-LB/LS",
+			"slug": "ltc1-ltc2-lb-ls",
+			"name": {
+				"en-US": "LTC1/LTC2-LB/LS LoRaWAN Temperature Transmitter",
+				"pt-BR": "LTC1/LTC2-LB/LS LoRaWAN Transmissor de Temperatura"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-ltc1-ltc2-nb-ns",
+			"model": "LTC1/LTC2-NB/NS",
+			"slug": "ltc1-ltc2-nb-ns",
+			"name": {
+				"en-US": "LTC1/LTC2-NB/NS NB-IoT Temperature Transmitter",
+				"pt-BR": "LTC1/LTC2-NB/NS NB-IoT Transmissor de Temperatura"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-lwl04",
+			"model": "LWL04",
+			"slug": "lwl04",
+			"name": {
+				"en-US": "LWL04 LoRaWAN Water Leak Sensor",
+				"pt-BR": "LWL04 LoRaWAN Sensor de Vazamento de Água"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors water leaks. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora vazamento de água. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"water_leak"
+			],
+			"tags": [
+				"water_leak",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-mds120-lb-ls",
+			"model": "MDS120-LB/LS",
+			"slug": "mds120-lb-ls",
+			"name": {
+				"en-US": "MDS120-LB/LS LoRaWAN Microwave Radar Distance Sensor",
+				"pt-BR": "MDS120-LB/LS LoRaWAN Sensor de Distância por Radar de Micro-ondas"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors distance / level. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"distance",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-mds120-nb",
+			"model": "MDS120-NB",
+			"slug": "mds120-nb",
+			"name": {
+				"en-US": "MDS120-NB NB-IoT Microwave Radar Distance Sensor",
+				"pt-BR": "MDS120-NB NB-IoT Sensor de Distância por Radar de Micro-ondas"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors distance / level. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"nb-iot",
+				"distance",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-mds200-lb-ls",
+			"model": "MDS200-LB/LS",
+			"slug": "mds200-lb-ls",
+			"name": {
+				"en-US": "MDS200-LB/LS LoRaWAN Microwave Radar Distance Sensor",
+				"pt-BR": "MDS200-LB/LS LoRaWAN Sensor de Distância por Radar de Micro-ondas"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors distance / level. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"distance",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-mds200-nb",
+			"model": "MDS200-NB",
+			"slug": "mds200-nb",
+			"name": {
+				"en-US": "MDS200-NB NB-IoT Microwave Radar Distance Sensor",
+				"pt-BR": "MDS200-NB NB-IoT Sensor de Distância por Radar de Micro-ondas"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors distance / level. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"nb-iot",
+				"distance",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-mr-xx-cb-cs",
+			"model": "MR-XX-CB/CS",
+			"slug": "mr-xx-cb-cs",
+			"name": {
+				"en-US": "MR-XX-CB/CS Cat-1 Microwave Radar Distance Sensor",
+				"pt-BR": "MR-XX-CB/CS Cat-1 Sensor de Distância por Radar de Micro-ondas"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors distance / level. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"nb-iot",
+				"distance",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-mr-xx-lb-ls",
+			"model": "MR-XX-LB/LS",
+			"slug": "mr-xx-lb-ls",
+			"name": {
+				"en-US": "MR-XX-LB/LS LoRaWAN Microwave Radar Distance Sensor",
+				"pt-BR": "MR-XX-LB/LS LoRaWAN Sensor de Distância por Radar de Micro-ondas"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors distance / level. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"distance",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-mr-xx-nb-ns",
+			"model": "MR-XX-NB/NS",
+			"slug": "mr-xx-nb-ns",
+			"name": {
+				"en-US": "MR-XX-NB/NS NB-IoT Microwave Radar Distance Sensor",
+				"pt-BR": "MR-XX-NB/NS NB-IoT Sensor de Distância por Radar de Micro-ondas"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors distance / level. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"distance"
+			],
+			"tags": [
+				"nb-iot",
+				"distance",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-pb01",
+			"model": "PB01",
+			"slug": "pb01",
+			"name": {
+				"en-US": "PB01 LoRaWAN Push Button",
+				"pt-BR": "PB01 LoRaWAN Botão de Acionamento"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors button presses. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora acionamentos de botão. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"button"
+			],
+			"tags": [
+				"button",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-pb05-l",
+			"model": "PB05-L",
+			"slug": "pb05-l",
+			"name": {
+				"en-US": "PB05-L LoRaWAN Push Button",
+				"pt-BR": "PB05-L LoRaWAN Botão de Acionamento"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors button presses. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora acionamentos de botão. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"button"
+			],
+			"tags": [
+				"button",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-pf52",
+			"model": "PF52",
+			"slug": "pf52",
+			"name": {
+				"en-US": "PF52 LoRaWAN People Counting Sensor",
+				"pt-BR": "PF52 LoRaWAN Sensor de Contagem de Pessoas"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors people/passage counts and temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora contagem de passagem e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"passage_counter",
+				"temperature"
+			],
+			"tags": [
+				"passage_counter",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-ps-cb-na",
+			"model": "PS-CB-NA",
+			"slug": "ps-cb-na",
+			"name": {
+				"en-US": "PS-CB-NA Cat-1 Analog Sensor",
+				"pt-BR": "PS-CB-NA Cat-1 Sensor Analógico"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors analog voltage. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora tensão analógica. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"voltage"
+			],
+			"tags": [
+				"nb-iot",
+				"voltage",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-ps-cb-cs",
+			"model": "PS-CB/CS",
+			"slug": "ps-cb-cs",
+			"name": {
+				"en-US": "PS-CB/CS Cat-1 Pressure Sensor",
+				"pt-BR": "PS-CB/CS Cat-1 Sensor de Pressão"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors pressure. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora pressão. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"pressure"
+			],
+			"tags": [
+				"nb-iot",
+				"pressure",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-ps-lb-ls",
+			"model": "PS-LB/LS",
+			"slug": "ps-lb-ls",
+			"name": {
+				"en-US": "PS-LB/LS LoRaWAN Pressure Sensor",
+				"pt-BR": "PS-LB/LS LoRaWAN Sensor de Pressão"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors pressure. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora pressão. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"pressure"
+			],
+			"tags": [
+				"pressure",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-ps-lb-ls-d",
+			"model": "PS-LB/LS-D",
+			"slug": "ps-lb-ls-d",
+			"name": {
+				"en-US": "PS-LB/LS-D LoRaWAN Pressure Sensor",
+				"pt-BR": "PS-LB/LS-D LoRaWAN Sensor de Pressão"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors pressure. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora pressão. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"pressure"
+			],
+			"tags": [
+				"pressure",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-ps-nb-na",
+			"model": "PS-NB-NA",
+			"slug": "ps-nb-na",
+			"name": {
+				"en-US": "PS-NB-NA NB-IoT Analog Sensor",
+				"pt-BR": "PS-NB-NA NB-IoT Sensor Analógico"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors analog voltage. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora tensão analógica. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"voltage"
+			],
+			"tags": [
+				"nb-iot",
+				"voltage",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-rs485-cb",
+			"model": "RS485-CB",
+			"slug": "rs485-cb",
+			"name": {
+				"en-US": "RS485-CB Cat-1 RS485/UART Converter",
+				"pt-BR": "RS485-CB Cat-1 Conversor RS485/UART"
+			},
+			"description": {
+				"en-US": "NB-IoT converter with configurable sensor inputs — the readings depend on the attached probe. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Conversor NB-IoT com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [],
+			"tags": [
+				"nb-iot",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-rs485-lb-ls",
+			"model": "RS485-LB/LS",
+			"slug": "rs485-lb-ls",
+			"name": {
+				"en-US": "RS485-LB/LS LoRaWAN RS485/UART Converter",
+				"pt-BR": "RS485-LB/LS LoRaWAN Conversor RS485/UART"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) converter with configurable sensor inputs — the readings depend on the attached probe. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Conversor LoRaWAN (Classe A) com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [],
+			"tags": [
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-rs485-nb",
+			"model": "RS485-NB",
+			"slug": "rs485-nb",
+			"name": {
+				"en-US": "RS485-NB NB-IoT RS485/UART Converter",
+				"pt-BR": "RS485-NB NB-IoT Conversor RS485/UART"
+			},
+			"description": {
+				"en-US": "NB-IoT converter with configurable sensor inputs — the readings depend on the attached probe. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Conversor NB-IoT com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [],
+			"tags": [
+				"nb-iot",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-s31-cb-s31b-cb",
+			"model": "S31-CB/S31B-CB",
+			"slug": "s31-cb-s31b-cb",
+			"name": {
+				"en-US": "S31-CB/S31B-CB Cat-1 Temperature & Humidity Sensor",
+				"pt-BR": "S31-CB/S31B-CB Cat-1 Sensor de Temperatura e Umidade"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors temperature and humidity. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora temperatura e umidade. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"temperature",
+				"humidity"
+			],
+			"tags": [
+				"nb-iot",
+				"temperature",
+				"humidity",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-sdi-12-cb-cs",
+			"model": "SDI-12-CB/CS",
+			"slug": "sdi-12-cb-cs",
+			"name": {
+				"en-US": "SDI-12-CB/CS Cat-1 SDI-12 Converter",
+				"pt-BR": "SDI-12-CB/CS Cat-1 Conversor SDI-12"
+			},
+			"description": {
+				"en-US": "NB-IoT converter with configurable sensor inputs — the readings depend on the attached probe. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Conversor NB-IoT com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [],
+			"tags": [
+				"nb-iot",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-sdi-12-nb-ns",
+			"model": "SDI-12-NB/NS",
+			"slug": "sdi-12-nb-ns",
+			"name": {
+				"en-US": "SDI-12-NB/NS NB-IoT SDI-12 Converter",
+				"pt-BR": "SDI-12-NB/NS NB-IoT Conversor SDI-12"
+			},
+			"description": {
+				"en-US": "NB-IoT converter with configurable sensor inputs — the readings depend on the attached probe. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Conversor NB-IoT com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [],
+			"tags": [
+				"nb-iot",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-se01-lb-ls",
+			"model": "SE01-LB/LS",
+			"slug": "se01-lb-ls",
+			"name": {
+				"en-US": "SE01-LB/LS LoRaWAN Soil Moisture & EC Sensor",
+				"pt-BR": "SE01-LB/LS LoRaWAN Sensor de Umidade e Condutividade (EC) do Solo"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors soil moisture, electrical conductivity (EC) and temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora umidade do solo, condutividade elétrica (EC) e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"soil_moisture",
+				"conductivity",
+				"temperature"
+			],
+			"tags": [
+				"soil_moisture",
+				"conductivity",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-se01-nb",
+			"model": "SE01-NB",
+			"slug": "se01-nb",
+			"name": {
+				"en-US": "SE01-NB NB-IoT Soil Moisture & EC Sensor",
+				"pt-BR": "SE01-NB NB-IoT Sensor de Umidade e Condutividade (EC) do Solo"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors soil moisture, electrical conductivity (EC) and temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora umidade do solo, condutividade elétrica (EC) e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"soil_moisture",
+				"conductivity",
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"soil_moisture",
+				"conductivity",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-se02-lb",
+			"model": "SE02-LB",
+			"slug": "se02-lb",
+			"name": {
+				"en-US": "SE02-LB LoRaWAN Soil Moisture & EC Sensor",
+				"pt-BR": "SE02-LB LoRaWAN Sensor de Umidade e Condutividade (EC) do Solo"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors soil moisture, electrical conductivity (EC) and temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora umidade do solo, condutividade elétrica (EC) e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"soil_moisture",
+				"conductivity",
+				"temperature"
+			],
+			"tags": [
+				"soil_moisture",
+				"conductivity",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-se02-nb",
+			"model": "SE02-NB",
+			"slug": "se02-nb",
+			"name": {
+				"en-US": "SE02-NB NB-IoT Soil Moisture & EC Sensor",
+				"pt-BR": "SE02-NB NB-IoT Sensor de Umidade e Condutividade (EC) do Solo"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors soil moisture, electrical conductivity (EC) and temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora umidade do solo, condutividade elétrica (EC) e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"soil_moisture",
+				"conductivity",
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"soil_moisture",
+				"conductivity",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-se0x-lb",
+			"model": "SE0X-LB",
+			"slug": "se0x-lb",
+			"name": {
+				"en-US": "SE0X-LB LoRaWAN Soil Moisture & EC Sensor",
+				"pt-BR": "SE0X-LB LoRaWAN Sensor de Umidade e Condutividade (EC) do Solo"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors soil moisture, electrical conductivity (EC) and temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora umidade do solo, condutividade elétrica (EC) e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"soil_moisture",
+				"conductivity",
+				"temperature"
+			],
+			"tags": [
+				"soil_moisture",
+				"conductivity",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-se0x-nb-ns",
+			"model": "SE0X-NB/NS",
+			"slug": "se0x-nb-ns",
+			"name": {
+				"en-US": "SE0X-NB/NS NB-IoT Soil Moisture & EC Sensor",
+				"pt-BR": "SE0X-NB/NS NB-IoT Sensor de Umidade e Condutividade (EC) do Solo"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors soil moisture, electrical conductivity (EC) and temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora umidade do solo, condutividade elétrica (EC) e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"soil_moisture",
+				"conductivity",
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"soil_moisture",
+				"conductivity",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-sn50v3-nb",
+			"model": "SN50v3-NB",
+			"slug": "sn50v3-nb",
+			"name": {
+				"en-US": "SN50v3-NB NB-IoT Universal Sensor Node",
+				"pt-BR": "SN50v3-NB NB-IoT Nó Sensor Universal"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-sph01-lb-ls",
+			"model": "SPH01-LB/LS",
+			"slug": "sph01-lb-ls",
+			"name": {
+				"en-US": "SPH01-LB/LS LoRaWAN Soil pH Sensor",
+				"pt-BR": "SPH01-LB/LS LoRaWAN Sensor de pH do Solo"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors pH and temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora pH e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"ph",
+				"temperature"
+			],
+			"tags": [
+				"ph",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-sph01-nb",
+			"model": "SPH01-NB",
+			"slug": "sph01-nb",
+			"name": {
+				"en-US": "SPH01-NB NB-IoT Soil pH Sensor",
+				"pt-BR": "SPH01-NB NB-IoT Sensor de pH do Solo"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors pH and temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora pH e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"ph",
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"ph",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-svc01-ls2",
+			"model": "SVC01-LS2",
+			"slug": "svc01-ls2",
+			"name": {
+				"en-US": "SVC01-LS2 LoRaWAN Sensor",
+				"pt-BR": "SVC01-LS2 LoRaWAN Sensor"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) converter with configurable sensor inputs — the readings depend on the attached probe. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Conversor LoRaWAN (Classe A) com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [],
+			"tags": [
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": false
+		},
+		{
+			"id": "dragino-sw3l-lb-ls",
+			"model": "SW3L-LB/LS",
+			"slug": "sw3l-lb-ls",
+			"name": {
+				"en-US": "SW3L-LB/LS LoRaWAN Flow Sensor",
+				"pt-BR": "SW3L-LB/LS LoRaWAN Sensor de Vazão"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors flow rate. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora vazão. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"flow"
+			],
+			"tags": [
+				"flow",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-sw3l-nb",
+			"model": "SW3L-NB",
+			"slug": "sw3l-nb",
+			"name": {
+				"en-US": "SW3L-NB NB-IoT Flow Sensor",
+				"pt-BR": "SW3L-NB NB-IoT Sensor de Vazão"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors flow rate. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora vazão. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"flow"
+			],
+			"tags": [
+				"nb-iot",
+				"flow",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-t68dl",
+			"model": "T68DL",
+			"slug": "t68dl",
+			"name": {
+				"en-US": "T68DL LoRaWAN Temperature Sensor",
+				"pt-BR": "T68DL LoRaWAN Sensor de Temperatura"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-tc01-tc11-lb",
+			"model": "TC01/TC11-LB",
+			"slug": "tc01-tc11-lb",
+			"name": {
+				"en-US": "TC01/TC11-LB LoRaWAN Thermocouple Converter",
+				"pt-BR": "TC01/TC11-LB LoRaWAN Conversor de Termopar"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature"
+			],
+			"tags": [
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-trackerd-ls",
+			"model": "TrackerD-LS",
+			"slug": "trackerd-ls",
+			"name": {
+				"en-US": "TrackerD-LS LoRaWAN Asset Tracker",
+				"pt-BR": "TrackerD-LS LoRaWAN Rastreador de Ativos"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors GPS location. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora localização GPS. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"location"
+			],
+			"tags": [
+				"location",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-ts01-lb-ls",
+			"model": "TS01-LB/LS",
+			"slug": "ts01-lb-ls",
+			"name": {
+				"en-US": "TS01-LB/LS LoRaWAN Tilting Sensor",
+				"pt-BR": "TS01-LB/LS LoRaWAN Sensor de Inclinação"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors tilt angle. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora ângulo de inclinação. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"tilt"
+			],
+			"tags": [
+				"tilt",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-ts01-nb",
+			"model": "TS01-NB",
+			"slug": "ts01-nb",
+			"name": {
+				"en-US": "TS01-NB NB-IoT Tilting Sensor",
+				"pt-BR": "TS01-NB NB-IoT Sensor de Inclinação"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors tilt angle. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora ângulo de inclinação. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"tilt"
+			],
+			"tags": [
+				"nb-iot",
+				"tilt",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-wl03a-lb-ls",
+			"model": "WL03A-LB/LS",
+			"slug": "wl03a-lb-ls",
+			"name": {
+				"en-US": "WL03A-LB/LS LoRaWAN Rope-Type Water Leak Controller",
+				"pt-BR": "WL03A-LB/LS LoRaWAN Controlador de Vazamento de Água tipo Corda"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors water leaks. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora vazamento de água. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"water_leak"
+			],
+			"tags": [
+				"water_leak",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-wl03a-nb",
+			"model": "WL03A-NB",
+			"slug": "wl03a-nb",
+			"name": {
+				"en-US": "WL03A-NB NB-IoT Rope-Type Water Leak Controller",
+				"pt-BR": "WL03A-NB NB-IoT Controlador de Vazamento de Água tipo Corda"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors water leaks. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora vazamento de água. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"water_leak"
+			],
+			"tags": [
+				"nb-iot",
+				"water_leak",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-wqs-cb",
+			"model": "WQS-CB/CS",
+			"slug": "wqs-cb",
+			"name": {
+				"en-US": "WQS-CB/CS Cat-1 Water Quality Sensor",
+				"pt-BR": "WQS-CB/CS Cat-1 Sensor de Qualidade da Água"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors pH, electrical conductivity (EC) and temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora pH, condutividade elétrica (EC) e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"ph",
+				"conductivity",
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"ph",
+				"conductivity",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-wqs-lb",
+			"model": "WQS-LB/LS",
+			"slug": "wqs-lb",
+			"name": {
+				"en-US": "WQS-LB/LS LoRaWAN Water Quality Sensor",
+				"pt-BR": "WQS-LB/LS LoRaWAN Sensor de Qualidade da Água"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors pH, electrical conductivity (EC) and temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora pH, condutividade elétrica (EC) e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"ph",
+				"conductivity",
+				"temperature"
+			],
+			"tags": [
+				"ph",
+				"conductivity",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-wqs-nb",
+			"model": "WQS-NB/NS",
+			"slug": "wqs-nb",
+			"name": {
+				"en-US": "WQS-NB/NS NB-IoT Water Quality Sensor",
+				"pt-BR": "WQS-NB/NS NB-IoT Sensor de Qualidade da Água"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors pH, electrical conductivity (EC) and temperature. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora pH, condutividade elétrica (EC) e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"ph",
+				"conductivity",
+				"temperature"
+			],
+			"tags": [
+				"nb-iot",
+				"ph",
+				"conductivity",
+				"temperature",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-wsc2-compact-ls",
+			"model": "WSC2-Compact-LS",
+			"slug": "wsc2-compact-ls",
+			"name": {
+				"en-US": "WSC2-Compact-LS LoRaWAN Weather Station Kit",
+				"pt-BR": "WSC2-Compact-LS LoRaWAN Kit de Estação Meteorológica"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors temperature, humidity, pressure, wind and rainfall. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura, umidade, pressão, vento e chuva. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"pressure",
+				"wind",
+				"rainfall"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"pressure",
+				"wind",
+				"rainfall",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-wsc2-l",
+			"model": "WSC2-L",
+			"slug": "wsc2-l",
+			"name": {
+				"en-US": "WSC2-L LoRaWAN Weather Station",
+				"pt-BR": "WSC2-L LoRaWAN Estação Meteorológica"
+			},
+			"description": {
+				"en-US": "LoRaWAN (Class A) sensor that monitors temperature, humidity, pressure, wind, rainfall and noise level. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura, umidade, pressão, vento, chuva e nível de ruído. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"pressure",
+				"wind",
+				"rainfall",
+				"noise"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"pressure",
+				"wind",
+				"rainfall",
+				"noise",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "dragino-wsc2-n",
+			"model": "WSC2-N",
+			"slug": "wsc2-n",
+			"name": {
+				"en-US": "WSC2-N NB-IoT Weather Station",
+				"pt-BR": "WSC2-N NB-IoT Estação Meteorológica"
+			},
+			"description": {
+				"en-US": "NB-IoT sensor that monitors temperature, humidity, pressure, wind, rainfall and noise level. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+				"pt-BR": "Sensor NB-IoT que monitora temperatura, umidade, pressão, vento, chuva e nível de ruído. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"pressure",
+				"wind",
+				"rainfall",
+				"noise"
+			],
+			"tags": [
+				"nb-iot",
+				"temperature",
+				"humidity",
+				"pressure",
+				"wind",
+				"rainfall",
+				"noise",
+				"dragino"
+			],
+			"icon": "",
+			"hasCodec": false,
+			"hasManual": true
+		}
+	]
+}

@@ -1,0 +1,41 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-dds04-lb-ls",
+	"model": "DDS04-LB/LS",
+	"name": {
+		"en-US": "DDS04-LB/LS LoRaWAN 4-Channel Distance Detection Sensor",
+		"pt-BR": "DDS04-LB/LS LoRaWAN Sensor de Detecção de Distância de 4 Canais"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors distance / level. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"distance"
+	],
+	"tags": [
+		"distance",
+		"level",
+		"4-channel",
+		"ultrasonic"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/t64ho6xzeowhm1k/AADerK1ljYM_B5P4iqItdP97a?dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/DDS04-LB_LoRaWAN_4-Channels_Distance_Detection_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/distance-level-sensor/item/280-dds04-lb-ls.html"
+}

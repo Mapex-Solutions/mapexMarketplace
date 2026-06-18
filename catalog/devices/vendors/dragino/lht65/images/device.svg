@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="320" viewBox="0 0 480 320" role="img" aria-label="Dragino LHT65">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eef2f5"/>
+    </linearGradient>
+    <linearGradient id="dev" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2f6d8a"/>
+      <stop offset="1" stop-color="#2f5d50"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="320" fill="url(#bg)"/>
+  <rect x="170" y="86" width="140" height="120" rx="18" fill="url(#dev)"/>
+  <circle cx="240" cy="120" r="12" fill="#ffffff" opacity="0.92"/>
+  <rect x="200" y="150" width="80" height="10" rx="5" fill="#ffffff" opacity="0.55"/>
+  <rect x="212" y="170" width="56" height="8" rx="4" fill="#ffffff" opacity="0.4"/>
+  <text x="240" y="252" text-anchor="middle" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="30" font-weight="700" fill="#212121">LHT65</text>
+  <text x="240" y="282" text-anchor="middle" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="16" fill="#6b7780">Dragino</text>
+</svg>

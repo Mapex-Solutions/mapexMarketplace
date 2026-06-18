@@ -1,0 +1,61 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Dragino SDI-12-NB/NS",
+	"protocolId": "mqtt",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "mqtt",
+		"brokerUrl": "",
+		"clientId": "",
+		"baseTopic": "dragino/sdi-12-nb-ns",
+		"authMode": "none",
+		"username": "",
+		"password": "",
+		"tlsCertPem": "",
+		"tlsKeyPem": "",
+		"tlsCaPem": "",
+		"receiveEnabled": false,
+		"subscriptions": []
+	},
+	"attributes": {
+		"manufacturer": "Dragino",
+		"model": "SDI-12-NB/NS"
+	},
+	"events": [
+		{
+			"id": "status",
+			"name": "Device status",
+			"mqtt": {
+				"topic": "dragino/sdi-12-nb-ns/status",
+				"qos": 0,
+				"retain": false,
+				"bodyMode": "raw",
+				"bodyFields": [],
+				"body": "{\"IMEI\":\"{{randInt(100000000000000,999999999999999)}}\",\"IMSI\":\"{{randInt(100000000000000,999999999999999)}}\",\"Model\":\"SDI-12-NB/NS\",\"fw_version\":\"1.0.0\",\"battery\":3.{{randInt(10,45)}},\"signal\":{{randInt(5,31)}},\"time\":\"2026/06/18 {{randInt(10,23)}}:{{randInt(10,59)}}:{{randInt(10,59)}}\"}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 12,
+				"unit": "hours"
+			}
+		},
+		{
+			"id": "data",
+			"name": "Sensor data uplink",
+			"mqtt": {
+				"topic": "dragino/sdi-12-nb-ns/up",
+				"qos": 0,
+				"retain": false,
+				"bodyMode": "raw",
+				"bodyFields": [],
+				"body": "{\"IMEI\":\"{{randInt(100000000000000,999999999999999)}}\",\"IMSI\":\"{{randInt(100000000000000,999999999999999)}}\",\"Model\":\"SDI-12-NB/NS\",\"Payload\":\"{{randInt(0,100)}}\",\"battery\":3.{{randInt(10,45)}},\"signal\":{{randInt(5,31)}},\"time\":\"2026/06/18 {{randInt(10,23)}}:{{randInt(10,59)}}:{{randInt(10,59)}}\"}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 1,
+				"unit": "hours"
+			}
+		}
+	]
+}

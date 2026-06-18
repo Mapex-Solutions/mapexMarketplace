@@ -1,0 +1,43 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-wqs-lb",
+	"model": "WQS-LB/LS",
+	"name": {
+		"en-US": "WQS-LB/LS LoRaWAN Water Quality Sensor",
+		"pt-BR": "WQS-LB/LS LoRaWAN Sensor de Qualidade da Água"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors pH, electrical conductivity (EC) and temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora pH, condutividade elétrica (EC) e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"ph",
+		"conductivity",
+		"temperature"
+	],
+	"tags": [
+		"ph",
+		"conductivity",
+		"temperature",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/ij4r7rywq92e46v6ormfi/AA-XHY3oCweysoGBIlqMRds?rlkey=fn0grkx4cjn480yid6709ej85&st=ppkh47u0&dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/WQS-LB--LoRaWAN_Water_Quality_Sensor_Transmitter_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/water-air-quality-sensor/item/345-wqs-lb.html"
+}

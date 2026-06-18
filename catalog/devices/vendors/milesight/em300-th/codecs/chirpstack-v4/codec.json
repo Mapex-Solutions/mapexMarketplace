@@ -1,0 +1,12 @@
+{
+	"$schema": "mapex-device-codec/v1",
+	"id": "chirpstack-v4",
+	"name": "ChirpStack v4",
+	"source": "community",
+	"official": false,
+	"default": false,
+	"target": "chirpstack",
+	"language": "javascript",
+	"files": { "decoder": "decoder.js" },
+	"sourceUrl": "https://github.com/chirpstack/lorawan-devices"
+}

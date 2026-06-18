@@ -1,0 +1,38 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-pb01",
+	"model": "PB01",
+	"name": {
+		"en-US": "PB01 LoRaWAN Push Button",
+		"pt-BR": "PB01 LoRaWAN Botão de Acionamento"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors button presses. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora acionamentos de botão. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"button"
+	],
+	"tags": [
+		"button",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/y7pvm58wcr8319d5o4ujr/APZtqlbzRCNbHoPWTmmMMWs?rlkey=wfh93x2dhcev3ydn0846rinf0&st=4sekipnj&dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/PB01--LoRaWAN_Button_User_Manual/#H4.2A0PowerConsumptionAnalyze"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/lorawan-nb-iot-door-sensor-water-leak/item/333-pb01-lorawan-button.html"
+}

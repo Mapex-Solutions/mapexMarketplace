@@ -1,0 +1,41 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-dds04-nb",
+	"model": "DDS04-NB",
+	"name": {
+		"en-US": "DDS04-NB NB-IoT 4-Channel Distance Detection Sensor",
+		"pt-BR": "DDS04-NB NB-IoT Sensor de Detecção de Distância de 4 Canais"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors distance / level. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"distance"
+	],
+	"tags": [
+		"nb-iot",
+		"distance",
+		"level",
+		"4-channel"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/kpsupfr4pufdvhs/AACabIEYxTCiKVk1xNLB4mi9a?dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/DDS04-NB_NB-IoT_4-Channels_Distance_Detection_Sensor_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/distance-level-sensor/item/312-dds04-nb.html"
+}

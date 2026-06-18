@@ -1,0 +1,61 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Dragino DDS75-NB",
+	"protocolId": "mqtt",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "mqtt",
+		"brokerUrl": "",
+		"clientId": "",
+		"baseTopic": "dragino/dds75-nb",
+		"authMode": "none",
+		"username": "",
+		"password": "",
+		"tlsCertPem": "",
+		"tlsKeyPem": "",
+		"tlsCaPem": "",
+		"receiveEnabled": false,
+		"subscriptions": []
+	},
+	"attributes": {
+		"manufacturer": "Dragino",
+		"model": "DDS75-NB"
+	},
+	"events": [
+		{
+			"id": "status",
+			"name": "Device status",
+			"mqtt": {
+				"topic": "dragino/dds75-nb/status",
+				"qos": 0,
+				"retain": false,
+				"bodyMode": "raw",
+				"bodyFields": [],
+				"body": "{\"IMEI\":\"{{randInt(100000000000000,999999999999999)}}\",\"IMSI\":\"{{randInt(100000000000000,999999999999999)}}\",\"Model\":\"DDS75-NB\",\"fw_version\":\"1.0.0\",\"battery\":3.{{randInt(10,45)}},\"signal\":{{randInt(5,31)}},\"time\":\"2026/06/18 {{randInt(10,23)}}:{{randInt(10,59)}}:{{randInt(10,59)}}\"}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 12,
+				"unit": "hours"
+			}
+		},
+		{
+			"id": "uplink-distance",
+			"name": "Distance & temperature uplink",
+			"mqtt": {
+				"topic": "dragino/dds75-nb/up",
+				"qos": 0,
+				"retain": false,
+				"bodyMode": "raw",
+				"bodyFields": [],
+				"body": "{\"IMEI\": \"{{randInt(100000000000000,999999999999999)}}\", \"Model\": \"DDS75-NB\", \"distance\": \"{{randInt(100,7500)}}\", \"temperature\": \"{{randInt(15,35)}}.{{randInt(0,9)}}\", \"bat\": \"3.{{randInt(0,6)}}\"}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 1,
+				"unit": "hours"
+			}
+		}
+	]
+}

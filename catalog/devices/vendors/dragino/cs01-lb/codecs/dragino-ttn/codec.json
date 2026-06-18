@@ -1,0 +1,14 @@
+{
+	"$schema": "mapex-device-codec/v1",
+	"id": "dragino-ttn",
+	"name": "Dragino TTN (official)",
+	"source": "vendor",
+	"official": true,
+	"default": false,
+	"target": "ttn",
+	"language": "javascript",
+	"files": {
+		"decoder": "decoder.js"
+	},
+	"sourceUrl": "https://raw.githubusercontent.com/dragino/dragino-end-node-decoder/main/CS01-LB/CS01-LB_v1.3.1_TTN_Decoder.txt.txt"
+}

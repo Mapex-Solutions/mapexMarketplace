@@ -1,0 +1,23 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-em300-th",
+	"model": "EM300-TH",
+	"name": "EM300-TH Temperature & Humidity Sensor",
+	"description": "Indoor LoRaWAN sensor reporting temperature and relative humidity. Designed for offices, server rooms and cold-chain monitoring with multi-year battery life.",
+	"protocol": "lorawan",
+	"readingTypes": ["temperature", "humidity"],
+	"tags": ["indoor", "battery", "climate"],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": { "device": "images/device.png" },
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf"
+	},
+	"collectedAt": "2026-06-16"
+}

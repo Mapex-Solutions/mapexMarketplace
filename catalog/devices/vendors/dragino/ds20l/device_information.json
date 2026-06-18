@@ -1,0 +1,42 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-ds20l",
+	"model": "DS20L",
+	"name": {
+		"en-US": "DS20L LoRaWAN Distance & Thermocouple Sensor",
+		"pt-BR": "DS20L LoRaWAN Sensor de Distância e Termopar"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors distance / level and temperature. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"distance",
+		"temperature"
+	],
+	"tags": [
+		"distance",
+		"level",
+		"temperature",
+		"thermocouple"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/wwsh5kl69u8wmk4/AAA9dyuZO2Rni4xGDPMJem05a?dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/distance-level-sensor/item/289-ds20l.html"
+}

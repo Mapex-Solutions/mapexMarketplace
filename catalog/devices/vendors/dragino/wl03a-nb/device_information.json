@@ -1,0 +1,40 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-wl03a-nb",
+	"model": "WL03A-NB",
+	"name": {
+		"en-US": "WL03A-NB NB-IoT Rope-Type Water Leak Controller",
+		"pt-BR": "WL03A-NB NB-IoT Controlador de Vazamento de Água tipo Corda"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors water leaks. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora vazamento de água. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"water_leak"
+	],
+	"tags": [
+		"nb-iot",
+		"water_leak",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/agum4d7sgi3u0sf/AADlctPGmnAonOgPn0KLBtNTa?dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/WL03A-NB_NB-IoT_None-Position_Rope_Type_Water_Leak_Controller_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/lorawan-nb-iot-door-sensor-water-leak/item/313-wl03a-nb.html"
+}

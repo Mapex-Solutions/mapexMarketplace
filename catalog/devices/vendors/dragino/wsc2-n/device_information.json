@@ -1,0 +1,50 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-wsc2-n",
+	"model": "WSC2-N",
+	"name": {
+		"en-US": "WSC2-N NB-IoT Weather Station",
+		"pt-BR": "WSC2-N NB-IoT Estação Meteorológica"
+	},
+	"description": {
+		"en-US": "NB-IoT sensor that monitors temperature, humidity, pressure, wind, rainfall and noise level. Readings are published to an IoT server over NB-IoT (MQTT/CoAP/UDP).",
+		"pt-BR": "Sensor NB-IoT que monitora temperatura, umidade, pressão, vento, chuva e nível de ruído. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"temperature",
+		"humidity",
+		"pressure",
+		"wind",
+		"rainfall",
+		"noise"
+	],
+	"tags": [
+		"nb-iot",
+		"temperature",
+		"humidity",
+		"pressure",
+		"wind",
+		"rainfall",
+		"noise",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/scl/fo/18xqwhlvxicuoubtvrfv2/ADAKCsU7Unbvmf9HRBar4kA?rlkey=07wu3b3p2i3flj2j0mvoru18b&st=m1iye0t3&dl=0",
+		"manualUrl": "https://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/WSC2-N--Weather_Station_Kit_User_Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/agriculture-weather-station/item/379-wsc2-n.html"
+}

@@ -1,0 +1,67 @@
+# Node
+node_modules/
+dist/
+lib/
+.npmrc
+
+# Internal
+INTERNALS/
+
+# Claude Code
+.claude/
+CLAUDE.md
+agents.sh
+*.local
+.local/
+
+# Binaries
+*.bin
+/bin/
+workspace_go/bin/
+workspace_go/services/**/main
+workspace_go/services/**/*_bench
+
+# Go vendor
+vendor/
+
+# Compiled / bytecode
+*.class
+*.py[cod]
+*.jar
+*.app
+*.exe
+*.war
+
+# Logs
+*.log
+
+# Unit test reports
+TEST*.xml
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large media
+*.mp4
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv
+
+# Archives
+all.tar
+
+# Parquet
+*.parquet
+
+# Marketplace: derived, disposable SQLite search index (rebuilt from catalog/ on boot)
+/data/
+*.db
+*.db-shm
+*.db-wal

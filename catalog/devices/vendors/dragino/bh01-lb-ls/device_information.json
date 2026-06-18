@@ -1,0 +1,39 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-bh01-lb-ls",
+	"model": "BH01-LB/LS",
+	"name": {
+		"en-US": "BH01-LB/LS BLE to LoRaWAN Hub",
+		"pt-BR": "BH01-LB/LS Hub BLE para LoRaWAN"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors temperature and humidity. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura e umidade. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature",
+		"humidity"
+	],
+	"tags": [
+		"ble",
+		"hub",
+		"gateway",
+		"bridge"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z"
+}

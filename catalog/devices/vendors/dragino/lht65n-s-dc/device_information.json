@@ -1,0 +1,41 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "dragino-lht65n-s-dc",
+	"model": "LHT65N-S-DC",
+	"name": {
+		"en-US": "LHT65N/S-DC LoRaWAN Temperature & Humidity Sensor",
+		"pt-BR": "LHT65N/S-DC LoRaWAN Sensor de Temperatura e Umidade"
+	},
+	"description": {
+		"en-US": "LoRaWAN (Class A) sensor that monitors temperature and humidity. Readings are sent as LoRaWAN uplinks (sensor data on FPort 2, device status on FPort 5).",
+		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura e umidade. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature",
+		"humidity"
+	],
+	"tags": [
+		"temperature",
+		"humidity",
+		"dragino"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "dragino",
+		"name": "Dragino",
+		"site": "https://www.dragino.com",
+		"support": "https://www.dragino.com/support"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://www.dropbox.com/sh/una19zsni308dme/AACOKp6J2RF5TMlKWT5zU3RTa?dl=0",
+		"manualUrl": "http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/LHT65N%20LoRaWAN%20Temperature%20%26%20Humidity%20Sensor%20Manual/"
+	},
+	"collectedAt": "2026-06-16T14:07:18.725Z",
+	"_sourceUrl": "https://www.dragino.com/products/lorawan-nb-iot-door-sensor-water-leak/item/328-lht65n-s-dc.html"
+}

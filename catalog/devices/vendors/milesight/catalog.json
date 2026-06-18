@@ -1,0 +1,37 @@
+{
+	"$schema": "mapex-device-vendor-catalog/v1",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"items": [
+		{
+			"id": "milesight-em300-th",
+			"model": "EM300-TH",
+			"slug": "em300-th",
+			"name": "EM300-TH Temperature & Humidity Sensor",
+			"description": "Indoor LoRaWAN sensor reporting temperature and relative humidity on a battery that lasts years.",
+			"protocol": "lorawan",
+			"readingTypes": ["temperature", "humidity"],
+			"tags": ["indoor", "battery", "climate"],
+			"icon": "mdi-thermometer",
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-vs121",
+			"model": "VS121",
+			"slug": "vs121",
+			"name": "VS121 AI People Counter",
+			"description": "Ceiling-mounted LoRaWAN sensor that counts people passing through an entrance.",
+			"protocol": "lorawan",
+			"readingTypes": ["passage_counter"],
+			"tags": ["occupancy", "ceiling", "ai"],
+			"icon": "mdi-counter",
+			"hasCodec": true,
+			"hasManual": true
+		}
+	]
+}

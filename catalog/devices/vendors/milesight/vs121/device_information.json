@@ -1,0 +1,22 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-vs121",
+	"model": "VS121",
+	"name": "VS121 AI People Counter",
+	"description": "Ceiling-mounted LoRaWAN sensor using AI vision to count people passing through an entrance. Reports cumulative in/out passage counts.",
+	"protocol": "lorawan",
+	"readingTypes": ["passage_counter"],
+	"tags": ["occupancy", "ceiling", "ai"],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": { "device": "images/device.png" },
+	"files": {
+		"manual": "files/manual.pdf"
+	},
+	"collectedAt": "2026-06-16"
+}

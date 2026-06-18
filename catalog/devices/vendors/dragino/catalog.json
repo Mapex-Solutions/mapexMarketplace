@@ -847,26 +847,6 @@
 			"hasManual": true
 		},
 		{
-			"id": "dragino-lht65",
-			"model": "LHT65",
-			"slug": "lht65",
-			"name": "LHT65 Temperature & Humidity Sensor",
-			"description": "LoRaWAN sensor with a built-in humidity sensor and an external temperature probe, suited for outdoor and industrial monitoring.",
-			"protocol": "lorawan",
-			"readingTypes": [
-				"temperature",
-				"humidity"
-			],
-			"tags": [
-				"probe",
-				"battery",
-				"climate"
-			],
-			"icon": "",
-			"hasCodec": true,
-			"hasManual": true
-		},
-		{
 			"id": "dragino-lht65n-s-ds",
 			"model": "LHT65N-S-DS",
 			"slug": "lht65n-s-ds",

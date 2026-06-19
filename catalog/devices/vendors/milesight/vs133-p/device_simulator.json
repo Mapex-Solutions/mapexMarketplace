@@ -1,0 +1,46 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Milesight VS133-P",
+	"protocolId": "http",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "http",
+		"url": "",
+		"method": "POST",
+		"headers": [
+			{
+				"key": "Content-Type",
+				"value": "application/json"
+			}
+		],
+		"authMode": "none",
+		"apiKeyHeader": "",
+		"apiKey": "",
+		"basicUser": "",
+		"basicPass": ""
+	},
+	"attributes": {
+		"manufacturer": "Milesight",
+		"model": "VS133-P"
+	},
+	"events": [
+		{
+			"id": "periodic-report",
+			"name": "Periodic people-counting report",
+			"http": {
+				"method": "POST",
+				"path": "/",
+				"headers": [],
+				"bodyMode": "raw",
+				"bodyFields": [],
+				"body": "{\"device_info\":{\"device_sn\":\"6757D1{{randInt(100000,999999)}}\",\"device_name\":\"VS133-P\",\"device_mac\":\"24:E1:24:B0:3D:3D\",\"firmware_version\":\"V_133.1.0.7\",\"ip_address\":\"192.168.{{randInt(1,254)}}.{{randInt(2,254)}}\",\"running_time\":{{randInt(1000,99999)}}},\"line_total_data\":[{\"line\":1,\"line_name\":\"Line1\",\"in_counted\":{{randInt(0,800)}},\"out_counted\":{{randInt(0,800)}},\"capacity_counted\":{{randInt(0,50)}}}],\"region_count_data\":[{\"region\":1,\"region_name\":\"Region1\",\"current_total\":{{randInt(0,50)}}}],\"time_info\":{\"start_time\":\"2026-06-19T12:00:00+00:00\",\"end_time\":\"2026-06-19T12:15:00+00:00\"}}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 15,
+				"unit": "minutes"
+			}
+		}
+	]
+}

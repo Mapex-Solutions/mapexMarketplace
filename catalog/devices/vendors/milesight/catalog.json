@@ -1370,30 +1370,33 @@
 			"hasManual": false
 		},
 		{
-			"id": "milesight-vs133-vs135",
-			"model": "VS133-VS135",
-			"slug": "vs133-vs135",
+			"id": "milesight-vs133-p",
+			"model": "VS133-P",
+			"slug": "vs133-p",
 			"name": {
-				"en-US": "VS133-VS135 Milesight LoRaWAN Sensor",
-				"pt-BR": "VS133-VS135 Sensor LoRaWAN Milesight"
+				"en-US": "VS133-P Milesight AI ToF People Counter (PoE)",
+				"pt-BR": "VS133-P Contador de Pessoas AI ToF Milesight (PoE)"
 			},
 			"description": {
-				"en-US": "Milesight VS133-VS135 — LoRaWAN (Class A) sensor that monitors people counts. Uplinks are channel-TLV frames on FPort 85.",
-				"pt-BR": "Milesight VS133-VS135 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
+				"en-US": "Milesight VS133-P — the PoE/Ethernet variant of the VS133 AI ToF people counter. Unlike the LoRaWAN VS133, it posts a JSON 'periodic report' (line and region people counts) over HTTP(S)/MQTT(S) directly to a server.",
+				"pt-BR": "Milesight VS133-P — variante PoE/Ethernet do contador de pessoas AI ToF VS133. Diferente do VS133 LoRaWAN, ele posta um 'periodic report' em JSON (contagens por linha e região) via HTTP(S)/MQTT(S) direto para um servidor."
 			},
-			"protocol": "lorawan",
+			"protocol": "http",
 			"readingTypes": [
 				"passage_counter"
 			],
 			"tags": [
 				"passage_counter",
+				"people-counter",
+				"poe",
+				"tof",
 				"milesight"
 			],
 			"icon": "",
 			"image": "",
 			"hasImage": false,
-			"hasCodec": true,
-			"hasManual": false
+			"hasCodec": false,
+			"hasManual": true
 		},
 		{
 			"id": "milesight-vs135",

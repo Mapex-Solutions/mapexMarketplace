@@ -1292,8 +1292,8 @@
 				"pt-BR": "VS121-P Contador de Pessoas AI Milesight (PoE)"
 			},
 			"description": {
-				"en-US": "Milesight VS121-P — the PoE/Ethernet AI workplace sensor that posts a JSON region people-counting report (occupancy per region) over HTTP(S)/MQTT(S), distinct from a LoRaWAN node.",
-				"pt-BR": "Milesight VS121-P — sensor AI de ocupação PoE/Ethernet que posta um relatório JSON de contagem de pessoas por região (ocupação) via HTTP(S)/MQTT(S), diferente de um nó LoRaWAN."
+				"en-US": "Milesight VS121-P — the IP-connected (Ethernet PoE) AI workplace sensor that posts a JSON region people-counting report (occupancy per region) over HTTP(S)/MQTT(S), unlike the LoRaWAN nodes.",
+				"pt-BR": "Milesight VS121-P — sensor AI de ocupação conectado por IP (Ethernet PoE) que posta um relatório JSON de contagem por região (ocupação) via HTTP(S)/MQTT(S), diferente dos nós LoRaWAN."
 			},
 			"protocol": "http",
 			"readingTypes": [
@@ -1403,12 +1403,12 @@
 			"model": "VS133-P",
 			"slug": "vs133-p",
 			"name": {
-				"en-US": "VS133-P Milesight AI ToF People Counter (PoE)",
-				"pt-BR": "VS133-P Contador de Pessoas AI ToF Milesight (PoE)"
+				"en-US": "VS133-P Milesight AI ToF People Counter (Wi-Fi/PoE)",
+				"pt-BR": "VS133-P Contador de Pessoas AI ToF Milesight (Wi-Fi/PoE)"
 			},
 			"description": {
-				"en-US": "Milesight VS133-P — the PoE/Ethernet variant of the VS133 AI ToF people counter. Unlike the LoRaWAN VS133, it posts a JSON 'periodic report' (line and region people counts) over HTTP(S)/MQTT(S) directly to a server.",
-				"pt-BR": "Milesight VS133-P — variante PoE/Ethernet do contador de pessoas AI ToF VS133. Diferente do VS133 LoRaWAN, ele posta um 'periodic report' em JSON (contagens por linha e região) via HTTP(S)/MQTT(S) direto para um servidor."
+				"en-US": "Milesight VS133-P — the IP-connected (Wi-Fi / Ethernet PoE) variant of the VS133 AI ToF people counter. Unlike the LoRaWAN VS133, it posts a JSON 'periodic report' (line and region people counts) over HTTP(S)/MQTT(S) directly to a server.",
+				"pt-BR": "Milesight VS133-P — variante conectada por IP (Wi-Fi / Ethernet PoE) do contador AI ToF VS133. Diferente do VS133 LoRaWAN, posta um 'periodic report' em JSON (contagens por linha e região) via HTTP(S)/MQTT(S) direto para um servidor."
 			},
 			"protocol": "http",
 			"readingTypes": [
@@ -1419,7 +1419,8 @@
 				"people-counter",
 				"poe",
 				"tof",
-				"milesight"
+				"milesight",
+				"wifi"
 			],
 			"icon": "",
 			"image": "",
@@ -1460,12 +1461,12 @@
 			"model": "VS135-P",
 			"slug": "vs135-p",
 			"name": {
-				"en-US": "VS135-P Milesight AI ToF People Counter (PoE)",
-				"pt-BR": "VS135-P Contador de Pessoas AI ToF Milesight (PoE)"
+				"en-US": "VS135-P Milesight AI ToF People Counter (Wi-Fi/PoE)",
+				"pt-BR": "VS135-P Contador de Pessoas AI ToF Milesight (Wi-Fi/PoE)"
 			},
 			"description": {
-				"en-US": "Milesight VS135-P — the PoE/Ethernet variant of the VS135 AI ToF people counter; posts a JSON periodic report (line and region counts) over HTTP(S)/MQTT(S) instead of LoRaWAN.",
-				"pt-BR": "Milesight VS135-P — variante PoE/Ethernet do contador AI ToF VS135; posta um relatório periódico em JSON (contagens por linha e região) via HTTP(S)/MQTT(S) em vez de LoRaWAN."
+				"en-US": "Milesight VS135-P — the IP-connected (Wi-Fi / Ethernet PoE) variant of the VS135 AI ToF people counter; posts a JSON periodic report (line and region counts) over HTTP(S)/MQTT(S) instead of LoRaWAN.",
+				"pt-BR": "Milesight VS135-P — variante por IP (Wi-Fi / Ethernet PoE) do contador AI ToF VS135; posta um relatório periódico em JSON (contagens por linha e região) via HTTP(S)/MQTT(S) em vez de LoRaWAN."
 			},
 			"protocol": "http",
 			"readingTypes": [
@@ -1476,7 +1477,8 @@
 				"people-counter",
 				"poe",
 				"tof",
-				"milesight"
+				"milesight",
+				"wifi"
 			],
 			"icon": "",
 			"image": "",

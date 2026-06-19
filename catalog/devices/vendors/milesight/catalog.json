@@ -1546,6 +1546,40 @@
 			"hasManual": true
 		},
 		{
+			"id": "milesight-vs361",
+			"model": "VS361",
+			"slug": "vs361",
+			"name": {
+				"en-US": "VS361 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS361 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS361 — LoRaWAN (Class A) sensor that monitors distance / level, open/close status, flow rate, people counts and temperature. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight VS361 — sensor LoRaWAN (Classe A) que monitora distância / nível, status de abertura/fechamento, vazão, contagem de pessoas e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance",
+				"door",
+				"flow",
+				"passage_counter",
+				"temperature"
+			],
+			"tags": [
+				"distance",
+				"door",
+				"flow",
+				"passage_counter",
+				"temperature",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
 			"id": "milesight-vs370",
 			"model": "VS370",
 			"slug": "vs370",

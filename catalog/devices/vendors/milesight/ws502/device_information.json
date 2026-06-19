@@ -1,0 +1,39 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-ws502",
+	"model": "WS502",
+	"name": {
+		"en-US": "WS502 Milesight LoRaWAN Sensor",
+		"pt-BR": "WS502 Sensor LoRaWAN Milesight"
+	},
+	"description": {
+		"en-US": "Milesight WS502 — LoRaWAN (Class A) sensor that monitors relay / dry-contact state and electrical current. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the WS50X series.)",
+		"pt-BR": "Milesight WS502 — sensor LoRaWAN (Classe A) que monitora relé / contato seco e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série WS50X.)"
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"dry_contact",
+		"current"
+	],
+	"tags": [
+		"dry_contact",
+		"current",
+		"milesight"
+	],
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/ws50x-datasheet-en.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/ws50x-user-guide-en.pdf"
+	},
+	"collectedAt": "2026-06-18T20:26:09.342Z"
+}

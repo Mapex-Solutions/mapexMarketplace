@@ -1284,6 +1284,62 @@
 			"hasManual": true
 		},
 		{
+			"id": "milesight-vs125",
+			"model": "VS125",
+			"slug": "vs125",
+			"name": {
+				"en-US": "VS125 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS125 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS125 — LoRaWAN (Class A) sensor that monitors open/close status and people counts. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight VS125 — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento e contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"door",
+				"passage_counter"
+			],
+			"tags": [
+				"door",
+				"passage_counter",
+				"milesight"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-vs126",
+			"model": "VS126",
+			"slug": "vs126",
+			"name": {
+				"en-US": "VS126 Milesight LoRaWAN Sensor",
+				"pt-BR": "VS126 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight VS126 — LoRaWAN (Class A) sensor that monitors button presses and people counts. Uplinks are channel-TLV frames on FPort 85.",
+				"pt-BR": "Milesight VS126 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão e contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"button",
+				"passage_counter"
+			],
+			"tags": [
+				"button",
+				"passage_counter",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
 			"id": "milesight-vs133",
 			"model": "VS133",
 			"slug": "vs133",
@@ -1873,6 +1929,90 @@
 				"button",
 				"temperature",
 				"water_leak",
+				"milesight"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws501",
+			"model": "WS501",
+			"slug": "ws501",
+			"name": {
+				"en-US": "WS501 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS501 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS501 — LoRaWAN (Class A) sensor that monitors relay / dry-contact state and electrical current. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the WS50X series.)",
+				"pt-BR": "Milesight WS501 — sensor LoRaWAN (Classe A) que monitora relé / contato seco e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série WS50X.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"dry_contact",
+				"current"
+			],
+			"tags": [
+				"dry_contact",
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws502",
+			"model": "WS502",
+			"slug": "ws502",
+			"name": {
+				"en-US": "WS502 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS502 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS502 — LoRaWAN (Class A) sensor that monitors relay / dry-contact state and electrical current. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the WS50X series.)",
+				"pt-BR": "Milesight WS502 — sensor LoRaWAN (Classe A) que monitora relé / contato seco e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série WS50X.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"dry_contact",
+				"current"
+			],
+			"tags": [
+				"dry_contact",
+				"current",
+				"milesight"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-ws503",
+			"model": "WS503",
+			"slug": "ws503",
+			"name": {
+				"en-US": "WS503 Milesight LoRaWAN Sensor",
+				"pt-BR": "WS503 Sensor LoRaWAN Milesight"
+			},
+			"description": {
+				"en-US": "Milesight WS503 — LoRaWAN (Class A) sensor that monitors relay / dry-contact state and electrical current. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the WS50X series.)",
+				"pt-BR": "Milesight WS503 — sensor LoRaWAN (Classe A) que monitora relé / contato seco e corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série WS50X.)"
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"dry_contact",
+				"current"
+			],
+			"tags": [
+				"dry_contact",
+				"current",
 				"milesight"
 			],
 			"icon": "",

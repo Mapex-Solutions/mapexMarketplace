@@ -1,0 +1,14 @@
+{
+	"$schema": "mapex-device-codec/v1",
+	"id": "milesight-generic",
+	"name": "Milesight Generic (official)",
+	"source": "vendor",
+	"official": true,
+	"default": true,
+	"target": "generic",
+	"language": "javascript",
+	"files": {
+		"decoder": "decoder.js"
+	},
+	"sourceUrl": "https://raw.githubusercontent.com/Milesight-IoT/SensorDecoders/main/ws-series/ws502/ws502-decoder.js"
+}

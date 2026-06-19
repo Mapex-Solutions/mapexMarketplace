@@ -1284,6 +1284,35 @@
 			"hasManual": true
 		},
 		{
+			"id": "milesight-vs121-p",
+			"model": "VS121-P",
+			"slug": "vs121-p",
+			"name": {
+				"en-US": "VS121-P Milesight AI Workplace People Counter (PoE)",
+				"pt-BR": "VS121-P Contador de Pessoas AI Milesight (PoE)"
+			},
+			"description": {
+				"en-US": "Milesight VS121-P — the PoE/Ethernet AI workplace sensor that posts a JSON region people-counting report (occupancy per region) over HTTP(S)/MQTT(S), distinct from a LoRaWAN node.",
+				"pt-BR": "Milesight VS121-P — sensor AI de ocupação PoE/Ethernet que posta um relatório JSON de contagem de pessoas por região (ocupação) via HTTP(S)/MQTT(S), diferente de um nó LoRaWAN."
+			},
+			"protocol": "http",
+			"readingTypes": [
+				"passage_counter"
+			],
+			"tags": [
+				"passage_counter",
+				"people-counter",
+				"poe",
+				"tof",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
 			"id": "milesight-vs125",
 			"model": "VS125",
 			"slug": "vs125",
@@ -1424,6 +1453,35 @@
 			"image": "",
 			"hasImage": false,
 			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "milesight-vs135-p",
+			"model": "VS135-P",
+			"slug": "vs135-p",
+			"name": {
+				"en-US": "VS135-P Milesight AI ToF People Counter (PoE)",
+				"pt-BR": "VS135-P Contador de Pessoas AI ToF Milesight (PoE)"
+			},
+			"description": {
+				"en-US": "Milesight VS135-P — the PoE/Ethernet variant of the VS135 AI ToF people counter; posts a JSON periodic report (line and region counts) over HTTP(S)/MQTT(S) instead of LoRaWAN.",
+				"pt-BR": "Milesight VS135-P — variante PoE/Ethernet do contador AI ToF VS135; posta um relatório periódico em JSON (contagens por linha e região) via HTTP(S)/MQTT(S) em vez de LoRaWAN."
+			},
+			"protocol": "http",
+			"readingTypes": [
+				"passage_counter"
+			],
+			"tags": [
+				"passage_counter",
+				"people-counter",
+				"poe",
+				"tof",
+				"milesight"
+			],
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"hasCodec": false,
 			"hasManual": true
 		},
 		{

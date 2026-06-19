@@ -1,0 +1,39 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-vs121-p",
+	"model": "VS121-P",
+	"name": {
+		"en-US": "VS121-P Milesight AI Workplace People Counter (PoE)",
+		"pt-BR": "VS121-P Contador de Pessoas AI Milesight (PoE)"
+	},
+	"description": {
+		"en-US": "Milesight VS121-P — the PoE/Ethernet AI workplace sensor that posts a JSON region people-counting report (occupancy per region) over HTTP(S)/MQTT(S), distinct from a LoRaWAN node.",
+		"pt-BR": "Milesight VS121-P — sensor AI de ocupação PoE/Ethernet que posta um relatório JSON de contagem de pessoas por região (ocupação) via HTTP(S)/MQTT(S), diferente de um nó LoRaWAN."
+	},
+	"protocol": "http",
+	"readingTypes": [
+		"passage_counter"
+	],
+	"tags": [
+		"passage_counter",
+		"people-counter",
+		"poe",
+		"tof",
+		"milesight"
+	],
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": ""
+	},
+	"files": {
+		"datasheet": "",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/vs121-p-user-guide-en.pdf"
+	}
+}

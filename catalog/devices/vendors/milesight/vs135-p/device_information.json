@@ -1,0 +1,39 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "milesight-vs135-p",
+	"model": "VS135-P",
+	"name": {
+		"en-US": "VS135-P Milesight AI ToF People Counter (PoE)",
+		"pt-BR": "VS135-P Contador de Pessoas AI ToF Milesight (PoE)"
+	},
+	"description": {
+		"en-US": "Milesight VS135-P — the PoE/Ethernet variant of the VS135 AI ToF people counter; posts a JSON periodic report (line and region counts) over HTTP(S)/MQTT(S) instead of LoRaWAN.",
+		"pt-BR": "Milesight VS135-P — variante PoE/Ethernet do contador AI ToF VS135; posta um relatório periódico em JSON (contagens por linha e região) via HTTP(S)/MQTT(S) em vez de LoRaWAN."
+	},
+	"protocol": "http",
+	"readingTypes": [
+		"passage_counter"
+	],
+	"tags": [
+		"passage_counter",
+		"people-counter",
+		"poe",
+		"tof",
+		"milesight"
+	],
+	"vendor": {
+		"slug": "milesight",
+		"name": "Milesight",
+		"site": "https://www.milesight.com",
+		"support": "https://support.milesight-iot.com"
+	},
+	"images": {
+		"device": ""
+	},
+	"files": {
+		"datasheet": "",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/vs135-p-user-guide-en.pdf"
+	}
+}

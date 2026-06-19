@@ -1,0 +1,46 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Milesight VS121-P",
+	"protocolId": "http",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "http",
+		"url": "",
+		"method": "POST",
+		"headers": [
+			{
+				"key": "Content-Type",
+				"value": "application/json"
+			}
+		],
+		"authMode": "none",
+		"apiKeyHeader": "",
+		"apiKey": "",
+		"basicUser": "",
+		"basicPass": ""
+	},
+	"attributes": {
+		"manufacturer": "Milesight",
+		"model": "VS121-P"
+	},
+	"events": [
+		{
+			"id": "periodic-report",
+			"name": "Periodic people-counting report",
+			"http": {
+				"method": "POST",
+				"path": "/",
+				"headers": [],
+				"bodyMode": "raw",
+				"bodyFields": [],
+				"body": "{\"event\":\"Region People Counting\",\"report_type\":\"interval\",\"device_info\":{\"device\":\"Workplace Sensor\",\"device_sn\":\"3693{{randInt(10000000,99999999)}}\",\"device_mac\":\"00:16:28:FA:8E:68\",\"ip_address\":\"192.168.0.{{randInt(2,254)}}\"},\"time_info\":{\"timezone\":\"UTC+0:00\",\"dst_status\":false,\"start_time\":\"2026/06/19 12:00:00\",\"end_time\":\"2026/06/19 12:15:00\"},\"current_total\":{{randInt(0,50)}},\"max_counted\":{{randInt(0,80)}},\"total_mapped_regions\":2,\"regions_name\":[\"Region1\",\"Region2\"],\"numbering_regions\":[1,2],\"occupancy\":[{{randInt(0,1)}},{{randInt(0,1)}}]}"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 15,
+				"unit": "minutes"
+			}
+		}
+	]
+}

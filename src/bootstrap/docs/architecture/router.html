@@ -1,0 +1,511 @@
+<h1 id="router-service">Router Service</h1>
+<p>The <strong>Router Service</strong> is the event routing layer of MapexOS. It consumes asset events from NATS JetStream, resolves asset context via a multi-level TieredCache, evaluates RouteGroup match rules, and publishes routed events to downstream services.</p>
+<blockquote>
+<p><strong>Applies to v1.0.0</strong> — Go, port 5003, NATS JetStream consumers, TieredCache (L0/L1/L2), RouteGroup match policies, 5-target fan-out, batch processing, and Prometheus observability.</p>
+</blockquote>
+<hr>
+<h2 id="role-in-the-pipeline">Role in the pipeline</h2>
+<p>The Router sits between event ingestion and downstream processing. After the HTTP Gateway ingests and the JS Execution Engine decodes/validates/transforms events, the Router decides <strong>where</strong> each event goes.</p>
+<pre><code class="language-txt">HTTP Gateway → JS Execution → Router → Workflow engine
+                                     → Triggers
+                                     → Events (persistence)
+                                     → Lake House (analytics)
+                                     → Notifications
+</code></pre>
+<p>The Router does not modify event payloads. It reads the asset context, evaluates routing rules, and fans out the event to the correct downstream subjects.</p>
+<hr>
+<h2 id="responsibilities">Responsibilities</h2>
+<ul>
+<li>Consume asset events from NATS JetStream</li>
+<li>Resolve full asset context via TieredCache</li>
+<li>Load and cache RouteGroup configurations</li>
+<li>Evaluate match rules against event + asset data</li>
+<li>Fan-out routed events to downstream NATS subjects</li>
+<li>Emit routing history for audit and UI visibility</li>
+<li>Invalidate caches on asset changes</li>
+<li>Expose REST API for RouteGroup CRUD operations</li>
+</ul>
+<hr>
+<h2 id="non-responsibilities">Non-responsibilities</h2>
+<p>The Router does <strong>not</strong>:</p>
+<ul>
+<li><strong>Ingest events from external sources</strong> — that is the <a href="/docs/1.0.0/en/architecture/http-gateway">HTTP Gateway</a></li>
+<li><strong>Execute scripts</strong> — that is the <a href="/docs/1.0.0/en/architecture/js-execution">JS Execution Engine</a></li>
+<li><strong>Evaluate workflows</strong> — that is the Workflow engine</li>
+<li><strong>Dispatch outbound actions</strong> — that is the <a href="/docs/1.0.0/en/architecture/triggers">Triggers Service</a></li>
+</ul>
+<hr>
+<h2 id="data-flow">Data flow</h2>
+<h3 id="consume">Consume</h3>
+<p>The Router consumes from a single NATS JetStream subject:</p>
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Stream</th>
+<th>Consumer type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>route.execute</code></td>
+<td><code>ROUTE-GROUPS</code></td>
+<td>WorkQueue (durable)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="processing-steps">Processing steps</h3>
+<pre><code class="language-txt">1. Receive batch of messages from NATS
+2. Resolve asset context via TieredCache
+3. Load RouteGroups for the asset's organization
+4. Evaluate match rules per RouteGroup
+5. Fan-out matching events to downstream subjects
+6. Emit routing history to audit subject
+7. ACK processed messages
+</code></pre>
+<h3 id="publish">Publish</h3>
+<p>The Router fans out to five downstream subjects:</p>
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>events.save</code></td>
+<td>Persist event to operational storage</td>
+</tr>
+<tr>
+<td><code>events.lake_house</code></td>
+<td>Persist event to analytical storage (ClickHouse)</td>
+</tr>
+<tr>
+<td><code>events.notification</code></td>
+<td>Trigger notification delivery</td>
+</tr>
+<tr>
+<td><code>workflow.{id}.execute</code></td>
+<td>Evaluate workflows for the event</td>
+</tr>
+<tr>
+<td><code>trigger.{id}.execute</code></td>
+<td>Execute trigger actions for the event</td>
+</tr>
+</tbody>
+</table>
+<p>Additionally, every routed event emits a history record:</p>
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>events.router</code></td>
+<td>Audit trail for routing decisions (visible in UI)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="asset-resolution--tieredcache">Asset resolution — TieredCache</h2>
+<p>Before evaluating routing rules, the Router must resolve the full asset context. MapexOS uses a <strong>TieredCache</strong> to minimize latency:</p>
+<pre><code class="language-txt">L0 (In-memory) → L1 (In-memory, longer TTL) → L2 (MinIO/S3) → HTTP fallback
+</code></pre>
+<h3 id="cache-levels">Cache levels</h3>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Storage</th>
+<th>TTL</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L0</strong></td>
+<td>In-memory</td>
+<td>5 min</td>
+<td>Hot assets, fastest access</td>
+</tr>
+<tr>
+<td><strong>L1</strong></td>
+<td>In-memory</td>
+<td>1 hour</td>
+<td>Warm assets, reduces downstream calls</td>
+</tr>
+<tr>
+<td><strong>L2</strong></td>
+<td>MinIO/S3</td>
+<td>Persistent</td>
+<td>Shared across replicas</td>
+</tr>
+<tr>
+<td><strong>Fallback</strong></td>
+<td>HTTP endpoint</td>
+<td>—</td>
+<td>Calls Assets service (<code>ASSETS_URL</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cache-invalidation">Cache invalidation</h3>
+<p>The Router subscribes to a FANOUT consumer on <code>fanout.asset.invalidate</code>. When an asset is created, updated, or deleted, the Assets service publishes an invalidation event. All Router replicas evict the affected asset from L0 and L1.</p>
+<hr>
+<h2 id="routegroups">RouteGroups</h2>
+<p>A <strong>RouteGroup</strong> is a configuration object that defines which events should be routed and where they should go. RouteGroups are scoped to an organization.</p>
+<h3 id="loading-and-caching">Loading and caching</h3>
+<p>RouteGroups are loaded from MongoDB and cached in Redis:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>TTL</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Redis</strong></td>
+<td>60 min</td>
+<td>Primary cache for RouteGroup configs</td>
+</tr>
+<tr>
+<td><strong>MongoDB</strong></td>
+<td>—</td>
+<td>Source of truth, fallback on cache miss</td>
+</tr>
+</tbody>
+</table>
+<h3 id="match-rules">Match rules</h3>
+<p>Each RouteGroup contains match rules that are evaluated against the event and asset context. Rules use a <strong>policy</strong> to determine how multiple conditions combine:</p>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>all</code></td>
+<td>Every condition must match (AND logic)</td>
+</tr>
+<tr>
+<td><code>any</code></td>
+<td>At least one condition must match (OR logic)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="match-operators">Match operators</h3>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>eq</code></td>
+<td>Equal</td>
+</tr>
+<tr>
+<td><code>neq</code></td>
+<td>Not equal</td>
+</tr>
+<tr>
+<td><code>gt</code></td>
+<td>Greater than</td>
+</tr>
+<tr>
+<td><code>gte</code></td>
+<td>Greater than or equal</td>
+</tr>
+<tr>
+<td><code>lt</code></td>
+<td>Less than</td>
+</tr>
+<tr>
+<td><code>lte</code></td>
+<td>Less than or equal</td>
+</tr>
+<tr>
+<td><code>in</code></td>
+<td>Value is in list</td>
+</tr>
+<tr>
+<td><code>nin</code></td>
+<td>Value is not in list</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-routegroup">Example RouteGroup</h3>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;Temperature alerts&quot;,
+  &quot;policy&quot;: &quot;all&quot;,
+  &quot;rules&quot;: [
+    { &quot;field&quot;: &quot;event.temperature&quot;, &quot;operator&quot;: &quot;gt&quot;, &quot;value&quot;: 80 },
+    { &quot;field&quot;: &quot;asset.type&quot;, &quot;operator&quot;: &quot;eq&quot;, &quot;value&quot;: &quot;sensor&quot; }
+  ],
+  &quot;targets&quot;: [&quot;workflow&quot;, &quot;events.save&quot;, &quot;events.notification&quot;]
+}
+</code></pre>
+<p>This RouteGroup matches events where the temperature exceeds 80 <strong>and</strong> the asset type is <code>sensor</code>, then fans out to the Workflow engine, event persistence, and notifications.</p>
+<hr>
+<h2 id="batch-processing">Batch processing</h2>
+<p>The Router processes messages in batches for throughput:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Environment variable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Batch size</strong></td>
+<td>8000</td>
+<td><code>NATS_BATCH_SIZE</code></td>
+</tr>
+</tbody>
+</table>
+<p>Each batch is fetched from the WorkQueue consumer, processed in memory (resolve, match, fan-out), and acknowledged. Batch size is configurable per deployment based on available memory and latency targets.</p>
+<hr>
+<h2 id="infrastructure">Infrastructure</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Role</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>NATS JetStream</strong></td>
+<td>Event bus</td>
+<td>Consume <code>route.execute</code>, publish to 5+ subjects</td>
+</tr>
+<tr>
+<td><strong>MongoDB</strong></td>
+<td>Config store</td>
+<td>RouteGroup definitions (source of truth)</td>
+</tr>
+<tr>
+<td><strong>Redis</strong></td>
+<td>Cache</td>
+<td>RouteGroup cache (60 min TTL), counter cache (6 h TTL), shared cache for coverage/permissions</td>
+</tr>
+<tr>
+<td><strong>MinIO/S3</strong></td>
+<td>Object store</td>
+<td>TieredCache L2 for asset context</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="retry-and-fault-tolerance">Retry and fault tolerance</h2>
+<h3 id="message-retry">Message retry</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Max attempts</strong></td>
+<td>5</td>
+</tr>
+<tr>
+<td><strong>Backoff intervals</strong></td>
+<td>1 s, 5 s, 30 s, 2 min, 10 min</td>
+</tr>
+</tbody>
+</table>
+<p>Messages that exceed the retry limit are moved to the dead-letter queue.</p>
+<h3 id="invalid-payloads">Invalid payloads</h3>
+<p>Messages with malformed or unparseable payloads are <strong>rejected immediately</strong> without retry. These are not transient failures — retrying would produce the same result.</p>
+<h3 id="failure-modes">Failure modes</h3>
+<table>
+<thead>
+<tr>
+<th>Failure</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Redis unavailable</td>
+<td>Fall back to MongoDB for RouteGroups</td>
+</tr>
+<tr>
+<td>TieredCache miss (all levels)</td>
+<td>Call Assets service via HTTP</td>
+</tr>
+<tr>
+<td>NATS publish failure</td>
+<td>Retry with backoff</td>
+</tr>
+<tr>
+<td>MongoDB unavailable</td>
+<td>Cached RouteGroups continue to serve; new configs unavailable</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="api">API</h2>
+<h3 id="external-api-jwt-auth">External API (JWT auth)</h3>
+<p>RouteGroup management for tenants:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/v1/route_groups</code></td>
+<td>List RouteGroups</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/v1/route_groups</code></td>
+<td>Create RouteGroup</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/api/v1/route_groups/:id</code></td>
+<td>Update RouteGroup</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/api/v1/route_groups/:id</code></td>
+<td>Delete RouteGroup</td>
+</tr>
+</tbody>
+</table>
+<h3 id="internal-api-api-key-auth">Internal API (API key auth)</h3>
+<p>Service-to-service access:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/internal/v1/routegroups</code></td>
+<td>List RouteGroups (internal)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="observability">Observability</h2>
+<h3 id="health-check">Health check</h3>
+<pre><code>GET /health
+</code></pre>
+<p>Checks connectivity to:</p>
+<ul>
+<li>MongoDB</li>
+<li>Redis (app cache)</li>
+<li>Redis (shared cache)</li>
+<li>NATS core</li>
+<li>MinIO (optional — degraded but functional without it)</li>
+</ul>
+<h3 id="metrics">Metrics</h3>
+<pre><code>GET /metrics
+</code></pre>
+<p>The Router exposes <strong>40+ Prometheus metrics</strong> covering:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Event processing</strong></td>
+<td>Events received, processed, failed, latency histograms</td>
+</tr>
+<tr>
+<td><strong>Cache performance</strong></td>
+<td>TieredCache hits/misses per level, RouteGroup cache hit ratio</td>
+</tr>
+<tr>
+<td><strong>Match evaluations</strong></td>
+<td>Rules evaluated, matched, skipped per RouteGroup</td>
+</tr>
+<tr>
+<td><strong>NATS publish</strong></td>
+<td>Publish count per downstream subject, publish latency</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dashboard">Dashboard</h3>
+<p>A pre-built Grafana dashboard is available:</p>
+<pre><code>router-overview.json
+</code></pre>
+<hr>
+<h2 id="scaling-guidelines">Scaling guidelines</h2>
+<h3 id="horizontal-scaling">Horizontal scaling</h3>
+<p>The Router is stateless (all state lives in Redis, MongoDB, and NATS). Scale replicas freely:</p>
+<pre><code class="language-txt">Router × N replicas
+  └── Each replica: own TieredCache L0/L1
+  └── Shared: Redis, MongoDB, MinIO, NATS
+</code></pre>
+<h3 id="when-to-scale">When to scale</h3>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consumer lag increasing</td>
+<td>Add replicas</td>
+</tr>
+<tr>
+<td>High L0/L1 cache miss rate</td>
+<td>Increase memory per replica or adjust TTLs</td>
+</tr>
+<tr>
+<td>Publish latency rising</td>
+<td>Check NATS cluster health, add replicas</td>
+</tr>
+<tr>
+<td>Batch processing time &gt; SLA</td>
+<td>Reduce <code>NATS_BATCH_SIZE</code> or add replicas</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tuning">Tuning</h3>
+<ul>
+<li><strong>Batch size</strong>: larger batches improve throughput but increase per-batch latency. Start at 8000 and adjust based on p99 processing time.</li>
+<li><strong>Cache TTLs</strong>: shorter TTLs reduce stale data risk but increase load on MongoDB and the Assets service. The defaults (L0: 5 min, L1: 1 h, RouteGroup: 60 min) are suitable for most deployments.</li>
+<li><strong>Redis connections</strong>: ensure the Redis connection pool is sized for the number of Router replicas.</li>
+</ul>
+<hr>
+<h2 id="next-steps">Next steps</h2>
+<ul>
+<li><a href="/docs/1.0.0/en/architecture/overview">Architecture Overview</a></li>
+<li>Workflow engine</li>
+<li><a href="/docs/1.0.0/en/architecture/js-execution">JS Execution Engine</a></li>
+<li><a href="/docs/1.0.0/en/core-platform/events-and-pipeline">Events &amp; Pipeline</a></li>
+<li><a href="/docs/1.0.0/en/core-platform/assets-and-templates">Assets &amp; Templates</a></li>
+</ul>

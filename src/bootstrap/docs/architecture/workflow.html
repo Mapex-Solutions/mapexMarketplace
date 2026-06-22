@@ -1,0 +1,254 @@
+<h1 id="workflow-engine">Workflow Engine</h1>
+<p>The Workflow Engine is the <strong>automation brain</strong> of MapexOS: a durable, DAG-based runtime that executes the workflows operators design in the visual editor. Its defining trait is how it handles side-effects — instead of performing a node's <strong>outbound action</strong> inline, it <strong>resolves the action, hands it to a specialized service, then suspends and resumes on the callback</strong>: outbound HTTP/MQTT actions go to the <a href="/docs/architecture/triggers">Triggers</a> service, <code>code</code> nodes to <a href="/docs/architecture/js-execution">JS Execution</a>, credential decryption to the Vault service. The engine still makes the internal calls orchestration needs — it calls the Vault service to decrypt credentials and runs an HTTP proxy for dynamic plugin options — but it <strong>never blocks a worker waiting on an outbound action</strong>. That decomposition, plus a per-step checkpoint to NATS KV, is what keeps every run <strong>deterministic and crash-recoverable</strong>: a node that triggers an action doesn't hold the run open — it parks, and a callback wakes it.</p>
+<blockquote>
+<p><strong>Port</strong> <code>5007</code> · <strong>Go</strong> (DDD + Hexagonal) · <strong>NATS JetStream + KV</strong> for live state (no Redis) · <strong>MongoDB</strong> + <strong>MinIO</strong> + <strong>TieredCache</strong> · <strong>Vue 3 / Quasar</strong> editor.</p>
+</blockquote>
+<hr>
+<h2 id="the-model-definition--instance--execution">The model: Definition → Instance → Execution</h2>
+<table>
+<thead>
+<tr>
+<th>Entity</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Definition</strong></td>
+<td>The DAG blueprint — nodes, edges, and node scripts.</td>
+</tr>
+<tr>
+<td><strong>Instance</strong></td>
+<td>A definition bound to specific inputs (<code>externalInputs</code>) — the configuration for a tenant or asset.</td>
+</tr>
+<tr>
+<td><strong>Execution</strong></td>
+<td>One actual run, with its own mutable state, status, and history.</td>
+</tr>
+</tbody>
+</table>
+<p>Cardinality is <code>Definition 1→N Instance 1→N Execution</code>. Definitions and instances are cached (TieredCache → MongoDB). An execution's live working state runs in NATS KV; its lifecycle is mirrored to MongoDB for the UI, and when it finishes it is also published to the Events service for permanent storage (see <a href="#storage">Storage</a>).</p>
+<hr>
+<h2 id="how-a-run-executes">How a run executes</h2>
+<p>The runtime walks the DAG <strong>one node at a time</strong>. After each advance it <strong>checkpoints the entire execution to a NATS KV record</strong> (<code>exec.{uuid}</code>) holding the full mutable state — <code>State</code>, <code>NodeOutputs</code>, <code>NodeStates</code>, <code>ActiveNodeIDs</code>, <code>ExecutionPath</code>. If a worker crashes, a restart reloads that record and <strong>resumes from the last completed node</strong>, not from the beginning.</p>
+<pre><code> ┌─ execute() ──────────────────────────────────────────────┐
+ │  pick next node → run executor → apply result            │
+ │        │                                                  │
+ │        ├── checkpoint(execution) → NATS KV  exec.{uuid}   │
+ │        │                                                  │
+ │        ├── more nodes &amp; steps &lt; 300 ? ──▶ loop inline     │
+ │        ├── steps ≥ 300 ? ──────────────▶ re-enqueue RESUME│
+ │        └── node suspended ? ───────────▶ park + dispatch  │
+ └──────────────────────────────────────────────────────────┘
+</code></pre>
+<p>A single cycle runs up to <code>MaxInlineSteps = 300</code> nodes inline; beyond that the runtime <strong>re-enqueues itself</strong> to the resume stream rather than holding a worker.</p>
+<hr>
+<h2 id="suspension--resume--one-uniform-async-contract">Suspension &amp; resume — one uniform async contract</h2>
+<p>Nodes that can't finish synchronously <strong>suspend</strong>, and the contract is <strong>data-driven</strong>: an executor signals suspension simply by putting a <code>waitType</code> key in its <code>NodeState</code>. The walker checkpoints and dispatches by type:</p>
+<table>
+<thead>
+<tr>
+<th><code>waitType</code></th>
+<th>Wakes when…</th>
+<th>Used by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>timer</strong></td>
+<td>a NATS Schedule timer fires</td>
+<td><code>delay</code>, retry backoff, wait expiry</td>
+</tr>
+<tr>
+<td><strong>signal</strong></td>
+<td>an external HTTP signal arrives</td>
+<td><code>wait_signal</code></td>
+</tr>
+<tr>
+<td><strong>condition</strong></td>
+<td>the condition is re-evaluated true</td>
+<td><code>wait_for</code></td>
+</tr>
+<tr>
+<td><strong>callback</strong></td>
+<td>an external service returns a result</td>
+<td><code>code</code>, <code>subworkflow</code>, plugin nodes</td>
+</tr>
+</tbody>
+</table>
+<p>Callback and signal wake-ups arrive on the <code>WORKFLOW-RESUME</code> stream; timer wake-ups fire on the <code>WORKFLOW-SCHEDULE</code> stream — both resume the exact execution. This one contract covers timers, human/external signals, polled conditions, and cross-service callbacks — no special-casing per node.</p>
+<hr>
+<h2 id="the-node-catalog--17-core-executors--plugins">The node catalog — 17 core executors + plugins</h2>
+<p>Every <code>core/*</code> node maps to a built-in executor (<code>registry_builder.go</code>); any non-<code>core/</code> type routes to a single <strong>generic plugin executor</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Nodes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Inline</strong></td>
+<td><code>start</code> · <code>end</code> · <code>condition</code> · <code>switch</code> · <code>set_state</code> · <code>log</code> · <code>goto</code></td>
+</tr>
+<tr>
+<td><strong>Async (suspend)</strong></td>
+<td><code>delay</code> · <code>wait_signal</code> · <code>code</code> · <code>subworkflow</code> · <code>trigger_event</code></td>
+</tr>
+<tr>
+<td><strong>Control flow</strong></td>
+<td><code>fanout</code> · <code>merge</code> · <code>sequence</code> · <code>loop</code> · <code>wait_for</code></td>
+</tr>
+<tr>
+<td><strong>Plugin</strong></td>
+<td>any <code>&lt;plugin&gt;/&lt;action&gt;</code> type → the generic plugin executor</td>
+</tr>
+</tbody>
+</table>
+<p><em>(The editor also offers <code>text_note</code> and <code>group_frame</code> — visual-only decorations with no executor.)</em></p>
+<hr>
+<h2 id="conditions--and--or--nand--nor--18-operators">Conditions — AND / OR / NAND / NOR + 18 operators</h2>
+<p>Conditions are not a single threshold. The engine evaluates <strong>nestable groups</strong> with a recursive, short-circuiting <code>EvaluateGroup</code> — <code>AND</code>, <code>OR</code>, <code>NAND</code> (<code>!AND</code>), <code>NOR</code> (<code>!OR</code>) — over <strong>18 operators</strong>:</p>
+<ul>
+<li><strong>Comparison:</strong> <code>equals</code>, <code>notEquals</code>, <code>greaterThan(Equals)</code>, <code>lessThan(Equals)</code>, <code>between</code></li>
+<li><strong>String:</strong> <code>contains</code>, <code>notContains</code>, <code>startsWith</code>, <code>endsWith</code>, <code>regex</code></li>
+<li><strong>Date / time:</strong> <code>beforeDate</code>, <code>afterDate</code>, <code>beforeTime</code>, <code>afterTime</code>, <code>betweenDate</code>, <code>betweenTime</code></li>
+</ul>
+<p>The same evaluator backs <code>condition</code>, <code>switch</code> (match mode <code>first</code> / <code>all</code>), and <code>wait_for</code> (a single-condition group). A field that can't be resolved degrades to <strong>non-match</strong> rather than throwing — predictable behavior under partial data.</p>
+<hr>
+<h2 id="state--persistent-vs-ephemeral">State — persistent vs ephemeral</h2>
+<p>Two scopes, and the distinction is load-bearing:</p>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Lifetime</th>
+<th>Mutated by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>State</code></strong></td>
+<td>Persists across the whole run</td>
+<td><code>set_state</code> patches: <code>set</code> · <code>increment</code> · <code>decrement</code> · <code>append</code> · <code>remove</code> (a nil value deletes the key)</td>
+</tr>
+<tr>
+<td><strong><code>NodeStates[nodeId]</code></strong></td>
+<td>Ephemeral, per node</td>
+<td>loop index, merge branch count, retry attempt, wait info — cleared when the node completes</td>
+</tr>
+</tbody>
+</table>
+<p>Node inputs are read by a <strong>value resolver with six sources</strong>: <code>literal</code> (with <code>{{...}}</code> template interpolation), <code>event</code>, <code>state</code>, <code>variable</code> (an alias of <code>state</code>), <code>input</code> (the instance's <code>externalInputs</code>), and <code>node_output</code> (<code>NodeOutputs[nodeId]</code>).</p>
+<hr>
+<h2 id="parallelism--control-flow">Parallelism &amp; control flow</h2>
+<ul>
+<li><strong>fanout → merge</strong> — <code>fanout</code> (≤ 20 branches) spawns goroutines, each with a <strong>deep-copied, isolated</strong> copy of state/outputs, so branches can't corrupt each other. <code>merge</code> joins them with strategy <code>all</code> / <code>any</code> / <code>first</code>. If branches suspend, the whole fanout suspends and resumes per branch.</li>
+<li><strong>loop</strong> — iterates a resolved array (≤ 10 000 iterations), injecting <code>loop_item</code> / <code>loop_index</code>. The walker keeps a <strong>LIFO loop stack</strong>, so nested loops and post-loop continuation work correctly.</li>
+<li><strong>switch</strong> — multi-way branching on the shared condition evaluator.</li>
+<li><strong>subworkflow</strong> — runs another workflow as a node (depth ≤ 10, with dedup), mapping <code>inputMappings</code> in and <code>outputMappings</code> back.</li>
+</ul>
+<hr>
+<h2 id="goto--virtual-links-that-keep-the-dag-clean">Goto — virtual links that keep the DAG clean</h2>
+<p><code>core/goto</code> comes in paired <strong>sender / receiver</strong> portals matched by <code>pairLabel</code>. At build time the GraphBuilder <strong>injects an adjacency edge</strong> from each sender to its receiver — so the editor's graph stays acyclic and readable while the run can still &quot;jump&quot; across it. An orphaned sender fails fast with <code>GOTO_NO_RECEIVER</code>. This is what lets a large workflow avoid wires crossing the whole canvas.</p>
+<hr>
+<h2 id="retry--error-handling">Retry &amp; error handling</h2>
+<p>A node can route failures down an explicit <strong><code>error</code> output edge</strong>. With an <code>ErrorHandler</code> enabled, the node <strong>retries with exponential backoff</strong> — <code>initialInterval × multiplier^attempt</code>, capped at <code>MaxRetryDelaySeconds = 3600</code>, hard limit <code>MaxRetryAttempts = 10</code> — implemented as a <code>timer</code> suspension on NATS Schedule (so retries survive restarts too).</p>
+<hr>
+<h2 id="plugin-nodes--pure-orchestration">Plugin nodes — pure orchestration</h2>
+<p>A plugin node (<code>&lt;plugin&gt;/&lt;action&gt;</code>, e.g. <code>telegram/message</code>) runs through the generic <strong>PluginExecutor</strong>, which:</p>
+<ol>
+<li>loads the plugin <strong>manifest</strong>,</li>
+<li>resolves the node's field values and <code>{{context.field}}</code> templates (over manifest / credentials / config / workflow / event),</li>
+<li><strong>decrypts credentials</strong> through the Vault service, then</li>
+<li><strong>suspends with a ready action payload</strong> that the Triggers service performs.</li>
+</ol>
+<p>The engine never opens the socket itself — it assembles the action and hands it off. New connectors are manifests, not engine code.</p>
+<hr>
+<h2 id="inputs--outputs">Inputs &amp; outputs</h2>
+<p><strong>Consumes (NATS JetStream):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Stream / subject</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WORKFLOW-EXECUTION</code> · <code>…workflow.execution.&gt;</code></td>
+<td>Execution commands, routed <strong>by a <code>mode</code> field</strong> (<code>newInstance</code>, <code>signal</code>, <code>signalOrStart</code>, <code>subworkflow</code>) — never by subject. From the router and from subworkflows.</td>
+</tr>
+<tr>
+<td><code>WORKFLOW-RESUME</code> · <code>…workflow.resume.&gt;</code></td>
+<td>Callback / timer / signal results that wake suspended runs.</td>
+</tr>
+<tr>
+<td><code>WORKFLOW-SCHEDULE</code> · <code>…workflow.schedule.fired</code></td>
+<td>NATS Schedule timer fires (delay / retry / wait expiry).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Produces (NATS):</strong> <code>…trigger.workflow.execute</code> → <strong>Triggers</strong> (plugin dispatch + <code>trigger_event</code>); <code>…workflow.js.code</code> → <strong>JS Execution</strong> (for <code>code</code> nodes); per-instance subworkflow executions; <code>workflow.state.&gt;</code> lifecycle events (<code>WORKFLOW-STATE</code>) → the in-service <strong>archiver</strong>; and on terminal, <code>…events.workflow</code> (<code>EVENTS-WORKFLOW-LOGS</code>) → the <strong>Events</strong> service for permanent storage.</p>
+<p><strong>HTTP</strong> (port <code>5007</code>, under <code>/api/v1</code>): <code>workflow_definitions</code>, <code>workflow_instances</code> (incl. <code>POST /:id/execute</code>), <code>workflow_executions</code>, <code>plugins</code> (incl. <code>/enabled</code>), <code>load_options</code> (dynamic plugin dropdowns).</p>
+<hr>
+<h2 id="storage">Storage</h2>
+<p>An execution moves through <strong>three tiers</strong> — and the runtime itself <strong>only ever writes NATS KV and NATS streams; it never touches MongoDB</strong>. The <code>archiver</code> (the sole MongoDB writer) consumes the <code>workflow.state.&gt;</code> lifecycle events (<code>WORKFLOW-STATE</code>) and persists them.</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Where</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Live working state</strong></td>
+<td><strong>NATS KV</strong> (<code>exec.{uuid}</code>, native CAS via revision — <strong>no Redis</strong>)</td>
+<td>The running execution; deleted from KV once terminal.</td>
+</tr>
+<tr>
+<td><strong>Hot history (UI/query)</strong></td>
+<td><strong>MongoDB</strong> (<code>dev-workflow</code>), via the archiver</td>
+<td>A lightweight record on <code>created</code>, status updates on <code>waiting</code>/<code>resumed</code>, the full document on terminal — kept under a <strong>TTL</strong> so the console can list and query recent runs.</td>
+</tr>
+<tr>
+<td><strong>Cold / permanent record</strong></td>
+<td><strong>Events service → ClickHouse</strong> (<code>EVENTS-WORKFLOW-LOGS</code>)</td>
+<td>On terminal, the archiver also publishes the finished execution to the Events service for durable, analytical storage.</td>
+</tr>
+</tbody>
+</table>
+<p>Definitions, instances, and plugin manifests are served from a <strong>TieredCache</strong> (L0 RAM → L1 disk) backed by <strong>MongoDB</strong>; definition blobs live in <strong>MinIO/S3</strong>.</p>
+<hr>
+<h2 id="tested-coverage">Tested coverage</h2>
+<p>Every capability on this page is exercised by Go unit tests <strong>and</strong> a full end-to-end DAG suite (<code>runtime/e2e/dag/core/</code>): all 17 core executors plus the plugin executor; the AND/OR/NAND/NOR groups and 18 operators; per-step KV checkpoint and suspend/resume; NATS-Schedule timers and retry with backoff; fanout/merge, the loop stack, goto edge injection, and subworkflow depth + dedup; plugin manifest resolution; and the archiver and <code>load_options</code> paths.</p>
+<h2 id="where-to-go-next">Where to go next</h2>
+<table>
+<thead>
+<tr>
+<th>To dive into…</th>
+<th>Go to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The concepts behind nodes &amp; state</td>
+<td><a href="/docs/getting-started/concepts#automation">Core Concepts → Automation</a></td>
+</tr>
+<tr>
+<td>Where outbound actions actually fire</td>
+<td><a href="/docs/architecture/triggers">Triggers</a></td>
+</tr>
+<tr>
+<td>Where <code>code</code> nodes run</td>
+<td><a href="/docs/architecture/js-execution">JS Execution</a></td>
+</tr>
+<tr>
+<td>How events reach a workflow</td>
+<td><a href="/docs/architecture/router">Router</a></td>
+</tr>
+</tbody>
+</table>

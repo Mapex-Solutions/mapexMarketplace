@@ -1,0 +1,186 @@
+<h1 id="installation">Installation</h1>
+<p>The whole platform — every service plus its infrastructure — boots from one Docker Compose distribution: <a href="https://github.com/Mapex-Solutions/mapexOSDeploy"><code>mapexOSDeploy</code></a>. Pre-built multi-arch images, one command.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><strong>Docker</strong> and <strong>Docker Compose v2</strong>.</li>
+<li>A host with roughly <strong>4 cores / 8 GB RAM</strong>. The stack is tuned to fit a laptop (see <a href="#resource-footprint">Resource footprint</a>).</li>
+<li>Linux, macOS (Apple Silicon), or Windows + Docker Desktop. Images are published for <strong><code>linux/amd64</code></strong> and <strong><code>linux/arm64</code></strong>, so the same stack runs on a Raspberry Pi 4/5.</li>
+</ul>
+<h2 id="boot-the-stack">Boot the stack</h2>
+<pre><code class="language-bash">git clone https://github.com/Mapex-Solutions/mapexOSDeploy.git
+cd mapexOSDeploy
+docker compose up -d
+</code></pre>
+<p>Wait <strong>~2 minutes</strong> for first-boot initialization — the Mongo replica-set, NATS streams, MinIO buckets, and ClickHouse tables are provisioned automatically.</p>
+<h2 id="access">Access</h2>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>URL</th>
+<th>Credentials</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Frontend</strong></td>
+<td><a href="http://localhost">http://localhost</a></td>
+<td><code>admin@mapex.local</code> / <code>mapex@123</code> <em>(change on first login)</em></td>
+</tr>
+<tr>
+<td><strong>Grafana</strong></td>
+<td><a href="http://localhost:3001">http://localhost:3001</a></td>
+<td><code>admin</code> / <code>admin</code> — 8 dashboards pre-loaded</td>
+</tr>
+<tr>
+<td><strong>MinIO console</strong></td>
+<td><a href="http://localhost:9001">http://localhost:9001</a></td>
+<td><code>mapex_admin</code> / <code>mapex_admin_secret_change_me</code></td>
+</tr>
+</tbody>
+</table>
+<p>To serve the UI to other machines on your network, set the public host:</p>
+<pre><code class="language-bash">MAPEXOS_PUBLIC_HOST=192.168.0.50 docker compose up -d
+</code></pre>
+<blockquote>
+<p>A red <code>[SECURITY WARNING]</code> line per service in the logs is <strong>expected</strong> in local mode — it's telling you the stack is running with dev defaults. See <a href="#going-to-production">Going to production</a> to harden it.</p>
+</blockquote>
+<h2 id="whats-running">What's running</h2>
+<p><strong>Application services</strong> (source in <a href="https://github.com/Mapex-Solutions/mapexOS"><code>mapexOS</code></a>):</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Port</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td>80</td>
+<td>Vue 3 + Quasar console</td>
+</tr>
+<tr>
+<td>mapex-iam</td>
+<td>5000</td>
+<td>Users, organizations, roles, auth</td>
+</tr>
+<tr>
+<td>http-gateway</td>
+<td>5001</td>
+<td>Webhook ingestion, datasource registry</td>
+</tr>
+<tr>
+<td>assets</td>
+<td>5002</td>
+<td>Assets, templates, EVA fields, device PKI + presence</td>
+</tr>
+<tr>
+<td>router</td>
+<td>5003</td>
+<td>Event routing, match rules, fan-out</td>
+</tr>
+<tr>
+<td>events</td>
+<td>5004</td>
+<td>ClickHouse storage, retention</td>
+</tr>
+<tr>
+<td>triggers</td>
+<td>5006</td>
+<td>Outbound executors (HTTP, MQTT, NATS, …)</td>
+</tr>
+<tr>
+<td>workflow</td>
+<td>5007</td>
+<td>Durable DAG workflow engine + plugins</td>
+</tr>
+<tr>
+<td>mapex-vault</td>
+<td>5010</td>
+<td>Credential vault, PKI authority</td>
+</tr>
+<tr>
+<td>js-executor</td>
+<td>8000</td>
+<td>V8 isolates for asset scripts</td>
+</tr>
+<tr>
+<td>js-wf-executor</td>
+<td>8001</td>
+<td>V8 isolates for workflow code nodes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Infrastructure:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Port</th>
+<th>Image</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MongoDB</td>
+<td>27017</td>
+<td><code>mongo:7.0.34</code> (replica-set <code>rs0</code>)</td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>6379</td>
+<td><code>redis:7.4-alpine</code></td>
+</tr>
+<tr>
+<td>ClickHouse</td>
+<td>8123 / 9440</td>
+<td><code>clickhouse/clickhouse-server</code></td>
+</tr>
+<tr>
+<td>MinIO</td>
+<td>9000 / 9001</td>
+<td><code>minio/minio</code></td>
+</tr>
+<tr>
+<td>NATS</td>
+<td>4222 / 8222</td>
+<td><code>nats:2-alpine</code> (JetStream)</td>
+</tr>
+<tr>
+<td>MQTT Broker</td>
+<td>1883</td>
+<td><code>mapexos/mapex-broker-mqtt</code></td>
+</tr>
+<tr>
+<td>Prometheus</td>
+<td>9090</td>
+<td><code>prom/prometheus</code></td>
+</tr>
+<tr>
+<td>Grafana</td>
+<td>3001</td>
+<td><code>grafana/grafana</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="resource-footprint">Resource footprint</h2>
+<p>Every long-running service ships a <code>deploy.resources.limits</code> block <strong>sized to fit a single ~4-core / 8 GB laptop</strong> — the limits sum to roughly <strong>10.5 vCPU / ~5 GB RAM</strong>. These are <strong>ceilings, not reservations</strong>: Docker never reserves the cores or RAM, so the totals can exceed the host and the stack still runs fine — the scheduler time-shares real cores and idle containers cost nothing. MongoDB and ClickHouse are additionally tuned internally (<code>--wiredTigerCacheSizeGB</code>, <code>max_server_memory_usage</code>) so their caches respect the container cap. Init one-shots are left uncapped on purpose.</p>
+<h2 id="stop--reset">Stop &amp; reset</h2>
+<pre><code class="language-bash">docker compose down       # stop containers, keep data
+docker compose down -v    # stop + drop volumes (full reset)
+</code></pre>
+<h2 id="going-to-production">Going to production</h2>
+<p>The defaults exist so the stack fits a laptop — <strong>not</strong> so it performs under load. For production:</p>
+<ol>
+<li>Build a real env file: <code>cp infra/envs/production.example.env infra/envs/production.env</code>, then fill in every value (the template includes generators, e.g. <code>openssl rand -hex 32</code> for <code>AUTH_SECRET</code>).</li>
+<li>Point the compose files at <code>production.env</code> and set <code>GO_ENV=prod</code>.</li>
+<li>Run on a <strong>Kubernetes cluster</strong>, where you size <code>resources.requests</code>/<code>limits</code> (and HPA/VPA) to real demand — give MongoDB/ClickHouse/Prometheus real headroom.</li>
+</ol>
+<p>Every Mapex service has a <strong>security guard</strong> that refuses to boot when <code>GO_ENV</code>/<code>NODE_ENV</code> is not a dev value <strong>and</strong> any sensitive variable (<code>AUTH_SECRET</code>, <code>INTERNAL_API_KEY</code>, <code>NATS_PASSWORD</code>, …) is missing or still equals its dev default — a loud fatal error instead of a silent boot with a leaked secret.</p>
+<blockquote>
+<p><code>infra/envs/production.env</code> is git-ignored. Never commit it.</p>
+</blockquote>
+<h2 id="next">Next</h2>
+<p>→ <a href="/docs/getting-started/quickstart">Quickstart</a> — wire your first sensor end to end.</p>

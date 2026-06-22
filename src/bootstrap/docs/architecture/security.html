@@ -1,0 +1,172 @@
+<h1 id="security">Security</h1>
+<p>This document describes the security model of <strong>MapexOS v1.0.0</strong> and provides practical guidance for operating MapexOS in enterprise environments.</p>
+<blockquote>
+<p>Scope note: MapexOS is designed as a <strong>self-hosted</strong> platform. Your final security posture depends on your deployment environment (Kubernetes / VMs), network controls, secrets management, and operational discipline.</p>
+</blockquote>
+<hr>
+<h2 id="security-goals">Security goals</h2>
+<p>MapexOS is built to support:</p>
+<ul>
+<li><strong>Multi-tenant isolation</strong> through organization scoping and permission boundaries.</li>
+<li><strong>Least-privilege access</strong> with <strong>RBAC</strong> (users/groups/roles scoped to org nodes).</li>
+<li><strong>Secure ingestion</strong> of events via configurable authentication at the gateway edge.</li>
+<li><strong>Controlled execution</strong> of user-defined scripts (decode/validate/transform) with isolation and limits.</li>
+<li><strong>Auditability</strong> of automation decisions (rule evaluation logs + trigger execution logs).</li>
+</ul>
+<hr>
+<h2 id="trust-boundaries">Trust boundaries</h2>
+<p>MapexOS typically interacts with four trust zones:</p>
+<ol>
+<li><strong>Human operators</strong> (Console/UI/API clients)</li>
+<li><strong>Machine clients</strong> (integrations, gateways, partners)</li>
+<li><strong>Untrusted event sources</strong> (devices/sensors/field systems)</li>
+<li><strong>Core infrastructure</strong> (NATS, MongoDB, Redis, ClickHouse, object storage)</li>
+</ol>
+<p>Key principle: <strong>treat inbound events as untrusted input</strong> until validated by templates and routing policies.</p>
+<hr>
+<h2 id="authentication">Authentication</h2>
+<h3 id="control-plane-authentication-users">Control-plane authentication (users)</h3>
+<p>MapexOS control-plane access (Console/UI and management APIs) should be protected by:</p>
+<ul>
+<li>Strong identity (SSO or centralized IdP where available)</li>
+<li>MFA for privileged users</li>
+<li>Short-lived tokens and rotation policies</li>
+</ul>
+<blockquote>
+<p>Implementation detail depends on your deployment and gateway strategy. If you expose management APIs publicly, terminate TLS and enforce authentication at the edge.</p>
+</blockquote>
+<h3 id="data-plane-authentication-ingestion">Data-plane authentication (ingestion)</h3>
+<p>MapexOS supports multiple authentication modes for HTTP ingestion (as described in the architecture docs), including:</p>
+<ul>
+<li><strong>API Key</strong></li>
+<li><strong>JWT</strong></li>
+<li><strong>IP allowlist / whitelist</strong></li>
+<li><strong>OAuth2</strong> (where applicable to your edge)</li>
+</ul>
+<p>Recommended pattern:</p>
+<ul>
+<li>Use <strong>API keys</strong> for server-to-server ingestion (integrations, gateways).</li>
+<li>Use <strong>JWT</strong> for user-bound ingestion workflows and internal services.</li>
+<li>Use <strong>IP allowlists</strong> only as an additional layer (never as the single control).</li>
+</ul>
+<hr>
+<h2 id="authorization-rbac">Authorization (RBAC)</h2>
+<p>MapexOS uses <strong>Role-Based Access Control</strong>:</p>
+<ul>
+<li>Permissions are granted via <strong>Roles</strong>.</li>
+<li>Roles are assigned to <strong>Users</strong> or <strong>Groups</strong> via <strong>Memberships</strong>.</li>
+<li>Memberships are scoped to an <strong>Organization node</strong> (vendor/customer/site/building/floor/zone).</li>
+<li>Permissions propagate according to organization scope rules.</li>
+</ul>
+<p>Security guidance:</p>
+<ul>
+<li>Create separate roles for <strong>operators</strong> vs <strong>administrators</strong>.</li>
+<li>Prefer <strong>group-based</strong> assignments (avoid user-by-user drift).</li>
+<li>Keep a minimal set of &quot;break-glass&quot; admin accounts with stronger controls.</li>
+</ul>
+<hr>
+<h2 id="tenant-isolation">Tenant isolation</h2>
+<p>MapexOS is multi-tenant by design. Enterprise deployments should ensure:</p>
+<ul>
+<li><strong>Organization scoping</strong> is enforced consistently in all services (API filters, event routing, queries, logs).</li>
+<li><strong>No cross-tenant reads/writes</strong> without an explicit admin permission.</li>
+<li><strong>Per-tenant rate limits</strong> at the gateway layer (protect shared infrastructure).</li>
+<li>Isolation in backing stores:
+<ul>
+<li>MongoDB collections should enforce tenant scoping in indexes and queries.</li>
+<li>ClickHouse queries should require tenant filters (or separate databases if you need hard boundaries).</li>
+<li>Object storage paths should be tenant-scoped.</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Enterprise hard boundary option: if your threat model requires it, run <strong>separate MapexOS deployments per tenant</strong> (most strict isolation).</p>
+</blockquote>
+<hr>
+<h2 id="script-execution-security-templates--rules">Script execution security (templates &amp; rules)</h2>
+<p>MapexOS supports user-defined scripts for:</p>
+<ul>
+<li>Decode / validate / transform (asset templates)</li>
+<li>Rule evaluation and condition logic (where enabled)</li>
+</ul>
+<p>Enterprise requirements:</p>
+<ul>
+<li><strong>Isolation</strong>: scripts must execute in isolated runtimes (e.g., V8 isolates) to prevent memory sharing across tenants.</li>
+<li><strong>Limits</strong>: enforce CPU timeouts, memory ceilings, and execution quotas.</li>
+<li><strong>No implicit network access</strong> from scripts unless explicitly enabled and sandboxed.</li>
+<li><strong>Determinism</strong>: avoid dependency on mutable global state.</li>
+<li><strong>Cache safety</strong>: cache keys must include tenant + template version to avoid cross-tenant contamination.</li>
+</ul>
+<p>Logging:</p>
+<ul>
+<li>Store script execution outcomes (success/failure), durations, and error categories for auditing.</li>
+<li>Never log secrets or raw credentials inside script logs.</li>
+</ul>
+<hr>
+<h2 id="secrets-management">Secrets management</h2>
+<p>MapexOS uses secrets for API keys, JWT signing/verification, database credentials, and service-to-service auth.</p>
+<p>Minimum enterprise controls:</p>
+<ul>
+<li>Store secrets in a dedicated system (Kubernetes Secrets + sealed-secrets, Vault, AWS Secrets Manager, etc.).</li>
+<li>Rotate secrets regularly (at least quarterly; sooner for exposed API keys).</li>
+<li>Use <strong>separate credentials per environment</strong> (dev/staging/prod).</li>
+<li>Enforce &quot;no secrets in Git&quot; with scanners.</li>
+</ul>
+<hr>
+<h2 id="transport-security">Transport security</h2>
+<p>Recommendations (deployment dependent):</p>
+<ul>
+<li>Terminate <strong>TLS</strong> for all public endpoints (Console/UI, APIs, ingestion).</li>
+<li>Use TLS (or mTLS) for internal service-to-service traffic when required by compliance.</li>
+<li>Secure NATS and databases with network policies and private networking.</li>
+</ul>
+<hr>
+<h2 id="data-protection">Data protection</h2>
+<p>MapexOS stores operational and analytic data across multiple systems.</p>
+<p>Minimum enterprise posture:</p>
+<ul>
+<li>Encrypt data <strong>at rest</strong> at the infrastructure level (disk encryption, managed storage encryption).</li>
+<li>Encrypt backups and restrict restore permissions.</li>
+<li>Define retention/TTL policies for event data and logs.</li>
+<li>Restrict access to object storage buckets and ClickHouse endpoints to internal networks.</li>
+</ul>
+<hr>
+<h2 id="auditing--observability">Auditing &amp; observability</h2>
+<p>For enterprise operations you should be able to answer:</p>
+<ul>
+<li>Who changed an asset/template/rule?</li>
+<li>What rule fired? What trigger executed? With which inputs?</li>
+<li>Which tenant produced abnormal traffic?</li>
+</ul>
+<p>Recommendations:</p>
+<ul>
+<li>Centralize logs (OpenTelemetry/ELK/Cloud logging).</li>
+<li>Emit structured audit events for all admin actions (create/update/delete).</li>
+<li>Track rule execution logs and correlate with ingestion event IDs.</li>
+</ul>
+<hr>
+<h2 id="recommended-hardening-checklist">Recommended hardening checklist</h2>
+<p><strong>P0 (must-have)</strong></p>
+<ul>
+<li>TLS on public endpoints</li>
+<li>RBAC with least privilege + group-based assignments</li>
+<li>API key rotation policy</li>
+<li>Tenant-scoped queries and indexes</li>
+<li>Rate limiting at ingestion</li>
+</ul>
+<p><strong>P1 (strongly recommended)</strong></p>
+<ul>
+<li>Centralized identity (SSO/MFA)</li>
+<li>Network policies for NATS/DB isolation</li>
+<li>Backups + restore drill</li>
+<li>Audit log retention and tamper-resistant storage</li>
+</ul>
+<p><strong>P2 (advanced)</strong></p>
+<ul>
+<li>mTLS service mesh for east-west traffic</li>
+<li>Per-tenant deployments for strict isolation</li>
+<li>Compliance mapping (SOC2/ISO) with control evidence</li>
+</ul>
+<hr>
+<h2 id="security-reporting">Security reporting</h2>
+<p>If you discover a vulnerability, establish a security reporting channel for responsible disclosure (email or ticket intake), and document your patch/release process.</p>

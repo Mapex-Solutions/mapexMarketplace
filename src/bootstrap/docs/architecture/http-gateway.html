@@ -1,0 +1,322 @@
+<h1 id="http-gateway">HTTP Gateway</h1>
+<p>The <strong>HTTP Gateway</strong> is the HTTP entrypoint for external webhook event ingestion into MapexOS. It authenticates each inbound request according to its Data Source configuration, publishes accepted payloads to the processing pipeline, and reports authentication failures as security events.</p>
+<blockquote>
+<p><strong>Applies to v1.0.0</strong> -- Go service, port 5001. MongoDB for Data Source configuration, Redis for cache-aside lookups, NATS JetStream for event publishing.</p>
+</blockquote>
+<hr>
+<h2 id="role-in-the-pipeline">Role in the pipeline</h2>
+<p>The HTTP Gateway is the first service an external event touches when entering MapexOS via HTTP:</p>
+<pre><code class="language-txt">External source (webhook / integration)
+        |
+   HTTP Gateway  ──  authenticate, publish
+        |
+   NATS JetStream
+        |
+   JS Execution Service (processor.js.execute)
+        |
+   Router → Rules → Triggers → Events
+</code></pre>
+<p>The Gateway's job ends once the payload is published to NATS. It does not parse, transform, or route events -- those responsibilities belong to downstream services.</p>
+<hr>
+<h2 id="responsibilities">Responsibilities</h2>
+<ul>
+<li><strong>Event ingestion</strong>: accept HTTP POST requests from external systems (webhooks, integrations, partner APIs).</li>
+<li><strong>Per-source authentication</strong>: validate each request against the authentication configuration of its Data Source.</li>
+<li><strong>Security event reporting</strong>: on authentication failure, fire a security event to <code>events.raw</code> (fire-and-forget) for audit purposes, then return HTTP 401.</li>
+<li><strong>Event publishing</strong>: on successful authentication, publish the raw payload to <code>processor.js.execute</code> via NATS JetStream for downstream processing.</li>
+<li><strong>Data Source management</strong>: CRUD operations for Data Source configurations (authentication type, endpoint settings, metadata).</li>
+<li><strong>Data Source caching</strong>: cache-aside pattern for Data Source lookups to reduce MongoDB load under high ingestion rates.</li>
+</ul>
+<hr>
+<h2 id="non-responsibilities">Non-responsibilities</h2>
+<p>The HTTP Gateway does <strong>not</strong> handle:</p>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Script execution (decode/validate/transform)</td>
+<td><a href="/docs/1.0.0/en/architecture/js-execution">JS Execution Engine</a></td>
+</tr>
+<tr>
+<td>Event routing and fan-out</td>
+<td>Router Service</td>
+</tr>
+<tr>
+<td>Asset and template management</td>
+<td><a href="/docs/1.0.0/en/architecture/assets">Assets Service</a></td>
+</tr>
+<tr>
+<td>Rule evaluation and automation</td>
+<td>Workflow engine</td>
+</tr>
+<tr>
+<td>Action dispatch</td>
+<td>Triggers Service</td>
+</tr>
+<tr>
+<td>Event persistence</td>
+<td>Events Service</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="data-flow">Data flow</h2>
+<h3 id="successful-ingestion">Successful ingestion</h3>
+<pre><code class="language-txt">Client  ──POST /api/v1/events?ds=&lt;dataSourceId&gt;──&gt;  Gateway
+                                                       |
+                                                  load Data Source config (cache or MongoDB)
+                                                  authenticate request per DS auth type
+                                                       |
+                                                  ── auth OK ──
+                                                       |
+                                                  publish to processor.js.execute (NATS)
+                                                       |
+Client  &lt;──── 202 Accepted ───────────────────────  Gateway
+</code></pre>
+<h3 id="authentication-failure">Authentication failure</h3>
+<pre><code class="language-txt">Client  ──POST /api/v1/events?ds=&lt;dataSourceId&gt;──&gt;  Gateway
+                                                       |
+                                                  load Data Source config
+                                                  authenticate request
+                                                       |
+                                                  ── auth FAILED ──
+                                                       |
+                                                  publish security event to events.raw (fire-and-forget)
+                                                       |
+Client  &lt;──── 401 Unauthorized ───────────────────  Gateway
+</code></pre>
+<p>The security event published on failure contains the source IP, Data Source ID, auth type attempted, and failure reason. This enables security monitoring and anomaly detection downstream.</p>
+<hr>
+<h2 id="authentication-types">Authentication types</h2>
+<p>Each Data Source is configured with one authentication method. The Gateway evaluates the configured method on every inbound request to that Data Source.</p>
+<table>
+<thead>
+<tr>
+<th>Auth type</th>
+<th>Mechanism</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>JWT (HMAC)</strong></td>
+<td>Shared-secret JWT validation</td>
+<td>Validates signature using a pre-shared HMAC secret configured on the Data Source</td>
+</tr>
+<tr>
+<td><strong>JWT (JWKS)</strong></td>
+<td>Public-key JWT validation</td>
+<td>Fetches and caches the JWKS key set from a configured URL, validates JWT signature</td>
+</tr>
+<tr>
+<td><strong>OAuth2 (JWKS introspection)</strong></td>
+<td>Token introspection via JWKS</td>
+<td>Validates OAuth2 bearer tokens against a JWKS endpoint</td>
+</tr>
+<tr>
+<td><strong>API Key</strong></td>
+<td>Static key match</td>
+<td>Checks for a matching key in a configured location: HTTP header, query parameter, or request body field</td>
+</tr>
+<tr>
+<td><strong>IP Whitelist</strong></td>
+<td>Source IP check</td>
+<td>Validates the request's source IP against a configured allowlist</td>
+</tr>
+<tr>
+<td><strong>None</strong></td>
+<td>No authentication</td>
+<td>Accepts all requests. Use only for trusted internal sources or development</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recommendations">Recommendations</h3>
+<ul>
+<li>Use <strong>API Key</strong> for server-to-server integrations where simplicity is preferred.</li>
+<li>Use <strong>JWT</strong> or <strong>OAuth2</strong> for integrations that already issue tokens.</li>
+<li>Use <strong>IP Whitelist</strong> as an additional layer, not as the sole authentication control.</li>
+<li>Avoid <strong>None</strong> in production deployments.</li>
+</ul>
+<hr>
+<h2 id="api-surface">API surface</h2>
+<h3 id="data-source-management-platform-auth-required">Data Source management (platform auth required)</h3>
+<p>These endpoints require standard MapexOS platform authentication (JWT from MapexOS Core).</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/data_sources</code></td>
+<td>List all Data Sources (paginated)</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/data_sources/:id</code></td>
+<td>Get a single Data Source</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/data_sources</code></td>
+<td>Create a new Data Source</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/api/v1/data_sources/:id</code></td>
+<td>Update a Data Source</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/api/v1/data_sources/:id</code></td>
+<td>Delete a Data Source</td>
+</tr>
+</tbody>
+</table>
+<h3 id="event-ingestion-per-data-source-auth">Event ingestion (per-Data Source auth)</h3>
+<p>This endpoint does <strong>not</strong> require platform authentication. Each request is authenticated according to the Data Source's own configuration.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/events?ds=&lt;dataSourceId&gt;</code></td>
+<td>Ingest a raw event for the specified Data Source</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>ds</code> query parameter identifies which Data Source configuration to use for authentication and metadata attachment.</p>
+<hr>
+<h2 id="infrastructure">Infrastructure</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Role</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MongoDB</strong></td>
+<td>Configuration store</td>
+<td>Data Source documents (auth type, credentials, metadata)</td>
+</tr>
+<tr>
+<td><strong>Redis</strong></td>
+<td>Cache</td>
+<td>Cache-aside for Data Source lookups; 6h TTL counter cache for rate tracking</td>
+</tr>
+<tr>
+<td><strong>NATS JetStream</strong></td>
+<td>Event bus</td>
+<td>Publish to <code>processor.js.execute</code> (success) and <code>events.raw</code> (security events)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="caching">Caching</h2>
+<p>The Gateway uses a <strong>cache-aside</strong> pattern for Data Source lookups:</p>
+<ol>
+<li>On inbound request, check Redis for the Data Source configuration.</li>
+<li>On cache hit, use the cached config for authentication.</li>
+<li>On cache miss, load from MongoDB, authenticate, and populate the cache.</li>
+</ol>
+<p>This eliminates a MongoDB round-trip for the vast majority of requests under sustained traffic. The cache is invalidated when a Data Source is updated or deleted via the management API.</p>
+<p>Additionally, a <strong>counter cache</strong> with a 6-hour TTL tracks per-Data Source request counts in Redis for rate monitoring without per-request database writes.</p>
+<hr>
+<h2 id="retry-and-fault-tolerance">Retry and fault tolerance</h2>
+<ul>
+<li><strong>NATS JetStream publish</strong>: if the NATS publish fails, the Gateway returns an error to the caller so the external system can retry. The Gateway does not buffer or retry internally -- this keeps the service stateless.</li>
+<li><strong>Fire-and-forget security events</strong>: security event publishing to <code>events.raw</code> is best-effort. A failure to publish the security event does not affect the 401 response to the client.</li>
+<li><strong>Redis unavailability</strong>: if Redis is down, the Gateway falls back to direct MongoDB lookups for every request. Throughput decreases but the service remains functional.</li>
+<li><strong>MongoDB unavailability</strong>: if MongoDB is unreachable and the cache is also empty, the Gateway returns 503 (Service Unavailable) because it cannot load Data Source configurations.</li>
+</ul>
+<hr>
+<h2 id="observability">Observability</h2>
+<blockquote>
+<p>MapexOS ships with <strong>Prometheus</strong> (15-day retention, 15s scrape interval) and <strong>Grafana</strong> pre-provisioned in the default Docker Compose deployment. Each service exposes a <code>/metrics</code> endpoint with a dedicated Grafana dashboard. No additional configuration is required to start monitoring.</p>
+</blockquote>
+<h3 id="health-check">Health check</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Checks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /health</code></td>
+<td>MongoDB connectivity, Redis app pool, Redis shared pool, NATS core connection</td>
+</tr>
+</tbody>
+</table>
+<p>Use this endpoint for container orchestration liveness and readiness probes.</p>
+<h3 id="key-metrics">Key metrics</h3>
+<p>The Gateway exposes metrics at <code>/metrics</code>, covering:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Authentication</strong></td>
+<td>Attempts by auth type (success/failure), failure reasons</td>
+</tr>
+<tr>
+<td><strong>Event processing</strong></td>
+<td>Events received, events published, publish latency</td>
+</tr>
+<tr>
+<td><strong>Payload size</strong></td>
+<td>Payload size distribution (histogram)</td>
+</tr>
+<tr>
+<td><strong>Data Source CRUD</strong></td>
+<td>Operation latency per CRUD endpoint</td>
+</tr>
+<tr>
+<td><strong>Cache</strong></td>
+<td>Redis hit/miss ratio for Data Source lookups</td>
+</tr>
+</tbody>
+</table>
+<h3 id="grafana-dashboard">Grafana dashboard</h3>
+<p>The pre-provisioned dashboard is <code>httpgw-overview.json</code>. It provides panels for ingestion throughput, authentication success/failure rates by type, payload size distribution, and Data Source cache performance.</p>
+<hr>
+<h2 id="scaling-guidelines">Scaling guidelines</h2>
+<p>The HTTP Gateway is stateless and scales horizontally behind a load balancer:</p>
+<ul>
+<li><strong>Ingestion throughput</strong>: add Gateway replicas. Each replica independently authenticates and publishes to NATS.</li>
+<li><strong>Data Source count</strong>: the cache-aside pattern absorbs lookup load. For deployments with thousands of Data Sources and high cache churn, increase Redis memory allocation.</li>
+<li><strong>NATS backpressure</strong>: if NATS publish latency increases, scale the NATS cluster or the downstream consumers (JS Execution Service) to reduce queue depth.</li>
+<li><strong>Payload size</strong>: large payloads increase memory pressure per request. Monitor payload size histograms and set appropriate request body limits at the reverse proxy or Gateway configuration level.</li>
+</ul>
+<p>For most deployments, 2-3 Gateway replicas behind a load balancer provide sufficient throughput and redundancy.</p>
+<hr>
+<h2 id="next-steps">Next steps</h2>
+<ul>
+<li><a href="/docs/1.0.0/en/architecture/mapexos-core">MapexOS Core</a></li>
+<li><a href="/docs/1.0.0/en/architecture/js-execution">JS Execution Engine</a></li>
+<li><a href="/docs/1.0.0/en/architecture/assets">Assets Service</a></li>
+<li><a href="/docs/1.0.0/en/core-platform/events-and-pipeline">Events &amp; Pipeline</a></li>
+</ul>

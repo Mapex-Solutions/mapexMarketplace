@@ -1,0 +1,462 @@
+<h1 id="js-execution-engine">JS Execution Engine</h1>
+<p>The <strong>JS Execution Service</strong> is responsible for running user-defined scripts in MapexOS. It executes the <strong>decode → validate → transform</strong> pipeline defined in Asset Templates, converting raw payloads into standardized events.</p>
+<blockquote>
+<p><strong>Applies to v1.0.0</strong> — V8 isolates, worker threads, bytecode caching, 4-level cache pipeline, execution limits, and tenant isolation.</p>
+</blockquote>
+<hr>
+<h2 id="why-javascript">Why JavaScript?</h2>
+<p>MapexOS chose JavaScript for template scripts because:</p>
+<ul>
+<li><strong>Universal familiarity</strong>: most integration teams know JavaScript</li>
+<li><strong>Rich ecosystem</strong>: JSON manipulation, date handling, string processing</li>
+<li><strong>V8 performance</strong>: Google's V8 engine is highly optimized</li>
+<li><strong>Isolation</strong>: V8 isolates provide memory and execution isolation</li>
+</ul>
+<hr>
+<h2 id="execution-pipeline">Execution pipeline</h2>
+<p>Each event ingested by MapexOS goes through the template pipeline:</p>
+<pre><code class="language-txt">Raw Payload → Decode → Validate → Transform → Standard Event
+</code></pre>
+<h3 id="pipeline-stages">Pipeline stages</h3>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Purpose</th>
+<th>Script function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Decode</strong></td>
+<td>Parse raw bytes/JSON into a structured object</td>
+<td><code>decode(payload, metadata)</code></td>
+</tr>
+<tr>
+<td><strong>Validate</strong></td>
+<td>Check required fields, types, ranges</td>
+<td><code>validate(decoded, metadata)</code></td>
+</tr>
+<tr>
+<td><strong>Transform</strong></td>
+<td>Map to Standard Event schema + EVA fields</td>
+<td><code>transform(validated, metadata)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Each stage is a JavaScript function defined in the Asset Template. If any stage fails, the event is rejected with a structured error.</p>
+<hr>
+<h2 id="v8-isolates">V8 Isolates</h2>
+<p>MapexOS uses <strong>V8 isolates</strong> to execute scripts securely:</p>
+<ul>
+<li><strong>Memory isolation</strong>: each isolate has its own heap (no cross-tenant memory access)</li>
+<li><strong>Execution isolation</strong>: scripts cannot access the host process or other isolates</li>
+<li><strong>Resource limits</strong>: CPU time and memory ceilings are enforced per execution</li>
+</ul>
+<h3 id="how-isolates-work">How isolates work</h3>
+<pre><code class="language-txt">┌─────────────────────────────────────────┐
+│           JS Execution Service          │
+├─────────────────────────────────────────┤
+│  ┌─────────┐  ┌─────────┐  ┌─────────┐  │
+│  │ Isolate │  │ Isolate │  │ Isolate │  │
+│  │ Tenant A│  │ Tenant B│  │ Tenant C│  │
+│  └─────────┘  └─────────┘  └─────────┘  │
+│                                         │
+│  Pooled isolates with bytecode cache    │
+└─────────────────────────────────────────┘
+</code></pre>
+<hr>
+<h2 id="worker-threads">Worker threads</h2>
+<p>To maximize throughput, the JS Execution Service uses <strong>worker threads</strong>:</p>
+<ul>
+<li><strong>Parallel execution</strong>: multiple scripts run concurrently</li>
+<li><strong>Non-blocking</strong>: main thread handles orchestration, workers execute scripts</li>
+<li><strong>Pool management</strong>: workers are reused to avoid startup overhead</li>
+</ul>
+<h3 id="scaling">Scaling</h3>
+<pre><code class="language-txt">JS Execution Service × N replicas
+  └── Worker Pool per replica
+        └── Isolate per execution context
+</code></pre>
+<p>Scale the service horizontally to increase scripts/second capacity.</p>
+<hr>
+<h2 id="4-level-cache-pipeline">4-Level cache pipeline</h2>
+<p>For optimal performance, MapexOS caches compiled scripts at multiple levels:</p>
+<pre><code class="language-txt">L0 (RAM) → L1 (NVMe/SSD) → L2 (MinIO/S3) → Compile fallback
+</code></pre>
+<h3 id="cache-levels">Cache levels</h3>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Storage</th>
+<th>Latency</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L0</strong></td>
+<td>In-memory (RAM)</td>
+<td>~μs</td>
+<td>Hot scripts and bytecode</td>
+</tr>
+<tr>
+<td><strong>L1</strong></td>
+<td>Local disk (NVMe/SSD)</td>
+<td>~ms</td>
+<td>Warm scripts, persists across restarts</td>
+</tr>
+<tr>
+<td><strong>L2</strong></td>
+<td>Object storage (MinIO/S3)</td>
+<td>~10-100ms</td>
+<td>Shared cache across replicas</td>
+</tr>
+<tr>
+<td><strong>Fallback</strong></td>
+<td>On-demand compile</td>
+<td>~10-50ms</td>
+<td>First execution of new/updated script</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cache-keys">Cache keys</h3>
+<p>Cache keys are scoped to prevent cross-tenant contamination:</p>
+<pre><code class="language-txt">{orgId}:{templateId}:{templateVersion}:{stage}
+</code></pre>
+<p>Example:</p>
+<pre><code class="language-txt">org-123:tmpl-456:v3:decode
+org-123:tmpl-456:v3:validate
+org-123:tmpl-456:v3:transform
+</code></pre>
+<h3 id="bytecode-caching">Bytecode caching</h3>
+<p>V8 can serialize compiled bytecode, avoiding recompilation:</p>
+<ol>
+<li><strong>First execution</strong>: script is parsed and compiled</li>
+<li><strong>Bytecode cached</strong>: compiled bytecode is stored at L0/L1/L2</li>
+<li><strong>Subsequent executions</strong>: bytecode is loaded directly (skip parse/compile)</li>
+</ol>
+<p>This significantly reduces latency for frequently-used templates.</p>
+<hr>
+<h2 id="execution-limits">Execution limits</h2>
+<p>MapexOS enforces strict limits to protect the platform:</p>
+<h3 id="per-execution-limits">Per-execution limits</h3>
+<table>
+<thead>
+<tr>
+<th>Limit</th>
+<th>Default</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CPU timeout</strong></td>
+<td>100ms</td>
+<td>Maximum execution time per script</td>
+</tr>
+<tr>
+<td><strong>Memory ceiling</strong></td>
+<td>64MB</td>
+<td>Maximum heap size per isolate</td>
+</tr>
+<tr>
+<td><strong>Stack depth</strong></td>
+<td>1000</td>
+<td>Maximum call stack depth</td>
+</tr>
+</tbody>
+</table>
+<h3 id="per-tenant-quotas-configurable">Per-tenant quotas (configurable)</h3>
+<table>
+<thead>
+<tr>
+<th>Quota</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Executions/second</strong></td>
+<td>Rate limit per tenant</td>
+</tr>
+<tr>
+<td><strong>Concurrent executions</strong></td>
+<td>Max parallel scripts per tenant</td>
+</tr>
+<tr>
+<td><strong>Script size</strong></td>
+<td>Maximum bytes per script</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Limits are configurable per deployment. Adjust based on your workload and infrastructure capacity.</p>
+</blockquote>
+<hr>
+<h2 id="script-context-available-apis">Script context (available APIs)</h2>
+<p>Scripts have access to a limited, sandboxed API:</p>
+<h3 id="available">Available</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JSON.parse()</code> / <code>JSON.stringify()</code></td>
+<td>JSON manipulation</td>
+</tr>
+<tr>
+<td><code>Date</code></td>
+<td>Date/time operations</td>
+</tr>
+<tr>
+<td><code>Math</code></td>
+<td>Mathematical functions</td>
+</tr>
+<tr>
+<td><code>String</code> / <code>Array</code> / <code>Object</code></td>
+<td>Standard data types</td>
+</tr>
+<tr>
+<td><code>console.log()</code></td>
+<td>Logging (captured for debugging)</td>
+</tr>
+<tr>
+<td><code>Buffer</code></td>
+<td>Binary data handling</td>
+</tr>
+<tr>
+<td><code>TextEncoder</code> / <code>TextDecoder</code></td>
+<td>Text encoding</td>
+</tr>
+</tbody>
+</table>
+<h3 id="not-available-by-design">Not available (by design)</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fetch()</code> / <code>XMLHttpRequest</code></td>
+<td>No network access from scripts</td>
+</tr>
+<tr>
+<td><code>require()</code> / <code>import</code></td>
+<td>No module loading</td>
+</tr>
+<tr>
+<td><code>fs</code> / <code>process</code></td>
+<td>No file system or process access</td>
+</tr>
+<tr>
+<td><code>eval()</code> / <code>Function()</code></td>
+<td>Disabled for security</td>
+</tr>
+<tr>
+<td><code>setTimeout</code> / <code>setInterval</code></td>
+<td>No async timers</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Scripts are synchronous and deterministic. Side effects (HTTP calls, notifications) are handled by Triggers, not scripts.</p>
+</blockquote>
+<hr>
+<h2 id="error-handling">Error handling</h2>
+<p>When a script fails, MapexOS captures:</p>
+<ul>
+<li><strong>Error type</strong>: syntax, runtime, timeout, memory</li>
+<li><strong>Error message</strong>: description of the failure</li>
+<li><strong>Stage</strong>: which pipeline stage failed (decode/validate/transform)</li>
+<li><strong>Stack trace</strong>: for debugging (when debug mode is enabled)</li>
+</ul>
+<h3 id="error-categories">Error categories</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Description</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Syntax error</strong></td>
+<td>Invalid JavaScript</td>
+<td>Fix script in template</td>
+</tr>
+<tr>
+<td><strong>Runtime error</strong></td>
+<td>Exception during execution</td>
+<td>Check logic and input</td>
+</tr>
+<tr>
+<td><strong>Timeout</strong></td>
+<td>Exceeded CPU limit</td>
+<td>Optimize script or increase limit</td>
+</tr>
+<tr>
+<td><strong>Memory limit</strong></td>
+<td>Exceeded heap size</td>
+<td>Reduce memory usage</td>
+</tr>
+<tr>
+<td><strong>Validation rejection</strong></td>
+<td>Script returned invalid result</td>
+<td>Check validation logic</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="debugging">Debugging</h2>
+<h3 id="debug-mode-per-asset">Debug mode per asset</h3>
+<p>Enable debug mode on specific assets for detailed logging:</p>
+<pre><code class="language-txt">debugEnabled = true  → Full execution logs (input, output, duration)
+debugEnabled = false → Error logs only (default)
+</code></pre>
+<h3 id="execution-logs">Execution logs</h3>
+<p>When debug is enabled, logs include:</p>
+<ul>
+<li>Input payload</li>
+<li>Decoded output</li>
+<li>Validation result</li>
+<li>Transformed event</li>
+<li>Execution duration per stage</li>
+<li>Any warnings or errors</li>
+</ul>
+<blockquote>
+<p><strong>Production note</strong>: Keep debug disabled in production to reduce log volume and cost. Enable only during investigation.</p>
+</blockquote>
+<hr>
+<h2 id="performance-guidelines">Performance guidelines</h2>
+<h3 id="write-efficient-scripts">Write efficient scripts</h3>
+<pre><code class="language-javascript">// GOOD: Direct property access
+function decode(payload) {
+  return {
+    temperature: payload.t,
+    humidity: payload.h
+  };
+}
+
+// AVOID: Unnecessary operations
+function decode(payload) {
+  const copy = JSON.parse(JSON.stringify(payload)); // Unnecessary copy
+  return { temperature: copy.t, humidity: copy.h };
+}
+</code></pre>
+<h3 id="avoid-common-pitfalls">Avoid common pitfalls</h3>
+<table>
+<thead>
+<tr>
+<th>Pitfall</th>
+<th>Impact</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Large loops</td>
+<td>Timeout</td>
+<td>Limit iterations, use built-in methods</td>
+</tr>
+<tr>
+<td>Deep recursion</td>
+<td>Stack overflow</td>
+<td>Use iterative approach</td>
+</tr>
+<tr>
+<td>Large string concatenation</td>
+<td>Memory pressure</td>
+<td>Use arrays and join</td>
+</tr>
+<tr>
+<td>Excessive logging</td>
+<td>Performance + cost</td>
+<td>Log only errors in production</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="security-model">Security model</h2>
+<h3 id="tenant-isolation">Tenant isolation</h3>
+<ul>
+<li>Scripts from different tenants never share memory</li>
+<li>Cache keys include tenant ID</li>
+<li>Execution metrics are scoped to tenant</li>
+</ul>
+<h3 id="no-network-access">No network access</h3>
+<p>Scripts cannot make HTTP calls or access external systems. All external actions are handled by:</p>
+<ol>
+<li><strong>Triggers</strong>: for HTTP webhooks, notifications, etc.</li>
+<li><strong>Route Groups</strong>: for event fan-out to external systems</li>
+</ol>
+<h3 id="secrets-handling">Secrets handling</h3>
+<p>Scripts can reference secrets stored securely:</p>
+<pre><code class="language-javascript">function transform(validated, metadata) {
+  // Secrets are injected by the platform, not hardcoded
+  const apiKey = metadata.secrets.API_KEY;
+  // ...
+}
+</code></pre>
+<blockquote>
+<p>Secrets are never logged. The platform injects them at runtime.</p>
+</blockquote>
+<hr>
+<h2 id="monitoring">Monitoring</h2>
+<h3 id="key-metrics">Key metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>js_executions_total</code></td>
+<td>Total script executions</td>
+</tr>
+<tr>
+<td><code>js_execution_duration_ms</code></td>
+<td>Execution time histogram</td>
+</tr>
+<tr>
+<td><code>js_execution_errors_total</code></td>
+<td>Errors by type</td>
+</tr>
+<tr>
+<td><code>js_cache_hits_total</code></td>
+<td>Cache hits by level</td>
+</tr>
+<tr>
+<td><code>js_cache_misses_total</code></td>
+<td>Cache misses</td>
+</tr>
+<tr>
+<td><code>js_isolate_pool_size</code></td>
+<td>Current isolate pool size</td>
+</tr>
+</tbody>
+</table>
+<h3 id="alerting-recommendations">Alerting recommendations</h3>
+<ul>
+<li><strong>High error rate</strong>: &gt; 1% of executions failing</li>
+<li><strong>High latency</strong>: p99 &gt; 50ms</li>
+<li><strong>Cache miss rate</strong>: &gt; 10% (indicates cold cache or churn)</li>
+</ul>
+<hr>
+<h2 id="next-steps">Next steps</h2>
+<ul>
+<li><a href="/docs/1.0.0/en/core-platform/assets-and-templates">Assets &amp; Templates</a></li>
+<li><a href="/docs/1.0.0/en/core-platform/events-and-pipeline">Events &amp; Pipeline</a></li>
+<li><a href="/docs/1.0.0/en/architecture/security">Security</a></li>
+</ul>

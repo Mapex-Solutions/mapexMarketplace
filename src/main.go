@@ -26,6 +26,7 @@ func main() {
 
 	app := bootstrap.InitFiber(c)
 	bootstrap.InitHealth(app)
+	bootstrap.InitHome(app)
 
 	// Catalog modules build their index tables and register their routes.
 	appModule.InitModule()

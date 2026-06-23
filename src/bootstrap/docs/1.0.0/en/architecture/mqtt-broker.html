@@ -1,0 +1,127 @@
+<h1 id="mqtt-broker">MQTT Broker</h1>
+<p>The MQTT Broker is how devices that speak <strong>MQTT</strong> get into MapexOS. It is <strong>not</strong> a MapexOS microservice — it is <strong>Eclipse Mosquitto 2.0</strong> carrying a single in-house <strong>Go plugin</strong> (cgo) that turns the MQTT edge into a source of structured <strong>NATS</strong> events. Mosquitto handles the MQTT protocol; the plugin handles MapexOS: it <strong>authenticates every connection locally</strong>, authorizes every topic, and forwards every authorized message onto NATS — where <a href="/docs/1.0.0/en/architecture/js-execution">JS Execution</a> and the <a href="/docs/1.0.0/en/architecture/assets">Assets</a> health monitor pick it up.</p>
+<p>It is the broker side of the rule you saw in <a href="/docs/1.0.0/en/architecture/assets">Assets</a>: <em>Assets authors the credentials; the edge decides the connection.</em> This is that edge.</p>
+<blockquote>
+<p>Packaged as the Docker image <code>mapexos/mapex-broker-mqtt</code> (operators pull, never build) · <strong>Mosquitto 2.0.x</strong> + a <strong>cgo</strong> plugin (libmosquitto + OpenSSL) · listeners <strong>1883</strong> (TCP) / <strong>8883</strong> (mTLS, auto-detected) · <strong>Pebble</strong> (L1) + <strong>MinIO</strong> (L2) + <strong>NATS Core</strong> (no JetStream produced here).</p>
+</blockquote>
+<hr>
+<h2 id="one-plugin-four-hooks">One plugin, four hooks</h2>
+<p>The plugin registers exactly four Mosquitto callbacks — the whole MapexOS behavior hangs off these:</p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>What the plugin does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BASIC_AUTH</code></td>
+<td>Authenticate the connection against the Assets auth projection.</td>
+</tr>
+<tr>
+<td><code>ACL_CHECK</code></td>
+<td>Authorize every PUBLISH / SUBSCRIBE by topic.</td>
+</tr>
+<tr>
+<td><code>MESSAGE</code></td>
+<td>Forward every authorized publish onto NATS.</td>
+</tr>
+<tr>
+<td><code>DISCONNECT</code></td>
+<td>Emit a presence advisory.</td>
+</tr>
+</tbody>
+</table>
+<p>Mosquitto 2.0.x exposes no <code>CONNECT</code> hook, so a device coming <strong>online</strong> is derived from the <strong>auth-success</strong> edge — the broker never needs a separate connect signal.</p>
+<hr>
+<h2 id="zero-http-auth-on-the-warm-path">Zero-HTTP auth on the warm path</h2>
+<p>Every connection is authenticated <strong>locally</strong> — there is no per-connection call back to Assets. The plugin resolves the device's credentials through a <strong>three-tier, self-healing cache</strong>:</p>
+<pre><code> CONNECT → L1 Pebble (embedded KV on disk, survives restarts)
+              ↓ miss
+           L2 MinIO   (mapex-asset-auth/{assetUUID}.json — the projection Assets writes)
+              ↓ miss
+           L3 HTTP    (GET /internal/asset_auth/:assetUUID → Assets)
+</code></pre>
+<p>Every L2 or L3 hit <strong>warms L1</strong>, so the warm path is pure local disk. A full miss <strong>denies</strong> (default-deny); a total store outage <strong>fails closed</strong>. L1 carries a TTL safety net (default 30 min), and a <strong>FANOUT</strong> consumer drops stale L1 entries the instant Assets changes a device — so the broker authenticates fast and never on stale credentials.</p>
+<p>The credentials themselves come straight from the <a href="/docs/1.0.0/en/architecture/assets">Assets</a> auth projection's <code>mqtt</code> block. The broker enforces the <strong>two mutually-exclusive modes</strong> Assets declares:</p>
+<ul>
+<li><strong>password</strong> — a local <strong>bcrypt</strong> compare against <code>passwordHash</code> (run on the broker thread, no HTTP),</li>
+<li><strong>cert</strong> — equality of the client certificate's serial against <code>currentCertSerial</code>.</li>
+</ul>
+<p>A password-mode asset presenting a cert is denied, and vice-versa; an unknown auth type is denied.</p>
+<hr>
+<h2 id="a-device-can-only-touch-its-own-topics">A device can only touch its own topics</h2>
+<p>Authorization is a <strong>pure-Go, allocation-free</strong> check on a strict contract. The MQTT <strong>username is the bare <code>assetUUID</code></strong> (globally unique), and a device may use exactly two topic shapes:</p>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>events/{assetUUID}/{eventType}</code></td>
+<td>the device <strong>publishes</strong> telemetry</td>
+</tr>
+<tr>
+<td><code>commands/{assetUUID}/{commandType}</code></td>
+<td>the device <strong>subscribes</strong> to commands</td>
+</tr>
+</tbody>
+</table>
+<p>The decisive rule: the <code>assetUUID</code> token in the topic <strong>must equal the username</strong>. One device physically cannot publish to or read another device's topics — cross-asset access is denied at the broker, in sub-microsecond string comparison, before anything reaches NATS.</p>
+<hr>
+<h2 id="liveness-over-correctness--the-async-publisher">Liveness over correctness — the async publisher</h2>
+<p>An authorized publish must never let a slow backend stall a device. So the plugin hands each message to a <strong>bounded async publisher</strong>: a non-blocking enqueue onto a fixed-size channel, drained by a worker pool that publishes to NATS. If the queue is full, the message is <strong>dropped and counted</strong> — never blocked, never retried inline. A slow or unreachable NATS degrades into counted drops, while <strong>MQTT clients keep connecting and publishing</strong> unaffected. Every payload is copied across the cgo boundary before it reaches a worker, so the broker's own buffers are never touched off-thread.</p>
+<hr>
+<h2 id="what-it-emits--raw-bytes-structured-subjects">What it emits — raw bytes, structured subjects</h2>
+<p>The broker <strong>does not decode or transform</strong> payloads — it forwards the raw MQTT bytes and lets <a href="/docs/1.0.0/en/architecture/js-execution">JS Execution</a> normalize them. It publishes two NATS streams (Core, fire-and-forget):</p>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Subject</th>
+<th>Consumed by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ingress</strong></td>
+<td><code>mqtt.data.{orgId}.{assetUUID}</code></td>
+<td><a href="/docs/1.0.0/en/architecture/js-execution">JS Execution</a> (subscribes <code>mqtt.data.&gt;</code>)</td>
+</tr>
+<tr>
+<td><strong>Presence</strong></td>
+<td><code>mqtt.presence.advisory</code> (connect / disconnect)</td>
+<td>the <a href="/docs/1.0.0/en/architecture/assets">Assets</a> health monitor</td>
+</tr>
+</tbody>
+</table>
+<p>Before publishing, ingress applies safety invariants — it drops subject tokens that are illegal on NATS and payloads larger than ~900 KiB, each as a counted warning rather than a malformed event.</p>
+<p><strong>Consumes:</strong> <code>fanout.asset.invalidate</code> (from Assets) to evict stale L1 entries. The broker runs <strong>no HTTP server of its own</strong> — it is a plugin, not a service.</p>
+<hr>
+<h2 id="where-to-go-next">Where to go next</h2>
+<table>
+<thead>
+<tr>
+<th>To dive into…</th>
+<th>Go to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Who authors the credentials it reads</td>
+<td><a href="/docs/1.0.0/en/architecture/assets">Assets</a></td>
+</tr>
+<tr>
+<td>What normalizes the bytes it forwards</td>
+<td><a href="/docs/1.0.0/en/architecture/js-execution">JS Execution</a></td>
+</tr>
+<tr>
+<td>The LoRaWAN counterpart at the edge</td>
+<td><a href="/docs/1.0.0/en/architecture/lns">LNS</a></td>
+</tr>
+</tbody>
+</table>

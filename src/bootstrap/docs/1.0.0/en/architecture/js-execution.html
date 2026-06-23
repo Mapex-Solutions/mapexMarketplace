@@ -1,0 +1,139 @@
+<h1 id="js-execution">JS Execution</h1>
+<p>JS Execution is the <strong>normalization engine</strong> of MapexOS. It is where a raw device payload — whatever shape a vendor invented — becomes the platform's one <strong>Standard Event</strong>. Every <a href="/docs/1.0.0/en/architecture/assets">Asset Template</a> carries the JavaScript that knows how to read its devices; this service runs that code, per event, inside a <strong>hardened V8 sandbox</strong>, and hands the normalized result to the <a href="/docs/1.0.0/en/architecture/router">Router</a>. It is the <em>transform</em> stage: between ingest — <strong>any external source that enters the platform</strong> (<a href="/docs/1.0.0/en/architecture/http-gateway">HTTP</a>, <a href="/docs/1.0.0/en/architecture/mqtt-broker">MQTT</a>, <a href="/docs/1.0.0/en/architecture/lns">LoRaWAN</a>, and whatever comes next) — upstream and routing downstream. The engine is <strong>source-agnostic</strong>: each event is tagged with its <code>sourceType</code> (<code>http</code> · <code>mqtt</code> · <code>lorawan</code>), but the <strong>same</strong> decode→validation→transform pipeline runs regardless — so onboarding a new ingest protocol needs no change here.</p>
+<p>Its hardest problem is that the code it runs is <strong>written by customers</strong>, not by the platform — so the whole design is about running untrusted code <strong>safely, deterministically, and fast</strong>.</p>
+<blockquote>
+<p><strong>Port</strong> <code>8000</code> · <strong>Node.js + TypeScript</strong> (DDD + Hexagonal) · <strong><code>isolated-vm</code> V8 isolates</strong> on a <strong>Piscina</strong> worker pool · reads asset/template scripts from a tiered cache (MinIO source of truth) · no owned database.</p>
+</blockquote>
+<hr>
+<h2 id="the-pipeline--decode--validation--transform">The pipeline — decode → validation → transform</h2>
+<p>Each event runs a fixed three-phase pipeline, built from the template's scripts:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Template script</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>decode</strong></td>
+<td><code>scriptProcessor</code> <em>(optional)</em></td>
+<td>Parse the raw payload — unpack a hex frame, split a CSV, decode base64.</td>
+</tr>
+<tr>
+<td><strong>validation</strong></td>
+<td><code>scriptValidator</code> <em>(optional)</em></td>
+<td>Check the decoded data against expectations before it goes further.</td>
+</tr>
+<tr>
+<td><strong>transform</strong></td>
+<td><code>scriptConversion</code> <em>(required)</em></td>
+<td>Emit the <strong>Standard Event</strong> — the normalized, typed shape the rest of MapexOS speaks.</td>
+</tr>
+</tbody>
+</table>
+<p>Each phase's JSON output becomes the next phase's <code>payload</code> input; only the final <strong>transform</strong> output is the standardized result. Because the per-device logic lives in a template, the same engine normalizes a LoRaWAN soil sensor and an HTTP turnstile with <strong>no per-device branch in the platform</strong> — onboarding a new vendor is writing three small scripts, not changing this service.</p>
+<hr>
+<h2 id="a-real-sandbox--customer-code-cannot-escape">A real sandbox — customer code cannot escape</h2>
+<p>Every script runs inside an <strong><code>isolated-vm</code> V8 isolate</strong> on a Piscina worker thread, with hard limits:</p>
+<ul>
+<li><strong>32 MB heap cap</strong> per isolate,</li>
+<li><strong>10-second execution timeout</strong> per script,</li>
+<li><strong>no access to Node, the network, or the filesystem</strong> — the worker imports only the isolation primitive and <code>worker_threads</code>; nothing from the application crosses into the sandbox.</li>
+</ul>
+<p>Within those bounds the code runs on <strong>full V8</strong> — modern <strong>ECMAScript (ES2015+)</strong> is available natively, with no transpilation: classes, arrow functions, template literals, destructuring, <code>Map</code>/<code>Set</code>, and the standard built-ins. The only ceiling is the isolate's <strong>32 MB</strong> memory budget — a script that allocates past it is stopped, not silently truncated.</p>
+<p>Each event gets a <strong>fresh V8 context</strong> (its <code>payload</code> injected by copy and released afterward), so one event can never see another's state. The isolate itself is <strong>recycled every 10,000 events</strong> to bound memory over time. Compiled scripts are cached per worker and per template, so the hot path compiles each template's code once, not once per event.</p>
+<hr>
+<h2 id="resilient-to-bad-code">Resilient to bad code</h2>
+<p>Untrusted code misbehaves, and the engine treats that as normal:</p>
+<ul>
+<li>A script that <strong>exhausts the heap</strong> disposes its isolate; the worker reports the out-of-memory condition, <strong>rebuilds a fresh isolate</strong>, and the event is <strong>NACK'd for retry</strong> — a transient failure, not a lost event.</li>
+<li>A script with a <strong>parse or schema error</strong> is a <em>permanent</em> failure: the message is rejected (to the dead-letter queue) rather than retried, because retrying can't fix it.</li>
+<li>A failure records which phase it failed at (<code>decode</code> / <code>validation</code> / <code>transform</code>) and emits a debug log to the <a href="/docs/1.0.0/en/architecture/events">Events</a> service, so a broken script is diagnosable, not silent.</li>
+</ul>
+<p>Validation scripts get an injected helper, <strong><code>$mv</code></strong> (MapexValidator), with typed checks (<code>string</code> / <code>number</code> / <code>boolean</code> / <code>date</code> / <code>array</code> / <code>object</code>) and a <code>validate(value, schema)</code> entry point — so authors validate declaratively instead of hand-rolling guards.</p>
+<hr>
+<h2 id="built-for-throughput">Built for throughput</h2>
+<p>The engine pulls events in <strong>batches</strong> and is tuned from a single knob. <code>CPU_LIMIT</code> derives the worker count, the batch size, and the in-flight limits; the process refuses to start if <code>CPU_LIMIT</code> exceeds the CPUs actually available, so it can never oversubscribe its host. Within a batch it <strong>deduplicates asset lookups</strong>, runs every event across the worker pool in parallel, and <strong>flushes all downstream publishes once</strong> before acknowledging — turning a burst of events into a single write round rather than one per event.</p>
+<hr>
+<h2 id="fed-from-the-assets-source-of-truth">Fed from the Assets source of truth</h2>
+<p>JS Execution owns no database. It resolves each event's asset and its template scripts from a <strong>tiered cache</strong> (RAM → disk → MinIO), whose source of truth is the <a href="/docs/1.0.0/en/architecture/assets">Assets</a> read-model. Two <strong>FANOUT</strong> consumers (<code>asset.invalidate</code>, <code>template.invalidate</code>) drop stale entries the moment an asset or template changes upstream — so a script edit takes effect without a restart, and no worker ever runs against a stale template.</p>
+<hr>
+<h2 id="inputs--outputs">Inputs &amp; outputs</h2>
+<p><strong>Consumes (NATS JetStream, batched):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>processor.js.execute</code></td>
+<td>HTTP-gateway datasource events.</td>
+</tr>
+<tr>
+<td><code>mqtt.data.&gt;</code></td>
+<td>MQTT telemetry from the <a href="/docs/1.0.0/en/architecture/mqtt-broker">MQTT broker</a>.</td>
+</tr>
+<tr>
+<td><code>lorawan.data.&gt;</code></td>
+<td>LoRaWAN uplinks from the <a href="/docs/1.0.0/en/architecture/lns">LNS</a>.</td>
+</tr>
+<tr>
+<td><code>fanout.asset.invalidate</code> · <code>fanout.template.invalidate</code></td>
+<td>Cache coherence.</td>
+</tr>
+</tbody>
+</table>
+<p>Each ingress edge publishes to its <strong>own protocol stream</strong>, and every message carries its <code>orgId</code> / <code>assetUUID</code> and a <code>sourceType</code> tag — so the engine resolves the asset and runs the identical pipeline no matter how the data arrived.</p>
+<p><strong>Produces (NATS, fire-and-forget, flushed once per batch):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>route.execute</code></td>
+<td>The standardized event (<code>eventSource: &quot;assetEvent&quot;</code>) → the <a href="/docs/1.0.0/en/architecture/router">Router</a>.</td>
+</tr>
+<tr>
+<td><code>events.logs.jsexecutor</code> · <code>events.raw</code></td>
+<td>Execution logs / debug → the <a href="/docs/1.0.0/en/architecture/events">Events</a> service.</td>
+</tr>
+<tr>
+<td><code>asset.heartbeat.{orgId}</code></td>
+<td>An implicit liveness signal (when the asset uses implicit heartbeat mode) → <a href="/docs/1.0.0/en/architecture/assets">Assets</a>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>HTTP</strong> (port <code>8000</code>): script <strong>test</strong> and <strong>sample-payload</strong> endpoints used by the template editor and test runner, plus <code>/health</code> and <code>/metrics</code>.</p>
+<hr>
+<h2 id="where-to-go-next">Where to go next</h2>
+<table>
+<thead>
+<tr>
+<th>To dive into…</th>
+<th>Go to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Where the scripts and fields are defined</td>
+<td><a href="/docs/1.0.0/en/architecture/assets">Assets</a></td>
+</tr>
+<tr>
+<td>What admits the events it consumes</td>
+<td><a href="/docs/1.0.0/en/architecture/http-gateway">HTTP Gateway</a></td>
+</tr>
+<tr>
+<td>Where its output is routed</td>
+<td><a href="/docs/1.0.0/en/architecture/router">Router</a></td>
+</tr>
+</tbody>
+</table>

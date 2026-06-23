@@ -1,0 +1,172 @@
+<h1 id="http-gateway">HTTP Gateway</h1>
+<p>The HTTP Gateway is the <strong>front door</strong> of MapexOS. It is where the outside world gets <em>in</em>: webhooks, device telemetry, and API calls from gateways and business systems arrive here over HTTP. Its job is narrow and load-bearing — <strong>authenticate each request against the policy of its source, mint a correlation id, and admit a clean, minimal payload to the pipeline</strong>. It does not decode, transform, or route; it authenticates and forwards, then hands off to the <a href="/docs/1.0.0/en/architecture/js-execution">JS execution</a> → <a href="/docs/1.0.0/en/architecture/router">Router</a> stages over NATS.</p>
+<p>Everything the gateway does is anchored on one concept: the <strong>DataSource</strong>.</p>
+<blockquote>
+<p><strong>Port</strong> <code>5001</code> · <strong>Go</strong> (DDD + Hexagonal) · <strong>MongoDB</strong> (DataSource registry) + <strong>Redis</strong> (cache-aside) · publishes to <strong>NATS JetStream</strong> · no inbound NATS — all input is HTTP.</p>
+</blockquote>
+<hr>
+<h2 id="the-datasource--a-governed-entry-point">The DataSource — a governed entry point</h2>
+<p>Every external integration is modeled as a <strong>DataSource</strong>: a configuration record that says <em>who</em> may send data, <em>how</em> they authenticate, and <em>which asset</em> the data belongs to. One device fleet posting over an API key, one partner system using OAuth2, one on-prem gateway restricted to an IP range — each is its own DataSource, governed independently.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auth</code></td>
+<td>The authentication strategy for this source (see below).</td>
+</tr>
+<tr>
+<td><code>assetBind</code></td>
+<td>How an incoming payload maps to an Asset.</td>
+</tr>
+<tr>
+<td><code>enabled</code></td>
+<td>A kill switch — a disabled source is refused before anything else runs.</td>
+</tr>
+<tr>
+<td><code>orgId</code> / <code>pathKey</code></td>
+<td>The tenant this source belongs to — the trust anchor.</td>
+</tr>
+</tbody>
+</table>
+<p>DataSources are managed through a governed REST surface (<code>/api/v1/data_sources</code>, permission-gated and org-scoped, with pagination, filtering, and projection), and read on the hot ingest path through a <strong>Redis cache-aside</strong> layer (24-hour TTL, hit/miss metered) so admitting a request rarely touches MongoDB.</p>
+<hr>
+<h2 id="per-source-authentication-at-the-edge">Per-source authentication at the edge</h2>
+<p>The gateway doesn't impose one global auth scheme. <strong>Each DataSource carries its own</strong>, and the ingest middleware switches on it per request:</p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>How it authenticates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apiKey</code></td>
+<td>A key in a configured header or query field.</td>
+</tr>
+<tr>
+<td><code>jwt</code></td>
+<td>A signed JWT validated against a shared secret (configurable header).</td>
+</tr>
+<tr>
+<td><code>oauth2</code></td>
+<td>A bearer token validated against a JWKS endpoint (OIDC-style).</td>
+</tr>
+<tr>
+<td><code>ip_whitelist</code></td>
+<td>The caller's IP must fall within allowed CIDR ranges.</td>
+</tr>
+<tr>
+<td><code>none</code></td>
+<td>Open ingestion, for trusted-network sources.</td>
+</tr>
+</tbody>
+</table>
+<p>Before any of this runs, a <strong>disabled DataSource is rejected outright</strong> — the kill switch costs nothing. The same applies to an unknown auth type: refused, never admitted by default.</p>
+<pre><code>POST /api/v1/events?ds={id}
+   │
+   ├─ resolve DataSource (Redis → MongoDB)
+   ├─ disabled?            → 403   (+ audit)
+   ├─ authenticate by type → 401 on failure (+ audit)
+   └─ admitted             → publish to the pipeline → 201
+</code></pre>
+<hr>
+<h2 id="rejected-traffic-is-recorded-not-just-dropped">Rejected traffic is recorded, not just dropped</h2>
+<p>Security at an ingestion edge is only as good as its visibility. <strong>Every rejection</strong> — a disabled source, a bad key, an IP outside the range — fires a <code>RawEventDTO{ success: false }</code> to <code>events.raw</code> in a detached goroutine, without slowing the <code>401</code>/<code>403</code> it returns to the caller. That record lands in ClickHouse via the <a href="/docs/1.0.0/en/architecture/events">Events</a> service, so failed and forged attempts become a <strong>queryable audit trail</strong>, not a silent drop.</p>
+<hr>
+<h2 id="the-correlation-id-is-born-here">The correlation id is born here</h2>
+<p>On every accepted request the gateway mints a fresh <strong><code>eventTrackerId</code></strong> (a UUID) and attaches it to the payload. That single id then threads through js-execution → router → triggers → workflow → storage — it is the thread that makes an event <strong>traceable end to end</strong>. When the Events service lets you reconstruct one event's whole journey by a single id, <em>this</em> is where that id starts.</p>
+<hr>
+<h2 id="a-deliberately-minimal-handoff">A deliberately minimal handoff</h2>
+<p>What the gateway forwards to the pipeline is intentionally lean. The published <code>processor.js.execute</code> payload carries only:</p>
+<ul>
+<li><code>sourceType: &quot;http&quot;</code> — the origin,</li>
+<li>the DataSource's <code>orgId</code> and <code>assetBind</code> — enough to resolve the Asset,</li>
+<li>the raw <code>event</code> body,</li>
+<li>the <code>eventTrackerId</code>.</li>
+</ul>
+<p>It deliberately omits the asset's name, description, and <code>pathKey</code> — <strong>js-execution reads those from the Asset cache, the source of truth.</strong> Nothing is duplicated onto the wire that the platform already knows; the edge stays thin and the Asset stays authoritative.</p>
+<hr>
+<h2 id="heartbeats--presence-without-spoofing">Heartbeats — presence without spoofing</h2>
+<p>Beyond telemetry, the gateway accepts an explicit <strong>heartbeat</strong> (<code>POST /api/v1/heartbeat?ds={id}</code>, body <code>{ assetUUID }</code>) that drives an asset's online state. It publishes to <code>asset.heartbeat.{orgId}</code> for the Assets health monitor. Crucially, the <strong><code>orgId</code> and <code>pathKey</code> come from the resolved (post-authentication) DataSource, never from the request body</strong> — so a forged body cannot make one tenant report presence for another.</p>
+<hr>
+<h2 id="inputs--outputs">Inputs &amp; outputs</h2>
+<p><strong>HTTP (in):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST /api/v1/events?ds={id}</code></td>
+<td>Admit telemetry → <code>201 { success: true }</code>.</td>
+</tr>
+<tr>
+<td><code>POST /api/v1/heartbeat?ds={id}</code></td>
+<td>Drive presence → <code>200 { success: true }</code>.</td>
+</tr>
+<tr>
+<td><code>/api/v1/data_sources</code> (CRUD)</td>
+<td>Manage sources — auth + permission-gated.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>NATS (out):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>processor.js.execute</code></td>
+<td>Admitted event → the JS-execution pipeline (JetStream, acknowledged).</td>
+</tr>
+<tr>
+<td><code>events.raw</code></td>
+<td>Auth-failure audit record (fire-and-forget).</td>
+</tr>
+<tr>
+<td><code>asset.heartbeat.{orgId}</code></td>
+<td>Presence signal → the Assets health monitor (core publish).</td>
+</tr>
+</tbody>
+</table>
+<p>The gateway consumes <strong>nothing</strong> from NATS — its entire input surface is HTTP.</p>
+<hr>
+<h2 id="observability">Observability</h2>
+<p>Prometheus metrics cover authentication outcomes <strong>per strategy</strong> (including the <code>disabled</code> gate), auth duration, DataSource cache hit/miss, and publish results — plus <code>/health</code> and <code>/swagger</code>. You can see, per source and per auth type, exactly what is being admitted and what is being turned away.</p>
+<hr>
+<h2 id="where-to-go-next">Where to go next</h2>
+<table>
+<thead>
+<tr>
+<th>To dive into…</th>
+<th>Go to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What happens to an admitted event</td>
+<td><a href="/docs/1.0.0/en/architecture/js-execution">JS Execution</a></td>
+</tr>
+<tr>
+<td>Where the asset model lives</td>
+<td><a href="/docs/1.0.0/en/architecture/overview">Architecture Overview</a></td>
+</tr>
+<tr>
+<td>Where rejected-traffic records are stored</td>
+<td><a href="/docs/1.0.0/en/architecture/events">Events</a></td>
+</tr>
+</tbody>
+</table>

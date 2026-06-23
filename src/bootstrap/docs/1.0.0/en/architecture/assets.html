@@ -1,0 +1,148 @@
+<h1 id="assets">Assets</h1>
+<p>Assets is the <strong>source of truth</strong> for everything connected to MapexOS. It owns <em>what</em> an asset is, <em>how</em> its payloads become normalized events, <em>how</em> it authenticates, and <em>whether it is online right now</em>. It does not ingest, transform, or route events itself — it <strong>configures the entities the rest of the pipeline acts on</strong>, and it <strong>authors the cache that every other service reads</strong>. When the <a href="/docs/1.0.0/en/architecture/mqtt-broker">MQTT broker</a>, <a href="/docs/1.0.0/en/architecture/lns">LNS</a>, <a href="/docs/1.0.0/en/architecture/router">Router</a>, and <a href="/docs/1.0.0/en/architecture/js-execution">JS execution</a> need to know something about an asset, they read it from their own tiered cache — and <strong>the bottom of every one of those caches falls back to Assets</strong>, the one place that can always reconstruct the truth.</p>
+<p>It carries two responsibilities: <strong>the model</strong> (Assets + Asset Templates) and the <strong>device control plane</strong> (PKI + presence/health).</p>
+<blockquote>
+<p><strong>Port</strong> <code>5002</code> · <strong>Go</strong> (DDD + Hexagonal) · <strong>MongoDB</strong> (write model) + <strong>MinIO/S3</strong> (read-model projections) + <strong>Redis</strong> (health hot-state) · <strong>mapexVault</strong> for the signing CA and key-encryption key · four modules: <code>assets</code>, <code>assettemplates</code>, <code>healthmonitor</code>, <code>mqttcerts</code>.</p>
+</blockquote>
+<hr>
+<h2 id="asset--template--onboard-by-configuration-not-code">Asset &amp; Template — onboard by configuration, not code</h2>
+<p>The model has two halves:</p>
+<ul>
+<li>An <strong>Asset Template</strong> is a reusable blueprint: its <strong>classification</strong> (category / manufacturer / model / version), the <code>assetIdPath</code> that locates the device id in a payload, the <strong>transform scripts</strong>, and the <strong>EVA field schema</strong>. Two scripts are required — <code>scriptValidator</code> and <code>scriptConversion</code> — and two are optional — <code>scriptProcessor</code> (preprocess) and <code>scriptTest</code> (for the in-console test runner).</li>
+<li>An <strong>Asset</strong> is one device instance bound to a template, carrying its protocol identity, route groups, health config, and active certificate. <code>assetUUID</code> is its stable, cross-platform business id.</li>
+</ul>
+<p>One template serves thousands of assets across hundreds of sites. A new vendor or model is a <strong>template configuration</strong>, never a new code branch — this is what turns device onboarding from an engineering task into a setup task.</p>
+<hr>
+<h2 id="eva-dynamic-fields--where-the-fieldid-is-born">EVA dynamic fields — where the <code>fieldId</code> is born</h2>
+<p>A template declares its dynamic fields, and <strong>this is the origin of the typed columnar storage</strong> you saw in <a href="/docs/1.0.0/en/architecture/events">Events</a>. Each field is assigned a numeric id with a hard contract:</p>
+<ul>
+<li><code>fieldId</code> is a <code>uint16</code>, <strong>immutable</strong> once assigned (a per-template <code>nextFieldId</code> counter only ever increments — ids are never reused),</li>
+<li>a declared <code>type</code> (<code>number</code> · <code>string</code> · <code>bool</code> · <code>date</code> · <code>geo</code>),</li>
+<li>a soft-delete <code>status</code> (a removed field is deprecated, never physically deleted),</li>
+<li>up to <strong>200 active fields</strong> per template.</li>
+</ul>
+<p>That immutability <em>is</em> the contract between Assets and Events: Assets assigns the <code>fieldId</code>, Events stores values under it in its typed EVA maps. Because ids never move, history stays coherent forever.</p>
+<hr>
+<h2 id="the-source-of-truth--and-the-cache-every-service-is-rebuilt-from">The source of truth — and the cache every service is rebuilt from</h2>
+<p>This is the architectural center of gravity. On <strong>every change that affects how an asset is read or authenticated</strong>, Assets writes two denormalized projections to MinIO/S3:</p>
+<table>
+<thead>
+<tr>
+<th>Projection</th>
+<th>Path</th>
+<th>For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Full read-model</strong></td>
+<td><code>mapex-assets/{orgId}/{assetUUID}.json</code></td>
+<td>Router, JS-execution, Events — full asset context.</td>
+</tr>
+<tr>
+<td><strong>Slim auth projection</strong></td>
+<td><code>mapex-asset-auth/{assetUUID}.json</code></td>
+<td>the MQTT broker plugin and LNS — just what's needed to authenticate.</td>
+</tr>
+</tbody>
+</table>
+<p>Then it fires a <strong>FANOUT invalidation</strong> on NATS so every replica of every consumer drops its stale copy. The read-model is always written <strong>before</strong> the invalidate, so a service that re-fetches on the invalidation sees fresh data, never a gap.</p>
+<pre><code>                 ┌──────────── Assets (source of truth) ────────────┐
+   write change → │  MongoDB (write model)                          │
+                 │     │ project                                     │
+                 │     ▼                                             │
+                 │  MinIO  mapex-assets/… · mapex-asset-auth/…       │
+                 │     │ then                                        │
+                 │     ▼                                             │
+                 │  FANOUT invalidate ─────────────────────────────┐│
+                 └──────────────────────────────────────────────────┘
+                                                                    ▼
+   consumer cache:   L0 RAM → L1 disk → L2 MinIO → L3 HTTP fallback → Assets
+                     (the fallback always reconstructs from the source of truth)
+</code></pre>
+<p>Every consumer — broker, LNS, Router, JS-execution — runs its own <code>TieredCache</code>, and <strong>the last tier of all of them falls back over HTTP to Assets</strong> (<code>GET /internal/assets/:assetUUID</code>), which repopulates the cache inline. No matter how cold a cache gets, there is always one authoritative place to rebuild it from.</p>
+<hr>
+<h2 id="authentication-happens-at-the-edge--assets-never-authenticates">Authentication happens at the edge — Assets never authenticates</h2>
+<p>Assets <strong>authors</strong> the credentials but <strong>never validates a connection</strong> itself. The slim auth projection is already at the edge, so the servers that terminate the protocol decide every connection <strong>locally</strong>:</p>
+<ul>
+<li>The <strong><a href="/docs/1.0.0/en/architecture/mqtt-broker">MQTT broker</a> plugin</strong> decides every MQTT <code>CONNECT</code> from the projection's <code>mqtt</code> block alone — bcrypt-comparing the presented password against <code>passwordHash</code>, or matching the client certificate's serial against <code>currentCertSerial</code>.</li>
+<li>The <strong><a href="/docs/1.0.0/en/architecture/lns">LNS</a></strong> authenticates LoRaWAN joins from the projection's <code>lorawan</code> block — the device identity and its envelope-encrypted keys (gateways authenticate by certificate serial).</li>
+</ul>
+<p>There is <strong>no per-connection HTTP callout to Assets</strong> — the only edge→Assets HTTP path is the L3 cache-miss fallback above. Authentication is fast, made where the connection lands, and keeps working even while Assets is briefly unavailable.</p>
+<hr>
+<h2 id="device-pki-control-plane">Device PKI control plane</h2>
+<p>Assets is a local certificate authority for devices (<code>mqttcerts</code> module). It issues <strong>X.509 client certificates</strong> — <strong>ECDSA P-256, 128-bit serial, client-auth extended key usage</strong> — signed by an <strong>intermediate CA fetched once from <a href="/docs/1.0.0/en/architecture/vault">mapexVault</a> and held in RAM</strong> (<code>atomic.Pointer</code>, never written to disk; a <code>caReady</code> gate returns <code>502</code> until the CA is loaded, with backoff retry on failure).</p>
+<ul>
+<li><strong>One active certificate per asset</strong> — re-issuing requires <code>force=true</code>, otherwise <code>409</code>.</li>
+<li>The <strong>certificate and private key PEM are returned exactly once</strong> at issue time and <strong>never persisted</strong> — the asset keeps only metadata (serial, fingerprint, subject CN, issued/expires).</li>
+<li><strong>Revocation is a hard delete</strong> plus a tamper-evident audit row that auto-expires after <strong>30 days</strong> (a MongoDB TTL index).</li>
+</ul>
+<p>The same machinery issues certificates for LoRaWAN gateways.</p>
+<hr>
+<h2 id="connectivity-health--presence">Connectivity health &amp; presence</h2>
+<p><code>healthmonitor</code> is a real near-real-time engine tracking each asset's <strong>online / offline / last-seen</strong>. It learns liveness two ways:</p>
+<ul>
+<li><strong>Heartbeats</strong> on <code>asset.heartbeat.&gt;</code> — <em>implicit</em> (js-execution emits one per data event) or <em>explicit</em> (an HTTP <code>POST /api/v1/heartbeat</code>, or MQTT broker presence advisories for MQTT assets) — refreshing a last-seen timestamp in Redis.</li>
+<li>A <strong>periodic scan</strong> that marks an asset offline once it has been silent past its threshold for <code>requiredMisses</code> consecutive sweeps (<code>cutoff = now − threshold</code>).</li>
+</ul>
+<p>It runs in three modes per asset — <strong>disabled</strong>, <strong>monitor-only</strong> (persist state), or <strong>monitor + route</strong> — and on each transition it publishes two things: an <code>asset_status_save</code> to <a href="/docs/1.0.0/en/architecture/events">Events</a> (the queryable connectivity history) and, when the asset configures them, a <code>route.execute</code> with <code>eventSource = healthStatus</code> to the <a href="/docs/1.0.0/en/architecture/router">Router</a> (which routes presence changes only to <code>trigger</code> / <code>workflow</code>). Transitions are <strong>exactly-once across replicas</strong> (an atomic Redis <code>SREM</code>), with an anti-race guard for multi-broker reconnects. Enabling health monitoring requires at least one offline/online route group — a fail-fast <code>422</code> otherwise.</p>
+<hr>
+<h2 id="multi-protocol-identity--secrets">Multi-protocol identity &amp; secrets</h2>
+<p>An asset speaks one of three protocols, and <strong>no secret is ever stored in plaintext</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Protocol</th>
+<th>Identity &amp; secret handling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>HTTP</strong></td>
+<td>No device credential — admitted at the <a href="/docs/1.0.0/en/architecture/http-gateway">HTTP Gateway</a> by its DataSource.</td>
+</tr>
+<tr>
+<td><strong>MQTT</strong></td>
+<td><code>password</code> <strong>xor</strong> <code>cert</code> (mutually exclusive). Passwords are <strong>bcrypt-hashed</strong>; certs come from the PKI plane.</td>
+</tr>
+<tr>
+<td><strong>LoRaWAN</strong></td>
+<td>Device (OTAA/ABP) or gateway. Device root/session keys are <strong>envelope-encrypted with a mapexVault KEK</strong> — only the four envelope fields persist; the runtime consumer is the <a href="/docs/1.0.0/en/architecture/lns">LNS</a>.</td>
+</tr>
+</tbody>
+</table>
+<p>Plaintext (a generated password, a key, a cert PEM) is shown to the operator <strong>once</strong> at create/issue time and is irretrievable afterward.</p>
+<hr>
+<h2 id="inputs--outputs">Inputs &amp; outputs</h2>
+<p><strong>HTTP (in):</strong> <code>/api/v1/assets</code> and <code>/api/v1/asset_templates</code> CRUD (JWT, permission- and coverage-gated); <code>/api/v1/mqtt_certs</code> and <code>/api/v1/gateway_certs</code> (issue/revoke, gated on CA readiness); internal API-key routes for the L3 cache fallback (<code>GET /internal/assets/:assetUUID</code>, <code>…/asset_auth/:assetUUID</code>, <code>…/scripts/:assetUUID</code>).</p>
+<p><strong>NATS (consumed):</strong> <code>asset.heartbeat.&gt;</code>, MQTT presence advisories, the periodic health scan, and classification-name updates.</p>
+<p><strong>NATS (produced):</strong> <code>fanout.asset.invalidate</code> and <code>fanout.template.invalidate</code> (cache coherence), <code>events.asset_status_save</code> (connectivity history → Events), and <code>route.execute</code> (<code>eventSource=healthStatus</code> → Router) on health transitions.</p>
+<p><strong>Object storage:</strong> the two MinIO projections above, plus template scripts (<code>{orgId|mapexos_public}/{templateId}.json</code>) for JS-execution.</p>
+<hr>
+<h2 id="where-to-go-next">Where to go next</h2>
+<table>
+<thead>
+<tr>
+<th>To dive into…</th>
+<th>Go to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Where templates' scripts run</td>
+<td><a href="/docs/1.0.0/en/architecture/js-execution">JS Execution</a></td>
+</tr>
+<tr>
+<td>Where dynamic fields are stored &amp; queried</td>
+<td><a href="/docs/1.0.0/en/architecture/events">Events</a></td>
+</tr>
+<tr>
+<td>Where presence changes are routed</td>
+<td><a href="/docs/1.0.0/en/architecture/router">Router</a></td>
+</tr>
+<tr>
+<td>The CA and KEK behind the control plane</td>
+<td><a href="/docs/1.0.0/en/architecture/vault">Vault</a></td>
+</tr>
+</tbody>
+</table>

@@ -1,0 +1,169 @@
+<h1 id="events">Events</h1>
+<p>Events is the <strong>system of record</strong> of MapexOS. It is the end of the line: every other stage — ingest, transform, route, automate — hands its output here, and Events persists it into <strong>ClickHouse</strong> as a typed, queryable row. It makes no decisions and publishes nothing back to the bus; it is pure <strong>storage and read</strong>. When you ask <em>what happened, to which asset, when, and why</em> — this is the service that answers.</p>
+<p>Its defining trick is that it stores <strong>schema-less data in a typed, columnar shape</strong>: arbitrary per-vendor fields become queryable typed columns without a migration, every row carries its own retention, and a single tracking id ties one event's entire journey together.</p>
+<blockquote>
+<p><strong>Port</strong> <code>5004</code> · <strong>Go</strong> (DDD + Hexagonal) · <strong>NATS JetStream</strong> batch consumers → <strong>ClickHouse</strong> (bulk insert, TTL retention) · <strong>MongoDB</strong> (retention catalog) + <strong>Redis</strong> + <strong>S3/MinIO</strong> (tiered template cache) · three modules: <code>events</code>, <code>asset_status</code>, <code>retention</code>.</p>
+</blockquote>
+<hr>
+<h2 id="eva--typed-storage-for-schema-less-data">EVA — typed storage for schema-less data</h2>
+<p>Every asset speaks a different payload: one sends <code>temperature</code>, another <code>co2</code>, a third <code>doorState</code>. Storing that as JSON blobs would make it unqueryable; storing a column per field would mean a migration per device. MapexOS does neither. It uses <strong>EVA</strong> (Entity-Value-Attribute): each template field is assigned a numeric <code>fieldId</code>, and the value lands in one of <strong>four typed ClickHouse MAP columns</strong>, keyed by that id:</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>eva_number</code></td>
+<td><code>map&lt;uint16, float64&gt;</code></td>
+<td>numeric fields — temperature, pressure, count</td>
+</tr>
+<tr>
+<td><code>eva_string</code></td>
+<td><code>map&lt;uint16, string&gt;</code></td>
+<td>text fields — status, location, device type</td>
+</tr>
+<tr>
+<td><code>eva_bool</code></td>
+<td><code>map&lt;uint16, uint8&gt;</code></td>
+<td>booleans — alarm, online, active</td>
+</tr>
+<tr>
+<td><code>eva_date</code></td>
+<td><code>map&lt;uint16, datetime&gt;</code></td>
+<td>timestamps — last update, alarm time</td>
+</tr>
+</tbody>
+</table>
+<p>The type comes from the field's declared type in the asset's template (with inference as a fallback; a geo field stores its latitude as a number <em>and</em> a <code>&quot;lat,lng&quot;</code> string). The result: a new vendor or model is a <strong>template configuration</strong>, never a schema change — yet every dynamic field is stored <strong>typed and columnar</strong>, so you can filter and aggregate on it directly. The <code>POST /store/query</code> endpoint takes a list of <code>EvaFilters</code> — conditions on those dynamic fields — and pushes them straight into ClickHouse.</p>
+<p>To turn the numeric ids back into human-readable names on read, Events resolves the asset's template through a <strong>tiered cache</strong> (L0 RAM → L1 disk → L2 S3/MinIO → HTTP fallback to the Assets service), kept coherent by a <strong>FANOUT</strong> <code>template.invalidate</code> consumer so a template edit upstream never serves stale names.</p>
+<hr>
+<h2 id="per-row-retention--each-row-knows-how-long-to-live">Per-row retention — each row knows how long to live</h2>
+<p>Retention is not one global setting. <strong>Every row is stamped at write time with its own <code>retention_days</code></strong>, resolved per-organization and per-table from the <code>retention</code> module (a MongoDB catalog, Redis cache-aside), and ClickHouse's native <strong>TTL</strong> expires it automatically. Different classes of data live for different spans by default — raw payloads and debug logs briefly, execution histories longer, processed events longest — and any organization can set its own policy:</p>
+<table>
+<thead>
+<tr>
+<th>Data class</th>
+<th>Default lifetime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Raw ingest · JS-executor debug</td>
+<td>1 day</td>
+</tr>
+<tr>
+<td>Router / trigger / workflow execution history</td>
+<td>7 days</td>
+</tr>
+<tr>
+<td>Processed events · dead-letter</td>
+<td>30 days</td>
+</tr>
+</tbody>
+</table>
+<p>A new organization is seeded with default policies automatically (the module consumes the <code>organization.created</code> lifecycle event), and editing a policy issues the corresponding ClickHouse TTL change.</p>
+<hr>
+<h2 id="what-it-stores--one-consumer-per-stream">What it stores — one consumer per stream</h2>
+<p>Events runs a batch consumer per stream, each writing its own ClickHouse table:</p>
+<table>
+<thead>
+<tr>
+<th>Stream</th>
+<th>What it captures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>events.save</code></td>
+<td><strong>Processed events</strong> — the primary table, with full EVA mapping.</td>
+</tr>
+<tr>
+<td><code>events.raw</code></td>
+<td>Raw ingest payloads, as received.</td>
+</tr>
+<tr>
+<td><code>events.logs.jsexecutor</code></td>
+<td>JS-executor decode/validate/convert debug output.</td>
+</tr>
+<tr>
+<td><code>events.router</code></td>
+<td>Router decisions — the per-event routing history.</td>
+</tr>
+<tr>
+<td><code>events.trigger</code></td>
+<td>Trigger execution outcomes.</td>
+</tr>
+<tr>
+<td><code>events.workflow</code> (<code>EVENTS-WORKFLOW-LOGS</code>)</td>
+<td>Terminal workflow executions.</td>
+</tr>
+<tr>
+<td><code>dlq</code></td>
+<td>Dead-letter entries from any service.</td>
+</tr>
+</tbody>
+</table>
+<p>Together these are a complete, queryable audit trail: the processed event itself, <em>and</em> the record of how it was routed, what it triggered, and which workflow it ran.</p>
+<hr>
+<h2 id="traceable-end-to-end-by-one-id">Traceable end to end by one id</h2>
+<p>A single <code>eventTrackerId</code> (a UUID) is minted at ingest and propagated through every service — route, trigger, workflow — and written onto every row here. So reconstructing one event's entire story is a single key lookup, not a join across systems: you can follow it from the raw payload, through the routing decision, to the trigger that fired and the workflow that ran. Names (<code>asset_name</code>, <code>template_name</code>, …) are <strong>denormalized at write time</strong>, so reads never pay for a join.</p>
+<hr>
+<h2 id="how-a-batch-is-persisted">How a batch is persisted</h2>
+<p>All consumers share one generic three-phase pipeline, tuned for ClickHouse's love of large writes:</p>
+<pre><code> Phase 1 — parse in parallel     a bounded worker pool (NumCPU × 2) parses,
+                                  validates, and EVA-maps each message
+ Phase 2 — one bulk insert       every valid row goes to ClickHouse in a single
+                                  bulk INSERT — minimal write amplification
+ Phase 3 — settle per message    Ack on success · Nack (retry) on insert failure
+                                  · Reject (→ DLQ) on a parse/validation failure
+</code></pre>
+<p>The dead-letter consumer uses a deliberate variant that <strong>never Nacks</strong> — a message it can't parse is acknowledged and skipped rather than retried, so the DLQ can never feed itself in a loop.</p>
+<hr>
+<h2 id="beyond-events--connectivity-history">Beyond events — connectivity history</h2>
+<p>A second module, <code>asset_status</code>, persists every <strong>online/offline transition</strong> an asset makes into its own table and serves a <strong>connectivity timeline</strong>: <code>GET /api/v1/events/connectivity_history</code> and <code>…/assets/:assetUUID/connectivity_history</code>, filterable by time window and transition type. Operations can see exactly when a device dropped and came back — a first-class history, not something reconstructed from logs.</p>
+<hr>
+<h2 id="read--manage--the-http-surface">Read &amp; manage — the HTTP surface</h2>
+<p>All read routes are <strong>cursor-paginated, organization-scoped, and permission-gated</strong>, under <code>/api/v1/events</code>:</p>
+<ul>
+<li>Per-stream lists: <code>GET /raw</code>, <code>/jsexec</code>, <code>/router</code>, <code>/trigger</code>, <code>/workflow</code>, <code>/dlq</code> (+ <code>/dlq/counts</code> grouped by service).</li>
+<li><code>POST /store/query</code> — processed events with optional <code>EvaFilters</code> (query by dynamic field).</li>
+<li><code>GET /store/:eventTrackerId</code> — one processed event with its EVA ids resolved to template-defined names.</li>
+<li><code>GET /workflow/execution/:executionId</code> — a single workflow record.</li>
+<li>Connectivity timelines (above).</li>
+</ul>
+<p>Retention policies are managed under <code>/api/v1/retention</code>: <code>GET /</code>, <code>GET /:id</code>, <code>PUT /</code> (upsert by <code>{orgId, type}</code>), <code>DELETE /:id</code>.</p>
+<hr>
+<h2 id="inputs--outputs">Inputs &amp; outputs</h2>
+<p><strong>Consumes (NATS JetStream, batch pull):</strong> <code>events.save</code>, <code>events.raw</code>, <code>events.logs.jsexecutor</code>, <code>events.router</code>, <code>events.trigger</code>, <code>events.workflow</code>, <code>dlq</code>, <code>events.asset_status_save</code>, <code>organization.created</code>, and the FANOUT <code>template.invalidate</code>.</p>
+<p><strong>Produces:</strong> nothing on the bus. Events is a terminal sink — its only outbound effect is a ClickHouse TTL change when a retention policy is edited.</p>
+<hr>
+<h2 id="observability">Observability</h2>
+<p>Per-consumer Prometheus metrics track messages consumed / parsed / inserted / failed, <strong>ClickHouse bulk-insert latency per table</strong>, EVA template-cache hit/miss, and batch sizes. Health surfaces the dependency graph (MongoDB, Redis, NATS required; ClickHouse and S3 degrade gracefully — the service keeps accepting messages from NATS even when writes are briefly unavailable).</p>
+<hr>
+<h2 id="where-to-go-next">Where to go next</h2>
+<table>
+<thead>
+<tr>
+<th>To dive into…</th>
+<th>Go to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Who decides what gets persisted</td>
+<td><a href="/docs/1.0.0/en/architecture/router">Router</a></td>
+</tr>
+<tr>
+<td>Where dynamic fields are defined</td>
+<td><a href="/docs/1.0.0/en/architecture/overview">Architecture Overview</a></td>
+</tr>
+<tr>
+<td>What produces execution histories</td>
+<td><a href="/docs/1.0.0/en/architecture/triggers">Triggers</a> · <a href="/docs/1.0.0/en/architecture/workflow">Workflow Engine</a></td>
+</tr>
+</tbody>
+</table>

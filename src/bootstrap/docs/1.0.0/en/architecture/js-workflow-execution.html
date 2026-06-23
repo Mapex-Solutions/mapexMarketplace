@@ -1,0 +1,79 @@
+<h1 id="js-workflow-execution">JS Workflow Execution</h1>
+<p>JS Workflow Execution is the <strong>compute substrate for workflow <code>code</code> nodes</strong>. When a <a href="/docs/1.0.0/en/architecture/workflow">workflow</a> reaches a node that runs custom JavaScript, the engine doesn't execute it inline — it <strong>suspends the node</strong>, dispatches the script here, and parks. This service runs the code in a hardened V8 sandbox and <strong>publishes the result back to the workflow's resume subject</strong>, waking the exact node so the DAG continues. It is the same suspend → run elsewhere → resume contract you saw with <a href="/docs/1.0.0/en/architecture/triggers">Triggers</a>, applied to in-graph computation.</p>
+<p>It shares its <strong>sandbox engine</strong> with <a href="/docs/1.0.0/en/architecture/js-execution">JS Execution</a> — the same <code>isolated-vm</code> V8 isolates on a Piscina worker pool, the same hard limits (<strong>32 MB heap</strong>, <strong>10-second timeout</strong>, isolate recycled every 10,000 runs, no access to Node, the network, or the filesystem). What differs is the <strong>contract</strong>: this service runs <em>one arbitrary user script per node</em> with a workflow's state in scope, not the fixed decode→validation→transform pipeline. As on its sibling, the code runs on <strong>full V8</strong> — modern <strong>ECMAScript (ES2015+)</strong> is native (classes, arrow functions, destructuring, <code>Map</code>/<code>Set</code>, the standard built-ins), bounded only by the isolate's <strong>32 MB</strong> budget.</p>
+<blockquote>
+<p><strong>Port</strong> <code>8001</code> · <strong>Node.js + TypeScript</strong> · <strong><code>isolated-vm</code></strong> V8 isolates on <strong>Piscina</strong> · driven entirely by NATS — no functional HTTP surface · stateless.</p>
+</blockquote>
+<hr>
+<h2 id="the-code-node-contract">The code-node contract</h2>
+<p>Each request injects four globals into the isolate, giving the script the running workflow's context:</p>
+<table>
+<thead>
+<tr>
+<th>Global</th>
+<th>What it holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>event</code></td>
+<td>The event that drives the run.</td>
+</tr>
+<tr>
+<td><code>state</code></td>
+<td>The workflow's persistent state.</td>
+</tr>
+<tr>
+<td><code>inputs</code></td>
+<td>The node's resolved inputs.</td>
+</tr>
+<tr>
+<td><code>nodes</code></td>
+<td>The outputs of prior nodes.</td>
+</tr>
+</tbody>
+</table>
+<p>The script returns two things — <strong><code>output</code></strong> (consumed by downstream nodes) and <strong><code>statePatch</code></strong> (merged into the workflow's state). There are two ways to return them, and the engine accepts both:</p>
+<pre><code class="language-js">// explicit
+result = { output: { celsius }, statePatch: { lastReading: celsius } };
+
+// or convenience — a bare object return is wrapped as { output: &lt;value&gt;, statePatch: {} }
+return { celsius };
+</code></pre>
+<p>The service then publishes a <code>WorkflowScriptCallback</code> — <code>{ status: 'success' | 'error', output?, statePatch?, error? }</code> — to the <code>callbackSubject</code> the runtime supplied, on the workflow <strong>resume</strong> stream. <strong>Exactly one callback is published per request</strong>, success or error (including a <code>SCRIPT_NOT_FOUND</code> when a node's source is missing), so a workflow node never hangs waiting on a result that isn't coming.</p>
+<hr>
+<h2 id="faster-cold-starts--v8-bytecode-caching">Faster cold starts — V8 bytecode caching</h2>
+<p>Unlike the per-event asset pipeline, this service <strong>persists compiled V8 bytecode across cold starts</strong>. On a fresh compile the worker emits the script's <code>cachedData</code>, which is stored (fire-and-forget) in a tiered <strong>bytecode cache</strong> (RAM → disk → MinIO); the next time a worker compiles that node — even in a different pod after a restart — it passes the bytecode back to V8 for a <strong>~1–5 ms</strong> compile instead of <strong>~10–50 ms</strong>. Bytecode is <strong>definition-scoped</strong> and reused across every running instance of a workflow; on a V8 version mismatch it silently falls back to a fresh compile. Source and bytecode are fetched <strong>in parallel</strong> to keep the cold path short.</p>
+<p>The node's JavaScript source itself comes from a tiered cache (<code>{orgId}/{workflowId}/scripts/{nodeId}</code>), kept fresh by a <strong>FANOUT</strong> broadcast the workflow engine emits when a definition changes — so editing a code node takes effect without a restart.</p>
+<hr>
+<h2 id="failure-handling">Failure handling</h2>
+<p>The engine treats misbehaving code as routine, with the same discipline as the asset executor:</p>
+<ul>
+<li>A script that <strong>exhausts the 32 MB heap</strong> disposes its isolate; the worker reports the out-of-memory condition and the message is <strong>NACK'd for backoff retry</strong> with a fresh isolate.</li>
+<li><strong>Any other script error</strong> publishes an <em>error</em> callback to the workflow and <strong>ACKs</strong> the message — the workflow node receives the failure on its <code>error</code> edge rather than the script being retried forever.</li>
+</ul>
+<hr>
+<h2 id="inputs--outputs">Inputs &amp; outputs</h2>
+<p><strong>Consumes (NATS JetStream):</strong> <code>workflow.js.code</code> (stream <code>JSWORKFLOWEXECUTOR-CODE</code>, load-balanced queue consumer) — one message per code node firing; and <code>fanout.workflow.definition.invalidate</code> (FANOUT) to drop stale cached sources/bytecode.</p>
+<p><strong>Produces (NATS):</strong> a <code>WorkflowScriptCallback</code> to the runtime-supplied <code>callbackSubject</code> on the workflow <strong>resume</strong> stream. The service hard-codes no outbound subject — it echoes back to wherever the runtime told it to.</p>
+<p>It exposes <strong>no functional HTTP API</strong> — only <code>/health</code> and <code>/metrics</code>. Every interaction is over NATS, driven by the workflow engine.</p>
+<hr>
+<h2 id="where-to-go-next">Where to go next</h2>
+<table>
+<thead>
+<tr>
+<th>To dive into…</th>
+<th>Go to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The engine that dispatches these nodes</td>
+<td><a href="/docs/1.0.0/en/architecture/workflow">Workflow Engine</a></td>
+</tr>
+<tr>
+<td>The sibling sandbox for device payloads</td>
+<td><a href="/docs/1.0.0/en/architecture/js-execution">JS Execution</a></td>
+</tr>
+</tbody>
+</table>

@@ -1,0 +1,112 @@
+<h1 id="lns">LNS</h1>
+<p>The LNS (LoRaWAN Network Server) is how <strong>LoRaWAN</strong> devices reach MapexOS. Rather than reimplement a LoRaWAN stack, it <strong>embeds <a href="https://www.thethingsindustries.com/stack/">The Things Stack</a></strong> — the production-grade open LoRaWAN engine — as a dependency and runs only the protocol roles it needs, slotting MapexOS in at a few precise seams. The Things Stack handles the radio protocol; MapexOS owns <strong>identity, keys, and data flow</strong>: the LNS feeds TTS its devices from the <a href="/docs/1.0.0/en/architecture/assets">Assets</a> model, and takes the decrypted uplinks back out onto <strong>NATS</strong> for <a href="/docs/1.0.0/en/architecture/js-execution">JS Execution</a> to normalize — exactly like the HTTP and MQTT ingress edges.</p>
+<blockquote>
+<p>Embeds <strong>The Things Stack v3</strong> as a pinned Go dependency, run from its own composition root (TTS is never forked) · gateway transports <strong>UDP</strong> Semtech packet-forwarder (<code>:1700</code>) + <strong>Basics Station</strong> WebSocket (<code>:1887</code>) · <strong>Redis</strong> (hot session) + <strong>MinIO</strong>/<strong>NVMe</strong> (cold-config cache) · no HTTP server, no MongoDB.</p>
+</blockquote>
+<hr>
+<h2 id="overlay-not-fork">Overlay, not fork</h2>
+<p>The LNS starts The Things Stack from <strong>its own composition root</strong> and lights up exactly three roles on one shared component:</p>
+<ul>
+<li><strong>Gateway Server (GS)</strong> — terminates gateway traffic,</li>
+<li><strong>Network Server (NS)</strong> — MAC layer, frame counters, scheduling,</li>
+<li><strong>Join Server (JS)</strong> — OTAA join + session-key derivation.</li>
+</ul>
+<p>It deliberately does <strong>not</strong> start TTS's Application Server, Identity Server, or Console — because MapexOS already owns those concerns (<a href="/docs/1.0.0/en/architecture/js-execution">JS Execution</a> is the codec, <a href="/docs/1.0.0/en/architecture/assets">Assets</a> is the device registry, and the MapexOS frontend is the console). TTS is a pinned dependency, never edited; unused roles are simply never constructed. The result is a real, battle-tested LoRaWAN engine with MapexOS substituted in only where it matters.</p>
+<hr>
+<h2 id="devices-come-from-assets-not-a-tts-database">Devices come from Assets, not a TTS database</h2>
+<p>This is the core trick. The LNS <strong>replaces TTS's device database</strong> with a <strong>hydrate-on-miss</strong> adapter:</p>
+<pre><code> TTS asks for a device
+     │  HOT  → Redis session store (nsredis / jsredis)
+     │  miss
+     └─ COLD → the Assets cold config via the tiered cache
+               (L1 NVMe → L2 MinIO mapex-asset-auth/{assetUUID}.json → Assets HTTP)
+               → mapped to a TTS device → cached → returned
+</code></pre>
+<p>The device's identity, region, class, and <strong>root keys</strong> come from the same <a href="/docs/1.0.0/en/architecture/assets">Assets</a> model the rest of the platform uses (<code>orgId</code> = TTS application, <code>assetUUID</code> = TTS device). Root keys are <strong>decrypted with a key-encryption key fetched from <a href="/docs/1.0.0/en/architecture/vault">Vault</a></strong> at boot and held only in RAM — the LNS never persists plaintext keys. Both <strong>OTAA</strong> (1.0.3 and 1.1) and <strong>ABP</strong> activation are supported, and a <code>fanout.asset.invalidate</code> event evicts both cache tiers the moment a device changes upstream.</p>
+<hr>
+<h2 id="cold-vs-hot-state">Cold vs hot state</h2>
+<p>The split is deliberate and load-bearing:</p>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>What it is</th>
+<th>Where it lives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cold</strong></td>
+<td>identity, root keys, region, class, ABP session — <strong>read-only</strong>, rebuildable from the asset</td>
+<td>the Assets model (cached)</td>
+</tr>
+<tr>
+<td><strong>Hot</strong></td>
+<td>frame counters, derived session keys, MAC state — <strong>disposable</strong></td>
+<td>Redis only</td>
+</tr>
+</tbody>
+</table>
+<p>So the LNS owns <strong>no database of record</strong>. Lose the hot Redis state and a device simply <strong>rejoins</strong> (OTAA) or re-hydrates (ABP) — there is nothing irreplaceable to back up.</p>
+<hr>
+<h2 id="decrypted-uplinks-become-nats-events">Decrypted uplinks become NATS events</h2>
+<p>When TTS validates an uplink's MIC and AES-decrypts it, the LNS dispatches the <strong>plaintext payload</strong> onto NATS — TTS believes it is feeding an Application Server; it is feeding the MapexOS pipeline. It publishes per-device subjects (NATS Core, fire-and-forget):</p>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Subject</th>
+<th>Goes to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Uplink</strong></td>
+<td><code>lorawan.data.{orgId}.{assetUUID}</code></td>
+<td><a href="/docs/1.0.0/en/architecture/js-execution">JS Execution</a> — normalized like any other ingress</td>
+</tr>
+<tr>
+<td><strong>Join</strong></td>
+<td><code>lorawan.join.{orgId}.{assetUUID}</code></td>
+<td>an OTAA join / presence signal</td>
+</tr>
+<tr>
+<td><strong>Downlink status</strong></td>
+<td><code>lorawan.downlink.status.{orgId}.{assetUUID}</code></td>
+<td>the command lifecycle (<code>queued</code> → <code>sent</code> → <code>ack</code>/<code>nack</code>/<code>failed</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>The uplink envelope carries the <code>orgId</code>, <code>assetUUID</code>, <code>fPort</code>, <code>fCnt</code>, and the base64 plaintext payload — so JS Execution resolves the asset and runs the <strong>same decode → validation → transform</strong> pipeline it runs for HTTP and MQTT. The LNS does <strong>not</strong> decode application payloads; that is JS Execution's job.</p>
+<hr>
+<h2 id="gateways-and-downlinks">Gateways and downlinks</h2>
+<p>Gateways are <strong>first-class, registered entities</strong>: only known gateways connect (<code>RequireRegisteredGateways</code>), each drawn from the Assets cold config with its own <strong>frequency plan</strong> (multi-region, plans embedded in the binary). Gateway authentication is <strong>EUI</strong> (UDP) or <strong>mTLS</strong> (Basics Station) — the certificate serial pinned from the asset, the CA chain provisioned from <a href="/docs/1.0.0/en/architecture/vault">Vault</a> PKI.</p>
+<p>For the reverse path, the LNS <strong>consumes</strong> downlink commands from NATS (JetStream stream <code>LORAWAN_DOWNLINK</code>) and pushes them onto the Network Server's downlink queue, emitting the status events above as the command moves through its lifecycle.</p>
+<hr>
+<h2 id="where-to-go-next">Where to go next</h2>
+<table>
+<thead>
+<tr>
+<th>To dive into…</th>
+<th>Go to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Where device identity &amp; keys are defined</td>
+<td><a href="/docs/1.0.0/en/architecture/assets">Assets</a></td>
+</tr>
+<tr>
+<td>The KEK and gateway CA behind it</td>
+<td><a href="/docs/1.0.0/en/architecture/vault">Vault</a></td>
+</tr>
+<tr>
+<td>What normalizes the uplinks it emits</td>
+<td><a href="/docs/1.0.0/en/architecture/js-execution">JS Execution</a></td>
+</tr>
+<tr>
+<td>The MQTT counterpart at the edge</td>
+<td><a href="/docs/1.0.0/en/architecture/mqtt-broker">MQTT Broker</a></td>
+</tr>
+</tbody>
+</table>

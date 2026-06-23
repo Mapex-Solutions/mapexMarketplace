@@ -1,0 +1,130 @@
+<h1 id="security">Security</h1>
+<p>Security in MapexOS is not a feature bolted on the side — it is <strong>woven through every layer</strong>, because the platform's job is to be <em>operated</em>: with identity, isolation, secrets, and audit as first-class parts of the architecture. This page is the <strong>map</strong>: it shows how those layers fit together and points to the service that enforces each one. Nothing here is a separate &quot;security product&quot; — it is how the system is built.</p>
+<p>The shape is <strong>defense in depth</strong>. A request is identified, scoped to a tenant, authorized, served by code it cannot escape, and recorded — and a secret or a device key is encrypted at rest, handed out only to a named service, and never returned in an API response.</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>What it protects</th>
+<th>Enforced by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Identity &amp; access</strong></td>
+<td>who you are, what you may do, where</td>
+<td><a href="/docs/1.0.0/en/architecture/mapexiam">mapexIam</a></td>
+</tr>
+<tr>
+<td><strong>Multi-tenant isolation</strong></td>
+<td>one organization can't see another</td>
+<td><a href="/docs/1.0.0/en/architecture/mapexiam">mapexIam</a> · every service</td>
+</tr>
+<tr>
+<td><strong>Secrets &amp; keys</strong></td>
+<td>credentials, encryption keys, the CA</td>
+<td><a href="/docs/1.0.0/en/architecture/vault">Vault</a></td>
+</tr>
+<tr>
+<td><strong>Device trust</strong></td>
+<td>only real devices connect, as themselves</td>
+<td><a href="/docs/1.0.0/en/architecture/assets">Assets</a> · <a href="#authentication-at-the-edge">Edge Servers</a></td>
+</tr>
+<tr>
+<td><strong>Edge authentication</strong></td>
+<td>every connection proven before admission</td>
+<td><a href="/docs/1.0.0/en/architecture/http-gateway">HTTP Gateway</a> · <a href="/docs/1.0.0/en/architecture/mqtt-broker">MQTT Broker</a> · <a href="/docs/1.0.0/en/architecture/lns">LNS</a></td>
+</tr>
+<tr>
+<td><strong>Code isolation</strong></td>
+<td>customer code can't reach the host</td>
+<td><a href="/docs/1.0.0/en/architecture/js-execution">JS Execution</a> · <a href="/docs/1.0.0/en/architecture/js-workflow-execution">JS Workflow Execution</a></td>
+</tr>
+<tr>
+<td><strong>Audit &amp; traceability</strong></td>
+<td>a complete, queryable record of what happened</td>
+<td><a href="/docs/1.0.0/en/architecture/events">Events</a></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="identity--access">Identity &amp; access</h2>
+<p>Every request is authenticated and authorized against <a href="/docs/1.0.0/en/architecture/mapexiam">mapexIam</a>, the identity control plane. Users log in with <strong>email + bcrypt password</strong> and receive a short-lived <strong>access JWT</strong> plus a <strong>refresh JWT</strong>; refresh tokens are stored per session and <strong>rotated with replay protection</strong>. Authorization is <strong>role-based</strong>: a user's resolved permissions for an organization are computed once and cached, and <strong>every other service reads that cache</strong> through shared middleware — which is why each service describes its routes as <em>permission-gated</em>. Roles cascade down the organization tree only where a descendant opts in (<code>merge</code> vs <code>strict</code>), so inherited access is deliberate, never accidental.</p>
+<hr>
+<h2 id="multi-tenant-isolation">Multi-tenant isolation</h2>
+<p>A single MapexOS deployment serves many organizations with <strong>zero shared visibility</strong>. Every asset, event, template, role, and credential is scoped to an <strong>organization</strong> in an unbounded hierarchy (<code>vendor → customer → site → building → floor → zone</code>), carried as a denormalized <strong><code>pathKey</code></strong>. Listing, querying, and routing are filtered by the caller's <strong>coverage</strong> — the slice of the tree they are allowed to reach — so one tenant cannot enumerate, read, or route another's data. Isolation is a property of the data model and the cache, not a filter someone has to remember to apply.</p>
+<hr>
+<h2 id="secrets--keys">Secrets &amp; keys</h2>
+<p>No secret is ever stored in plaintext or returned in an API response. <a href="/docs/1.0.0/en/architecture/vault">Vault</a> is the <strong>root of trust</strong>:</p>
+<ul>
+<li>Third-party <strong>credentials</strong> are sealed with <strong>two-layer envelope encryption</strong> (a master key wraps a per-record data key; AES-256-GCM). The encrypted fields physically cannot serialize into a response; plaintext is handed out only over a hidden, API-key-gated internal endpoint, for the life of one request.</li>
+<li>Services that need to encrypt their own secrets get a <strong>context-scoped key (KEK)</strong> and run the encryption <strong>locally</strong> — the master key never leaves Vault. This is how <a href="/docs/1.0.0/en/architecture/assets">Assets</a> seals LoRaWAN device keys.</li>
+<li>Vault is also the <strong>certificate authority</strong> (see below); its CA private keys are envelope-encrypted and decrypted per request, never cached.</li>
+</ul>
+<hr>
+<h2 id="device-trust--pki">Device trust &amp; PKI</h2>
+<p>Devices prove who they are with credentials <a href="/docs/1.0.0/en/architecture/assets">Assets</a> issues and <a href="/docs/1.0.0/en/architecture/vault">Vault</a> roots. An MQTT device authenticates by <strong>bcrypt password</strong> or by a <strong>per-device X.509 client certificate</strong> (ECDSA P-256), signed by an <strong>intermediate CA fetched from Vault</strong> and held only in RAM. A certificate's private key is returned <strong>once</strong> at issue time and <strong>never persisted</strong> — only its metadata is kept — and revocation is immediate. LoRaWAN gateways authenticate by <strong>mTLS</strong> with the serial pinned from the asset; LoRaWAN device keys are <strong>envelope-encrypted</strong> with a Vault KEK. One device's credentials grant access to exactly that device — nothing else.</p>
+<hr>
+<h2 id="authentication-at-the-edge">Authentication at the edge</h2>
+<p>Every external connection is proven <strong>before</strong> anything it sends is admitted, and the decision is made <strong>at the edge it lands on</strong> — off the same Assets-authored projection, with no central auth bottleneck:</p>
+<ul>
+<li>The <strong><a href="/docs/1.0.0/en/architecture/http-gateway">HTTP Gateway</a></strong> authenticates each source by its own policy (API key, JWT, OAuth2/JWKS bearer, IP allow-list, or none); a disabled source is refused before any auth runs, and <strong>every rejection is audited</strong>.</li>
+<li>The <strong><a href="/docs/1.0.0/en/architecture/mqtt-broker">MQTT Broker</a></strong> decides every <code>CONNECT</code> locally (bcrypt or cert serial), <strong>fails closed</strong> on a missing entry or a store outage, and enforces a strict ACL: a device may only touch <strong>its own</strong> topics — cross-asset access is denied in the broker.</li>
+<li>The <strong><a href="/docs/1.0.0/en/architecture/lns">LNS</a></strong> only admits <strong>registered</strong> gateways and draws every device's identity and keys from the Assets model.</li>
+</ul>
+<p>Tenancy can't be forged at the edge: a request's <code>orgId</code> is taken from the <strong>authenticated source</strong>, never from the payload body.</p>
+<hr>
+<h2 id="sandboxed-code-execution">Sandboxed code execution</h2>
+<p>MapexOS runs <strong>customer-authored JavaScript</strong> — template transform scripts and workflow code nodes — and treats all of it as untrusted. Every script runs inside an <strong><code>isolated-vm</code> V8 isolate</strong> (<a href="/docs/1.0.0/en/architecture/js-execution">JS Execution</a> · <a href="/docs/1.0.0/en/architecture/js-workflow-execution">JS Workflow Execution</a>) with a hard <strong>memory cap</strong>, a <strong>wall-clock timeout</strong>, and <strong>no access to Node, the network, or the filesystem</strong>. A script can compute and transform, and nothing more — it cannot reach the host, another tenant, or the outside world.</p>
+<hr>
+<h2 id="audit--traceability">Audit &amp; traceability</h2>
+<p>Everything that happens is recorded and queryable. <a href="/docs/1.0.0/en/architecture/events">Events</a> persists every event and every execution to ClickHouse with <strong>per-organization retention</strong>, so compliance evidence is a query, not a project. A single <strong><code>eventTrackerId</code></strong> follows one event end to end — ingest → route → trigger → workflow → storage — so a full story is one lookup. Routing decisions are <strong>explainable</strong> (each records why it did or didn't match), and <strong>rejected</strong> connections are audited too, not silently dropped.</p>
+<hr>
+<h2 id="transport-security">Transport security</h2>
+<p>External transports use <strong>TLS</strong>: the HTTP edge over HTTPS, MQTT over TLS/mTLS (port <code>8883</code>), LoRaWAN Basics Station over mTLS. Certificate verification is <strong>on</strong> — the platform ships no connector or client that disables it — and outbound connectors carry their own per-target TLS and timeouts. Internal service-to-service calls run on a trusted network and are gated by API keys.</p>
+<hr>
+<h2 id="secure-by-default">Secure by default</h2>
+<p>The defaults exist to fit a laptop, not to ship to production unguarded — so the platform <strong>refuses to run unguarded</strong>. Every Mapex service has a <strong>boot-time security guard</strong>: when <code>GO_ENV</code> / <code>NODE_ENV</code> is not a development value <strong>and</strong> any sensitive variable (<code>AUTH_SECRET</code>, <code>INTERNAL_API_KEY</code>, <code>NATS_PASSWORD</code>, the credential master key, …) is missing or still equal to its dev default, the service <strong>fails fast with a loud fatal error</strong> instead of booting with a leaked or weak secret. In local mode it prints a per-service <code>[SECURITY WARNING]</code> so the dev posture is never silent.</p>
+<hr>
+<h2 id="hardening-checklist">Hardening checklist</h2>
+<p>MapexOS is <strong>self-hosted</strong>, so the final posture is yours. Before production:</p>
+<ol>
+<li><strong>Generate every secret.</strong> Replace all dev defaults — <code>AUTH_SECRET</code>, <code>INTERNAL_API_KEY</code>, the Vault master key, datastore passwords (e.g. <code>openssl rand -hex 32</code>). The boot guard enforces this; don't fight it.</li>
+<li><strong>Set <code>GO_ENV</code>/<code>NODE_ENV=prod</code></strong> and point services at a real, git-ignored env file (never commit it).</li>
+<li><strong>Terminate TLS everywhere</strong> external — HTTPS at the gateway, mTLS on the broker and LNS — with certificates you control.</li>
+<li><strong>Run on Kubernetes</strong> with real resource requests/limits and network policies that close internal ports to the outside.</li>
+<li><strong>Lock down the datastores</strong> — MongoDB, ClickHouse, Redis, MinIO, NATS — to the cluster network with authentication enabled.</li>
+<li><strong>Rotate</strong> JWT secrets, API keys, and the Vault master key on a schedule, and set per-organization <strong>retention</strong> to your compliance needs.</li>
+<li><strong>Scope operators</strong> with least-privilege roles in the organization tree rather than broad recursive grants.</li>
+</ol>
+<hr>
+<h2 id="reporting-a-vulnerability">Reporting a vulnerability</h2>
+<p>If you find a security issue, please disclose it responsibly to the maintainers rather than opening a public issue, and allow time for a fix before any public discussion.</p>
+<hr>
+<h2 id="where-to-go-next">Where to go next</h2>
+<table>
+<thead>
+<tr>
+<th>To dive into…</th>
+<th>Go to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity, roles, and tenancy</td>
+<td><a href="/docs/1.0.0/en/architecture/mapexiam">mapexIam</a></td>
+</tr>
+<tr>
+<td>Secrets, keys, and the CA</td>
+<td><a href="/docs/1.0.0/en/architecture/vault">Vault</a></td>
+</tr>
+<tr>
+<td>Device certificates &amp; presence</td>
+<td><a href="/docs/1.0.0/en/architecture/assets">Assets</a></td>
+</tr>
+<tr>
+<td>The full platform map</td>
+<td><a href="/docs/1.0.0/en/architecture/overview">Architecture Overview</a></td>
+</tr>
+</tbody>
+</table>

@@ -1,0 +1,85 @@
+<h1 id="vault">Vault</h1>
+<p>mapexVault is the <strong>root of trust</strong> of MapexOS. It holds the things that must never leak: third-party <strong>credentials</strong>, the <strong>keys</strong> that let other services encrypt their own secrets, and the <strong>certificate authority</strong> behind every device identity. It sits off the telemetry path — it ingests no events and routes nothing — but the rest of the platform's security is built on it. Its guiding rule is simple: <strong>a secret goes in, and the plaintext never comes back out in an API response</strong> — only to a named internal service, over an authenticated internal channel, for exactly as long as the request lives.</p>
+<p>It does three jobs, in three modules: <strong>credentials</strong>, <strong>KEK</strong>, and <strong>PKI</strong>.</p>
+<blockquote>
+<p><strong>Port</strong> <code>5010</code> · <strong>Go</strong> (DDD + Hexagonal) · <strong>MongoDB</strong> (encrypted at rest) · <strong>NATS JetStream</strong> (scheduled token refresh) · <strong>AES-256-GCM</strong> envelope encryption · <strong>crypto/x509</strong> CA. Secret material is tagged <code>json:&quot;-&quot;</code> — it cannot serialize into a response.</p>
+</blockquote>
+<hr>
+<h2 id="credentials--two-layer-envelope-encryption">Credentials — two-layer envelope encryption</h2>
+<p>A credential is a third-party secret — an API token, an OAuth grant, a username/password (<code>manual</code> · <code>oauth2</code> · <code>userAndPass</code>). It is stored under <strong>two layers of envelope encryption</strong>:</p>
+<pre><code> master key  ──wraps──▶  per-record DEK  ──encrypts──▶  the secret data
+ (in Vault only)         (stored encrypted)              (AES-256-GCM)
+</code></pre>
+<p>A single <strong>master key</strong> (held only by Vault) wraps a <strong>per-record data-encryption key</strong>; that DEK encrypts the payload. Only the four envelope fields are persisted (<code>encryptedDEK</code>, <code>dekNonce</code>, <code>encryptedData</code>, <code>dataNonce</code>) — every one tagged <code>json:&quot;-&quot;</code>, so the secret <strong>physically cannot</strong> be marshaled into an API response. Plaintext is handed out on exactly one path: a hidden, API-key-gated <code>GET /internal/credentials/:id/decrypt</code>, used by the <a href="/docs/1.0.0/en/architecture/workflow">Workflow</a> engine to run a plugin's action — and even there it lives only for the request.</p>
+<p>Because each record has its own DEK, compromising one record's key exposes one record — not the store.</p>
+<hr>
+<h2 id="token-refresh--scheduled-never-polled">Token refresh — scheduled, never polled</h2>
+<p>OAuth and token credentials expire, so Vault keeps them alive <strong>without a polling cron</strong>. When a credential is stored, Vault schedules a single <strong>NATS JetStream message</strong> to fire at <strong><code>expiry − 15 minutes</code></strong>; when it fires, Vault runs the token exchange and <strong>re-arms the next timer</strong>. An hourly <strong>reconciler</strong> reseeds any timer lost to a NATS restart or drift, and already-expired credentials are rescheduled to refresh almost immediately on boot.</p>
+<p>The clever part is the separation: a credential's <strong><code>providerConfig</code></strong> — <em>how</em> to refresh it (the HTTP method, URL, headers, and where in the response the new token lives) — is stored <strong>unencrypted on purpose</strong>. The secret values are injected only at execution time through <code>{{credential.*}}</code> placeholders. So the refresh worker knows <em>where and how</em> to refresh <strong>without ever decrypting the secret</strong> to find out.</p>
+<hr>
+<h2 id="kek--let-services-encrypt-locally-without-the-master-key">KEK — let services encrypt locally, without the master key</h2>
+<p>Not every service should call Vault to encrypt every secret, and none should ever hold the master key. So Vault hands out <strong>key-encryption keys</strong>: a context-scoped AES-256 key (for example <code>lorawan_device_keys</code>) served over <code>GET /internal/kek/:context</code>. A service fetches its KEK once and then runs <strong>its own local envelope encryption</strong> with it — the way <a href="/docs/1.0.0/en/architecture/assets">Assets</a> seals LoRaWAN device keys before storing them.</p>
+<p>The master key never leaves Vault; the consuming service holds only a scoped key for its own context. KEKs are seeded at deploy time, not authored at runtime, and the endpoint returns <code>503</code> until a context is seeded — a clear &quot;not ready yet&quot; the caller can retry against.</p>
+<hr>
+<h2 id="pki--the-on-demand-certificate-authority">PKI — the on-demand certificate authority</h2>
+<p>Vault is the <strong>certificate authority</strong> beneath every device identity. It stores the <strong>root and intermediate CA</strong> with their private keys <strong>envelope-encrypted at rest</strong>, and exposes three internal operations:</p>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Returns</th>
+<th>Consumed by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /internal/pki/intermediate_ca_bundle</code></td>
+<td>the intermediate CA cert + key</td>
+<td><a href="/docs/1.0.0/en/architecture/assets">Assets</a> — held in RAM to sign per-device client certs</td>
+</tr>
+<tr>
+<td><code>GET /internal/pki/ca_chain</code></td>
+<td>the public root + intermediate chain</td>
+<td>anyone verifying a MapexOS cert</td>
+</tr>
+<tr>
+<td><code>POST /internal/pki/sign_server</code></td>
+<td>a signed server certificate</td>
+<td>the <a href="/docs/1.0.0/en/architecture/mqtt-broker">MQTT broker</a>'s TLS identity</td>
+</tr>
+</tbody>
+</table>
+<p>The defining property: <strong>the CA private key is decrypted per request and discarded</strong> — it is never cached in memory between calls, and the caller is expected to discard it the moment it is used. The whole device-PKI story you saw in <a href="/docs/1.0.0/en/architecture/assets">Assets</a> — per-device ECDSA certs signed by an intermediate CA held in RAM — <strong>roots here</strong>: Assets fetches the bundle once at boot, and Vault is where that bundle's trust actually comes from.</p>
+<hr>
+<h2 id="multi-tenant-by-default">Multi-tenant by default</h2>
+<p>Every external credential operation is scoped to the caller's <code>orgId</code> and hierarchical <code>pathKey</code> from the request context — one organization can never read or refresh another's secrets. Credential templates are excluded from owned reads and cannot be created or flipped through the external API.</p>
+<hr>
+<h2 id="inputs--outputs">Inputs &amp; outputs</h2>
+<p><strong>HTTP (external, JWT + permissions)</strong> under <code>/api/v1/credentials</code>: <code>POST</code> · <code>GET</code> · <code>GET /:id</code> · <code>PATCH /:id</code> · <code>DELETE /:id</code>.</p>
+<p><strong>HTTP (internal, API-key, hidden):</strong> <code>/internal/credentials/:id/decrypt</code> (→ Workflow), <code>/internal/kek/:context</code> (→ Assets), <code>/internal/pki/intermediate_ca_bundle</code> (→ Assets), <code>/internal/pki/ca_chain</code>, <code>/internal/pki/sign_server</code> (→ MQTT broker).</p>
+<p><strong>NATS (self-delivered):</strong> per-credential refresh schedules on <code>MAPEXVAULT-SCHEDULE</code>, and the reconciler stream that keeps them seeded.</p>
+<p>It publishes nothing onto the cross-service bus and consumes no telemetry — Vault is infrastructure the other services <em>call</em>, not a stage in the pipeline.</p>
+<hr>
+<h2 id="where-to-go-next">Where to go next</h2>
+<table>
+<thead>
+<tr>
+<th>To dive into…</th>
+<th>Go to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Who uses the CA and the LoRaWAN KEK</td>
+<td><a href="/docs/1.0.0/en/architecture/assets">Assets</a></td>
+</tr>
+<tr>
+<td>Who decrypts credentials to run plugins</td>
+<td><a href="/docs/1.0.0/en/architecture/workflow">Workflow Engine</a></td>
+</tr>
+<tr>
+<td>The broker whose server cert Vault signs</td>
+<td><a href="/docs/1.0.0/en/architecture/mqtt-broker">MQTT Broker</a></td>
+</tr>
+</tbody>
+</table>

@@ -1,0 +1,140 @@
+{
+  "sections": [
+    {
+      "slug": "introduction",
+      "title": "Introduction",
+      "pages": [
+        {
+          "slug": "what-is-mapexos",
+          "title": "What is MapexOS?",
+          "description": "The self-hosted operating layer for your connected operation — turn every"
+        },
+        {
+          "slug": "why-mapexos",
+          "title": "Why MapexOS?",
+          "description": "The pattern we kept seeing — and the decision to build one governed"
+        }
+      ]
+    },
+    {
+      "slug": "getting-started",
+      "title": "Getting started",
+      "pages": [
+        {
+          "slug": "concepts",
+          "title": "Core Concepts",
+          "description": "The vocabulary of MapexOS — the building blocks every operator, integrator, and architect needs to know before going deeper."
+        },
+        {
+          "slug": "installation",
+          "title": "Installation",
+          "description": "Boot the full MapexOS stack on one machine with a single command — prerequisites, access, what's running, and the path to production."
+        },
+        {
+          "slug": "quickstart",
+          "title": "Quickstart",
+          "description": "Wire a temperature sensor end to end — from a raw reading to a stored event you can see in Grafana — in a few minutes."
+        }
+      ]
+    },
+    {
+      "slug": "architecture",
+      "title": "Architecture",
+      "pages": [
+        {
+          "slug": "overview",
+          "title": "Architecture Overview",
+          "description": "How MapexOS is engineered — design principles, the event pipeline, multi-tenancy, durability, and the 10 services that compose the platform."
+        },
+        {
+          "slug": "security",
+          "title": "Security",
+          "description": "How MapexOS secures a connected operation end to end — identity, multi-tenancy, secrets, device trust, edge authentication, sandboxed code, and a complete audit trail — and how to harden a deployment."
+        },
+        {
+          "slug": "mapexiam",
+          "title": "mapexIam",
+          "description": "The identity and access control plane of MapexOS — users, the organization hierarchy, and the permission and coverage caches that gate and scope every request across every other service.",
+          "group": "Go Services"
+        },
+        {
+          "slug": "router",
+          "title": "Router",
+          "description": "The dispatcher of MapexOS — evaluates conditional match rules against every event and fans it out to persistence, automation, and notification, with routing decided from trusted asset state, not the payload.",
+          "group": "Go Services"
+        },
+        {
+          "slug": "workflow",
+          "title": "Workflow Engine",
+          "description": "The automation brain of MapexOS — a durable, NATS-native DAG engine that decides and delegates, surviving restarts and resuming mid-graph.",
+          "group": "Go Services"
+        },
+        {
+          "slug": "triggers",
+          "title": "Triggers",
+          "description": "The service that talks to the outside world — one egress point, eight protocol connectors, fired standalone from the Router or integrated with workflows through a fully async resume.",
+          "group": "Go Services"
+        },
+        {
+          "slug": "events",
+          "title": "Events",
+          "description": "The system of record for MapexOS — a ClickHouse sink that turns every signal into a typed, queryable, per-tenant-retained event, traceable end to end by a single tracking id.",
+          "group": "Go Services"
+        },
+        {
+          "slug": "assets",
+          "title": "Assets",
+          "description": "The source of truth for everything connected to MapexOS — the asset and template model, the EVA field schema, the device PKI and presence control plane, and the read-model cache that every other service is rebuilt from.",
+          "group": "Go Services"
+        },
+        {
+          "slug": "vault",
+          "title": "Vault",
+          "description": "The root of trust for MapexOS — an envelope-encrypted secret store, a key-distribution service, and the certificate authority behind every device identity. Secrets are stored, never surrendered.",
+          "group": "Go Services"
+        },
+        {
+          "slug": "js-execution",
+          "title": "JS Execution",
+          "description": "The normalization engine of MapexOS — runs each asset's template scripts inside hardened V8 isolates to turn any vendor's raw payload into one standard, typed event, safely and at scale.",
+          "group": "JS Services"
+        },
+        {
+          "slug": "js-workflow-execution",
+          "title": "JS Workflow Execution",
+          "description": "The compute substrate for workflow code nodes — runs each node's JavaScript in a hardened V8 isolate and hands the result back to the workflow engine to resume the DAG.",
+          "group": "JS Services"
+        },
+        {
+          "slug": "http-gateway",
+          "title": "HTTP Gateway",
+          "description": "The front door of MapexOS — an authenticated HTTP ingestion edge where every external source enters with its own auth policy, gets a correlation id, and is admitted to the pipeline with the leanest possible payload.",
+          "group": "Edge Servers"
+        },
+        {
+          "slug": "mqtt-broker",
+          "title": "MQTT Broker",
+          "description": "The MQTT ingress edge of MapexOS — Eclipse Mosquitto with a single Go plugin that authenticates every connection locally off the Assets projection and turns authorized traffic into structured NATS events.",
+          "group": "Edge Servers"
+        },
+        {
+          "slug": "lns",
+          "title": "LNS",
+          "description": "The LoRaWAN edge of MapexOS — a network server built as a thin overlay on The Things Stack that draws its devices from the Assets model and turns decrypted uplinks into NATS events.",
+          "group": "Edge Servers"
+        }
+      ]
+    },
+    {
+      "slug": "reference",
+      "title": "Reference",
+      "pages": [
+        {
+          "slug": "about-creator",
+          "title": "About the Creator",
+          "description": ""
+        }
+      ]
+    }
+  ]
+}

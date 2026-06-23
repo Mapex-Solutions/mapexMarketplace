@@ -25,7 +25,9 @@
 		"site": "https://www.milesight.com",
 		"support": "https://support.milesight-iot.com"
 	},
-	"images": {},
+	"images": {
+		"device": "images/device.svg"
+	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
 		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/em300-cl-datasheet-en.pdf"

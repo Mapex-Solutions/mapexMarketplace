@@ -7,19 +7,15 @@
 		"pt-BR": "WS201 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight WS201 — LoRaWAN (Class A) sensor that monitors button presses, distance / level and temperature. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight WS201 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, distância / nível e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight WS201 — LoRaWAN (Class A) sensor that monitors distance / level. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WS201 — sensor LoRaWAN (Classe A) que monitora distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"button",
-		"distance",
-		"temperature"
+		"distance"
 	],
 	"tags": [
-		"button",
 		"distance",
-		"temperature",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -30,7 +26,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.png"
+		"device": "images/device.svg"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",

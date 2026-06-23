@@ -7,21 +7,19 @@
 		"pt-BR": "WT401 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight WT401 — LoRaWAN (Class A) sensor that monitors button presses, humidity, occupancy / motion and temperature. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight WT401 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, umidade, ocupação / movimento e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight WT401 — LoRaWAN (Class A) sensor that monitors temperature, humidity and occupancy / motion. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WT401 — sensor LoRaWAN (Classe A) que monitora temperatura, umidade e presença / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"button",
+		"temperature",
 		"humidity",
-		"motion",
-		"temperature"
+		"motion"
 	],
 	"tags": [
-		"button",
+		"temperature",
 		"humidity",
 		"motion",
-		"temperature",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -31,7 +29,9 @@
 		"site": "https://www.milesight.com",
 		"support": "https://support.milesight-iot.com"
 	},
-	"images": {},
+	"images": {
+		"device": "images/device.svg"
+	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
 		"manual": "files/manual.pdf",

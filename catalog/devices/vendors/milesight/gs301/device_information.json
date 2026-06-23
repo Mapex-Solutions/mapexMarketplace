@@ -7,17 +7,19 @@
 		"pt-BR": "GS301 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight GS301 — LoRaWAN (Class A) sensor that monitors button presses and distance / level. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight GS301 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão e distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight GS301 — LoRaWAN (Class A) sensor that monitors temperature, humidity and air quality. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight GS301 — sensor LoRaWAN (Classe A) que monitora temperatura, umidade e qualidade do ar. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"button",
-		"distance"
+		"temperature",
+		"humidity",
+		"air_quality"
 	],
 	"tags": [
-		"button",
-		"distance",
+		"temperature",
+		"humidity",
+		"air_quality",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -28,7 +30,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.png"
+		"device": "images/device.svg"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",

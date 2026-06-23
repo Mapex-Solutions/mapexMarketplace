@@ -7,19 +7,15 @@
 		"pt-BR": "WT101 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight WT101 — LoRaWAN (Class A) sensor that monitors button presses, temperature and water leaks. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight WT101 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, temperatura e vazamento de água. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight WT101 — LoRaWAN (Class A) sensor that monitors temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WT101 — sensor LoRaWAN (Classe A) que monitora temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"button",
-		"temperature",
-		"water_leak"
+		"temperature"
 	],
 	"tags": [
-		"button",
 		"temperature",
-		"water_leak",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -30,7 +26,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.png"
+		"device": "images/device.svg"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",

@@ -7,14 +7,18 @@
 		"pt-BR": "WS515 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight WS515 — LoRaWAN (Class A) sensor that monitors relay / dry-contact state. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the WS51X series.)",
-		"pt-BR": "Milesight WS515 — sensor LoRaWAN (Classe A) que monitora relé / contato seco. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série WS51X.)"
+		"en-US": "Milesight WS515 — LoRaWAN (Class A) sensor that monitors electric current, voltage / power and dry-contact / pulse inputs. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WS515 — sensor LoRaWAN (Classe A) que monitora corrente elétrica, tensão / energia e entradas dry-contact / pulso. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
+		"current",
+		"voltage",
 		"dry_contact"
 	],
 	"tags": [
+		"current",
+		"voltage",
 		"dry_contact",
 		"milesight"
 	],
@@ -25,7 +29,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.png"
+		"device": "images/device.svg"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",

@@ -7,17 +7,17 @@
 		"pt-BR": "WT303-WT304 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight WT303-WT304 — LoRaWAN (Class A) sensor that monitors button presses and temperature. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight WT303-WT304 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight WT303-WT304 — LoRaWAN (Class A) sensor that monitors temperature and humidity. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WT303-WT304 — sensor LoRaWAN (Classe A) que monitora temperatura e umidade. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"button",
-		"temperature"
+		"temperature",
+		"humidity"
 	],
 	"tags": [
-		"button",
 		"temperature",
+		"humidity",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -27,7 +27,9 @@
 		"site": "https://www.milesight.com",
 		"support": "https://support.milesight-iot.com"
 	},
-	"images": {},
+	"images": {
+		"device": "images/device.svg"
+	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
 		"manual": "files/manual.pdf",

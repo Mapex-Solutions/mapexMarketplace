@@ -7,15 +7,19 @@
 		"pt-BR": "WS558 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight WS558 — LoRaWAN (Class A) sensor that monitors light / illuminance. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight WS558 — sensor LoRaWAN (Classe A) que monitora luminosidade. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight WS558 — LoRaWAN (Class A) sensor that monitors electric current, voltage / power and dry-contact / pulse inputs. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WS558 — sensor LoRaWAN (Classe A) que monitora corrente elétrica, tensão / energia e entradas dry-contact / pulso. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"light"
+		"current",
+		"voltage",
+		"dry_contact"
 	],
 	"tags": [
-		"light",
+		"current",
+		"voltage",
+		"dry_contact",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -26,7 +30,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.png"
+		"device": "images/device.svg"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",

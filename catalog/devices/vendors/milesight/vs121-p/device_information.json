@@ -7,8 +7,8 @@
 		"pt-BR": "VS121-P Contador de Pessoas AI Milesight (PoE)"
 	},
 	"description": {
-		"en-US": "Milesight VS121-P — the IP-connected (Ethernet PoE) AI workplace sensor that posts a JSON region people-counting report (occupancy per region) over HTTP(S)/MQTT(S), unlike the LoRaWAN nodes.",
-		"pt-BR": "Milesight VS121-P — sensor AI de ocupação conectado por IP (Ethernet PoE) que posta um relatório JSON de contagem por região (ocupação) via HTTP(S)/MQTT(S), diferente dos nós LoRaWAN."
+		"en-US": "Milesight VS121-P — HTTP sensor that monitors people counting. Reports periodic JSON over HTTP/MQTT.",
+		"pt-BR": "Milesight VS121-P — sensor HTTP que monitora contagem de pessoas. Reporta JSON periódico via HTTP/MQTT."
 	},
 	"protocol": "http",
 	"readingTypes": [
@@ -16,9 +16,6 @@
 	],
 	"tags": [
 		"passage_counter",
-		"people-counter",
-		"poe",
-		"tof",
 		"milesight"
 	],
 	"vendor": {
@@ -28,7 +25,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": ""
+		"device": "images/device.svg"
 	},
 	"files": {
 		"datasheet": "",

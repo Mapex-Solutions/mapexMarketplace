@@ -7,15 +7,17 @@
 		"pt-BR": "TS602 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight TS602 — LoRaWAN (Class A) sensor that monitors temperature. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the TS60X series.)",
-		"pt-BR": "Milesight TS602 — sensor LoRaWAN (Classe A) que monitora temperatura. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série TS60X.)"
+		"en-US": "Milesight TS602 — LoRaWAN (Class A) sensor that monitors temperature and humidity. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight TS602 — sensor LoRaWAN (Classe A) que monitora temperatura e umidade. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"temperature"
+		"temperature",
+		"humidity"
 	],
 	"tags": [
 		"temperature",
+		"humidity",
 		"milesight"
 	],
 	"vendor": {
@@ -25,7 +27,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": ""
+		"device": "images/device.svg"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",

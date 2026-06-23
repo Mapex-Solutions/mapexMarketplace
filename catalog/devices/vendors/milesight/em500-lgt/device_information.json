@@ -7,18 +7,14 @@
 		"pt-BR": "EM500-LGT Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight EM500-LGT — LoRaWAN (Class A) sensor that monitors button presses, open/close status and light / illuminance. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight EM500-LGT — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, status de abertura/fechamento e luminosidade. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight EM500-LGT — LoRaWAN (Class A) sensor that monitors light / illuminance. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight EM500-LGT — sensor LoRaWAN (Classe A) que monitora luz / iluminância. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"button",
-		"door",
 		"light"
 	],
 	"tags": [
-		"button",
-		"door",
 		"light",
 		"milesight"
 	],
@@ -29,7 +25,9 @@
 		"site": "https://www.milesight.com",
 		"support": "https://support.milesight-iot.com"
 	},
-	"images": {},
+	"images": {
+		"device": "images/device.svg"
+	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
 		"manual": "files/manual.pdf",

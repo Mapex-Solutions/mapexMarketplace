@@ -7,16 +7,14 @@
 		"pt-BR": "VS340 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight VS340 — LoRaWAN (Class A) sensor that monitors people counts and occupancy / motion. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the VS34X series.)",
-		"pt-BR": "Milesight VS340 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série VS34X.)"
+		"en-US": "Milesight VS340 — LoRaWAN (Class A) sensor that monitors occupancy / motion. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight VS340 — sensor LoRaWAN (Classe A) que monitora presença / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"passage_counter",
 		"motion"
 	],
 	"tags": [
-		"passage_counter",
 		"motion",
 		"milesight"
 	],
@@ -27,7 +25,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.png"
+		"device": "images/device.svg"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",

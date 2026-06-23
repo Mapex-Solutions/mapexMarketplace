@@ -30,7 +30,7 @@
 			"lorawan": {
 				"fport": 85,
 				"confirmed": false,
-				"payloadHex": "0175{{randInt(10,99)}}0367{{randInt(10000000,99999999)}}06d9{{randInt(1000,9999)}}"
+				"payloadHex": "0175{{randInt(10,99)}}0367{{randInt(1000,9999)}}0500{{randInt(10,99)}}06d9{{randInt(10000000,99999999)}}{{randInt(10000000,99999999)}}0700{{randInt(10,99)}}"
 			},
 			"schedule": {
 				"enabled": false,

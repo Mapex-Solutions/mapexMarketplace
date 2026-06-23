@@ -7,22 +7,14 @@
 		"pt-BR": "VS121 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight VS121 — LoRaWAN (Class A) sensor that monitors button presses, flow rate, light / illuminance, occupancy / motion and people counts. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight VS121 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, vazão, luminosidade, ocupação / movimento e contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight VS121 — LoRaWAN (Class A) sensor that monitors people counting. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight VS121 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"button",
-		"flow",
-		"light",
-		"motion",
 		"passage_counter"
 	],
 	"tags": [
-		"button",
-		"flow",
-		"light",
-		"motion",
 		"passage_counter",
 		"milesight"
 	],
@@ -34,7 +26,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.png"
+		"device": "images/device.svg"
 	},
 	"files": {
 		"manual": "files/manual.pdf",

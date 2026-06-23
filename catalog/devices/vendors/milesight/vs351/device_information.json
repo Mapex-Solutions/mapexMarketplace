@@ -7,15 +7,17 @@
 		"pt-BR": "VS351 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight VS351 — LoRaWAN (Class A) sensor that monitors people counts. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight VS351 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight VS351 — LoRaWAN (Class A) sensor that monitors people counting and temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight VS351 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"passage_counter"
+		"passage_counter",
+		"temperature"
 	],
 	"tags": [
 		"passage_counter",
+		"temperature",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -26,7 +28,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.jpg"
+		"device": "images/device.svg"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",

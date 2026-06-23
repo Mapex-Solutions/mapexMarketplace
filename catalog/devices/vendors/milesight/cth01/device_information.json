@@ -7,15 +7,19 @@
 		"pt-BR": "CTH01 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight CTH01 — LoRaWAN (Class A) sensor that monitors open/close status. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight CTH01 — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight CTH01 — LoRaWAN (Class A) sensor that monitors electric current, voltage / power and temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight CTH01 — sensor LoRaWAN (Classe A) que monitora corrente elétrica, tensão / energia e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"door"
+		"current",
+		"voltage",
+		"temperature"
 	],
 	"tags": [
-		"door",
+		"current",
+		"voltage",
+		"temperature",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -25,7 +29,9 @@
 		"site": "https://www.milesight.com",
 		"support": "https://support.milesight-iot.com"
 	},
-	"images": {},
+	"images": {
+		"device": "images/device.svg"
+	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
 		"manual": "files/manual.pdf",

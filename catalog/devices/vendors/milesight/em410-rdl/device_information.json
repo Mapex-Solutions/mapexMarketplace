@@ -7,15 +7,17 @@
 		"pt-BR": "EM410-RDL Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight EM410-RDL — LoRaWAN (Class A) sensor that monitors distance / level. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight EM410-RDL — sensor LoRaWAN (Classe A) que monitora distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight EM410-RDL — LoRaWAN (Class A) sensor that monitors distance / level and temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight EM410-RDL — sensor LoRaWAN (Classe A) que monitora distância / nível e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"distance"
+		"distance",
+		"temperature"
 	],
 	"tags": [
 		"distance",
+		"temperature",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -25,7 +27,9 @@
 		"site": "https://www.milesight.com",
 		"support": "https://support.milesight-iot.com"
 	},
-	"images": {},
+	"images": {
+		"device": "images/device.svg"
+	},
 	"files": {},
 	"collectedAt": "2026-06-18T20:26:09.342Z",
 	"_sourceUrl": "https://www.milesight.com/iot/product/lorawan-sensor/em410-rdl"

@@ -7,25 +7,27 @@
 		"pt-BR": "AM307L Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight AM307L — LoRaWAN (Class A) sensor that monitors CO₂, temperature, humidity, air quality, light and occupancy / motion. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the AM300 series.)",
-		"pt-BR": "Milesight AM307L — sensor LoRaWAN (Classe A) que monitora CO₂, temperatura, umidade, qualidade do ar, luminosidade e ocupação / movimento. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série AM300.)"
+		"en-US": "Milesight AM307L — LoRaWAN (Class A) sensor that monitors temperature, humidity, CO₂, air quality, light / illuminance, occupancy / motion and barometric pressure. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight AM307L — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, CO₂, qualidade do ar, luz / iluminância, presença / movimento e pressão barométrica. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"co2",
 		"temperature",
 		"humidity",
-		"air_quality",
-		"light",
-		"motion"
-	],
-	"tags": [
 		"co2",
-		"temperature",
-		"humidity",
 		"air_quality",
 		"light",
 		"motion",
+		"pressure"
+	],
+	"tags": [
+		"temperature",
+		"humidity",
+		"co2",
+		"air_quality",
+		"light",
+		"motion",
+		"pressure",
 		"milesight"
 	],
 	"vendor": {
@@ -35,7 +37,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": ""
+		"device": "images/device.svg"
 	},
 	"files": {
 		"datasheet": "",

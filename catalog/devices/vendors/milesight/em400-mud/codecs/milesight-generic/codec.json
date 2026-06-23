@@ -10,5 +10,5 @@
 	"files": {
 		"decoder": "decoder.js"
 	},
-	"sourceUrl": "https://raw.githubusercontent.com/Milesight-IoT/SensorDecoders/main/em-series/em400-mud/em400-mud-cellular.js"
+	"sourceUrl": "https://raw.githubusercontent.com/Milesight-IoT/SensorDecoders/main/em-series/em400-mud/em400-mud-decoder.js"
 }

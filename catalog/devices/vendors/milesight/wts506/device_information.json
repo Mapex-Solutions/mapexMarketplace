@@ -7,15 +7,23 @@
 		"pt-BR": "WTS506 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight WTS506 — LoRaWAN (Class A) sensor that monitors button presses. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight WTS506 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight WTS506 — LoRaWAN (Class A) sensor that monitors temperature, humidity, wind speed and direction, barometric pressure and rainfall. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight WTS506 — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, velocidade e direção do vento, pressão barométrica e chuva. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"button"
+		"temperature",
+		"humidity",
+		"wind",
+		"pressure",
+		"rainfall"
 	],
 	"tags": [
-		"button",
+		"temperature",
+		"humidity",
+		"wind",
+		"pressure",
+		"rainfall",
 		"milesight"
 	],
 	"version": "1.0.0",
@@ -25,7 +33,9 @@
 		"site": "https://www.milesight.com",
 		"support": "https://support.milesight-iot.com"
 	},
-	"images": {},
+	"images": {
+		"device": "images/device.svg"
+	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
 		"manual": "files/manual.pdf",

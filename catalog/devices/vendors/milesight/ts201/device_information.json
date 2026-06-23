@@ -7,16 +7,14 @@
 		"pt-BR": "TS201 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight TS201 — LoRaWAN (Class A) sensor that monitors button presses and temperature. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight TS201 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight TS201 — LoRaWAN (Class A) sensor that monitors temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight TS201 — sensor LoRaWAN (Classe A) que monitora temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"button",
 		"temperature"
 	],
 	"tags": [
-		"button",
 		"temperature",
 		"milesight"
 	],
@@ -27,7 +25,9 @@
 		"site": "https://www.milesight.com",
 		"support": "https://support.milesight-iot.com"
 	},
-	"images": {},
+	"images": {
+		"device": "images/device.svg"
+	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
 		"manual": "files/manual.pdf",

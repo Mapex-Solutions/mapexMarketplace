@@ -7,18 +7,14 @@
 		"pt-BR": "VS360 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight VS360 — LoRaWAN (Class A) sensor that monitors button presses, open/close status and people counts. Uplinks are channel-TLV frames on FPort 85.",
-		"pt-BR": "Milesight VS360 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão, status de abertura/fechamento e contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
+		"en-US": "Milesight VS360 — LoRaWAN (Class A) sensor that monitors people counting. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight VS360 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"button",
-		"door",
 		"passage_counter"
 	],
 	"tags": [
-		"button",
-		"door",
 		"passage_counter",
 		"milesight"
 	],
@@ -29,7 +25,9 @@
 		"site": "https://www.milesight.com",
 		"support": "https://support.milesight-iot.com"
 	},
-	"images": {},
+	"images": {
+		"device": "images/device.svg"
+	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",
 		"manual": "files/manual.pdf",

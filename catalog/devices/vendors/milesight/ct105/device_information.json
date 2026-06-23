@@ -7,15 +7,17 @@
 		"pt-BR": "CT105 Sensor LoRaWAN Milesight"
 	},
 	"description": {
-		"en-US": "Milesight CT105 — LoRaWAN (Class A) sensor that monitors electrical current. Uplinks are channel-TLV frames on FPort 85. (Datasheet/user guide cover the CT10X series.)",
-		"pt-BR": "Milesight CT105 — sensor LoRaWAN (Classe A) que monitora corrente elétrica. Os uplinks são quadros channel-TLV no FPort 85. (Datasheet/manual cobrem a série CT10X.)"
+		"en-US": "Milesight CT105 — LoRaWAN (Class A) sensor that monitors electric current and temperature. Uplinks are channel-TLV frames on FPort 85.",
+		"pt-BR": "Milesight CT105 — sensor LoRaWAN (Classe A) que monitora corrente elétrica e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
 	"readingTypes": [
-		"current"
+		"current",
+		"temperature"
 	],
 	"tags": [
 		"current",
+		"temperature",
 		"milesight"
 	],
 	"vendor": {
@@ -25,7 +27,7 @@
 		"support": "https://support.milesight-iot.com"
 	},
 	"images": {
-		"device": "images/device.jpg"
+		"device": "images/device.svg"
 	},
 	"files": {
 		"datasheet": "files/datasheet.pdf",

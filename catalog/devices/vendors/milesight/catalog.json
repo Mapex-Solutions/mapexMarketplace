@@ -33,7 +33,7 @@
 			"image": "images/device.svg",
 			"hasImage": true,
 			"hasCodec": true,
-			"hasManual": false
+			"hasManual": true
 		},
 		{
 			"id": "milesight-am103-am103l",
@@ -63,7 +63,7 @@
 			"image": "images/device.svg",
 			"hasImage": true,
 			"hasCodec": true,
-			"hasManual": false
+			"hasManual": true
 		},
 		{
 			"id": "milesight-am304l",
@@ -95,7 +95,7 @@
 			"image": "images/device.svg",
 			"hasImage": true,
 			"hasCodec": true,
-			"hasManual": false
+			"hasManual": true
 		},
 		{
 			"id": "milesight-am305l",
@@ -129,7 +129,7 @@
 			"image": "images/device.svg",
 			"hasImage": true,
 			"hasCodec": true,
-			"hasManual": false
+			"hasManual": true
 		},
 		{
 			"id": "milesight-am307",
@@ -167,7 +167,7 @@
 			"image": "images/device.svg",
 			"hasImage": true,
 			"hasCodec": true,
-			"hasManual": false
+			"hasManual": true
 		},
 		{
 			"id": "milesight-am307l",
@@ -205,7 +205,7 @@
 			"image": "images/device.svg",
 			"hasImage": true,
 			"hasCodec": true,
-			"hasManual": false
+			"hasManual": true
 		},
 		{
 			"id": "milesight-am308",
@@ -243,7 +243,7 @@
 			"image": "images/device.svg",
 			"hasImage": true,
 			"hasCodec": true,
-			"hasManual": false
+			"hasManual": true
 		},
 		{
 			"id": "milesight-am308l",
@@ -281,7 +281,7 @@
 			"image": "images/device.svg",
 			"hasImage": true,
 			"hasCodec": true,
-			"hasManual": false
+			"hasManual": true
 		},
 		{
 			"id": "milesight-at101",
@@ -847,7 +847,7 @@
 			"image": "images/device.svg",
 			"hasImage": true,
 			"hasCodec": true,
-			"hasManual": false
+			"hasManual": true
 		},
 		{
 			"id": "milesight-em500-co2",
@@ -1311,7 +1311,7 @@
 			"image": "images/device.svg",
 			"hasImage": true,
 			"hasCodec": true,
-			"hasManual": false
+			"hasManual": true
 		},
 		{
 			"id": "milesight-vs133-p",
@@ -2019,7 +2019,7 @@
 			"image": "images/device.svg",
 			"hasImage": true,
 			"hasCodec": true,
-			"hasManual": false
+			"hasManual": true
 		},
 		{
 			"id": "milesight-ws558",

@@ -36,10 +36,10 @@
 		"device": "images/device.svg"
 	},
 	"files": {
-		"datasheet": "",
-		"manual": "",
-		"datasheetUrl": "",
-		"manualUrl": ""
+		"datasheet": "files/datasheet.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/am300-series-datasheet-en.pdf",
+		"manual": "files/manual.pdf",
+		"manualUrl": "https://resource.milesight.com/milesight/iot/document/am300-series-user-guide-en.pdf"
 	},
 	"collectedAt": "2026-06-18T20:26:09.342Z"
 }

@@ -28,9 +28,7 @@
 		"device": "images/device.svg"
 	},
 	"files": {
-		"datasheet": "",
 		"manual": "files/manual.pdf",
-		"datasheetUrl": "",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/vs121-p-user-guide-en.pdf"
 	}
 }

@@ -28,9 +28,9 @@
 		"device": "images/device.svg"
 	},
 	"files": {
-		"datasheet": "",
+		"datasheet": "files/datasheet.pdf",
+		"datasheetUrl": "https://resource.milesight.com/milesight/iot/document/vs135-datasheet-en.pdf",
 		"manual": "files/manual.pdf",
-		"datasheetUrl": "",
 		"manualUrl": "https://resource.milesight.com/milesight/iot/document/vs135-p-user-guide-en.pdf"
 	}
 }

@@ -103,19 +103,6 @@ func GetAsset(service ports.DevicesServicePort) web.Handler {
 	}
 }
 
-// RefreshCatalog returns a handler that rebuilds the catalog index from disk.
-//
-// Returns 200 OK with the reindexed item count.
-func RefreshCatalog(service ports.DevicesServicePort) web.Handler {
-	return func(c *web.Ctx) error {
-		count, err := service.Refresh(c.UserContext())
-		if err != nil {
-			return err
-		}
-		return response.Success(c, web.Map{"reloaded": count})
-	}
-}
-
 // atoi parses a query integer, treating any malformed value as zero so the
 // service applies its defaults.
 func atoi(value string) int {

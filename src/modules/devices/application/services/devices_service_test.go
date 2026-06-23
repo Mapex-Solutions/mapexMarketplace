@@ -152,12 +152,3 @@ func TestDevicesService_CodecsMapsToDTO(t *testing.T) {
 		t.Fatalf("unexpected codecs mapping: %+v", out)
 	}
 }
-
-func TestDevicesService_RefreshReturnsCount(t *testing.T) {
-	repo := &mockCatalogRepo{reloadN: 5}
-	svc := New(di.DevicesServiceDI{Repo: repo})
-	count, err := svc.Refresh(context.Background())
-	if err != nil || count != 5 {
-		t.Fatalf("Refresh = %d, %v; want 5, nil", count, err)
-	}
-}

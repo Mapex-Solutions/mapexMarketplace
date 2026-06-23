@@ -81,8 +81,3 @@ func (s *DevicesService) GetAsset(ctx context.Context, vendor, slug, name string
 	}
 	return data, contentType, nil
 }
-
-// Refresh rebuilds the catalog index from disk and returns the item count.
-func (s *DevicesService) Refresh(ctx context.Context) (int, error) {
-	return s.deps.Repo.Reload(ctx)
-}

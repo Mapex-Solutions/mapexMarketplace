@@ -20,15 +20,15 @@ the consuming app.
   (detail sheet), `device_simulator.json` (install template), and assets (codec,
   manual, images).
 - **Index** — the in-process SQLite table of catalog items, derived from the
-  vendor manifests and rebuilt on boot / on refresh. Disposable; the JSON catalog
-  is the source of truth.
+  vendor manifests and rebuilt on boot. Disposable; the JSON catalog is the
+  source of truth.
 - **Catalog config** — the controlled vocabulary (`catalog_config.json`) that
   labels the protocol and reading-type filter facets.
 
 ## Driving Ports
 
 - `DevicesServicePort` — list (filter + paginate), facets, get information, get
-  simulator, get asset, refresh.
+  simulator, get asset.
 
 ## Driven Ports
 

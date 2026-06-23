@@ -29,7 +29,4 @@ type DevicesServicePort interface {
 
 	// GetAsset returns a bundle asset (codec, manual, image) with its content type.
 	GetAsset(ctx context.Context, vendor, slug, name string) ([]byte, string, error)
-
-	// Refresh rebuilds the catalog index from disk and returns the item count.
-	Refresh(ctx context.Context) (int, error)
 }

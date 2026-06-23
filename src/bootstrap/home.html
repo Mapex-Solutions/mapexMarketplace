@@ -294,14 +294,18 @@
   <div class="wrap top-inner">
     <a class="brand" href="#top"><img src="/assets/only-logo.png" alt="MapexOS" /> MapexOS</a>
     <nav>
-      <a class="lnk" href="#why">Why</a>
-      <a class="lnk" href="#action">In action</a>
-      <a class="lnk" href="#platform">Platform</a>
-      <a class="lnk" href="#ecosystem">Ecosystem</a>
-      <a class="lnk" href="#simulator">Simulator</a>
+      <a class="lnk" href="#why" data-i18n="nav.why">Why</a>
+      <a class="lnk" href="#action" data-i18n="nav.action">In action</a>
+      <a class="lnk" href="#platform" data-i18n="nav.platform">Platform</a>
+      <a class="lnk" href="#ecosystem" data-i18n="nav.ecosystem">Ecosystem</a>
+      <a class="lnk" href="#simulator" data-i18n="nav.simulator">Simulator</a>
       <a class="lnk" href="/docs">Docs</a>
       <a class="lnk ext" href="https://github.com/Mapex-Solutions" target="_blank" rel="noopener">GitHub</a>
-      <a class="btn-sm" href="#get-started">Get started</a>
+      <span class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" class="active">EN</button>
+        <button type="button" data-lang="pt">PT</button>
+      </span>
+      <a class="btn-sm" href="#get-started" data-i18n="nav.start">Get started</a>
     </nav>
   </div>
 </header>
@@ -311,27 +315,27 @@
   <div class="hero wrap">
     <div class="hero-grid">
       <div class="hero-copy">
-        <span class="kicker"><span class="dot"></span> Connect · Automate · Scale</span>
-        <h1>Raw telemetry in.<br><span class="grad">Automated action out.</span></h1>
-        <p class="sub">
+        <span class="kicker" data-i18n="hero.kicker"><span class="dot"></span> Connect · Automate · Scale</span>
+        <h1 data-i18n="hero.h1">Raw telemetry in.<br><span class="grad">Automated action out.</span></h1>
+        <p class="sub" data-i18n="hero.sub">
           <b>IoT-first, but not limited to IoT.</b> MapexOS ingests any device over any protocol,
           normalizes it into a single <b>Asset</b> model, and drives it through rules and a
           workflow engine — turning a stream of bytes into business outcomes in milliseconds.
         </p>
         <div class="actions">
-          <a class="btn primary" href="#get-started">
+          <a class="btn primary" href="#get-started" data-i18n="hero.cta1">
             Run the platform
             <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="btn ghost" href="/docs">
+          <a class="btn ghost" href="/docs" data-i18n="hero.cta2">
             <svg class="i" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 9h16M8 13h6"/></svg> Documentation
           </a>
         </div>
         <div class="hero-stats">
-          <div class="s"><div class="n grad">11</div><div class="l">backend services</div></div>
-          <div class="s"><div class="n grad">3</div><div class="l">ingest protocols</div></div>
+          <div class="s"><div class="n grad">10</div><div class="l" data-i18n="hero.stat1">backend services</div></div>
+          <div class="s"><div class="n grad">3</div><div class="l" data-i18n="hero.stat2">ingest protocols</div></div>
           <div class="s"><div class="n grad">1</div><div class="l"><code>docker compose up</code></div></div>
-          <div class="s"><div class="n grad">∞</div><div class="l">plugins &amp; assets</div></div>
+          <div class="s"><div class="n grad">∞</div><div class="l" data-i18n="hero.stat4">plugins &amp; assets</div></div>
         </div>
       </div>
 
@@ -362,7 +366,7 @@
   <div class="band">
     <div class="wrap band-inner">
       <span class="chip3">HTTP</span><span class="chip3">MQTT</span><span class="chip3">LoRaWAN</span>
-      <span class="chip3">Workflow engine</span><span class="chip3">Plugin UI</span><span class="chip3">Multi-tenant</span>
+      <span class="chip3" data-i18n="band.wf">Workflow engine</span><span class="chip3" data-i18n="band.plugin">Plugin UI</span><span class="chip3">Multi-tenant</span>
       <span class="chip3">RBAC</span><span class="chip3">Self-hosted</span><span class="chip3">amd64 · arm64 · Raspberry Pi</span>
     </div>
   </div>
@@ -370,41 +374,41 @@
   <!-- WHY: many capabilities, one integrated platform (respectful framing) -->
   <section class="wrap fade" id="why">
     <div class="sec-head center">
-      <div class="eyebrow">Why MapexOS</div>
-      <h2>A complete IoT operation needs many capabilities</h2>
-      <p>Ingestion, authentication, payload validation, business rules, automation, dashboards, multi-org governance — each is its own discipline. The open-source ecosystem has excellent tools for every one of them. MapexOS brings those capabilities together into a single, integrated platform.</p>
+      <div class="eyebrow" data-i18n="why.eyebrow">Why MapexOS</div>
+      <h2 data-i18n="why.h2">A complete IoT operation needs many capabilities</h2>
+      <p data-i18n="why.p">Ingestion, authentication, payload validation, business rules, automation, dashboards, multi-org governance — each is its own discipline. The open-source ecosystem has excellent tools for every one of them. MapexOS brings those capabilities together into a single, integrated platform.</p>
     </div>
     <div class="versus">
       <div class="vs-old">
-        <div class="vs-tag">The capabilities you assemble</div>
+        <div class="vs-tag" data-i18n="why.oldtag">The capabilities you assemble</div>
         <div class="vs-tools">
-          <span>Ingestion</span><span>Authentication</span><span>Payload validation</span><span>Rules engine</span>
-          <span>Automation</span><span>Dashboards</span><span>Message bus</span><span>Identity &amp; RBAC</span>
+          <span data-i18n="why.t1">Ingestion</span><span data-i18n="why.t2">Authentication</span><span data-i18n="why.t3">Payload validation</span><span data-i18n="why.t4">Rules engine</span>
+          <span data-i18n="why.t5">Automation</span><span data-i18n="why.t6">Dashboards</span><span data-i18n="why.t7">Message bus</span><span data-i18n="why.t8">Identity &amp; RBAC</span>
         </div>
         <ul class="vs-pain">
-          <li>Each capability is a separate system to run and secure</li>
-          <li>Integrations between them are yours to build and maintain</li>
-          <li>Business rules and identity end up living in several places</li>
-          <li>Multi-organization structure is modeled per project</li>
+          <li data-i18n="why.pain1">Each capability is a separate system to run and secure</li>
+          <li data-i18n="why.pain2">Integrations between them are yours to build and maintain</li>
+          <li data-i18n="why.pain3">Business rules and identity end up living in several places</li>
+          <li data-i18n="why.pain4">Multi-organization structure is modeled per project</li>
         </ul>
-        <p class="vs-note">Great tools, each strong at its slice — and a lot of surface area to operate together.</p>
+        <p class="vs-note" data-i18n="why.note">Great tools, each strong at its slice — and a lot of surface area to operate together.</p>
       </div>
       <div class="vs-arrow">→</div>
       <div class="vs-new">
         <img src="/assets/only-logo.png" alt="MapexOS" />
         <h3>MapexOS</h3>
-        <p>Acquisition · validation · processing · business rules · asset organization · observability · integration — the same capabilities, designed end to end as one platform.</p>
+        <p data-i18n="why.newp">Acquisition · validation · processing · business rules · asset organization · observability · integration — the same capabilities, designed end to end as one platform.</p>
         <div class="vs-protos">
           <span>HTTP</span><span>LoRaWAN</span><span>MQTT</span>
-          <em>ingestion ready out of the box</em>
+          <em data-i18n="why.protoem">ingestion ready out of the box</em>
         </div>
         <ul class="vs-win">
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> One architecture — every capability runs on the same core</li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Uniform scalability across the whole platform</li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> No data duplication, no integrations to build or maintain</li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Multi-organization built in from the base</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="why.win1">One architecture — every capability runs on the same core</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="why.win2">Uniform scalability across the whole platform</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="why.win3">No data duplication, no integrations to build or maintain</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="why.win4">Multi-organization built in from the base</span></li>
         </ul>
-        <span class="vs-badge">One integrated platform</span>
+        <span class="vs-badge" data-i18n="why.badge">One integrated platform</span>
       </div>
     </div>
   </section>
@@ -412,9 +416,9 @@
   <!-- SEE MAPEXOS IN ACTION (the platform) -->
   <section class="wrap fade" id="action">
     <div class="sec-head center">
-      <div class="eyebrow">See MapexOS in action</div>
-      <h2>The platform, working</h2>
-      <p>Real screens from MapexOS — design automations on a visual canvas, onboard assets from a template, watch presence and health, and govern the whole pipeline. Dark and light themes ship built-in.</p>
+      <div class="eyebrow" data-i18n="act.eyebrow">See MapexOS in action</div>
+      <h2 data-i18n="act.h2">The platform, working</h2>
+      <p data-i18n="act.p">Real screens from MapexOS — design automations on a visual canvas, onboard assets from a template, watch presence and health, and govern the whole pipeline. Dark and light themes ship built-in.</p>
     </div>
     <div class="gallery" id="gal-mapex">
       <div class="gframe">
@@ -428,18 +432,18 @@
     <div class="spotlights grid-3">
       <div class="card">
         <div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg></div>
-        <h3>Goto — virtual links</h3>
-        <p>Reference a step by name instead of dragging a wire across the canvas. Fewer crossings, and a DAG that stays readable as it grows.</p>
+        <h3 data-i18n="act.c1h">Goto — virtual links</h3>
+        <p data-i18n="act.c1p">Reference a step by name instead of dragging a wire across the canvas. Fewer crossings, and a DAG that stays readable as it grows.</p>
       </div>
       <div class="card">
         <div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M5 12a7 7 0 0 1 14 0M8.5 12a3.5 3.5 0 0 1 7 0"/><circle cx="12" cy="12" r="1.6"/></svg></div>
-        <h3>Native presence</h3>
-        <p>Online, offline and last-seen for every asset — the platform knows the moment one goes quiet, with no heartbeat plumbing to build.</p>
+        <h3 data-i18n="act.c2h">Native presence</h3>
+        <p data-i18n="act.c2p">Online, offline and last-seen for every asset — the platform knows the moment one goes quiet, with no heartbeat plumbing to build.</p>
       </div>
       <div class="card">
         <div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18zM12 3a9 9 0 0 1 0 18"/></svg></div>
-        <h3>Dark &amp; light</h3>
-        <p>Your workspace, your theme — every screen ships in both dark and light, switchable anytime.</p>
+        <h3 data-i18n="act.c3h">Dark &amp; light</h3>
+        <p data-i18n="act.c3p">Your workspace, your theme — every screen ships in both dark and light, switchable anytime.</p>
       </div>
     </div>
   </section>
@@ -447,40 +451,40 @@
   <!-- PLATFORM -->
   <section class="wrap fade" id="platform">
     <div class="sec-head center">
-      <div class="eyebrow">The platform</div>
-      <h2>Everything between the device and the decision</h2>
-      <p>Eleven backend services and a Vue 3 frontend, self-hostable with one command and published multi-arch — the full path from a raw payload to an automated outcome.</p>
+      <div class="eyebrow" data-i18n="plat.eyebrow">The platform</div>
+      <h2 data-i18n="plat.h2">Everything between the device and the decision</h2>
+      <p data-i18n="plat.p">Ten backend services and a Vue 3 frontend, self-hostable with one command and published multi-arch — the full path from a raw payload to an automated outcome.</p>
     </div>
     <div class="grid-3">
       <div class="card">
         <div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 12h4l2 5 4-12 2 7h6"/></svg></div>
-        <h3>Telemetry ingestion</h3>
-        <p>Authenticated HTTP and MQTT. Every CONNECT/PUBLISH decision is made locally off a three-tier cache — no round-trips on the hot path.</p>
+        <h3 data-i18n="plat.c1h">Telemetry ingestion</h3>
+        <p data-i18n="plat.c1p">Authenticated HTTP and MQTT. Every CONNECT/PUBLISH decision is made locally off a three-tier cache — no round-trips on the hot path.</p>
       </div>
       <div class="card">
         <div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 5l-2 14"/></svg></div>
-        <h3>Generic data conversion</h3>
-        <p>Per-asset <em>preprocess → validate → convert</em> pipelines in JavaScript, executed in V8 isolates. Normalize any payload — no source changes.</p>
+        <h3 data-i18n="plat.c2h">Generic data conversion</h3>
+        <p data-i18n="plat.c2p">Per-asset <em>preprocess → validate → convert</em> pipelines in JavaScript, executed in V8 isolates. Normalize any payload — no source changes.</p>
       </div>
       <div class="card">
         <div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M6 3v6a3 3 0 0 0 3 3h6a3 3 0 0 1 3 3v6M5 3h2M17 21h2"/></svg></div>
-        <h3>Dynamic event routing</h3>
-        <p>Match rules over arbitrary fields — <code>payload.temp &gt; 30</code>, tags, JSONPath, regex. Rules live in MongoDB and reload at runtime.</p>
+        <h3 data-i18n="plat.c3h">Dynamic event routing</h3>
+        <p data-i18n="plat.c3p">Match rules over event fields — <code>payload.temp &gt; 30</code>, equals, ranges, set membership. Rules live in MongoDB and take effect at runtime, no redeploy.</p>
       </div>
       <div class="card">
         <div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h6v6H4zM14 11h6v6h-6zM10 10l4 4"/></svg></div>
-        <h3>Workflow engine</h3>
-        <p>A DAG runtime inspired by Temporal.io — deterministic execution, retries, timers, sub-workflows. State persists across restarts.</p>
+        <h3 data-i18n="plat.c4h">Workflow engine</h3>
+        <p data-i18n="plat.c4p">A durable DAG runtime — deterministic execution, retries, timers, sub-workflows, and state that survives restarts through NATS-KV checkpointing.</p>
       </div>
       <div class="card">
         <div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M12 2l3 6 6 .5-4.5 4 1.5 6L12 15l-6 3.5 1.5-6L3 8.5 9 8z"/></svg></div>
-        <h3>Plugin UI (n8n-style)</h3>
-        <p>Custom workflow nodes ship as plugins from a manifest registry — new connectors land in the editor without rebuilding the frontend.</p>
+        <h3 data-i18n="plat.c5h">Plugin UI (n8n-style)</h3>
+        <p data-i18n="plat.c5p">Custom workflow nodes ship as plugins from a manifest registry — new connectors land in the editor without rebuilding the frontend.</p>
       </div>
       <div class="card">
         <div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21a7 7 0 0 1 14 0M17 11l2 2 4-4"/></svg></div>
-        <h3>Multi-tenant &amp; RBAC</h3>
-        <p>Organization hierarchy with per-org isolation, shared templates and fine-grained permissions, evaluated centrally by <code>mapex-iam</code>.</p>
+        <h3 data-i18n="plat.c6h">Multi-tenant &amp; RBAC</h3>
+        <p data-i18n="plat.c6p">Organization hierarchy with per-org isolation, shared templates and fine-grained permissions, evaluated centrally by <code>mapex-iam</code>.</p>
       </div>
     </div>
   </section>
@@ -489,25 +493,25 @@
   <section class="wrap fade" id="assets">
     <div class="split">
       <div class="content">
-        <div class="eyebrow">The model</div>
-        <h2>An Asset is anything that generates data</h2>
-        <p class="lede">Not just a device. A sensor, a machine, a piece of equipment, an area, a zone, a sector — any asset that produces data or needs monitoring. <strong>Asset Templates</strong> turn each new integration from a brand-new project into a reusable configuration, shared across branches, sites and entire clients.</p>
+        <div class="eyebrow" data-i18n="ast.eyebrow">The model</div>
+        <h2 data-i18n="ast.h2">An Asset is anything that generates data</h2>
+        <p class="lede" data-i18n="ast.lede">Not just a device. A sensor, a machine, a piece of equipment, an area, a zone, a sector — any asset that produces data or needs monitoring. <strong>Asset Templates</strong> turn each new integration from a brand-new project into a reusable configuration, shared across branches, sites and entire clients.</p>
         <ul class="feat-list">
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Asset Templates — integrate once, reuse everywhere. Without a template, each integration is a new project; with one, it's just configuration.</li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Multi-organization from the base — not a patch bolted on later, an architectural decision.</li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Shared templates propagate to descendant orgs; RBAC and groups are evaluated centrally.</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="ast.f1">Asset Templates — integrate once, reuse everywhere. Without a template, each integration is a new project; with one, it's just configuration.</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="ast.f2">Multi-organization from the base — not a patch bolted on later, an architectural decision.</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="ast.f3">Shared templates propagate to descendant orgs; RBAC and groups are evaluated centrally.</span></li>
         </ul>
       </div>
       <div class="visual">
-        <div class="vh">Enterprise hierarchy — multi-tenant by design</div>
+        <div class="vh" data-i18n="ast.vh1">Enterprise hierarchy — multi-tenant by design</div>
 <pre class="tree">Headquarters
  └─ Branch
      └─ Site
          └─ Sector
              └─ Zone
-                 └─ <span class="leaf">Asset</span>  <span class="note">◀ sensor · machine · area</span></pre>
-        <div class="vh" style="margin-top:24px">Own workflow engine — not a dependency</div>
-        <p style="color:var(--muted);font-size:14px;margin:0">An integrated, n8n-inspired workflow engine processes events and applies business rules inside the platform — and is built to orchestrate AI agents inside those flows next.</p>
+                 └─ <span class="leaf">Asset</span>  <span class="note" data-i18n="ast.treenote">◀ sensor · machine · area</span></pre>
+        <div class="vh" style="margin-top:24px" data-i18n="ast.vh2">Own workflow engine — not a dependency</div>
+        <p style="color:var(--muted);font-size:14px;margin:0" data-i18n="ast.vp">An integrated, n8n-inspired workflow engine processes events and applies business rules inside the platform — and is built to orchestrate AI agents inside those flows next.</p>
       </div>
     </div>
   </section>
@@ -515,40 +519,40 @@
   <!-- ECOSYSTEM -->
   <section class="wrap fade" id="ecosystem">
     <div class="sec-head center">
-      <div class="eyebrow">Open source</div>
-      <h2>The MapexOS ecosystem</h2>
-      <p>One platform, many open repositories. The deploy repo runs the whole stack; the others are the services, the broker, the LoRaWAN network server, the SDKs and the tools around it.</p>
+      <div class="eyebrow" data-i18n="eco.eyebrow">Open source</div>
+      <h2 data-i18n="eco.h2">The MapexOS ecosystem</h2>
+      <p data-i18n="eco.p">One platform, many open repositories. The deploy repo runs the whole stack; the others are the services, the broker, the LoRaWAN network server, the SDKs and the tools around it.</p>
     </div>
     <div class="grid-3">
       <a class="card repo" href="https://github.com/Mapex-Solutions/mapexOSDeploy" target="_blank" rel="noopener">
         <div class="top-line"><span class="lang-dot lang-mix"></span><h3>mapexOSDeploy</h3><span class="gh">↗</span></div>
-        <p>Docker Compose distribution that pulls pre-built multi-arch images. <strong>Start here to run the platform.</strong></p>
-        <div class="role">Distribution · start here</div>
+        <p data-i18n="eco.r1p">Docker Compose distribution that pulls pre-built multi-arch images. <strong>Start here to run the platform.</strong></p>
+        <div class="role" data-i18n="eco.r1role">Distribution · start here</div>
       </a>
       <a class="card repo" href="https://github.com/Mapex-Solutions/mapexOS" target="_blank" rel="noopener">
         <div class="top-line"><span class="lang-dot lang-mix"></span><h3>mapexOS</h3><span class="gh">↗</span></div>
-        <p>Source for the eleven backend services and the Vue 3 frontend — ingestion, conversion, routing, workflow engine and IAM.</p>
-        <div class="role">Core · Go + Vue 3</div>
+        <p data-i18n="eco.r2p">Source for the ten backend services and the Vue 3 frontend — ingestion, conversion, routing, workflow engine and IAM.</p>
+        <div class="role" data-i18n="eco.r2role">Core · Go + Vue 3</div>
       </a>
       <a class="card repo" href="https://github.com/Mapex-Solutions/mapexMQTTBroker" target="_blank" rel="noopener">
         <div class="top-line"><span class="lang-dot lang-go"></span><h3>mapexMQTTBroker</h3><span class="gh">↗</span></div>
-        <p>Eclipse Mosquitto v2 plus an in-house Go plugin handling auth, ACL, presence and ingress in a single <code>.so</code>.</p>
-        <div class="role">MQTT edge · Go</div>
+        <p data-i18n="eco.r3p">Eclipse Mosquitto v2 plus an in-house Go plugin handling auth, ACL, presence and ingress in a single <code>.so</code>.</p>
+        <div class="role" data-i18n="eco.r3role">MQTT edge · Go</div>
       </a>
       <a class="card repo" href="https://github.com/Mapex-Solutions/mapexLNS" target="_blank" rel="noopener">
         <div class="top-line"><span class="lang-dot lang-go"></span><h3>mapexLNS</h3><span class="gh">↗</span></div>
-        <p>LoRaWAN Network Server — an overlay on The Things Stack (GS · NS · JS) wrapped in the MapexOS hexagonal architecture.</p>
-        <div class="role">LoRaWAN · Go</div>
+        <p data-i18n="eco.r4p">LoRaWAN Network Server — an overlay on The Things Stack (GS · NS · JS) wrapped in the MapexOS hexagonal architecture.</p>
+        <div class="role" data-i18n="eco.r4role">LoRaWAN · Go</div>
       </a>
       <a class="card repo" href="https://github.com/Mapex-Solutions/mapexDevicesSimulator" target="_blank" rel="noopener">
         <div class="top-line"><span class="lang-dot lang-mix"></span><h3>mapexDevicesSimulator</h3><span class="gh">↗</span></div>
-        <p>Desktop app (Electron + Go) that behaves like real devices on the wire over HTTP, MQTT and LoRaWAN.</p>
-        <div class="role">Tooling · Electron + Go</div>
+        <p data-i18n="eco.r5p">Desktop app (Electron + Go) that behaves like real devices on the wire over HTTP, MQTT and LoRaWAN.</p>
+        <div class="role" data-i18n="eco.r5role">Tooling · Electron + Go</div>
       </a>
       <a class="card repo" href="https://github.com/Mapex-Solutions/mapexGoKit" target="_blank" rel="noopener">
         <div class="top-line"><span class="lang-dot lang-go"></span><h3>mapexGoKit</h3><span class="gh">↗</span></div>
-        <p>Shared Go SDK — HTTP middleware, NATS, Mongo/ClickHouse/MinIO/Redis clients, JWT, JS sandboxing and cross-service contracts.</p>
-        <div class="role">SDK · Go</div>
+        <p data-i18n="eco.r6p">Shared Go SDK — HTTP middleware, NATS, Mongo/ClickHouse/MinIO/Redis clients, JWT, JS sandboxing and cross-service contracts.</p>
+        <div class="role" data-i18n="eco.r6role">SDK · Go</div>
       </a>
     </div>
   </section>
@@ -557,30 +561,30 @@
   <section class="wrap fade" id="simulator">
     <div class="split">
       <div class="content">
-        <div class="eyebrow">Tooling</div>
+        <div class="eyebrow" data-i18n="sim.eyebrow">Tooling</div>
         <h2>Mapex Devices Simulator</h2>
-        <p class="lede">Simulate real IoT devices — with no hardware to buy — and drive live traffic into MapexOS or any platform that speaks HTTP, MQTT or LoRaWAN. A desktop app (Electron around a Go sidecar) that behaves like real devices on the wire.</p>
+        <p class="lede" data-i18n="sim.lede">Simulate real IoT devices — with no hardware to buy — and drive live traffic into MapexOS or any platform that speaks HTTP, MQTT or LoRaWAN. A desktop app (Electron around a Go sidecar) that behaves like real devices on the wire.</p>
         <ul class="feat-list">
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Four transports — HTTP, MQTT (pub + sub), and LoRaWAN over Semtech UDP or Basics Station with real OTAA/ABP crypto.</li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Live sessions — persistent broker/LNS connections with auto-reconnect; fire events on demand or on a schedule.</li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Console &amp; logs — a live WebSocket stream of every uplink, downlink and frame, plus a filterable history.</li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> One desktop binary — Electron app spawns the Go engine; nothing external to run.</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="sim.f1">Four transports — HTTP, MQTT (pub + sub), and LoRaWAN over Semtech UDP or Basics Station with real OTAA/ABP crypto.</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="sim.f2">Live sessions — persistent broker/LNS connections with auto-reconnect; fire events on demand or on a schedule.</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="sim.f3">Console &amp; logs — a live WebSocket stream of every uplink, downlink and frame, plus a filterable history.</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="sim.f4">One desktop binary — Electron app spawns the Go engine; nothing external to run.</span></li>
         </ul>
         <div class="cta-row">
-          <a class="btn primary" href="https://github.com/Mapex-Solutions/mapexDevicesSimulator" target="_blank" rel="noopener">Open on GitHub</a>
-          <a class="btn ghost" href="/api/v1/devices" target="_blank" rel="noopener">Browse the catalog API</a>
+          <a class="btn primary" href="https://github.com/Mapex-Solutions/mapexDevicesSimulator" target="_blank" rel="noopener" data-i18n="sim.cta1">Open on GitHub</a>
+          <a class="btn ghost" href="/api/v1/devices" target="_blank" rel="noopener" data-i18n="sim.cta2">Browse the catalog API</a>
         </div>
       </div>
       <div class="visual">
-        <div class="vh">Speaks on the wire</div>
+        <div class="vh" data-i18n="sim.vh1">Speaks on the wire</div>
         <div class="protos">
           <div class="proto-b"><b>HTTP</b> · send</div>
           <div class="proto-b"><b>MQTT</b> · pub + sub</div>
           <div class="proto-b"><b>LoRaWAN</b> · Semtech UDP</div>
           <div class="proto-b"><b>LoRaWAN</b> · Basics Station</div>
         </div>
-        <div class="vh" style="margin-top:24px">Point it anywhere</div>
-        <p style="color:var(--muted);font-size:14px;margin:0">Built for MapexOS, but vendor-neutral: The Things Stack, ChirpStack, a cloud IoT endpoint, or your own broker — it just works.</p>
+        <div class="vh" style="margin-top:24px" data-i18n="sim.vh2">Point it anywhere</div>
+        <p style="color:var(--muted);font-size:14px;margin:0" data-i18n="sim.vp">Built for MapexOS, but vendor-neutral: The Things Stack, ChirpStack, a cloud IoT endpoint, or your own broker — it just works.</p>
       </div>
     </div>
 
@@ -597,35 +601,35 @@
   <!-- CLIMAX -->
   <div class="climax fade">
     <div class="wrap">
-      <p class="climax-lead">A platform that doesn't just deliver connectivity. It delivers —</p>
-      <div class="climax-words">
+      <p class="climax-lead" data-i18n="clx.lead">A platform that doesn't just deliver connectivity. It delivers —</p>
+      <div class="climax-words" data-i18n="clx.words">
         <span>Structure</span><span>Organization</span><span>Permissions</span><span>Templates</span>
         <span>Workflow</span><span>Business rules</span><span>Observability</span><span>Scalability</span>
       </div>
-      <p class="climax-free">— and above all, <span class="grad">freedom</span> to build real IoT solutions.</p>
-      <div class="stack-strip">Built on Go · NATS · JetStream · V8 isolates · Prometheus · Grafana</div>
+      <p class="climax-free" data-i18n="clx.free">— and above all, <span class="grad">freedom</span> to build real IoT solutions.</p>
+      <div class="stack-strip" data-i18n="clx.stack">Built on Go · NATS · JetStream · V8 isolates · Prometheus · Grafana</div>
     </div>
   </div>
 
   <!-- GET STARTED -->
   <section class="wrap fade" id="get-started">
     <div class="sec-head center">
-      <div class="eyebrow">Run it</div>
-      <h2>The whole stack, one command</h2>
-      <p>Clone the deploy repo and boot the full platform — Mongo replica-set, NATS, MinIO, ClickHouse and every service — on Linux, Apple Silicon, Windows + Docker Desktop or a Raspberry Pi.</p>
+      <div class="eyebrow" data-i18n="run.eyebrow">Run it</div>
+      <h2 data-i18n="run.h2">The whole stack, one command</h2>
+      <p data-i18n="run.p">Clone the deploy repo and boot the full platform — Mongo replica-set, NATS, MinIO, ClickHouse and every service — on Linux, Apple Silicon, Windows + Docker Desktop or a Raspberry Pi.</p>
     </div>
     <div class="terminal">
       <div class="bar"><span></span><span></span><span></span></div>
-<pre><span class="d"># clone the runnable distribution</span>
+<pre><span class="d" data-i18n="run.c1"># clone the runnable distribution</span>
 <span class="c">git</span> clone https://github.com/Mapex-Solutions/mapexOSDeploy.git
 <span class="c">cd</span> mapexOSDeploy
 <span class="c">docker</span> compose up -d
-<span class="d"># ~2 min later → frontend at http://localhost</span>
+<span class="d" data-i18n="run.c2"># ~2 min later → frontend at http://localhost</span>
 <span class="g">✓ login: admin@mapex.local / mapex@123</span></pre>
     </div>
     <div class="actions" style="justify-content:center">
-      <a class="btn primary" href="https://github.com/Mapex-Solutions/mapexOSDeploy" target="_blank" rel="noopener">Get mapexOSDeploy</a>
-      <a class="btn ghost" href="/docs">Read the docs</a>
+      <a class="btn primary" href="https://github.com/Mapex-Solutions/mapexOSDeploy" target="_blank" rel="noopener" data-i18n="run.cta1">Get mapexOSDeploy</a>
+      <a class="btn ghost" href="/docs" data-i18n="run.cta2">Read the docs</a>
     </div>
   </section>
 </main>
@@ -635,33 +639,33 @@
     <div class="foot-grid">
       <div>
         <div class="brand" style="margin-bottom:12px"><img src="/assets/only-logo.png" alt="MapexOS" style="width:30px;height:30px;border-radius:8px" /> MapexOS</div>
-        <p style="color:var(--muted);font-size:14px;margin:0;max-width:320px">IoT-first, but not limited to IoT. The open platform for data integration and intelligent automation. <strong>Connect. Automate. Scale.</strong></p>
+        <p style="color:var(--muted);font-size:14px;margin:0;max-width:320px" data-i18n="foot.tag">IoT-first, but not limited to IoT. The open platform for data integration and intelligent automation. <strong>Connect. Automate. Scale.</strong></p>
       </div>
       <div>
-        <h5>Platform</h5>
+        <h5 data-i18n="foot.h1">Platform</h5>
         <a href="https://github.com/Mapex-Solutions/mapexOS" target="_blank" rel="noopener">mapexOS</a>
         <a href="https://github.com/Mapex-Solutions/mapexOSDeploy" target="_blank" rel="noopener">mapexOSDeploy</a>
         <a href="https://github.com/Mapex-Solutions/mapexMQTTBroker" target="_blank" rel="noopener">mapexMQTTBroker</a>
         <a href="https://github.com/Mapex-Solutions/mapexLNS" target="_blank" rel="noopener">mapexLNS</a>
       </div>
       <div>
-        <h5>Tools &amp; SDKs</h5>
+        <h5 data-i18n="foot.h2">Tools &amp; SDKs</h5>
         <a href="https://github.com/Mapex-Solutions/mapexDevicesSimulator" target="_blank" rel="noopener">Devices Simulator</a>
         <a href="https://github.com/Mapex-Solutions/mapexMarketplace" target="_blank" rel="noopener">Marketplace</a>
         <a href="https://github.com/Mapex-Solutions/mapexGoKit" target="_blank" rel="noopener">mapexGoKit</a>
         <a href="https://github.com/Mapex-Solutions/mapexJsKit" target="_blank" rel="noopener">mapexJsKit</a>
       </div>
       <div>
-        <h5>Resources</h5>
-        <a href="/docs">Documentation</a>
+        <h5 data-i18n="foot.h3">Resources</h5>
+        <a href="/docs" data-i18n="foot.docs">Documentation</a>
         <a href="https://github.com/Mapex-Solutions" target="_blank" rel="noopener">GitHub org ↗</a>
         <a href="/api/v1/devices" target="_blank" rel="noopener">Marketplace API</a>
-        <a href="/health" target="_blank" rel="noopener">Health</a>
+        <a href="/health" target="_blank" rel="noopener" data-i18n="foot.health">Health</a>
       </div>
     </div>
     <div class="foot-bottom">
-      <div>© Mapex Solutions · MapexOS ecosystem.</div>
-      <div><a href="#top" style="color:var(--green-br)">Back to top ↑</a></div>
+      <div data-i18n="foot.copy">© Mapex Solutions · MapexOS ecosystem.</div>
+      <div><a href="#top" style="color:var(--green-br)" data-i18n="foot.top">Back to top ↑</a></div>
     </div>
   </div>
 </footer>
@@ -712,20 +716,20 @@
 
   /* ============ GALLERIES (reusable, one per section) ============ */
   var MAPEX_SHOTS = [
-    { src: "/assets/shots/mapexos/01-workflow-goto.png", title: "Workflow editor", desc: "Build automations on a DAG canvas — branch, loop, and use Goto to jump to a step by name.", url: "mapexos · automation / workflow" },
-    { src: "/assets/shots/mapexos/02-assets-presence.png", title: "Assets & presence", desc: "Every asset with its protocol, debug state and live health — online, offline, last-seen.", url: "mapexos · assets" },
-    { src: "/assets/shots/mapexos/03-asset-create.png", title: "Onboard an asset", desc: "Identification, template, route groups, connectivity and health monitoring — guided.", url: "mapexos · assets / new" },
-    { src: "/assets/shots/mapexos/04-asset-template.png", title: "Asset template", desc: "preprocess → validate → convert in JavaScript, plus custom searchable fields.", url: "mapexos · asset-template" },
-    { src: "/assets/shots/mapexos/05-triggers.png", title: "Triggers", desc: "Technical triggers over HTTP, MQTT, RabbitMQ, NATS or WebSocket.", url: "mapexos · automation / triggers" },
-    { src: "/assets/shots/mapexos/06-retention.png", title: "Governance", desc: "Per-stage data retention, compliance windows and LakeHouse export — light theme.", url: "mapexos · settings" }
+    { src: "/assets/shots/mapexos/01-workflow-goto.png", title: "Workflow editor", desc: "Build automations on a DAG canvas — branch, loop, and use Goto to jump to a step by name.", url: "mapexos · automation / workflow", pt: { title: "Editor de workflow", desc: "Monte automações num canvas de DAG — ramifique, faça loops e use o Goto para pular para um passo pelo nome." } },
+    { src: "/assets/shots/mapexos/02-assets-presence.png", title: "Assets & presence", desc: "Every asset with its protocol, debug state and live health — online, offline, last-seen.", url: "mapexos · assets", pt: { title: "Assets & presença", desc: "Cada asset com seu protocolo, estado de debug e saúde ao vivo — online, offline, último contato." } },
+    { src: "/assets/shots/mapexos/03-asset-create.png", title: "Onboard an asset", desc: "Identification, template, route groups, connectivity and health monitoring — guided.", url: "mapexos · assets / new", pt: { title: "Integrar um asset", desc: "Identificação, Template, route groups, conectividade e monitoramento de saúde — passo a passo." } },
+    { src: "/assets/shots/mapexos/04-asset-template.png", title: "Asset template", desc: "preprocess → validate → convert in JavaScript, plus custom searchable fields.", url: "mapexos · asset-template", pt: { title: "Asset Template", desc: "preprocess → validate → convert em JavaScript, mais campos customizados e pesquisáveis." } },
+    { src: "/assets/shots/mapexos/05-triggers.png", title: "Triggers", desc: "Technical triggers over HTTP, MQTT, RabbitMQ, NATS or WebSocket.", url: "mapexos · automation / triggers", pt: { title: "Triggers", desc: "Triggers técnicos por HTTP, MQTT, RabbitMQ, NATS ou WebSocket." } },
+    { src: "/assets/shots/mapexos/06-retention.png", title: "Governance", desc: "Per-stage data retention, compliance windows and LakeHouse export — light theme.", url: "mapexos · settings", pt: { title: "Governança", desc: "Retenção de dados por etapa, janelas de compliance e export para LakeHouse — tema claro." } }
   ];
   var SIM_SHOTS = [
-    { src: "/assets/shots/01-marketplace.png", title: "Marketplace", desc: "Browse and filter the device catalog by protocol, reading type or vendor.", url: "simulator · marketplace" },
-    { src: "/assets/shots/02-overview.png", title: "Device overview", desc: "Datasheet, reading-type tags and the vendor link for an installed device.", url: "simulator · device" },
-    { src: "/assets/shots/03-codecs.png", title: "Codecs", desc: "The official ChirpStack v4 and TTN decoders shipped with each device.", url: "simulator · codecs" },
-    { src: "/assets/shots/04-console.png", title: "Live console", desc: "Fire events and watch HTTP / MQTT / LoRaWAN messages with real payloads.", url: "simulator · console" },
-    { src: "/assets/shots/05-logs.png", title: "Logs & events", desc: "The persisted, filterable history of every message.", url: "simulator · logs" },
-    { src: "/assets/shots/06-events.png", title: "Device events", desc: "Configure events and an auto-repeat schedule for each device.", url: "simulator · events" }
+    { src: "/assets/shots/01-marketplace.png", title: "Marketplace", desc: "Browse and filter the device catalog by protocol, reading type or vendor.", url: "simulator · marketplace", pt: { title: "Marketplace", desc: "Navegue e filtre o catálogo de dispositivos por protocolo, tipo de leitura ou fabricante." } },
+    { src: "/assets/shots/02-overview.png", title: "Device overview", desc: "Datasheet, reading-type tags and the vendor link for an installed device.", url: "simulator · device", pt: { title: "Visão do dispositivo", desc: "Datasheet, tags de tipo de leitura e o link do fabricante de um dispositivo instalado." } },
+    { src: "/assets/shots/03-codecs.png", title: "Codecs", desc: "The official ChirpStack v4 and TTN decoders shipped with each device.", url: "simulator · codecs", pt: { title: "Codecs", desc: "Os decoders oficiais ChirpStack v4 e TTN que acompanham cada dispositivo." } },
+    { src: "/assets/shots/04-console.png", title: "Live console", desc: "Fire events and watch HTTP / MQTT / LoRaWAN messages with real payloads.", url: "simulator · console", pt: { title: "Console ao vivo", desc: "Dispare eventos e acompanhe as mensagens HTTP / MQTT / LoRaWAN com payloads reais." } },
+    { src: "/assets/shots/05-logs.png", title: "Logs & events", desc: "The persisted, filterable history of every message.", url: "simulator · logs", pt: { title: "Logs & eventos", desc: "O histórico persistido e filtrável de cada mensagem." } },
+    { src: "/assets/shots/06-events.png", title: "Device events", desc: "Configure events and an auto-repeat schedule for each device.", url: "simulator · events", pt: { title: "Eventos do dispositivo", desc: "Configure eventos e um agendamento de repetição automática para cada dispositivo." } }
   ];
   function initGallery(root, shots) {
     if (!root) return;
@@ -748,11 +752,13 @@
       idx = i;
       imgs.forEach(function (im, j) { im.classList.toggle("on", j === i); });
       btns.forEach(function (bn, j) { bn.classList.toggle("active", j === i); });
-      if (titleEl) titleEl.textContent = shots[i].title;
-      if (descEl) descEl.textContent = shots[i].desc;
-      if (urlEl) urlEl.textContent = shots[i].url;
+      var s = shots[i], cap = (LANG === "pt" && s.pt) ? s.pt : s;
+      if (titleEl) titleEl.textContent = cap.title;
+      if (descEl) descEl.textContent = cap.desc;
+      if (urlEl) urlEl.textContent = s.url;
       if (manual && timer) { clearInterval(timer); timer = setInterval(next, 4800); }
     }
+    GAL_REDRAW.push(function () { show(idx); });
     function next() { show((idx + 1) % shots.length); }
     show(0);
     if (!reduce) {
@@ -765,6 +771,158 @@
     }
   }
 
+  /* ============ i18n — EN is the source; PT applied on demand ============ */
+  var LANG = "en";
+  var GAL_REDRAW = [];
+  var PT = {
+    "nav.why": "Por quê",
+    "nav.action": "Na prática",
+    "nav.platform": "Plataforma",
+    "nav.ecosystem": "Ecossistema",
+    "nav.simulator": "Simulador",
+    "nav.start": "Começar",
+    "hero.kicker": '<span class="dot"></span> Conecte · Automatize · Escale',
+    "hero.h1": 'Telemetria bruta entra.<br><span class="grad">Ação automatizada sai.</span>',
+    "hero.sub": '<b>IoT em primeiro lugar — mas não só IoT.</b> O MapexOS recebe qualquer dispositivo, em qualquer protocolo, normaliza tudo em um único modelo de <b>Asset</b> e conduz esse dado por regras e um motor de workflows — transformando um fluxo de bytes em resultado de negócio em milissegundos.',
+    "hero.cta1": 'Rodar a plataforma <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    "hero.cta2": '<svg class="i" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 9h16M8 13h6"/></svg> Documentação',
+    "hero.stat1": "serviços de backend",
+    "hero.stat2": "protocolos de ingestão",
+    "hero.stat4": "plugins e assets",
+
+    "band.wf": "Motor de workflows",
+    "band.plugin": "Plugins na UI",
+
+    "why.eyebrow": "Por que MapexOS",
+    "why.h2": "Uma operação IoT completa exige muitas capacidades",
+    "why.p": "Ingestão, autenticação, validação de payload, regras de negócio, automação, dashboards, governança multi-organização — cada uma é uma disciplina por si só. O ecossistema open source tem ótimas ferramentas para cada uma delas. O MapexOS reúne todas essas capacidades em uma única plataforma integrada.",
+    "why.oldtag": "As capacidades que você junta",
+    "why.t1": "Ingestão", "why.t2": "Autenticação", "why.t3": "Validação de payload", "why.t4": "Motor de regras",
+    "why.t5": "Automação", "why.t6": "Dashboards", "why.t7": "Barramento de mensagens", "why.t8": "Identidade & RBAC",
+    "why.pain1": "Cada capacidade é um sistema separado para operar e proteger",
+    "why.pain2": "As integrações entre elas são você que constrói e mantém",
+    "why.pain3": "Regras de negócio e identidade acabam espalhadas por vários lugares",
+    "why.pain4": "A estrutura multi-organização é modelada projeto a projeto",
+    "why.note": "Ótimas ferramentas, cada uma forte no seu pedaço — e muita superfície para operar tudo junto.",
+    "why.newp": "Aquisição · validação · processamento · regras de negócio · organização de assets · observabilidade · integração — as mesmas capacidades, pensadas de ponta a ponta como uma só plataforma.",
+    "why.protoem": "ingestão pronta de fábrica",
+    "why.win1": "Uma arquitetura — toda capacidade roda sobre o mesmo núcleo",
+    "why.win2": "Escalabilidade uniforme em toda a plataforma",
+    "why.win3": "Sem duplicação de dados e sem integrações para construir ou manter",
+    "why.win4": "Multi-organização de base, não como remendo",
+    "why.badge": "Uma plataforma integrada",
+
+    "act.eyebrow": "O MapexOS na prática",
+    "act.h2": "A plataforma, funcionando",
+    "act.p": "Telas reais do MapexOS — desenhe automações num canvas visual, integre assets a partir de um Template, acompanhe presença e saúde, e governe o pipeline inteiro. Temas claro e escuro já vêm de fábrica.",
+    "act.c1h": "Goto — links virtuais",
+    "act.c1p": "Referencie um passo pelo nome em vez de arrastar um fio pelo canvas. Menos cruzamentos, e um DAG que continua legível conforme cresce.",
+    "act.c2h": "Presença nativa",
+    "act.c2p": "Online, offline e último contato de cada asset — a plataforma percebe na hora quando um deles silencia, sem você ter que montar nenhum esquema de heartbeat.",
+    "act.c3h": "Escuro & claro",
+    "act.c3p": "Seu espaço, seu tema — toda tela vem nos dois modos, claro e escuro, alternáveis a qualquer momento.",
+
+    "plat.eyebrow": "A plataforma",
+    "plat.h2": "Tudo entre o dispositivo e a decisão",
+    "plat.p": "Dez serviços de backend e um frontend em Vue 3, self-hosted com um único comando e publicados em multi-arch — o caminho completo de um payload bruto até uma ação automatizada.",
+    "plat.c1h": "Ingestão de telemetria",
+    "plat.c1p": "HTTP e MQTT autenticados. Cada decisão de CONNECT/PUBLISH é tomada localmente sobre um cache de três camadas — sem ida e volta no caminho crítico.",
+    "plat.c2h": "Conversão genérica de dados",
+    "plat.c2p": "Pipelines por asset de <em>preprocess → validate → convert</em> em JavaScript, executados em isolates V8. Normalize qualquer payload — sem mexer na fonte.",
+    "plat.c3h": "Roteamento dinâmico de eventos",
+    "plat.c3p": "Regras de match sobre os campos do evento — <code>payload.temp &gt; 30</code>, igualdade, faixas, pertencimento a conjunto. As regras vivem no MongoDB e valem em tempo de execução, sem redeploy.",
+    "plat.c4h": "Workflow engine",
+    "plat.c4p": "Um runtime de DAG durável — execução determinística, retries, timers, sub-workflows, e estado que sobrevive a reinícios via checkpoint no NATS-KV.",
+    "plat.c5h": "Plugins na UI (estilo n8n)",
+    "plat.c5p": "Nós de workflow customizados chegam como plugins a partir de um registro de manifests — conectores novos aparecem no editor sem recompilar o frontend.",
+    "plat.c6h": "Multi-tenant & RBAC",
+    "plat.c6p": "Hierarquia de organizações com isolamento por org, Templates compartilhados e permissões granulares, avaliadas de forma central pelo <code>mapex-iam</code>.",
+
+    "ast.eyebrow": "O modelo",
+    "ast.h2": "Um Asset é qualquer coisa que gera dado",
+    "ast.lede": "Não só um dispositivo. Um sensor, uma máquina, um equipamento, uma área, uma zona, um setor — qualquer asset que produz dado ou precisa ser monitorado. Os <strong>Asset Templates</strong> transformam cada nova integração de um projeto do zero em uma configuração reutilizável, compartilhada entre filiais, sites e clientes inteiros.",
+    "ast.f1": "Asset Templates — integre uma vez, reutilize em todo lugar. Sem um Template, cada integração é um projeto novo; com ele, é só configuração.",
+    "ast.f2": "Multi-organização de base — não um remendo colocado depois, e sim uma decisão de arquitetura.",
+    "ast.f3": "Templates compartilhados se propagam para as organizações descendentes; RBAC e grupos são avaliados de forma central.",
+    "ast.vh1": "Hierarquia corporativa — multi-tenant por design",
+    "ast.treenote": "◀ sensor · máquina · área",
+    "ast.vh2": "Workflow engine próprio — não uma dependência",
+    "ast.vp": "Um workflow engine integrado, inspirado no n8n, processa eventos e aplica regras de negócio dentro da plataforma — e já está sendo preparado para orquestrar agentes de IA dentro desses fluxos.",
+
+    "eco.eyebrow": "Open source",
+    "eco.h2": "O ecossistema MapexOS",
+    "eco.p": "Uma plataforma, muitos repositórios abertos. O repo de deploy sobe a stack inteira; os outros são os serviços, o broker, o network server LoRaWAN, os SDKs e as ferramentas ao redor.",
+    "eco.r1p": "Distribuição em Docker Compose que baixa imagens multi-arch pré-construídas. <strong>Comece por aqui para rodar a plataforma.</strong>",
+    "eco.r1role": "Distribuição · comece aqui",
+    "eco.r2p": "Código dos dez serviços de backend e do frontend em Vue 3 — ingestão, conversão, roteamento, workflow engine e IAM.",
+    "eco.r2role": "Núcleo · Go + Vue 3",
+    "eco.r3p": "Eclipse Mosquitto v2 mais um plugin Go próprio que cuida de auth, ACL, presença e ingestão num único <code>.so</code>.",
+    "eco.r3role": "Borda MQTT · Go",
+    "eco.r4p": "Network Server LoRaWAN — um overlay sobre o The Things Stack (GS · NS · JS) embrulhado na arquitetura hexagonal do MapexOS.",
+    "eco.r4role": "LoRaWAN · Go",
+    "eco.r5p": "App desktop (Electron + Go) que se comporta como dispositivo real no fio, por HTTP, MQTT e LoRaWAN.",
+    "eco.r5role": "Ferramenta · Electron + Go",
+    "eco.r6p": "SDK Go compartilhado — middleware HTTP, NATS, clients de Mongo/ClickHouse/MinIO/Redis, JWT, sandbox de JS e contratos entre serviços.",
+    "eco.r6role": "SDK · Go",
+
+    "sim.eyebrow": "Ferramenta",
+    "sim.lede": "Simule dispositivos IoT reais — sem precisar comprar hardware — e mande tráfego de verdade para o MapexOS ou qualquer plataforma que fale HTTP, MQTT ou LoRaWAN. Um app desktop (Electron em volta de um sidecar Go) que se comporta como dispositivo real no fio.",
+    "sim.f1": "Quatro transportes — HTTP, MQTT (pub + sub) e LoRaWAN por Semtech UDP ou Basics Station, com cripto OTAA/ABP de verdade.",
+    "sim.f2": "Sessões ao vivo — conexões persistentes com broker/LNS e reconexão automática; dispare eventos sob demanda ou em um agendamento.",
+    "sim.f3": "Console & logs — um stream WebSocket ao vivo de cada uplink, downlink e frame, mais um histórico filtrável.",
+    "sim.f4": "Um único binário desktop — o app Electron sobe o engine Go; nada externo para rodar.",
+    "sim.cta1": "Abrir no GitHub",
+    "sim.cta2": "Ver a API do catálogo",
+    "sim.vh1": "Fala no fio",
+    "sim.vh2": "Aponte para onde quiser",
+    "sim.vp": "Feito para o MapexOS, mas neutro a fornecedor: The Things Stack, ChirpStack, um endpoint IoT na nuvem ou seu próprio broker — simplesmente funciona.",
+
+    "clx.lead": "Uma plataforma que não entrega só conectividade. Ela entrega —",
+    "clx.words": '<span>Estrutura</span><span>Organização</span><span>Permissões</span><span>Templates</span><span>Workflow</span><span>Regras de negócio</span><span>Observabilidade</span><span>Escalabilidade</span>',
+    "clx.free": '— e, acima de tudo, <span class="grad">liberdade</span> para construir soluções IoT de verdade.',
+    "clx.stack": "Construído sobre Go · NATS · JetStream · isolates V8 · Prometheus · Grafana",
+
+    "run.eyebrow": "Rodar",
+    "run.h2": "A stack inteira, um comando",
+    "run.p": "Clone o repo de deploy e suba a plataforma completa — replica-set do Mongo, NATS, MinIO, ClickHouse e cada serviço — em Linux, Apple Silicon, Windows + Docker Desktop ou um Raspberry Pi.",
+    "run.c1": "# clona a distribuição executável",
+    "run.c2": "# ~2 min depois → frontend em http://localhost",
+    "run.cta1": "Baixar o mapexOSDeploy",
+    "run.cta2": "Ler a documentação",
+
+    "foot.tag": "IoT em primeiro lugar, mas não só IoT. A plataforma aberta para integração de dados e automação inteligente. <strong>Conecte. Automatize. Escale.</strong>",
+    "foot.h1": "Plataforma",
+    "foot.h2": "Ferramentas e SDKs",
+    "foot.h3": "Recursos",
+    "foot.docs": "Documentação",
+    "foot.health": "Status",
+    "foot.copy": "© Mapex Solutions · ecossistema MapexOS.",
+    "foot.top": "Voltar ao topo ↑"
+  };
+  var I18N_ORIG = {};
+  function applyLang(lang) {
+    LANG = lang;
+    Array.prototype.forEach.call(document.querySelectorAll("[data-i18n]"), function (el) {
+      var k = el.getAttribute("data-i18n");
+      if (!(k in I18N_ORIG)) I18N_ORIG[k] = el.innerHTML;
+      el.innerHTML = (lang === "pt" && PT[k] != null) ? PT[k] : I18N_ORIG[k];
+    });
+    document.documentElement.lang = (lang === "pt") ? "pt-br" : "en";
+    Array.prototype.forEach.call(document.querySelectorAll(".lang button"), function (b) {
+      b.classList.toggle("active", b.getAttribute("data-lang") === lang);
+    });
+    GAL_REDRAW.forEach(function (f) { f(); });
+    try { localStorage.setItem("mapexos_lang", lang); } catch (e) {}
+  }
+  function initLang() {
+    var saved = "en";
+    try { saved = localStorage.getItem("mapexos_lang") || "en"; } catch (e) {}
+    Array.prototype.forEach.call(document.querySelectorAll(".lang button"), function (b) {
+      b.addEventListener("click", function () { applyLang(b.getAttribute("data-lang")); });
+    });
+    applyLang(saved);
+  }
+
   /* ============ SCROLL REVEAL + BOOT ============ */
   function initReveal() {
     if (!("IntersectionObserver" in window)) { Array.prototype.forEach.call(document.querySelectorAll(".fade"), function (n) { n.classList.add("in"); }); return; }
@@ -772,6 +930,7 @@
     Array.prototype.forEach.call(document.querySelectorAll(".fade"), function (n) { io.observe(n); });
   }
   function boot() {
+    initLang();
     startStream();
     initGallery(document.getElementById("gal-mapex"), MAPEX_SHOTS);
     initGallery(document.getElementById("gal-sim"), SIM_SHOTS);

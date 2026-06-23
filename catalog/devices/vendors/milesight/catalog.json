@@ -535,7 +535,7 @@
 			"image": "images/device.svg",
 			"hasImage": true,
 			"hasCodec": true,
-			"hasManual": false
+			"hasManual": true
 		},
 		{
 			"id": "milesight-em300-di",
@@ -621,7 +621,7 @@
 			"image": "images/device.svg",
 			"hasImage": true,
 			"hasCodec": true,
-			"hasManual": false
+			"hasManual": true
 		},
 		{
 			"id": "milesight-em300-sld-zld",
@@ -647,7 +647,7 @@
 			"image": "images/device.svg",
 			"hasImage": true,
 			"hasCodec": true,
-			"hasManual": false
+			"hasManual": true
 		},
 		{
 			"id": "milesight-em300-th",

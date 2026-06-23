@@ -1,0 +1,112 @@
+<h1 id="lns">LNS</h1>
+<p>O LNS (LoRaWAN Network Server) é o caminho pelo qual dispositivos <strong>LoRaWAN</strong> chegam ao MapexOS. Em vez de reimplementar uma stack LoRaWAN, ele <strong>embarca o <a href="https://www.thethingsindustries.com/stack/">The Things Stack</a></strong> — o motor LoRaWAN aberto e de nível produção — como dependência e roda apenas os papéis de protocolo de que precisa, encaixando o MapexOS em algumas costuras precisas. O The Things Stack cuida do protocolo de rádio; o MapexOS é dono de <strong>identidade, chaves e fluxo de dados</strong>: o LNS alimenta o TTS com seus dispositivos a partir do modelo de <a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a>, e devolve os uplinks decifrados para o <strong>NATS</strong>, para a <a href="/docs/1.0.0/pt-br/architecture/js-execution">JS Execution</a> normalizar — exatamente como as bordas de entrada HTTP e MQTT.</p>
+<blockquote>
+<p>Embarca o <strong>The Things Stack v3</strong> como dependência Go fixada (pinned), executado a partir de seu próprio composition root (o TTS nunca é forkado) · transportes de gateway <strong>UDP</strong> Semtech packet-forwarder (<code>:1700</code>) + <strong>Basics Station</strong> WebSocket (<code>:1887</code>) · <strong>Redis</strong> (sessão quente) + <strong>MinIO</strong>/<strong>NVMe</strong> (cache de config fria) · sem servidor HTTP, sem MongoDB.</p>
+</blockquote>
+<hr>
+<h2 id="camada-sobreposta-no-fork">Camada sobreposta, não fork</h2>
+<p>O LNS inicia o The Things Stack a partir de <strong>seu próprio composition root</strong> e acende exatamente três papéis em um componente compartilhado:</p>
+<ul>
+<li><strong>Gateway Server (GS)</strong> — termina o tráfego de gateway,</li>
+<li><strong>Network Server (NS)</strong> — camada MAC, frame counters, agendamento,</li>
+<li><strong>Join Server (JS)</strong> — join OTAA + derivação de chaves de sessão.</li>
+</ul>
+<p>Ele deliberadamente <strong>não</strong> inicia o Application Server, o Identity Server nem o Console do TTS — porque o MapexOS já é dono dessas responsabilidades (<a href="/docs/1.0.0/pt-br/architecture/js-execution">JS Execution</a> é o codec, <a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a> é o registro de dispositivos, e o frontend do MapexOS é o console). O TTS é uma dependência fixada, nunca editada; papéis não usados simplesmente nunca são construídos. O resultado é um motor LoRaWAN real e testado em batalha, com o MapexOS substituído apenas onde importa.</p>
+<hr>
+<h2 id="os-dispositivos-vm-de-assets-no-de-um-banco-do-tts">Os dispositivos vêm de Assets, não de um banco do TTS</h2>
+<p>Este é o truque central. O LNS <strong>substitui o banco de dispositivos do TTS</strong> por um adaptador de <strong>hidratação sob miss</strong> (hydrate-on-miss):</p>
+<pre><code> TTS pede um dispositivo
+     │  HOT  → Redis session store (nsredis / jsredis)
+     │  miss
+     └─ COLD → a config fria de Assets via tiered cache
+               (L1 NVMe → L2 MinIO mapex-asset-auth/{assetUUID}.json → Assets HTTP)
+               → mapeado para um dispositivo TTS → cacheado → retornado
+</code></pre>
+<p>A identidade, a região, a classe e as <strong>root keys</strong> do dispositivo vêm do mesmo modelo de <a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a> que o resto da plataforma usa (<code>orgId</code> = aplicação TTS, <code>assetUUID</code> = dispositivo TTS). As root keys são <strong>decifradas com uma key-encryption key buscada no <a href="/docs/1.0.0/pt-br/architecture/vault">Vault</a></strong> no boot e mantidas apenas em RAM — o LNS nunca persiste chaves em texto puro. Tanto a ativação <strong>OTAA</strong> (1.0.3 e 1.1) quanto a <strong>ABP</strong> são suportadas, e um evento <code>fanout.asset.invalidate</code> remove ambas as camadas de cache no momento em que um dispositivo muda upstream.</p>
+<hr>
+<h2 id="estado-frio-vs-quente">Estado frio vs. quente</h2>
+<p>A divisão é deliberada e estrutural:</p>
+<table>
+<thead>
+<tr>
+<th>Estado</th>
+<th>O que é</th>
+<th>Onde vive</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Frio</strong></td>
+<td>identidade, root keys, região, classe, sessão ABP — <strong>somente leitura</strong>, reconstruível a partir do asset</td>
+<td>o modelo de Assets (cacheado)</td>
+</tr>
+<tr>
+<td><strong>Quente</strong></td>
+<td>frame counters, chaves de sessão derivadas, estado MAC — <strong>descartável</strong></td>
+<td>apenas no Redis</td>
+</tr>
+</tbody>
+</table>
+<p>Assim, o LNS não é dono de <strong>nenhum banco de registro</strong>. Perca o estado quente do Redis e um dispositivo simplesmente <strong>refaz o join</strong> (OTAA) ou se re-hidrata (ABP) — não há nada insubstituível para fazer backup.</p>
+<hr>
+<h2 id="uplinks-decifrados-viram-eventos-nats">Uplinks decifrados viram eventos NATS</h2>
+<p>Quando o TTS valida o MIC de um uplink e o decifra via AES, o LNS despacha o <strong>payload em texto puro</strong> para o NATS — o TTS acredita estar alimentando um Application Server; está alimentando o pipeline do MapexOS. Ele publica subjects por dispositivo (NATS Core, fire-and-forget):</p>
+<table>
+<thead>
+<tr>
+<th>Sinal</th>
+<th>Subject</th>
+<th>Vai para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Uplink</strong></td>
+<td><code>lorawan.data.{orgId}.{assetUUID}</code></td>
+<td><a href="/docs/1.0.0/pt-br/architecture/js-execution">JS Execution</a> — normalizado como qualquer outra entrada</td>
+</tr>
+<tr>
+<td><strong>Join</strong></td>
+<td><code>lorawan.join.{orgId}.{assetUUID}</code></td>
+<td>um sinal de join OTAA / presence</td>
+</tr>
+<tr>
+<td><strong>Status de downlink</strong></td>
+<td><code>lorawan.downlink.status.{orgId}.{assetUUID}</code></td>
+<td>o ciclo de vida do comando (<code>queued</code> → <code>sent</code> → <code>ack</code>/<code>nack</code>/<code>failed</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>O envelope do uplink carrega o <code>orgId</code>, o <code>assetUUID</code>, o <code>fPort</code>, o <code>fCnt</code> e o payload em texto puro em base64 — então a JS Execution resolve o asset e roda o <strong>mesmo pipeline de decode → validação → transform</strong> que roda para HTTP e MQTT. O LNS <strong>não</strong> decodifica payloads de aplicação; isso é trabalho da JS Execution.</p>
+<hr>
+<h2 id="gateways-e-downlinks">Gateways e downlinks</h2>
+<p>Gateways são <strong>entidades de primeira classe, registradas</strong>: apenas gateways conhecidos se conectam (<code>RequireRegisteredGateways</code>), cada um extraído da config fria de Assets com seu próprio <strong>frequency plan</strong> (multi-região, planos embarcados no binário). A autenticação de gateway é por <strong>EUI</strong> (UDP) ou <strong>mTLS</strong> (Basics Station) — o serial do certificado fixado a partir do asset, a cadeia de CA provisionada pela PKI do <a href="/docs/1.0.0/pt-br/architecture/vault">Vault</a>.</p>
+<p>No caminho reverso, o LNS <strong>consome</strong> comandos de downlink do NATS (stream JetStream <code>LORAWAN_DOWNLINK</code>) e os empurra para a fila de downlink do Network Server, emitindo os eventos de status acima conforme o comando avança em seu ciclo de vida.</p>
+<hr>
+<h2 id="para-onde-ir-agora">Para onde ir agora</h2>
+<table>
+<thead>
+<tr>
+<th>Para se aprofundar em…</th>
+<th>Vá para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Onde a identidade e as chaves do dispositivo são definidas</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a></td>
+</tr>
+<tr>
+<td>A KEK e a CA de gateway por trás disso</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/vault">Vault</a></td>
+</tr>
+<tr>
+<td>O que normaliza os uplinks que ele emite</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/js-execution">JS Execution</a></td>
+</tr>
+<tr>
+<td>A contraparte MQTT na borda</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/mqtt-broker">MQTT Broker</a></td>
+</tr>
+</tbody>
+</table>

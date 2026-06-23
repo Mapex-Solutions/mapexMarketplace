@@ -1,0 +1,827 @@
+<h1 id="viso-geral-da-arquitetura">Visão Geral da Arquitetura</h1>
+<blockquote>
+<p><strong>IoT-first, mas não limitado a IoT.</strong>
+O MapexOS não enxerga devices nem sensores — ele enxerga <strong>Assets</strong>.
+Qualquer origem. Qualquer protocolo. Uma única abstração.</p>
+<p><strong>Conecte. Automatize. Escale.</strong> — a plataforma aberta para integração de dados e automação inteligente.</p>
+</blockquote>
+<p>Leia esta página se você está avaliando o MapexOS para uma carga de produção. Todo o resto da documentação remete a uma das ideias desta página.</p>
+<p>O MapexOS trata cada sinal de entrada — um device, um gateway, uma API, um webhook de terceiros, um app interno — como um <strong>Asset event</strong>. A partir dessa única abstração, ele entrega aos operadores um pipeline para <strong>ingerir, validar, normalizar, rotear, armazenar e automatizar</strong> esse sinal. A plataforma é <strong>self-hosted, multi-tenant, multi-arch</strong>, e foi construída para a mesma disciplina operacional de qualquer outro sistema de produção da sua stack.</p>
+<pre><code>   Sources                       MapexOS                         Destinations
+   ───────                       ───────                         ────────────
+   Devices ──┐                                              ┌── Webhooks / APIs
+   Gateways ─┤   Ingest → Validate → Transform → Route →    ├── Slack / Teams / Email
+   APIs ─────┼──        Store / Notify / Automate           ├── NATS / MQTT
+   Apps ─────┤                                              └── Custom plugins
+   3rd-party ┘
+</code></pre>
+<hr>
+<h2 id="tldr--o-pitch-de-60-segundos">TL;DR — o pitch de 60 segundos</h2>
+<ul>
+<li><strong>Uma única abstração para toda origem.</strong> Devices, gateways, APIs, apps e webhooks de terceiros viram todos <strong>Asset events</strong> — um payload normalizado com <code>orgId</code>, <code>eventId</code>, <code>data</code>, <code>metadata</code>.</li>
+<li><strong>Dez serviços escaláveis de forma independente</strong> (8 em Go, 2 em Node) unidos por um único contrato de evento no <strong>NATS JetStream</strong>.</li>
+<li><strong>Um Workflow Engine durável e recuperável a falhas</strong> — um runtime de DAG com retries, timers e sub-workflows; cada step tem checkpoint no NATS KV, então uma execução retoma após um restart em vez de recomeçar do zero.</li>
+<li><strong>Um modelo de Plugin no estilo n8n</strong> — novos nós de Workflow chegam como manifests declarativos servidos pelo plugin registry; o editor os carrega em runtime, então novos conectores entram em cena sem rebuild do frontend.</li>
+<li><strong>O código de decode / validate / transform roda em sandbox</strong> dentro de <strong>V8 isolates</strong> (<code>isolated-vm</code> sobre um pool de workers); um cache de read-model em camadas (<strong>L0 RAM → L1 disk → L2 MinIO/S3 → Fallback (reconstrói o cache)</strong>) mantém a config quente rápida em toda a plataforma.</li>
+<li><strong>Multi-tenant desde a camada zero.</strong> <code>orgId + pathKey</code> se propaga por todo contrato; templates e políticas herdam para baixo na árvore de organizações.</li>
+<li><strong>Secrets nunca ficam em texto puro.</strong> Envelope encryption no <code>mapexVault</code>; o data plane vê apenas referências como <code>secrets.slack.token</code>.</li>
+<li><strong>Um único comando para subir a plataforma.</strong> <code>docker compose up -d</code> a partir do <code>mapexOSDeploy</code>; imagens multi-arch para servidores Linux, Apple Silicon, Windows + Docker Desktop e Raspberry Pi 4/5.</li>
+<li><strong>Licenciado sob BSL 1.1.</strong> Faça self-host, modifique e execute para a sua própria organização; a distribuição comercial em SaaS é reservada. Converte para Apache 2.0 na Change Date.</li>
+</ul>
+<p>Se algum desses pontos for um impeditivo — ou inegociável — o resto desta página mostra onde cada um deles vive no código.</p>
+<hr>
+<h2 id="o-que-o-mapexos---e-o-que-ele-no-">O que o MapexOS é — e o que ele não é</h2>
+<p><strong>O MapexOS é:</strong></p>
+<ul>
+<li><strong>IoT-first, mas não limitado a IoT.</strong> Devices e sensores são cidadãos de primeira classe, mas toda outra origem — REST API, webhook, app interno, SaaS de terceiros — entra pela mesma abstração de <strong>Asset event</strong>.</li>
+<li><strong>Um runtime de automação durável.</strong> Um Workflow Engine baseado em DAG, com execução determinística, retries com backoff, timers, sub-workflows e Triggers idempotentes — o estado tem checkpoint no NATS KV a cada step e sobrevive a restarts de processo.</li>
+<li><strong>Um control plane multi-tenant.</strong> Hierarquia de organizações, RBAC, membership de grupos e herança de templates são preocupações de primeira classe — não puxadinhos.</li>
+<li><strong>Um router orientado a políticas.</strong> Para onde um evento vai — storage, lake house, Workflow, Trigger — é <em>configuração</em>, não código. As regras de match vivem no MongoDB e se aplicam em runtime (sem migração de schema, sem redeploy); as regras são lidas através de um cache com uma janela curta de refresh.</li>
+<li><strong>Um editor extensível.</strong> Novos nós de Workflow chegam como <strong>Plugins no estilo n8n</strong> descritos por manifests que o editor carrega em runtime; novos conectores entram no editor sem um release de frontend.</li>
+<li><strong>Self-hostable, multi-arch.</strong> Um único <code>docker compose up -d</code> sobe a stack. Imagens para <code>linux/amd64</code> e <code>linux/arm64</code> — roda em servidores Linux, Apple Silicon, Windows + Docker Desktop e Raspberry Pi 4/5.</li>
+</ul>
+<p><strong>O MapexOS NÃO é:</strong></p>
+<ul>
+<li>❌ <strong>Não é um banco de dados de séries temporais.</strong> A persistência é delegada ao <strong>ClickHouse</strong>; o MapexOS é o pipeline que o alimenta e a superfície de consulta que o interpreta.</li>
+<li>❌ <strong>Não é mais um produto de &quot;ingestão-e-dashboard para IoT&quot;.</strong> A maioria das plataformas nesse espaço para na ingestão e em um gráfico. O MapexOS trata a ingestão como a parte fácil e investe seu orçamento de complexidade em <strong>roteamento, Workflows duráveis, extensibilidade via Plugin e multi-tenancy</strong> — as partes que de fato quebram em escala.</li>
+<li>❌ <strong>Não é um SaaS gerenciado.</strong> A plataforma é self-hosted, container-first. A distribuição comercial hospedada é uma oferta separada da Mapex, reservada sob a <strong>BSL 1.1</strong>.</li>
+</ul>
+<blockquote>
+<p><strong>Por que a distinção importa.</strong> Uma demo com um widget de temperatura não é uma plataforma de frota. A parte difícil de operar cargas reais começa <em>depois</em> que o dado pousa — e é exatamente aí que o MapexOS gasta sua engenharia.</p>
+</blockquote>
+<hr>
+<h2 id="o-pipeline-de-eventos">O pipeline de eventos</h2>
+<p>Todo evento que entra no MapexOS percorre o mesmo pipeline canônico. <strong>Cada seta neste diagrama é um NATS subject sob um stream do JetStream, persistido e replayable.</strong></p>
+<pre><code>   INGEST                    TRANSFORM                ROUTE                    ACT  (fan-out, 0..N)
+   ──────                    ─────────                ─────                    ────────────────────
+
+  ┌───────────────┐                                                      ┌───────────────────────────┐
+  │ http_gateway  │──┐    ┌───────────────┐     ┌───────────────┐   ┌───▶│ events    :5004 → ClickHo │
+  │ :5001         │  │    │ js-executor   │     │ router        │   │    └───────────────────────────┘
+  └───────────────┘  │    │ V8   :8000    │     │ :5003         │   │    ┌───────────────────────────┐
+                     ├───▶│ decode →      │────▶│ match-rule    │───┤───▶│ workflow  :5007 → DAG      │
+  ┌───────────────┐  │    │ validate →    │     │ evaluation    │   │    └───────────────────────────┘
+  │ Mosquitto +   │  │    │ transform     │     │ + fan-out     │   │    ┌───────────────────────────┐
+  │ broker plugin │──┘    └───────────────┘     └───────────────┘   ├───▶│ triggers  :5006 → 8 execs │
+  └───────────────┘             │                                   │    └───────────────────────────┘
+   authenticate +         Standard Event +                          │    ┌───────────────────────────┐
+   persist raw copy       EVA dynamic fields                        └───▶│ lake-house   sink         │
+                                                                         └───────────────────────────┘
+</code></pre>
+<p><strong>Sources</strong> — Devices (HTTP / MQTT) e webhooks/APIs de terceiros entram todos no <em>Ingest</em>. <strong>Cada seta é um subject do NATS JetStream</strong> (persistido e replayable): a ingestão emite <code>events.raw</code> e <code>processor.js.execute</code>; o router faz fan-out sobre <code>events.save</code>, <code>workflow.execution.router</code>, <code>trigger.router.execute</code>, <code>events.lake_house</code> e <code>events.router</code> (history).</p>
+<p>O pipeline tem <strong>seis estágios</strong>, cada um pertencente a um serviço diferente e cada um escalável de forma independente:</p>
+<table>
+<thead>
+<tr>
+<th>Estágio</th>
+<th>Serviço dono</th>
+<th>O que acontece</th>
+<th>Saída</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Ingest</strong></td>
+<td><code>http_gateway</code>, MQTT broker</td>
+<td>Autentica o produtor, anexa <code>orgId</code> + <code>dataSourceId</code>, persiste uma cópia bruta de auditoria</td>
+<td><code>events.raw</code>, <code>processor.js.execute</code></td>
+</tr>
+<tr>
+<td><strong>2. Decode</strong></td>
+<td><code>js-executor</code></td>
+<td>Roda o script <code>decode</code> do asset em um V8 isolate para transformar os bytes do fabricante em um objeto JSON</td>
+<td>payload <code>decoded</code></td>
+</tr>
+<tr>
+<td><strong>3. Validate</strong></td>
+<td><code>js-executor</code></td>
+<td>Roda o script <code>validate</code> — rejeita entradas malformadas antes que cheguem ao router</td>
+<td>payload <code>validated</code></td>
+</tr>
+<tr>
+<td><strong>4. Transform</strong></td>
+<td><code>js-executor</code></td>
+<td>Roda o script <code>transform</code> — emite o <strong>Standard Event</strong> + EVA dynamic fields</td>
+<td>Standard Event <code>transformed</code></td>
+</tr>
+<tr>
+<td><strong>5. Route</strong></td>
+<td><code>router</code></td>
+<td>Avalia as regras de match sobre o Standard Event; faz fan-out para 0..N subjects downstream</td>
+<td>subjects por tipo</td>
+</tr>
+<tr>
+<td><strong>6. Act</strong></td>
+<td><code>events</code>, <code>workflow</code>, <code>triggers</code></td>
+<td>Persiste, automatiza ou notifica — cada consumer é independente</td>
+<td>linhas no ClickHouse, execuções de Workflow, chamadas de Trigger</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Por que cada step é seu próprio serviço.</strong> Decode-validate-transform é CPU-bound e se beneficia do pooling de V8. O roteamento é pesado em avaliação de regras e precisa de lookups quentes de assets. O storage é I/O-bound no ClickHouse. Os Workflows são stateful, com timers de vida longa. Separar isso significa <strong>escalar o ponto quente, não a plataforma inteira.</strong></p>
+</blockquote>
+<hr>
+<h2 id="o-ecossistema-mapexos">O ecossistema MapexOS</h2>
+<p>O MapexOS é um <strong>monorepo</strong> (<code>mapexOS</code>) com os serviços de backend e o frontend em Vue 3, cercado por alguns <strong>repositórios satélites</strong>. A maioria dos usuários só precisa do repo de deploy; os demais são para contribuidores, operadores de broker, LoRaWAN e integradores Go.</p>
+<table>
+<thead>
+<tr>
+<th>Repositório</th>
+<th>Papel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="https://github.com/Mapex-Solutions/mapexOS"><code>mapexOS</code></a></strong></td>
+<td>Monorepo: os serviços de backend e o frontend em Vue 3.</td>
+</tr>
+<tr>
+<td><strong><a href="https://github.com/Mapex-Solutions/mapexOSDeploy"><code>mapexOSDeploy</code></a></strong></td>
+<td>Distribuição Docker Compose que puxa imagens multi-arch pré-construídas do Docker Hub. <strong>Comece por aqui para rodar a plataforma.</strong></td>
+</tr>
+<tr>
+<td><strong><a href="https://github.com/Mapex-Solutions/mapexMQTTBroker"><code>mapexMQTTBroker</code></a></strong></td>
+<td>O MQTT broker de produção — Eclipse Mosquitto v2 mais um plugin Go interno que cuida de auth, ACL, presence e ingress em um único <code>.so</code>.</td>
+</tr>
+<tr>
+<td><strong><a href="https://github.com/Mapex-Solutions/mapexLNS"><code>mapexLNS</code></a></strong></td>
+<td>LoRaWAN Network Server — uma camada fina sobre o The Things Stack (papéis GS/NS/JS) que despacha os uplinks decifrados para o NATS.</td>
+</tr>
+<tr>
+<td><strong><a href="https://github.com/Mapex-Solutions/mapexGoKit"><code>mapexGoKit</code></a></strong></td>
+<td>SDK Go compartilhado usado por todo serviço Go — middleware HTTP, clients de NATS/Mongo/ClickHouse/MinIO/Redis, observabilidade, validação, contratos.</td>
+</tr>
+<tr>
+<td><strong><a href="https://github.com/Mapex-Solutions/mapexDevicesSimulator"><code>mapexDevicesSimulator</code></a></strong></td>
+<td>Simulador desktop que injeta tráfego real de HTTP/MQTT/LoRaWAN na plataforma sem hardware.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>O MQTT broker é seu próprio repo por um motivo.</strong> Cada decisão de CONNECT/PUBLISH é tomada <strong>localmente</strong> no plugin do broker, a partir de um cache de três camadas (<strong>Pebble → MinIO/S3 → fallback HTTP</strong> para o serviço <code>assets</code>). Sem ida e volta no caminho crítico. É essa garantia que permite a um único broker carregar dezenas de milhares de conexões simultâneas de devices sem que o control plane vire o gargalo.</p>
+</blockquote>
+<hr>
+<h2 id="princpios-de-design--e-os-tradeoffs-que-aceitamos">Princípios de design — e os tradeoffs que aceitamos</h2>
+<p>A arquitetura existe para responder a seis perguntas. Cada linha mostra a pergunta, o princípio que escolhemos, o que <strong>abrimos mão</strong> para consegui-lo e onde a escolha aparece no código.</p>
+<table>
+<thead>
+<tr>
+<th>Pergunta que o princípio responde</th>
+<th>Escolha que fizemos</th>
+<th>Do que abrimos mão</th>
+<th>Onde vive</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Como os serviços permanecem desacoplados conforme a plataforma cresce?</em></td>
+<td><strong>NATS JetStream</strong> como sistema de registro dos eventos; HTTP apenas para o control plane</td>
+<td>Request/response síncrono entre serviços</td>
+<td>Todo fluxo de eventos entre serviços usa subjects em <code>packages/contracts/services/*/events</code></td>
+</tr>
+<tr>
+<td><em>Como entregamos código de cliente com segurança, sem escapes de sandbox?</em></td>
+<td><strong>V8 isolates</strong> sem bindings de Node, sem filesystem, sem rede</td>
+<td>&quot;Simplesmente escreva qualquer módulo Node&quot; — só ES6+ é permitido</td>
+<td><code>js-executor</code>, <code>js-workflow-executor</code></td>
+</tr>
+<tr>
+<td><em>Como os scripts rodam rápido em escala?</em></td>
+<td><strong>Compilação para bytecode + um cache em camadas</strong> (L0 RAM → L1 disk → L2 MinIO/S3 → Fallback)</td>
+<td>Orçamento de memória — a camada de RAM é limitada por pod</td>
+<td>Camada de cache em camadas usada por <code>assets</code>, <code>workflow</code>, <code>js-executor</code></td>
+</tr>
+<tr>
+<td><em>Como as execuções de Workflow sobrevivem a uma falha?</em></td>
+<td><strong>Estado do DAG com checkpoint no NATS KV</strong>, arquivado no MongoDB ao terminar</td>
+<td>Custo de storage — cada step é persistido</td>
+<td><code>workflow/src/modules/runtime</code> + <code>archiver</code></td>
+</tr>
+<tr>
+<td><em>Como servimos muitos tenants com segurança em uma única stack?</em></td>
+<td><strong><code>orgId + pathKey</code> em todo contrato</strong>, RBAC aplicado centralmente, templates propagam árvore abaixo</td>
+<td>Um modelo plano — não existe &quot;modo single-tenant&quot;</td>
+<td><code>mapexIam</code> está em todo caminho de código</td>
+</tr>
+<tr>
+<td><em>Como os operadores adicionam novas integrações sem redeploy?</em></td>
+<td><strong>Manifests de Plugin</strong> que o editor carrega em runtime a partir do plugin registry</td>
+<td>Os operadores confiam no registry que configuram</td>
+<td><code>workflow/src/modules/plugins</code></td>
+</tr>
+</tbody>
+</table>
+<p>Esses tradeoffs não são adaptações posteriores — são a razão pela qual o codebase tem a cara que tem.</p>
+<hr>
+<h2 id="os-10-servios--em-um-relance">Os 10 serviços — em um relance</h2>
+<pre><code>   ┌─────────────────────────────────────────────────────────────────────────┐
+   │                            CONTROL PLANE                                │
+   │   mapexIam      mapexVault      assets       (frontend: mapexOS SPA)    │
+   │   (auth/orgs)   (secrets/PKI)   (templates)                             │
+   └─────────────────────────────────────────────────────────────────────────┘
+   ┌─────────────────────────────────────────────────────────────────────────┐
+   │                              DATA PLANE                                 │
+   │                                                                         │
+   │   http_gateway  ──┐                                                     │
+   │                   ├─→  js-executor  ──→  router  ──┬─→  events          │
+   │   MQTT broker  ──┘                                  ├─→  workflow       │
+   │                                                     └─→  triggers       │
+   │                                                                         │
+   │              js-workflow-executor  (V8 for workflow code nodes)         │
+   └─────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Serviço</th>
+<th>Porta</th>
+<th>Stack</th>
+<th>Papel</th>
+<th>Storage que possui</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>mapexIam</strong></td>
+<td>5000</td>
+<td>Go</td>
+<td>Organizações, usuários, roles, grupos, auth JWT, cache de RBAC</td>
+<td><code>dev-mapexos</code> (Mongo) + Redis DB 5</td>
+</tr>
+<tr>
+<td><strong>http_gateway</strong></td>
+<td>5001</td>
+<td>Go</td>
+<td>Ingestão de webhooks, 5 estratégias de auth, registry de datasources</td>
+<td><code>dev-http_gateway</code> (Mongo)</td>
+</tr>
+<tr>
+<td><strong>assets</strong></td>
+<td>5002</td>
+<td>Go</td>
+<td>Assets, templates, EVA fields, backend de auth/ACL do MQTT</td>
+<td><code>dev-assets</code> (Mongo)</td>
+</tr>
+<tr>
+<td><strong>router</strong></td>
+<td>5003</td>
+<td>Go</td>
+<td>Avaliação de match-rule, fan-out para destinos downstream</td>
+<td><code>dev-router</code> (Mongo)</td>
+</tr>
+<tr>
+<td><strong>events</strong></td>
+<td>5004</td>
+<td>Go</td>
+<td>Storage no ClickHouse, 7 consumers NATS, queries EVA, TTL</td>
+<td><code>mapexos</code> (ClickHouse) + <code>dev-events</code> (Mongo)</td>
+</tr>
+<tr>
+<td><strong>triggers</strong></td>
+<td>5006</td>
+<td>Go</td>
+<td>8 executors outbound: HTTP, MQTT, RabbitMQ, NATS, WebSocket, Email, Teams, Slack</td>
+<td><code>dev-triggers</code> (Mongo)</td>
+</tr>
+<tr>
+<td><strong>workflow</strong></td>
+<td>5007</td>
+<td>Go</td>
+<td>Runtime de DAG durável e recuperável a falhas, 17 tipos de nó core + nós de Plugin, checkpointing em NATS KV</td>
+<td><code>dev-workflow</code> (Mongo) + NATS KV</td>
+</tr>
+<tr>
+<td><strong>mapexVault</strong></td>
+<td>5010</td>
+<td>Go</td>
+<td>Credenciais com envelope encryption, autoridade PKI</td>
+<td><code>dev-vault</code> (Mongo)</td>
+</tr>
+<tr>
+<td><strong>js-executor</strong></td>
+<td>8000</td>
+<td>Node + V8</td>
+<td>Isolates de Decode → Validate → Transform para eventos de IoT</td>
+<td>MinIO/S3 (cache L2)</td>
+</tr>
+<tr>
+<td><strong>js-workflow-executor</strong></td>
+<td>8001</td>
+<td>Node + V8</td>
+<td>V8 isolates para os nós <code>Code</code> de Workflow</td>
+<td>MinIO/S3 (cache L2)</td>
+</tr>
+</tbody>
+</table>
+<p>Cada serviço segue o mesmo layout interno — <strong>DDD + hexagonal</strong>, módulos em <code>src/modules/</code>, ports/adapters separando o domínio da infraestrutura. É essa uniformidade que permite a um novo contribuidor cair em qualquer serviço e se localizar em minutos.</p>
+<h3 id="edge-servers--os-trs-pontos-de-ingress">Edge servers — os três pontos de ingress</h3>
+<p>Além dos dez serviços core, a plataforma tem <strong>três edges de ingress</strong> — e dois deles vivem em <strong>seus próprios repositórios</strong> com sua própria tecnologia, porque o edge de protocolo tem características operacionais muito diferentes:</p>
+<table>
+<thead>
+<tr>
+<th>Edge</th>
+<th>Transporte</th>
+<th>Stack</th>
+<th>Stream de ingress</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="/docs/1.0.0/pt-br/architecture/http-gateway">HTTP Gateway</a></strong></td>
+<td>HTTP / HTTPS</td>
+<td>Go (Fiber) — um serviço core</td>
+<td><code>processor.js.execute</code></td>
+</tr>
+<tr>
+<td><strong><a href="/docs/1.0.0/pt-br/architecture/mqtt-broker">MQTT Broker</a></strong></td>
+<td>MQTT <code>1883</code> / <code>8883</code></td>
+<td>Eclipse Mosquitto v2 + um plugin Go</td>
+<td><code>mqtt.data.&gt;</code></td>
+</tr>
+<tr>
+<td><strong><a href="/docs/1.0.0/pt-br/architecture/lns">LNS</a></strong></td>
+<td>LoRaWAN (UDP <code>1700</code> / WS <code>1887</code>)</td>
+<td>Camada sobre o The Things Stack (Go)</td>
+<td><code>lorawan.data.&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Todos os três autenticam <strong>no edge</strong> a partir da mesma projeção autorada pelo Assets, e convergem para o <code>js-executor</code> para a normalização — cada um em seu próprio stream de protocolo.</p>
+<hr>
+<h2 id="multi-tenancy-by-design">Multi-tenancy by design</h2>
+<p>Todo contrato carrega o contexto de tenant. Não é um header HTTP que se perde no caminho — é um campo tipado em todo DTO que cruza a fronteira de um serviço.</p>
+<h3 id="a-rvore-de-organizaes">A árvore de organizações</h3>
+<pre><code>RootOrg
+  ├── Tenant-A           (pathKey: &quot;rootOrg.tenantA&quot;)
+  │     ├── Region-EU    (pathKey: &quot;rootOrg.tenantA.regionEu&quot;)
+  │     └── Region-US    (pathKey: &quot;rootOrg.tenantA.regionUs&quot;)
+  └── Tenant-B           (pathKey: &quot;rootOrg.tenantB&quot;)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Preocupação</th>
+<th>Como funciona</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Identidade</strong></td>
+<td><code>orgId</code> (UUID imutável) + <code>pathKey</code> (string hierárquica). Todo evento, asset, template, regra, Workflow e Trigger carrega os dois.</td>
+</tr>
+<tr>
+<td><strong>Autorização</strong></td>
+<td>Roles de RBAC são <em>definidos por org</em> — não existem roles globais de &quot;admin&quot; ou &quot;viewer&quot;. O <code>mapexIam</code> avalia a matriz de acesso em cada chamada.</td>
+</tr>
+<tr>
+<td><strong>Herança</strong></td>
+<td>Templates e políticas declarados em uma org pai propagam para os descendentes, a menos que sejam explicitamente sobrescritos.</td>
+</tr>
+<tr>
+<td><strong>Isolamento de estado</strong></td>
+<td>Todas as chaves de estado são escopadas: <code>state:{orgId}:{workflowId}:{var}</code>. Não há keyspace compartilhado entre tenants.</td>
+</tr>
+<tr>
+<td><strong>Isolamento de storage</strong></td>
+<td>Lógico, não físico — mesmo banco Mongo, mesmo cluster ClickHouse. O isolamento duro é obtido implantando múltiplas stacks.</td>
+</tr>
+<tr>
+<td><strong>Retenção</strong></td>
+<td>O TTL é configurável <strong>por org × por stream</strong> (raw, processed, router history). A janela de compliance de um tenant não impõe custo a outro.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Por que lógico e não físico?</strong> Bancos físicos por tenant foram considerados e descartados — o custo operacional de replicar Mongo, ClickHouse, NATS e Redis por tenant é justamente o que torna a maioria das plataformas &quot;multi-tenant&quot; inviável para tenants SMB. O isolamento lógico, com filtragem disciplinada por <code>orgId</code> imposta no pacote de contratos, dá aos operadores a <em>opção</em> de fazer sharding depois sem mudanças de código.</p>
+</blockquote>
+<hr>
+<h2 id="durabilidade-e-confiabilidade">Durabilidade e confiabilidade</h2>
+<p>O que significa, concretamente, &quot;durável por padrão&quot;?</p>
+<table>
+<thead>
+<tr>
+<th>Camada</th>
+<th>Garantia</th>
+<th>Mecanismo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ingestão</strong></td>
+<td>Assim que o <code>http_gateway</code> retorna <code>2xx</code>, o evento está persistido no JetStream</td>
+<td><code>events.raw</code> é um stream do JetStream com storage em arquivo</td>
+</tr>
+<tr>
+<td><strong>Decode / validate / transform</strong></td>
+<td>Entrega at-least-once ao <code>js-executor</code></td>
+<td>Consumer NATS JS com <code>Ack</code> explícito após transform bem-sucedido</td>
+</tr>
+<tr>
+<td><strong>Roteamento</strong></td>
+<td>Regras de match avaliadas contra o snapshot mais recente do asset, nunca um obsoleto</td>
+<td>O <code>router</code> lê via TieredCache (L0/L1) com invalidação por FANOUT em mutações de asset</td>
+</tr>
+<tr>
+<td><strong>Execução de Workflow</strong></td>
+<td>Um worker que falhou retoma o DAG em pleno voo após o restart</td>
+<td>Checkpoint por step no <code>NATS KV</code> (<code>exec.{uuid}</code>); os timers do NATS Schedule sobrevivem a restarts</td>
+</tr>
+<tr>
+<td><strong>Triggers</strong></td>
+<td>Chamadas outbound que falham fazem retry com backoff exponencial e caem em uma DLQ</td>
+<td>Política de retry do NATS JS + subjects de DLQ por Trigger</td>
+</tr>
+<tr>
+<td><strong>Storage</strong></td>
+<td>Nenhum evento pousa no ClickHouse duas vezes para o mesmo <code>eventId</code></td>
+<td>O serviço <code>events</code> deduplica em <code>(orgId, eventId)</code> via batch insert com ReplacingMergeTree</td>
+</tr>
+<tr>
+<td><strong>Replay</strong></td>
+<td>Operadores podem reprocessar eventos históricos sem escrever código</td>
+<td>Os consumers do JetStream suportam <code>DeliverByStartTime</code> / <code>DeliverByStartSeq</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>O que isto não é.</strong> O MapexOS não promete <em>exactly-once</em> ponta a ponta. Ele promete <strong>at-least-once com chaves de idempotência estáveis</strong> (<code>eventId</code>, <code>workflowUUID</code>, <code>executionStepId</code>). Os consumers downstream precisam respeitar essas chaves para deduplicar.</p>
+</blockquote>
+<hr>
+<h2 id="escala-horizontal--o-que-escalar-e-por-qual-sinal">Escala horizontal — o que escalar, e por qual sinal</h2>
+<p>O MapexOS escala adicionando instâncias do <strong>serviço específico</strong> que é o gargalo. Cada serviço tem um vetor de escala claro e um gargalo claro.</p>
+<table>
+<thead>
+<tr>
+<th>Serviço</th>
+<th>Escale por</th>
+<th>Sinal a observar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>http_gateway</code></td>
+<td>Pods stateless atrás de LB</td>
+<td>Requisições/segundo, latência p99</td>
+</tr>
+<tr>
+<td>MQTT broker</td>
+<td>Cluster Mosquitto + NATS leaf nodes</td>
+<td>Conexões simultâneas, CPU do broker</td>
+</tr>
+<tr>
+<td><code>js-executor</code></td>
+<td>Pool de workers + pool de isolates</td>
+<td>Scripts/segundo, saturação do pool de isolates</td>
+</tr>
+<tr>
+<td><code>router</code></td>
+<td>Concorrência do NATS pull consumer</td>
+<td>Mensagens pendentes em <code>events.processed</code></td>
+</tr>
+<tr>
+<td><code>workflow</code></td>
+<td>Pool de workers + contagem de partições NATS</td>
+<td>Mensagens pendentes em <code>workflow.execution.router</code>, tamanho do NATS KV</td>
+</tr>
+<tr>
+<td><code>triggers</code></td>
+<td>Pool de workers por executor</td>
+<td>Profundidade da fila de retry, latência das chamadas downstream</td>
+</tr>
+<tr>
+<td><code>events</code></td>
+<td>Consumers JS paralelos + batchers de insert do ClickHouse</td>
+<td>Throughput de insert, latência do batch</td>
+</tr>
+<tr>
+<td>ClickHouse</td>
+<td>Réplicas (leitura) + shards (escrita)</td>
+<td>I/O de disco, lag de replicação</td>
+</tr>
+<tr>
+<td>NATS JetStream</td>
+<td>Tamanho do cluster + réplicas de stream</td>
+<td>Pressão de storage, ack pendente</td>
+</tr>
+<tr>
+<td>MongoDB</td>
+<td>Replica set; faça sharding quando o working set exceder a RAM</td>
+<td>Razão working set vs RAM</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Por que não auto-escalar tudo a partir de um único sinal?</strong> Cada estágio tem um gargalo diferente — o <code>http_gateway</code> é request-bound, o <code>js-executor</code> é CPU-bound, o <code>events</code> é disk-bound. Uma única política de auto-scaling para toda a plataforma escalaria errado a maioria dos estágios na maior parte do tempo. Expomos sinais por estágio e deixamos os operadores decidirem.</p>
+</blockquote>
+<hr>
+<h2 id="arquitetura-de-dados--operacional-analtico-quente-frio">Arquitetura de dados — operacional, analítico, quente, frio</h2>
+<pre><code>  ┌─ OPERATIONAL ───────────────┐   ┌─ ANALYTICAL ────────────────┐
+  │  MongoDB                    │   │  ClickHouse                 │
+  │  configs · governance       │   │  events.raw · processed     │
+  │  templates · rules          │   │  router history · trig logs │
+  └─────────────────────────────┘   └─────────────────────────────┘
+
+  ┌─ HOT STATE ─────────────────┐   ┌─ OBJECT STORAGE ────────────┐
+  │  Redis                      │   │  MinIO / S3                 │
+  │  auth cache · rule counters │   │  read-models · definitions  │
+  ├─────────────────────────────┤   │  artifacts · L2 cache       │
+  │  NATS KV                    │   └─────────────────────────────┘
+  │  workflow exec state        │
+  │  plugin manifest cache      │   ┌─ EVENT BACKBONE ────────────┐
+  └─────────────────────────────┘   │  NATS JetStream             │
+                                     │  every cross-service        │
+                                     │  subject · streams · replay │
+                                     └─────────────────────────────┘
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Storage</th>
+<th>Papel</th>
+<th>O que vive lá</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MongoDB</strong></td>
+<td>Fonte operacional da verdade</td>
+<td>Orgs, usuários, roles, assets, templates, datasources, route groups, definições de Workflow, configs de Trigger, credenciais (criptografadas)</td>
+</tr>
+<tr>
+<td><strong>ClickHouse</strong></td>
+<td>Event store analítico</td>
+<td>Eventos brutos, eventos processados, histórico de execução do router, logs de Workflow, logs de Trigger</td>
+</tr>
+<tr>
+<td><strong>Redis</strong></td>
+<td>Estado compartilhado de baixa latência</td>
+<td>Cache de autorização / permissões (DB 5 — compartilhado entre serviços)</td>
+</tr>
+<tr>
+<td><strong>NATS KV</strong></td>
+<td>Estado quente por execução</td>
+<td>Estado de execução de Workflow ao vivo (<code>exec.{uuid}</code>), cache de manifests de Plugin</td>
+</tr>
+<tr>
+<td><strong>NATS JetStream</strong></td>
+<td>Backbone de eventos</td>
+<td>Todo subject e stream de evento entre serviços</td>
+</tr>
+<tr>
+<td><strong>MinIO / S3</strong></td>
+<td>Objeto + cache L2</td>
+<td>Artefatos de bytecode, definições de Workflow, assets de Plugin</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>A disciplina.</strong> Cada serviço tem <strong>exatamente um</strong> banco Mongo autoritativo — <code>dev-assets</code>, <code>dev-router</code>, <code>dev-workflow</code>, etc. Leituras entre serviços passam pelo NATS ou pela API de contratos, nunca por uma collection Mongo compartilhada. É isso que mantém os serviços implantáveis de forma independente.</p>
+</blockquote>
+<hr>
+<h2 id="estratgia-de-caching--performance-previsvel-no-caminho-crtico">Estratégia de caching — performance previsível no caminho crítico</h2>
+<p>Orçamentos apertados de latência no caminho crítico (lookups de asset do router, resolução de definição de Workflow, carregamento de script) são servidos por um <strong>TieredCache</strong> uniforme — sempre os mesmos quatro níveis: <strong>L0 RAM → L1 disk → L2 MinIO/S3 → Fallback (reconstrói o cache)</strong>.</p>
+<pre><code>L0  RAM                 (per-pod, ~MB, sub-ms)
+ │
+L1  disk (NVMe / SSD)   (per-pod, ~GB, ~1 ms)
+ │
+L2  MinIO / S3          (cluster-wide, unbounded, ~10 ms)
+ │
+Fallback                (rebuild the cache from the source of truth)
+</code></pre>
+<blockquote>
+<p><strong>L2 é qualquer object storage compatível com S3.</strong> A camada L2 fala a <strong>API S3</strong>, então funciona com <strong>MinIO, AWS S3, DigitalOcean Spaces</strong> ou qualquer outro serviço compatível com a API S3 — escolha aquele que o seu deploy já executa. Em um miss de L2, o <strong>Fallback</strong> re-busca no serviço dono (via HTTP) e <strong>reconstrói o cache</strong> para que a próxima leitura volte a ser quente.</p>
+</blockquote>
+<p>Onde é usado:</p>
+<ul>
+<li>O <strong><code>js-executor</code></strong> compila e faz cache do bytecode dos scripts de decode/validate/transform por worker, para reexecução rápida.</li>
+<li>O <strong><code>router</code></strong> faz cache dos snapshots de asset usados na avaliação de match-rule.</li>
+<li>O <strong><code>workflow</code></strong> faz cache de <code>WorkflowDefinition</code>, <code>WorkflowInstance</code> e manifests de Plugin.</li>
+<li>O <strong><code>assets</code></strong> serve as decisões de ACL de MQTT CONNECT/PUBLISH ao plugin do broker a partir do cache — sem ida e volta ao Mongo no caminho crítico.</li>
+</ul>
+<p>A invalidação é <strong>event-driven</strong> sobre NATS — uma atualização de definição faz fan-out para todo pod que mantém a entrada de cache. Não há chute de TTL.</p>
+<hr>
+<h2 id="extensibilidade--trs-planos-trs-contratos">Extensibilidade — três planos, três contratos</h2>
+<p>Os operadores estendem o MapexOS de três formas independentes, cada uma com seu próprio contrato e seu próprio raio de impacto.</p>
+<table>
+<thead>
+<tr>
+<th>Plano</th>
+<th>O que você estende</th>
+<th>Onde roda</th>
+<th>Contrato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Templates</strong></td>
+<td>Decode / validate / transform por asset</td>
+<td>V8 isolate do <code>js-executor</code></td>
+<td>JavaScript ES6+, sem bindings de Node</td>
+</tr>
+<tr>
+<td><strong>Nós de código de Workflow</strong></td>
+<td>Lógica customizada dentro de uma execução de Workflow</td>
+<td>V8 isolate do <code>js-workflow-executor</code></td>
+<td>JavaScript ES6+, o mesmo contrato de isolate</td>
+</tr>
+<tr>
+<td><strong>Plugins</strong></td>
+<td>Novos tipos de nó de Workflow no editor visual (estilo n8n)</td>
+<td>Frontend (UI) + workflow (registry de manifests)</td>
+<td>Manifest JSON declarativo servido pelo plugin registry</td>
+</tr>
+</tbody>
+</table>
+<p>Cada plano roda em sandbox em uma fronteira diferente:</p>
+<ul>
+<li><strong>Templates</strong> veem um evento de cada vez e nunca alcançam o filesystem ou a rede do host.</li>
+<li><strong>Nós de código de Workflow</strong> veem o contexto do Workflow e saem de forma limpa nos limites de memória/timeout.</li>
+<li><strong>Plugins</strong> carregam sua UI a partir da URL do marketplace que o operador configura — o operador decide em quem confia.</li>
+</ul>
+<p>Essa divisão é a razão pela qual <strong>novos conectores entram no editor sem um release de frontend</strong>, e pela qual <strong>nova lógica de integração chega como um template, não como uma mudança de código</strong>.</p>
+<hr>
+<h2 id="baseline-de-segurana">Baseline de segurança</h2>
+<table>
+<thead>
+<tr>
+<th>Preocupação</th>
+<th>Como o MapexOS resolve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Autenticação (norte-sul)</strong></td>
+<td>O <code>http_gateway</code> suporta API key, JWT, IP allowlist, OAuth 2.0 e basic auth por datasource</td>
+</tr>
+<tr>
+<td><strong>Autenticação (leste-oeste)</strong></td>
+<td>Chamadas serviço-a-serviço carregam um JWT assinado pelo <code>mapexIam</code>; os consumers validam via o JWKS do IAM</td>
+</tr>
+<tr>
+<td><strong>Autorização</strong></td>
+<td>Roles de RBAC por org, avaliados centralmente pelo <code>mapexIam</code>, com cache no Redis DB 5</td>
+</tr>
+<tr>
+<td><strong>Isolamento de tenant</strong></td>
+<td><code>orgId + pathKey</code> imposto em todo contrato, validado em toda fronteira</td>
+</tr>
+<tr>
+<td><strong>Armazenamento de secrets</strong></td>
+<td>O <code>mapexVault</code> guarda credenciais sob envelope encryption (AES-256-GCM); o data plane vê apenas referências como <code>secrets.&lt;id&gt;.&lt;field&gt;</code></td>
+</tr>
+<tr>
+<td><strong>PKI</strong></td>
+<td>O <code>mapexVault</code> é a certificate authority — o material de mTLS é provisionado, não colado em configs</td>
+</tr>
+<tr>
+<td><strong>Auditoria</strong></td>
+<td>Toda execução do router escreve uma linha de history; toda chamada de Trigger escreve uma linha de log; ambas consultáveis via o serviço events</td>
+</tr>
+<tr>
+<td><strong>Sandboxing</strong></td>
+<td>Todo código de cliente roda em V8 isolates com limites explícitos de tempo e memória</td>
+</tr>
+<tr>
+<td><strong>Criptografia em trânsito</strong></td>
+<td>Todos os endpoints de NATS, Mongo, ClickHouse, Redis e MinIO são TLS-capable; o HTTP gateway termina TLS no LB</td>
+</tr>
+</tbody>
+</table>
+<p>O threat model assume que o operador da plataforma é confiável, que os scripts fornecidos pelo cliente são não confiáveis e que os tenants não podem observar os dados uns dos outros. As fronteiras impõem esse modelo.</p>
+<hr>
+<h2 id="observabilidade">Observabilidade</h2>
+<p>O MapexOS foi feito para ser <strong>diagnosticável de fora.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sinal</th>
+<th>Onde encontrar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Logs JSON estruturados</strong></td>
+<td>stdout de todo serviço; correlação por <code>eventId</code> / <code>workflowUUID</code></td>
+</tr>
+<tr>
+<td><strong>Métricas Prometheus</strong></td>
+<td><code>/metrics</code> em todo serviço Go; contagens de pendentes por NATS-consumer; saturação por pool de isolates</td>
+</tr>
+<tr>
+<td><strong>Health probes</strong></td>
+<td><code>/health</code> (liveness) e <code>/ready</code> (readiness) em todo serviço</td>
+</tr>
+<tr>
+<td><strong>Traces distribuídos</strong></td>
+<td>OpenTelemetry-ready (<code>traceparent</code> W3C propagado pelos headers do NATS)</td>
+</tr>
+<tr>
+<td><strong>Logs de auditoria persistentes</strong></td>
+<td>Histórico de execução do router e logs de Trigger são consultáveis no ClickHouse</td>
+</tr>
+<tr>
+<td><strong>Debug por asset</strong></td>
+<td>Flag opt-in <code>debugEnabled</code> por asset escreve histórico detalhado do pipeline no ClickHouse — desligada por padrão para controlar custo</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Por que o debug é opt-in.</strong> Persistir cada step de cada evento de cada asset dominaria o storage do ClickHouse. Assets de produção emitem apenas erros; o debug entra em cena com uma flag acionada durante a investigação de um incidente.</p>
+</blockquote>
+<hr>
+<h2 id="topologias-de-deploy">Topologias de deploy</h2>
+<p>O MapexOS é entregue como Docker Compose para single-node e como imagens de container para qualquer orquestrador. O formato do deploy é função do throughput, não de um SKU de produto diferente.</p>
+<table>
+<thead>
+<tr>
+<th>Topologia</th>
+<th>Caso de uso</th>
+<th>O que muda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Single-node</strong></td>
+<td>POC, edge gateway, demo</td>
+<td>Um arquivo Compose, todos os serviços em um host</td>
+</tr>
+<tr>
+<td><strong>Control plane em HA</strong></td>
+<td>Produção, regional</td>
+<td>Cluster NATS (3+ nós), Mongo replica set, múltiplos pods de <code>mapexIam</code> e frontend</td>
+</tr>
+<tr>
+<td><strong>Data plane com sharding</strong></td>
+<td>Ingestão de alto throughput</td>
+<td>Múltiplas réplicas de <code>http_gateway</code> e <code>js-executor</code>; NATS leaf nodes para o edge MQTT</td>
+</tr>
+<tr>
+<td><strong>Edge + central</strong></td>
+<td>Deploys em campo</td>
+<td>MQTT broker + NATS leaf no edge; plataforma completa no data center</td>
+</tr>
+</tbody>
+</table>
+<p>Não existe um caminho de código de &quot;edição Enterprise&quot; — os mesmos binários rodam todas as topologias.</p>
+<hr>
+<h2 id="como-ler-o-resto-da-documentao">Como ler o resto da documentação</h2>
+<p>Leitores diferentes se importam com partes diferentes desta página. Aqui está para onde ir em seguida com base no que você veio buscar.</p>
+<table>
+<thead>
+<tr>
+<th>Se você está avaliando o MapexOS como um...</th>
+<th>Leia a seguir</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Arquiteto de plataforma</strong></td>
+<td><a href="/docs/1.0.0/pt-br/getting-started/concepts">Conceitos Core</a> → <a href="/docs/1.0.0/pt-br/architecture/events">Events</a> → <a href="/docs/1.0.0/pt-br/architecture/mapexiam">mapexIam</a></td>
+</tr>
+<tr>
+<td><strong>SRE / operador</strong></td>
+<td><a href="/docs/1.0.0/pt-br/getting-started/installation">Instalação</a> → <a href="#observabilidade">Observabilidade</a> → <a href="/docs/1.0.0/pt-br/getting-started/quickstart">Quickstart</a></td>
+</tr>
+<tr>
+<td><strong>Revisor de segurança</strong></td>
+<td><a href="/docs/1.0.0/pt-br/architecture/security">Arquitetura de segurança</a> → <a href="/docs/1.0.0/pt-br/architecture/mapexiam">mapexIam</a></td>
+</tr>
+<tr>
+<td><strong>Desenvolvedor de integração</strong></td>
+<td><a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a> → <a href="/docs/1.0.0/pt-br/architecture/js-execution">Execução JS</a> → <a href="/docs/1.0.0/pt-br/architecture/http-gateway">HTTP Gateway</a></td>
+</tr>
+<tr>
+<td><strong>Autor de Workflow</strong></td>
+<td><a href="/docs/1.0.0/pt-br/getting-started/concepts">Conceitos Core</a> → <a href="/docs/1.0.0/pt-br/architecture/js-execution">Execução JS</a> → <a href="/docs/1.0.0/pt-br/architecture/triggers">Triggers</a></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="deep-dives-dos-servios">Deep-dives dos serviços</h2>
+<p>Cada capacidade tem sua própria página, agrupada do jeito que a plataforma é construída.</p>
+<p><strong>Serviços Go</strong></p>
+<ul>
+<li><a href="/docs/1.0.0/pt-br/architecture/mapexiam"><strong>mapexIam</strong></a> — organizações, usuários, roles, JWT, caches de RBAC + coverage</li>
+<li><a href="/docs/1.0.0/pt-br/architecture/router"><strong>Router</strong></a> — regras de match, fan-out, route groups</li>
+<li><a href="/docs/1.0.0/pt-br/architecture/workflow"><strong>Workflow Engine</strong></a> — runtime de DAG durável, condições, suspend/resume</li>
+<li><a href="/docs/1.0.0/pt-br/architecture/triggers"><strong>Triggers</strong></a> — executors outbound, retries, DLQ</li>
+<li><a href="/docs/1.0.0/pt-br/architecture/events"><strong>Events</strong></a> — storage no ClickHouse, queries EVA, retenção</li>
+<li><a href="/docs/1.0.0/pt-br/architecture/assets"><strong>Assets</strong></a> — assets, templates, EVA fields, PKI de device, presence</li>
+<li><a href="/docs/1.0.0/pt-br/architecture/vault"><strong>Vault</strong></a> — secrets com envelope encryption, KEKs, a certificate authority</li>
+</ul>
+<p><strong>Serviços JS</strong></p>
+<ul>
+<li><a href="/docs/1.0.0/pt-br/architecture/js-execution"><strong>Execução JS</strong></a> — V8 isolates que normalizam os payloads dos devices</li>
+<li><a href="/docs/1.0.0/pt-br/architecture/js-workflow-execution"><strong>Execução de Workflow JS</strong></a> — V8 isolates para os nós de código de Workflow</li>
+</ul>
+<p><strong>Edge servers</strong></p>
+<ul>
+<li><a href="/docs/1.0.0/pt-br/architecture/http-gateway"><strong>HTTP Gateway</strong></a> — ingestão de webhooks, auth por origem, registry de datasources</li>
+<li><a href="/docs/1.0.0/pt-br/architecture/mqtt-broker"><strong>MQTT Broker</strong></a> — Mosquitto + plugin Go: auth local, ACL, presence, ingress</li>
+<li><a href="/docs/1.0.0/pt-br/architecture/lns"><strong>LNS</strong></a> — LoRaWAN network server, uma camada sobre o The Things Stack</li>
+</ul>
+<p><strong>Cross-cutting</strong></p>
+<ul>
+<li><a href="/docs/1.0.0/pt-br/architecture/security"><strong>Segurança</strong></a> — identidade, isolamento, secrets e o threat model</li>
+</ul>

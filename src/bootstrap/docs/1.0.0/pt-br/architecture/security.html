@@ -1,0 +1,130 @@
+<h1 id="segurana">Segurança</h1>
+<p>A segurança no MapexOS não é um recurso pregado de lado — ela está <strong>entremeada em cada camada</strong>, porque o trabalho da plataforma é ser <em>operada</em>: com identidade, isolamento, secrets e auditoria como partes de primeira classe da arquitetura. Esta página é o <strong>mapa</strong>: ela mostra como essas camadas se encaixam e aponta para o serviço que impõe cada uma. Nada aqui é um &quot;produto de segurança&quot; à parte — é como o sistema é construído.</p>
+<p>O formato é o de <strong>defesa em profundidade</strong>. Uma requisição é identificada, escopada a um tenant, autorizada, servida por um código do qual ela não consegue escapar, e registrada — e um secret ou uma chave de device é criptografado em repouso, entregue apenas a um serviço nomeado, e nunca devolvido em uma resposta de API.</p>
+<table>
+<thead>
+<tr>
+<th>Camada</th>
+<th>O que protege</th>
+<th>Imposto por</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Identidade e acesso</strong></td>
+<td>quem você é, o que você pode fazer, onde</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/mapexiam">mapexIam</a></td>
+</tr>
+<tr>
+<td><strong>Isolamento multi-tenant</strong></td>
+<td>uma organização não pode ver a outra</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/mapexiam">mapexIam</a> · todo serviço</td>
+</tr>
+<tr>
+<td><strong>Secrets e chaves</strong></td>
+<td>credenciais, chaves de criptografia, a CA</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/vault">Vault</a></td>
+</tr>
+<tr>
+<td><strong>Confiança de device</strong></td>
+<td>só devices reais conectam, como eles mesmos</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a> · <a href="#autenticacao-no-edge">Edge Servers</a></td>
+</tr>
+<tr>
+<td><strong>Autenticação no edge</strong></td>
+<td>toda conexão é comprovada antes da admissão</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/http-gateway">HTTP Gateway</a> · <a href="/docs/1.0.0/pt-br/architecture/mqtt-broker">MQTT Broker</a> · <a href="/docs/1.0.0/pt-br/architecture/lns">LNS</a></td>
+</tr>
+<tr>
+<td><strong>Isolamento de código</strong></td>
+<td>o código de cliente não alcança o host</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/js-execution">Execução JS</a> · <a href="/docs/1.0.0/pt-br/architecture/js-workflow-execution">Execução de Workflow JS</a></td>
+</tr>
+<tr>
+<td><strong>Auditoria e rastreabilidade</strong></td>
+<td>um registro completo e consultável do que aconteceu</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/events">Events</a></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="identidade-e-acesso">Identidade e acesso</h2>
+<p>Toda requisição é autenticada e autorizada contra o <a href="/docs/1.0.0/pt-br/architecture/mapexiam">mapexIam</a>, o control plane de identidade. Os usuários fazem login com <strong>e-mail + senha bcrypt</strong> e recebem um <strong>access JWT</strong> de vida curta mais um <strong>refresh JWT</strong>; os refresh tokens são armazenados por sessão e <strong>rotacionados com proteção contra replay</strong>. A autorização é <strong>baseada em roles</strong>: as permissões resolvidas de um usuário para uma organização são computadas uma vez e cacheadas, e <strong>todo outro serviço lê esse cache</strong> por meio de um middleware compartilhado — é por isso que cada serviço descreve suas rotas como <em>permission-gated</em>. Os roles cascateiam árvore abaixo apenas onde um descendente opta por isso (<code>merge</code> vs <code>strict</code>), de modo que o acesso herdado é deliberado, nunca acidental.</p>
+<hr>
+<h2 id="isolamento-multi-tenant">Isolamento multi-tenant</h2>
+<p>Um único deploy do MapexOS serve muitas organizações com <strong>zero visibilidade compartilhada</strong>. Cada asset, evento, template, role e credencial é escopado a uma <strong>organização</strong> em uma hierarquia ilimitada (<code>vendor → customer → site → building → floor → zone</code>), carregada como um <strong><code>pathKey</code></strong> desnormalizado. Listagem, consulta e roteamento são filtrados pela <strong>coverage</strong> de quem chama — a fatia da árvore que ele tem permissão de alcançar — de modo que um tenant não consegue enumerar, ler ou rotear os dados de outro. O isolamento é uma propriedade do modelo de dados e do cache, não um filtro que alguém precisa lembrar de aplicar.</p>
+<hr>
+<h2 id="secrets-e-chaves">Secrets e chaves</h2>
+<p>Nenhum secret jamais é armazenado em texto puro ou devolvido em uma resposta de API. O <a href="/docs/1.0.0/pt-br/architecture/vault">Vault</a> é a <strong>raiz de confiança</strong>:</p>
+<ul>
+<li><strong>Credenciais</strong> de terceiros são seladas com <strong>envelope encryption de duas camadas</strong> (uma master key envolve uma data key por registro; AES-256-GCM). Os campos criptografados fisicamente não conseguem serializar para uma resposta; o texto puro é entregue apenas por um endpoint interno oculto e protegido por API key, pela duração de uma única requisição.</li>
+<li>Serviços que precisam criptografar seus próprios secrets recebem uma <strong>chave escopada por contexto (KEK)</strong> e rodam a criptografia <strong>localmente</strong> — a master key nunca sai do Vault. É assim que o <a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a> sela as chaves de device LoRaWAN.</li>
+<li>O Vault também é a <strong>certificate authority</strong> (veja abaixo); suas chaves privadas de CA têm envelope encryption e são decifradas por requisição, nunca cacheadas.</li>
+</ul>
+<hr>
+<h2 id="confiana-de-device-e-pki">Confiança de device e PKI</h2>
+<p>Os devices provam quem são com credenciais que o <a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a> emite e o <a href="/docs/1.0.0/pt-br/architecture/vault">Vault</a> enraíza. Um device MQTT se autentica por <strong>senha bcrypt</strong> ou por um <strong>certificado cliente X.509 por device</strong> (ECDSA P-256), assinado por uma <strong>CA intermediária buscada no Vault</strong> e mantida apenas em RAM. A chave privada de um certificado é devolvida <strong>uma única vez</strong> no momento da emissão e <strong>nunca persistida</strong> — só seus metadados são guardados — e a revogação é imediata. Os gateways LoRaWAN se autenticam por <strong>mTLS</strong> com o serial fixado a partir do asset; as chaves de device LoRaWAN têm <strong>envelope encryption</strong> com uma KEK do Vault. As credenciais de um device dão acesso exatamente a esse device — e a nada mais.</p>
+<hr>
+<h2 id="autenticao-no-edge">Autenticação no edge</h2>
+<p>Toda conexão externa é comprovada <strong>antes</strong> que qualquer coisa que ela envie seja admitida, e a decisão é tomada <strong>no edge em que ela pousa</strong> — a partir da mesma projeção autorada pelo Assets, sem um gargalo central de auth:</p>
+<ul>
+<li>O <strong><a href="/docs/1.0.0/pt-br/architecture/http-gateway">HTTP Gateway</a></strong> autentica cada origem pela sua própria política (API key, JWT, bearer OAuth2/JWKS, IP allow-list ou nenhuma); uma origem desabilitada é recusada antes que qualquer auth rode, e <strong>toda rejeição é auditada</strong>.</li>
+<li>O <strong><a href="/docs/1.0.0/pt-br/architecture/mqtt-broker">MQTT Broker</a></strong> decide cada <code>CONNECT</code> localmente (bcrypt ou serial do certificado), <strong>falha fechado</strong> diante de uma entrada ausente ou de uma indisponibilidade do store, e impõe um ACL estrito: um device só pode tocar <strong>seus próprios</strong> tópicos — o acesso entre assets é negado no broker.</li>
+<li>O <strong><a href="/docs/1.0.0/pt-br/architecture/lns">LNS</a></strong> só admite gateways <strong>registrados</strong> e tira a identidade e as chaves de cada device do modelo do Assets.</li>
+</ul>
+<p>A tenancy não pode ser forjada no edge: o <code>orgId</code> de uma requisição vem da <strong>origem autenticada</strong>, nunca do corpo do payload.</p>
+<hr>
+<h2 id="execuo-de-cdigo-em-sandbox">Execução de código em sandbox</h2>
+<p>O MapexOS roda <strong>JavaScript autorado por clientes</strong> — scripts de transform de template e nós de código de Workflow — e trata tudo isso como não confiável. Todo script roda dentro de um <strong>V8 isolate do <code>isolated-vm</code></strong> (<a href="/docs/1.0.0/pt-br/architecture/js-execution">Execução JS</a> · <a href="/docs/1.0.0/pt-br/architecture/js-workflow-execution">Execução de Workflow JS</a>) com um <strong>teto de memória</strong> rígido, um <strong>timeout de wall-clock</strong> e <strong>nenhum acesso a Node, à rede ou ao filesystem</strong>. Um script pode computar e transformar, e nada além disso — ele não consegue alcançar o host, outro tenant ou o mundo externo.</p>
+<hr>
+<h2 id="auditoria-e-rastreabilidade">Auditoria e rastreabilidade</h2>
+<p>Tudo o que acontece é registrado e consultável. O <a href="/docs/1.0.0/pt-br/architecture/events">Events</a> persiste cada evento e cada execução no ClickHouse com <strong>retenção por organização</strong>, então a evidência de compliance é uma query, não um projeto. Um único <strong><code>eventTrackerId</code></strong> acompanha um evento de ponta a ponta — ingest → route → trigger → workflow → storage — então a história completa é um único lookup. As decisões de roteamento são <strong>explicáveis</strong> (cada uma registra por que deu ou não deu match), e as conexões <strong>rejeitadas</strong> também são auditadas, não descartadas em silêncio.</p>
+<hr>
+<h2 id="segurana-de-transporte">Segurança de transporte</h2>
+<p>Os transportes externos usam <strong>TLS</strong>: o edge HTTP sobre HTTPS, MQTT sobre TLS/mTLS (porta <code>8883</code>), LoRaWAN Basics Station sobre mTLS. A verificação de certificado está <strong>ligada</strong> — a plataforma não entrega nenhum conector ou client que a desabilite — e os conectores outbound carregam seu próprio TLS e timeouts por destino. As chamadas internas serviço-a-serviço rodam em uma rede confiável e são protegidas por API keys.</p>
+<hr>
+<h2 id="seguro-por-padro">Seguro por padrão</h2>
+<p>Os defaults existem para caber em um laptop, não para serem enviados para produção desprotegidos — então a plataforma <strong>se recusa a rodar desprotegida</strong>. Todo serviço Mapex tem um <strong>guard de segurança no boot</strong>: quando <code>GO_ENV</code> / <code>NODE_ENV</code> não é um valor de desenvolvimento <strong>e</strong> alguma variável sensível (<code>AUTH_SECRET</code>, <code>INTERNAL_API_KEY</code>, <code>NATS_PASSWORD</code>, a master key de credenciais, …) está faltando ou ainda igual ao seu default de dev, o serviço <strong>falha rápido com um erro fatal estridente</strong> em vez de subir com um secret vazado ou fraco. Em modo local, ele imprime um <code>[SECURITY WARNING]</code> por serviço, para que a postura de dev nunca seja silenciosa.</p>
+<hr>
+<h2 id="checklist-de-hardening">Checklist de hardening</h2>
+<p>O MapexOS é <strong>self-hosted</strong>, então a postura final é sua. Antes da produção:</p>
+<ol>
+<li><strong>Gere todo secret.</strong> Substitua todos os defaults de dev — <code>AUTH_SECRET</code>, <code>INTERNAL_API_KEY</code>, a master key do Vault, senhas de datastore (ex.: <code>openssl rand -hex 32</code>). O guard de boot impõe isso; não brigue com ele.</li>
+<li><strong>Defina <code>GO_ENV</code>/<code>NODE_ENV=prod</code></strong> e aponte os serviços para um arquivo de env real e ignorado pelo git (nunca o commite).</li>
+<li><strong>Termine TLS em tudo</strong> que for externo — HTTPS no gateway, mTLS no broker e no LNS — com certificados que você controla.</li>
+<li><strong>Rode no Kubernetes</strong> com resource requests/limits reais e network policies que fechem as portas internas para fora.</li>
+<li><strong>Tranque os datastores</strong> — MongoDB, ClickHouse, Redis, MinIO, NATS — na rede do cluster, com autenticação habilitada.</li>
+<li><strong>Rotacione</strong> os secrets de JWT, as API keys e a master key do Vault em um cronograma, e ajuste a <strong>retenção</strong> por organização às suas necessidades de compliance.</li>
+<li><strong>Escope os operadores</strong> com roles de menor privilégio na árvore de organizações, em vez de grants recursivos amplos.</li>
+</ol>
+<hr>
+<h2 id="reportando-uma-vulnerabilidade">Reportando uma vulnerabilidade</h2>
+<p>Se você encontrar um problema de segurança, por favor divulgue-o de forma responsável aos mantenedores, em vez de abrir uma issue pública, e dê tempo para uma correção antes de qualquer discussão pública.</p>
+<hr>
+<h2 id="para-onde-ir-em-seguida">Para onde ir em seguida</h2>
+<table>
+<thead>
+<tr>
+<th>Para mergulhar em…</th>
+<th>Vá para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identidade, roles e tenancy</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/mapexiam">mapexIam</a></td>
+</tr>
+<tr>
+<td>Secrets, chaves e a CA</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/vault">Vault</a></td>
+</tr>
+<tr>
+<td>Certificados de device e presence</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a></td>
+</tr>
+<tr>
+<td>O mapa completo da plataforma</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/overview">Visão Geral da Arquitetura</a></td>
+</tr>
+</tbody>
+</table>

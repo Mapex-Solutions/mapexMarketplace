@@ -1,0 +1,74 @@
+<h1 id="quickstart">Quickstart</h1>
+<p>Leve um sensor de uma leitura bruta até um <strong>evento armazenado e consultável</strong> — o pipeline inteiro, em poucos minutos. Este é o caminho feliz guiado; os formulários campo a campo e o JSON pronto para colar ficam na pasta <a href="https://github.com/Mapex-Solutions/mapexOSDeploy/tree/main/quickstart"><code>quickstart/</code></a> do repositório de deploy.</p>
+<p><strong>Antes de começar:</strong> a stack está rodando e você está logado no frontend (<code>admin@mapex.local</code> / <code>mapex@123</code>). Se não estiver, veja <a href="/docs/1.0.0/pt-br/getting-started/installation">Instalação</a>.</p>
+<h2 id="o-que-voc-vai-construir">O que você vai construir</h2>
+<p>Você vai criar quatro coisas no console e depois empurrar dados através delas:</p>
+<pre><code>Asset Template → Route Group → Datasource → Asset → (send readings) → Grafana
+</code></pre>
+<p>Escolha um caminho de ingestão — os passos são os mesmos; só o datasource muda:</p>
+<table>
+<thead>
+<tr>
+<th>Caminho</th>
+<th>Melhor para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>HTTP</strong></td>
+<td>Dispositivos que dão POST de JSON em um webhook (REST, gateways, lambdas)</td>
+</tr>
+<tr>
+<td><strong>MQTT</strong></td>
+<td>Dispositivos que publicam em um broker MQTT (a maioria dos firmwares de prateleira)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1--asset-template--temperature-sensor">1 · Asset Template — <em>Temperature Sensor</em></h2>
+<p>Um template define como uma classe de dispositivo é integrada. Crie um com os três scripts que transformam um payload bruto em um Standard Event:</p>
+<ul>
+<li><strong>Preprocessor</strong> — normaliza o formato de transporte (opcional).</li>
+<li><strong>Validation</strong> — rejeita leituras malformadas.</li>
+<li><strong>Conversion</strong> — emite o Standard Event.</li>
+</ul>
+<p>Declare um <strong>dynamic field</strong> <code>temperature</code> (type <code>number</code>) para que as leituras sejam armazenadas em uma coluna tipada e consultável. Veja <a href="/docs/1.0.0/pt-br/getting-started/concepts#fontes-de-dados">Conceitos Fundamentais → Asset Template</a>.</p>
+<h2 id="2--route-group--save-temperature-events">2 · Route Group — <em>Save Temperature Events</em></h2>
+<p>Um route group decide para onde vão os eventos que dão match. Crie um que <strong>persista cada leitura no events store</strong> (ClickHouse). Uma regra, um destino — é o suficiente para a primeira rodada.</p>
+<h2 id="3--datasource">3 · Datasource</h2>
+<p><strong>Caminho HTTP:</strong> crie um datasource para obter uma <strong>URL de webhook + API key</strong> para a qual o dispositivo vai dar POST.
+<strong>Caminho MQTT:</strong> o dispositivo publica no broker (<code>localhost:1883</code>) usando as credenciais do asset — nenhum datasource é necessário.</p>
+<h2 id="4--asset--weather-http-001">4 · Asset — <em>weather-http-001</em></h2>
+<p>Crie o asset e vincule-o ao <strong>template</strong>, ao <strong>route group</strong> e ao <strong>protocolo</strong> (HTTP ou MQTT). É essa a coisa que produz eventos.</p>
+<h2 id="5--enviar-leituras-de-teste">5 · Enviar leituras de teste</h2>
+<p>Use o script Node.js pronto da pasta quickstart para empurrar leituras fictícias:</p>
+<pre><code class="language-bash">cd mapexOSDeploy/quickstart/device-http   # or device-mqtt
+node send-events.js                        # (device-mqtt: publish-events.js)
+</code></pre>
+<h2 id="6--ver-chegar">6 · Ver chegar</h2>
+<p>Abra o <strong>Grafana</strong> em <a href="http://localhost:3001">http://localhost:3001</a> (<code>admin</code> / <code>admin</code>) e filtre o dashboard de eventos pelo seu <strong><code>assetUUID</code></strong>. Cada leitura que você envia aparece em segundos — ingerida, validada, convertida, roteada e armazenada.</p>
+<h2 id="limpeza">Limpeza</h2>
+<p>Tudo o que você criou é dado comum da plataforma — apague pela UI (Assets, Datasources, Route Groups, Templates). Não há script de teardown.</p>
+<h2 id="para-onde-ir-em-seguida">Para onde ir em seguida</h2>
+<p>Você rodou um dispositivo por uma rota. A partir daqui:</p>
+<table>
+<thead>
+<tr>
+<th>Para aprender…</th>
+<th>Vá para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O vocabulário por trás de cada passo</td>
+<td><a href="/docs/1.0.0/pt-br/getting-started/concepts">Conceitos Fundamentais</a></td>
+</tr>
+<tr>
+<td>Como a plataforma é construída</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/overview">Architecture Overview</a></td>
+</tr>
+<tr>
+<td>Por que ela é feita assim</td>
+<td><a href="/docs/1.0.0/pt-br/introduction/why-mapexos">Why MapexOS?</a></td>
+</tr>
+</tbody>
+</table>

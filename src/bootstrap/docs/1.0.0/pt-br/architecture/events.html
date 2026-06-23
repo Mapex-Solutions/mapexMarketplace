@@ -1,0 +1,169 @@
+<h1 id="events">Events</h1>
+<p>O Events é o <strong>sistema de registro</strong> do MapexOS. É o fim da linha: todo outro estágio — ingest, transform, route, automate — entrega sua saída aqui, e o Events a persiste no <strong>ClickHouse</strong> como uma linha tipada e consultável. Ele não toma decisões e não publica nada de volta no bus; é puro <strong>armazenamento e leitura</strong>. Quando você pergunta <em>o que aconteceu, com qual asset, quando e por quê</em> — é este o serviço que responde.</p>
+<p>Seu truque definidor é armazenar <strong>dados sem schema em uma forma tipada e colunar</strong>: campos arbitrários por vendor viram colunas tipadas e consultáveis sem migration, cada linha carrega sua própria retenção, e um único tracking id amarra toda a jornada de um event.</p>
+<blockquote>
+<p><strong>Porta</strong> <code>5004</code> · <strong>Go</strong> (DDD + Hexagonal) · consumers em batch do <strong>NATS JetStream</strong> → <strong>ClickHouse</strong> (bulk insert, retenção por TTL) · <strong>MongoDB</strong> (catálogo de retenção) + <strong>Redis</strong> + <strong>S3/MinIO</strong> (cache de templates em camadas) · três módulos: <code>events</code>, <code>asset_status</code>, <code>retention</code>.</p>
+</blockquote>
+<hr>
+<h2 id="eva--armazenamento-tipado-para-dados-sem-schema">EVA — armazenamento tipado para dados sem schema</h2>
+<p>Cada asset fala um payload diferente: um manda <code>temperature</code>, outro <code>co2</code>, um terceiro <code>doorState</code>. Armazenar isso como blobs JSON tornaria tudo inconsultável; armazenar uma coluna por campo significaria uma migration por dispositivo. O MapexOS não faz nem um nem outro. Ele usa <strong>EVA</strong> (Entity-Value-Attribute): cada campo de template recebe um <code>fieldId</code> numérico, e o valor pousa em uma de <strong>quatro colunas MAP tipadas do ClickHouse</strong>, chaveada por esse id:</p>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Carrega</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>eva_number</code></td>
+<td><code>map&lt;uint16, float64&gt;</code></td>
+<td>campos numéricos — temperatura, pressão, contagem</td>
+</tr>
+<tr>
+<td><code>eva_string</code></td>
+<td><code>map&lt;uint16, string&gt;</code></td>
+<td>campos de texto — status, localização, tipo de dispositivo</td>
+</tr>
+<tr>
+<td><code>eva_bool</code></td>
+<td><code>map&lt;uint16, uint8&gt;</code></td>
+<td>booleanos — alarme, online, ativo</td>
+</tr>
+<tr>
+<td><code>eva_date</code></td>
+<td><code>map&lt;uint16, datetime&gt;</code></td>
+<td>timestamps — última atualização, horário do alarme</td>
+</tr>
+</tbody>
+</table>
+<p>O tipo vem do tipo declarado do campo no template do asset (com inferência como fallback; um campo geo armazena sua latitude como número <em>e</em> como string <code>&quot;lat,lng&quot;</code>). O resultado: um novo vendor ou modelo é uma <strong>configuração de template</strong>, nunca uma mudança de schema — e ainda assim todo campo dinâmico é armazenado de forma <strong>tipada e colunar</strong>, de modo que você possa filtrar e agregar sobre ele diretamente. O endpoint <code>POST /store/query</code> recebe uma lista de <code>EvaFilters</code> — condições sobre esses campos dinâmicos — e as empurra direto para o ClickHouse.</p>
+<p>Para reverter os ids numéricos em nomes legíveis na leitura, o Events resolve o template do asset através de um <strong>cache em camadas</strong> (L0 RAM → L1 disco → L2 S3/MinIO → fallback HTTP para o serviço Assets), mantido coerente por um consumer <strong>FANOUT</strong> <code>template.invalidate</code>, para que uma edição de template upstream nunca sirva nomes obsoletos.</p>
+<hr>
+<h2 id="reteno-por-linha--cada-linha-sabe-quanto-tempo-deve-viver">Retenção por linha — cada linha sabe quanto tempo deve viver</h2>
+<p>Retenção não é uma única configuração global. <strong>Cada linha é carimbada no momento da escrita com seu próprio <code>retention_days</code></strong>, resolvido por organização e por tabela a partir do módulo <code>retention</code> (um catálogo no MongoDB, cache-aside no Redis), e o <strong>TTL</strong> nativo do ClickHouse a expira automaticamente. Classes diferentes de dados vivem por períodos diferentes por padrão — payloads brutos e logs de debug por pouco tempo, históricos de execução por mais tempo, events processados por mais tempo ainda — e qualquer organização pode definir sua própria política:</p>
+<table>
+<thead>
+<tr>
+<th>Classe de dado</th>
+<th>Tempo de vida padrão</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ingest bruto · debug do JS-executor</td>
+<td>1 dia</td>
+</tr>
+<tr>
+<td>Histórico de execução de Router / trigger / workflow</td>
+<td>7 dias</td>
+</tr>
+<tr>
+<td>Events processados · dead-letter</td>
+<td>30 dias</td>
+</tr>
+</tbody>
+</table>
+<p>Uma nova organização é semeada com políticas padrão automaticamente (o módulo consome o event de ciclo de vida <code>organization.created</code>), e editar uma política emite a mudança de TTL correspondente no ClickHouse.</p>
+<hr>
+<h2 id="o-que-ele-armazena--um-consumer-por-stream">O que ele armazena — um consumer por stream</h2>
+<p>O Events roda um consumer em batch por stream, cada um escrevendo sua própria tabela no ClickHouse:</p>
+<table>
+<thead>
+<tr>
+<th>Stream</th>
+<th>O que captura</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>events.save</code></td>
+<td><strong>Events processados</strong> — a tabela primária, com mapeamento EVA completo.</td>
+</tr>
+<tr>
+<td><code>events.raw</code></td>
+<td>Payloads de ingest brutos, como recebidos.</td>
+</tr>
+<tr>
+<td><code>events.logs.jsexecutor</code></td>
+<td>Saída de debug de decode/validate/convert do JS-executor.</td>
+</tr>
+<tr>
+<td><code>events.router</code></td>
+<td>Decisões do Router — o histórico de roteamento por event.</td>
+</tr>
+<tr>
+<td><code>events.trigger</code></td>
+<td>Desfechos de execução de triggers.</td>
+</tr>
+<tr>
+<td><code>events.workflow</code> (<code>EVENTS-WORKFLOW-LOGS</code>)</td>
+<td>Execuções terminais de workflow.</td>
+</tr>
+<tr>
+<td><code>dlq</code></td>
+<td>Entradas de dead-letter de qualquer serviço.</td>
+</tr>
+</tbody>
+</table>
+<p>Juntos, eles formam uma trilha de auditoria completa e consultável: o próprio event processado, <em>e</em> o registro de como ele foi roteado, o que ele disparou e qual workflow ele rodou.</p>
+<hr>
+<h2 id="rastrevel-de-ponta-a-ponta-por-um-nico-id">Rastreável de ponta a ponta por um único id</h2>
+<p>Um único <code>eventTrackerId</code> (um UUID) é cunhado no ingest e propagado por todo serviço — route, trigger, workflow — e gravado em cada linha aqui. Então reconstruir toda a história de um event é uma única busca por chave, não um join entre sistemas: você consegue segui-lo do payload bruto, passando pela decisão de roteamento, até o trigger que disparou e o workflow que rodou. Os nomes (<code>asset_name</code>, <code>template_name</code>, …) são <strong>desnormalizados no momento da escrita</strong>, então as leituras nunca pagam por um join.</p>
+<hr>
+<h2 id="como-um-batch--persistido">Como um batch é persistido</h2>
+<p>Todos os consumers compartilham um pipeline genérico de três fases, afinado para o gosto do ClickHouse por escritas grandes:</p>
+<pre><code> Phase 1 — parse in parallel     a bounded worker pool (NumCPU × 2) parses,
+                                  validates, and EVA-maps each message
+ Phase 2 — one bulk insert       every valid row goes to ClickHouse in a single
+                                  bulk INSERT — minimal write amplification
+ Phase 3 — settle per message    Ack on success · Nack (retry) on insert failure
+                                  · Reject (→ DLQ) on a parse/validation failure
+</code></pre>
+<p>O consumer de dead-letter usa uma variante deliberada que <strong>nunca dá Nack</strong> — uma mensagem que ele não consegue parsear é reconhecida e pulada, em vez de retentada, de modo que a DLQ nunca possa se realimentar em loop.</p>
+<hr>
+<h2 id="alm-dos-events--histrico-de-conectividade">Além dos events — histórico de conectividade</h2>
+<p>Um segundo módulo, <code>asset_status</code>, persiste cada <strong>transição online/offline</strong> que um asset faz em sua própria tabela e serve uma <strong>timeline de conectividade</strong>: <code>GET /api/v1/events/connectivity_history</code> e <code>…/assets/:assetUUID/connectivity_history</code>, filtrável por janela de tempo e tipo de transição. A operação consegue ver exatamente quando um dispositivo caiu e voltou — um histórico de primeira classe, não algo reconstruído a partir de logs.</p>
+<hr>
+<h2 id="ler-e-gerenciar--a-superfcie-http">Ler e gerenciar — a superfície HTTP</h2>
+<p>Todas as rotas de leitura são <strong>paginadas por cursor, escopadas por organização e permission-gated</strong>, sob <code>/api/v1/events</code>:</p>
+<ul>
+<li>Listas por stream: <code>GET /raw</code>, <code>/jsexec</code>, <code>/router</code>, <code>/trigger</code>, <code>/workflow</code>, <code>/dlq</code> (+ <code>/dlq/counts</code> agrupado por serviço).</li>
+<li><code>POST /store/query</code> — events processados com <code>EvaFilters</code> opcionais (consulta por campo dinâmico).</li>
+<li><code>GET /store/:eventTrackerId</code> — um event processado com seus ids EVA resolvidos para os nomes definidos no template.</li>
+<li><code>GET /workflow/execution/:executionId</code> — um único registro de workflow.</li>
+<li>Timelines de conectividade (acima).</li>
+</ul>
+<p>As políticas de retenção são gerenciadas sob <code>/api/v1/retention</code>: <code>GET /</code>, <code>GET /:id</code>, <code>PUT /</code> (upsert por <code>{orgId, type}</code>), <code>DELETE /:id</code>.</p>
+<hr>
+<h2 id="entradas-e-sadas">Entradas e saídas</h2>
+<p><strong>Consome (NATS JetStream, pull em batch):</strong> <code>events.save</code>, <code>events.raw</code>, <code>events.logs.jsexecutor</code>, <code>events.router</code>, <code>events.trigger</code>, <code>events.workflow</code>, <code>dlq</code>, <code>events.asset_status_save</code>, <code>organization.created</code>, e o FANOUT <code>template.invalidate</code>.</p>
+<p><strong>Produz:</strong> nada no bus. O Events é um sink terminal — seu único efeito de saída é uma mudança de TTL no ClickHouse quando uma política de retenção é editada.</p>
+<hr>
+<h2 id="observabilidade">Observabilidade</h2>
+<p>Métricas Prometheus por consumer acompanham mensagens consumidas / parseadas / inseridas / falhas, <strong>latência de bulk insert no ClickHouse por tabela</strong>, hit/miss do cache de templates EVA e tamanhos de batch. O health expõe o grafo de dependências (MongoDB, Redis, NATS obrigatórios; ClickHouse e S3 degradam graciosamente — o serviço continua aceitando mensagens do NATS mesmo quando as escritas estão brevemente indisponíveis).</p>
+<hr>
+<h2 id="para-onde-ir-agora">Para onde ir agora</h2>
+<table>
+<thead>
+<tr>
+<th>Para se aprofundar em…</th>
+<th>Vá para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quem decide o que é persistido</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/router">Router</a></td>
+</tr>
+<tr>
+<td>Onde os campos dinâmicos são definidos</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/overview">Visão Geral da Arquitetura</a></td>
+</tr>
+<tr>
+<td>O que produz os históricos de execução</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/triggers">Triggers</a> · <a href="/docs/1.0.0/pt-br/architecture/workflow">Workflow Engine</a></td>
+</tr>
+</tbody>
+</table>

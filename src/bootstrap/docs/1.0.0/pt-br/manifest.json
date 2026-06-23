@@ -1,0 +1,140 @@
+{
+  "sections": [
+    {
+      "slug": "introduction",
+      "title": "Introduction",
+      "pages": [
+        {
+          "slug": "what-is-mapexos",
+          "title": "O que é o MapexOS?",
+          "description": "A camada operacional self-hosted da sua operação conectada — transforme cada"
+        },
+        {
+          "slug": "why-mapexos",
+          "title": "Por que MapexOS?",
+          "description": "O padrão que a gente via se repetir — e a decisão de construir uma plataforma"
+        }
+      ]
+    },
+    {
+      "slug": "getting-started",
+      "title": "Getting started",
+      "pages": [
+        {
+          "slug": "concepts",
+          "title": "Conceitos Fundamentais",
+          "description": "O vocabulário do MapexOS — os blocos de construção que todo operador, integrador e arquiteto precisa conhecer antes de se aprofundar."
+        },
+        {
+          "slug": "installation",
+          "title": "Instalação",
+          "description": "Suba toda a stack do MapexOS em uma única máquina com um só comando — pré-requisitos, acesso, o que fica rodando e o caminho até produção."
+        },
+        {
+          "slug": "quickstart",
+          "title": "Quickstart",
+          "description": "Conecte um sensor de temperatura de ponta a ponta — de uma leitura bruta a um evento armazenado que você vê no Grafana — em poucos minutos."
+        }
+      ]
+    },
+    {
+      "slug": "architecture",
+      "title": "Architecture",
+      "pages": [
+        {
+          "slug": "overview",
+          "title": "Visão Geral da Arquitetura",
+          "description": "Como o MapexOS é construído — princípios de design, o pipeline de eventos, multi-tenancy, durabilidade e os 10 serviços que compõem a plataforma."
+        },
+        {
+          "slug": "security",
+          "title": "Segurança",
+          "description": "Como o MapexOS protege uma operação conectada de ponta a ponta — identidade, multi-tenancy, secrets, confiança de device, autenticação no edge, código em sandbox e uma trilha de auditoria completa — e como endurecer um deploy."
+        },
+        {
+          "slug": "mapexiam",
+          "title": "mapexIam",
+          "description": "O control plane de identidade e controle de acesso do MapexOS — usuários, a hierarquia de organizações e os caches de permissão e coverage que protegem e escopam cada requisição em todos os demais serviços.",
+          "group": "Go Services"
+        },
+        {
+          "slug": "router",
+          "title": "Router",
+          "description": "O despachante do MapexOS — avalia regras de match condicionais contra cada evento e faz o fan-out para persistência, automação e notificação, com o roteamento decidido a partir do estado confiável do asset, não do payload.",
+          "group": "Go Services"
+        },
+        {
+          "slug": "workflow",
+          "title": "Workflow Engine",
+          "description": "O cérebro de automação do MapexOS — um engine de DAG durável e nativo de NATS que decide e delega, sobrevivendo a restarts e retomando no meio do grafo.",
+          "group": "Go Services"
+        },
+        {
+          "slug": "triggers",
+          "title": "Triggers",
+          "description": "O serviço que fala com o mundo externo — um único ponto de saída, oito conectores de protocolo, disparado de forma autônoma a partir do Router ou integrado a workflows por um resume totalmente assíncrono.",
+          "group": "Go Services"
+        },
+        {
+          "slug": "events",
+          "title": "Events",
+          "description": "O sistema de registro do MapexOS — um sink ClickHouse que transforma cada sinal em um event tipado, consultável e retido por tenant, rastreável de ponta a ponta por um único tracking id.",
+          "group": "Go Services"
+        },
+        {
+          "slug": "assets",
+          "title": "Assets",
+          "description": "A fonte da verdade para tudo o que está conectado ao MapexOS — o modelo de asset e template, o schema de campos EVA, o control plane de PKI e presence dos dispositivos, e o cache de read-model a partir do qual todo outro serviço é reconstruído.",
+          "group": "Go Services"
+        },
+        {
+          "slug": "vault",
+          "title": "Vault",
+          "description": "A raiz de confiança do MapexOS — um cofre de segredos cifrados em envelope, um serviço de distribuição de chaves e a autoridade certificadora por trás de toda identidade de dispositivo. Segredos entram, mas nunca são entregues de volta.",
+          "group": "Go Services"
+        },
+        {
+          "slug": "js-execution",
+          "title": "JS Execution",
+          "description": "O motor de normalização do MapexOS — roda os scripts de template de cada asset dentro de isolates V8 endurecidos para transformar o payload bruto de qualquer vendor em um evento padrão e tipado, com segurança e em escala.",
+          "group": "JS Services"
+        },
+        {
+          "slug": "js-workflow-execution",
+          "title": "Execução de JS em Workflows",
+          "description": "O substrato de computação para os nós de código do workflow — roda o JavaScript de cada nó em um isolate V8 endurecido e devolve o resultado ao Workflow Engine para retomar o DAG.",
+          "group": "JS Services"
+        },
+        {
+          "slug": "http-gateway",
+          "title": "HTTP Gateway",
+          "description": "A porta de entrada do MapexOS — uma borda de ingestão HTTP autenticada onde cada fonte externa entra com sua própria política de autenticação, recebe um correlation id e é admitida no pipeline com o payload mais enxuto possível.",
+          "group": "Edge Servers"
+        },
+        {
+          "slug": "mqtt-broker",
+          "title": "MQTT Broker",
+          "description": "A borda de entrada MQTT do MapexOS — Eclipse Mosquitto com um único plugin Go que autentica cada conexão localmente a partir da projeção de Assets e converte o tráfego autorizado em eventos NATS estruturados.",
+          "group": "Edge Servers"
+        },
+        {
+          "slug": "lns",
+          "title": "LNS",
+          "description": "A borda LoRaWAN do MapexOS — um network server construído como uma camada fina sobre o The Things Stack, que extrai seus dispositivos do modelo de Assets e transforma uplinks decifrados em eventos NATS.",
+          "group": "Edge Servers"
+        }
+      ]
+    },
+    {
+      "slug": "reference",
+      "title": "Reference",
+      "pages": [
+        {
+          "slug": "about-creator",
+          "title": "Sobre o Criador",
+          "description": ""
+        }
+      ]
+    }
+  ]
+}

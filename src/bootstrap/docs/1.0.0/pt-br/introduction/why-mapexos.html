@@ -1,0 +1,242 @@
+<h1 id="por-que-mapexos">Por que MapexOS?</h1>
+<blockquote>
+<p><strong>IoT em primeiro lugar, mas não só IoT.</strong>
+O MapexOS não enxerga dispositivos ou sensores — ele enxerga <strong>Assets</strong>.
+Qualquer fonte. Qualquer protocolo. Uma única abstração.</p>
+</blockquote>
+<p>Esta página é o <em>porquê</em> — o raciocínio por trás da plataforma. Para o <em>o quê</em>, comece por
+<a href="/docs/1.0.0/pt-br/introduction/what-is-mapexos">O que é o MapexOS?</a>. Se você está decidindo se o MapexOS serve para o tipo de
+operação que você toca, continue lendo.</p>
+<hr>
+<h2 id="o-padro-que-a-gente-via-se-repetir">O padrão que a gente via se repetir</h2>
+<p>Depois de anos construindo soluções de IoT, backends distribuídos e plataformas operacionais, um padrão
+não parava de se repetir: sempre que o objetivo era uma operação <strong>completa</strong>, o ecossistema open source
+tinha uma ferramenta excelente para cada peça isolada — e cada uma resolvia só uma <strong>peça</strong>.</p>
+<p>Uma ferramenta é forte em conectividade. Outra em dashboards. Outra em fluxos de automação. Outra em
+identidade. Outra em armazenamento. Todas realmente boas no seu pedaço.</p>
+<p>Mas uma operação enterprise de verdade precisa delas <em>juntas e governadas</em> — integradas, multi-organização,
+com permissões, templates, assets, logs persistentes, validação de payload, regras de negócio,
+observabilidade, APIs, um broker, e a capacidade de escalar. Nenhuma ferramenta sozinha cobre isso, então
+a resposta era sempre a mesma: <strong>juntar as peças.</strong></p>
+<hr>
+<h2 id="juntar-funciona--at-um-certo-ponto">Juntar funciona — até um certo ponto</h2>
+<p>Para uma operação pequena, compor ferramentas best-of-breed funciona. Você liga um serviço de ingestão a
+um motor de fluxos, coloca um servidor de identidade na frente, guarda as regras num banco, adiciona uma
+ferramenta de automação, e entrega.</p>
+<p>Por um tempo isso te leva a algum lugar. Mas conforme a operação cresce — mais tenants, mais sites, mais
+dispositivos, mais parceiros de integração — as <strong>costuras entre as ferramentas</strong> viram o trabalho.</p>
+<table>
+<thead>
+<tr>
+<th>Uma vitória no mês 1…</th>
+<th>…um imposto de manutenção no mês 12.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;O motor de fluxos liga o broker a tudo.&quot;</td>
+<td>Toda integração agora vive num fluxo que ninguém quer encostar.</td>
+</tr>
+<tr>
+<td>&quot;O servidor de identidade nos dá auth de graça.&quot;</td>
+<td>Organizações, sites e zonas vivem em grupos de auth que não mapeiam para mais nada.</td>
+</tr>
+<tr>
+<td>&quot;A ferramenta de automação cuida da nossa lógica.&quot;</td>
+<td>A lógica de negócio agora está dividida entre a ferramenta de automação, o banco de regras e um script que ninguém lembra que roda.</td>
+</tr>
+<tr>
+<td>&quot;Multi-tenancy a gente adiciona depois.&quot;</td>
+<td>&quot;Depois&quot; quer dizer reescrever o modelo de identidade debaixo de carga.</td>
+</tr>
+</tbody>
+</table>
+<p>Nenhuma dessas ferramentas é o problema — cada uma é excelente no que faz. O custo está no <strong>espaço entre
+elas</strong>, e ele acumula:</p>
+<ul>
+<li><strong>Dependência de vários runtimes</strong> para o comportamento central da plataforma.</li>
+<li><strong>Integrações difíceis de manter</strong>, porque os contratos entre as ferramentas nunca foram explícitos.</li>
+<li><strong>Regras de negócio espalhadas</strong> por três ou quatro runtimes.</li>
+<li><strong>Hierarquias organizacionais que não encaixam</strong> no formato que os clientes reais têm
+(vendor → customer → site → building → zone).</li>
+<li><strong>Modelos de permissão que não compõem</strong> ao longo da cadeia de ferramentas.</li>
+<li><strong>Nenhum reaproveitamento</strong> entre clientes — cada cliente novo é um projeto novo.</li>
+<li><strong>Uma arquitetura que foi montada, nunca projetada de ponta a ponta.</strong></li>
+</ul>
+<p>É esse espaço-entre-as-ferramentas que o MapexOS elimina.</p>
+<hr>
+<h2 id="a-deciso">A decisão</h2>
+<p>Tem um momento — depois da terceira ou quarta vez que você reconstrói a mesma plataforma multi-tenant,
+multi-site, orientada a template e com log de auditoria sobre uma pilha de cola diferente — em que você
+para e pergunta:</p>
+<blockquote>
+<p><em>&quot;Por que eu estou reconstruindo o mesmo encanamento toda vez?&quot;</em></p>
+</blockquote>
+<p>Essa pergunta é o motivo de o MapexOS existir.</p>
+<p>O MapexOS não começou para ser &quot;mais um projeto de IoT open source&quot;. Ele começou para ser uma <strong>plataforma
+única, aberta e de nível enterprise</strong> que entrega o ciclo completo de uma operação conectada — ingestão,
+validação, processamento, regras de negócio, organização de assets, observabilidade, integração — pronto
+de fábrica, para que a próxima frota de verdade não comece do zero.</p>
+<hr>
+<h2 id="quatro-compromissos-que-assumimos-cedo">Quatro compromissos que assumimos cedo</h2>
+<p>Toda decisão de design remete a um destes.</p>
+<h3 id="1-multi-tenancy--a-camada-zero-no-um-remendo">1. Multi-tenancy é a camada zero, não um remendo</h3>
+<p>Clientes reais tocam operações multi-tenant: um vendor atende vários customers, um customer tem vários
+sites, um site tem buildings, floors, zones. Permissões, retenção, visibilidade e templates têm que seguir
+essa árvore.</p>
+<p>No MapexOS, cada evento, Asset, template, regra, workflow e trigger carrega a sua identidade
+organizacional (<code>orgId</code> + um <code>pathKey</code> hierárquico) desde o instante em que entra. Não existe um modo
+single-tenant adaptado depois — a árvore de organizações é a primeira coisa que a plataforma conhece.</p>
+<h3 id="2-os-workflows-tm-que-sobreviver-a-reincios-de-processo">2. Os workflows têm que sobreviver a reinícios de processo</h3>
+<p>Quando uma ordem de manutenção está pela metade e um servidor reinicia, ela tem que terminar — não sumir.
+Quando um timer de escalação está no meio do caminho durante um deploy, ele tem que continuar contando.</p>
+<p>O MapexOS traz um <strong>workflow engine durável embutido na plataforma</strong>. Cada passo de cada workflow tem
+checkpoint; um worker que cai retoma no meio do grafo. A durabilidade é parte do engine, não um sistema
+separado pendurado.</p>
+<h3 id="3-a-plataforma-tem-que-estender-sem-fazer-redeploy">3. A plataforma tem que estender sem fazer redeploy</h3>
+<p>Operadores adicionam integrações o tempo todo — notificações, gateways de pagamento, ITSM, bancos. Uma
+integração nova não pode significar um release de frontend.</p>
+<p>O MapexOS usa um <strong>modelo de plugin</strong>: os novos tipos de nó de workflow são descritos por manifests, e o
+editor os carrega em tempo de execução — então um conector pode aparecer no editor sem recompilar a
+plataforma.</p>
+<h3 id="4-roteamento--configurao-no-cdigo">4. Roteamento é configuração, não código</h3>
+<p>Para onde um evento vai — storage, workflow, trigger, notificação — é definido por política, não por um
+deploy. As regras de match vivem num banco e são aplicadas em tempo de execução: mude um limite,
+redirecione os eventos de um tenant para um destino novo, adicione um sink — sem migração de schema, sem
+rebuild.</p>
+<hr>
+<h2 id="o-que-muda-para-a-sua-operao">O que muda para a sua operação</h2>
+<p>Esses compromissos viram resultados que o negócio enxerga, não só o time de engenharia.</p>
+<table>
+<thead>
+<tr>
+<th>O que costumava ser…</th>
+<th>…vira…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Um cliente novo exige uma instalação nova.</td>
+<td>Um cliente novo é um nó novo na árvore de organizações.</td>
+</tr>
+<tr>
+<td>Um fabricante novo de dispositivo leva um trimestre para integrar.</td>
+<td>Um fabricante novo é um único Asset Template novo.</td>
+</tr>
+<tr>
+<td>Todo alerta é uma duplicata, um falso positivo, ou os dois.</td>
+<td>Os alertas respeitam cooldowns, janelas de persistência e ciclos de vida de incidente por design.</td>
+</tr>
+<tr>
+<td>Evidência de compliance exige montagem manual de log.</td>
+<td>Evidência de compliance é uma consulta ao event store.</td>
+</tr>
+<tr>
+<td>Um conector novo exige um release de frontend.</td>
+<td>Um conector novo é um manifest de plugin.</td>
+</tr>
+<tr>
+<td>A lógica vive em runtimes que ninguém ousa mexer.</td>
+<td>A lógica vive em workflows com definições versionadas, execução reproduzível e uma única trilha de auditoria.</td>
+</tr>
+</tbody>
+</table>
+<p>A troca: mais disciplina na camada de plataforma, e muito menos acoplamento na camada de aplicação.</p>
+<hr>
+<h2 id="por-que-isso-importa-agora-ia-precisa-de-uma-fundao">Por que isso importa agora: IA precisa de uma fundação</h2>
+<p>A maioria das organizações fala em &quot;aplicar IA aos nossos dados&quot;. O que elas costumam ter é <strong>telemetria
+fragmentada em sistemas que não conversam entre si.</strong></p>
+<p>IA sobre dado fragmentado é, na melhor das hipóteses, barulhenta. Antes que qualquer agente de IA possa ser
+confiado para apontar uma anomalia, recomendar uma intervenção ou tomar uma ação autônoma, os eventos que o
+alimentam precisam ser ingeridos de todas as fontes, <strong>normalizados</strong> em um único contrato, <strong>roteados</strong>
+para o lugar certo, <strong>governados</strong> com fronteiras de organização explícitas, <strong>armazenados</strong> com retenção
+defensável, e <strong>pesquisáveis</strong> entre payloads heterogêneos.</p>
+<p>Essa camada — eventos limpos, governados e consultáveis — é a fundação de que a IA precisa.
+<strong>O MapexOS está sendo construído para ser essa fundação.</strong></p>
+<hr>
+<h2 id="para-onde-o-roadmap-aponta-planejado">Para onde o roadmap aponta <em>(planejado)</em></h2>
+<p>Hoje o MapexOS ingere por HTTP, MQTT e LoRaWAN, roda workflows duráveis e o engine de roteamento, e entrega
+a stack completa de governança multi-tenant. A direção daqui em diante:</p>
+<table>
+<thead>
+<tr>
+<th>Direção <em>(planejado)</em></th>
+<th>O que isso te daria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mais protocolos</strong> (ex.: CoAP)</td>
+<td>Alcançar mais dispositivos de baixo consumo e de rede restrita sem novos gateways.</td>
+</tr>
+<tr>
+<td><strong>Um catálogo consultável sobre datasets governados</strong></td>
+<td>Tornar os eventos descobríveis entre tenants e janelas de tempo.</td>
+</tr>
+<tr>
+<td><strong>Formato de tabela aberto para o event store</strong></td>
+<td>Datasets de vida longa que sistemas de analytics e IA leem direto, sem um export customizado.</td>
+</tr>
+<tr>
+<td><strong>Superfícies de orquestração de IA</strong></td>
+<td>Nós de workflow que conduzem agentes de IA em cima de eventos limpos e governados.</td>
+</tr>
+</tbody>
+</table>
+<p>A tese é proposital: <strong>a IA deve operar sobre eventos limpos, governados e contextualizados — não sobre
+dado bruto e fragmentado.</strong></p>
+<hr>
+<h2 id="uma-plataforma-no-uma-linha-de-produtos">Uma plataforma, não uma linha de produtos</h2>
+<p>O MapexOS é um único ecossistema aberto, não um conjunto de tiers pagos.</p>
+<ul>
+<li><strong>Um único repositório de código</strong> para os serviços de backend e o frontend (<code>mapexOS</code>).</li>
+<li><strong>Uma única distribuição de deploy</strong> para self-hosting (<code>mapexOSDeploy</code>).</li>
+<li><strong>Uma única licença</strong> — Business Source License 1.1 — cobrindo uso self-hosted, modificação e contribuição.</li>
+<li><strong>Nenhum caminho de código separado de &quot;edição enterprise&quot;.</strong> As mesmas imagens rodam um Raspberry Pi num
+site remoto e um cluster regional atrás de um load balancer.</li>
+</ul>
+<p>Na <strong>Change Date</strong>, a BSL converte para <strong>Apache 2.0</strong>. A única restrição hoje é sobre <em>hospedar</em>
+comercialmente o MapexOS para terceiros — não sobre rodá-lo para a sua própria operação.</p>
+<hr>
+<h2 id="quando-o-mapexos--uma-tima-escolha">Quando o MapexOS é uma ótima escolha</h2>
+<p>O MapexOS é a plataforma certa se vários destes descrevem você:</p>
+<ul>
+<li>Você opera <strong>múltiplos clientes, sites ou tenants</strong> e precisa de isolamento real entre eles.</li>
+<li>Você <strong>integra dispositivos, fabricantes ou sistemas de terceiros com frequência</strong>, e esse custo hoje é
+alto demais.</li>
+<li>Você precisa de <strong>automação que sobrevive a quedas</strong> — workflows que retomam depois de crashes, retries
+que respeitam os limites downstream, uma trilha de auditoria sobre cada ação.</li>
+<li>Você precisa de <strong>uma plataforma só para telemetria IoT e integração com sistemas de negócio</strong>, não duas
+stacks.</li>
+<li>Você precisa <strong>self-hostar</strong> numa infraestrutura que você controla — por compliance, custo, latência ou
+soberania de dados.</li>
+<li>Você está construindo a <strong>fundação de eventos sobre a qual as futuras capacidades de IA vão rodar</strong>, e
+quer ela aberta e inspecionável.</li>
+</ul>
+<p>Se só um ou dois se aplicam, o MapexOS provavelmente é exagero — comece com a ferramenta mínima que resolve
+o problema imediato. Se três ou mais se aplicam, o custo de <em>não</em> ter o MapexOS provavelmente já está
+aparecendo na sua operação.</p>
+<hr>
+<h2 id="para-onde-ir-agora">Para onde ir agora</h2>
+<table>
+<thead>
+<tr>
+<th>Se você quer…</th>
+<th>Vá para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entender como ele é construído</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/overview">Visão Geral da Arquitetura</a></td>
+</tr>
+<tr>
+<td>Aprender o vocabulário</td>
+<td><a href="/docs/1.0.0/pt-br/getting-started/concepts">Conceitos Centrais</a></td>
+</tr>
+<tr>
+<td>Rodar na sua máquina</td>
+<td><a href="/docs/1.0.0/pt-br/getting-started/quickstart">Quickstart</a></td>
+</tr>
+</tbody>
+</table>

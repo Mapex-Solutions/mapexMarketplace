@@ -1,0 +1,186 @@
+<h1 id="instalao">Instalação</h1>
+<p>A plataforma inteira — cada serviço e sua infraestrutura — sobe a partir de uma única distribuição em Docker Compose: <a href="https://github.com/Mapex-Solutions/mapexOSDeploy"><code>mapexOSDeploy</code></a>. Imagens multi-arch pré-buildadas, um comando.</p>
+<h2 id="pr-requisitos">Pré-requisitos</h2>
+<ul>
+<li><strong>Docker</strong> e <strong>Docker Compose v2</strong>.</li>
+<li>Um host com aproximadamente <strong>4 cores / 8 GB de RAM</strong>. A stack é ajustada para caber em um notebook (veja <a href="#pegada-de-recursos">Pegada de recursos</a>).</li>
+<li>Linux, macOS (Apple Silicon) ou Windows + Docker Desktop. As imagens são publicadas para <strong><code>linux/amd64</code></strong> e <strong><code>linux/arm64</code></strong>, então a mesma stack roda em um Raspberry Pi 4/5.</li>
+</ul>
+<h2 id="subir-a-stack">Subir a stack</h2>
+<pre><code class="language-bash">git clone https://github.com/Mapex-Solutions/mapexOSDeploy.git
+cd mapexOSDeploy
+docker compose up -d
+</code></pre>
+<p>Aguarde <strong>~2 minutos</strong> pela inicialização do primeiro boot — o replica-set do Mongo, os streams do NATS, os buckets do MinIO e as tabelas do ClickHouse são provisionados automaticamente.</p>
+<h2 id="acesso">Acesso</h2>
+<table>
+<thead>
+<tr>
+<th>Superfície</th>
+<th>URL</th>
+<th>Credenciais</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Frontend</strong></td>
+<td><a href="http://localhost">http://localhost</a></td>
+<td><code>admin@mapex.local</code> / <code>mapex@123</code> <em>(troque no primeiro login)</em></td>
+</tr>
+<tr>
+<td><strong>Grafana</strong></td>
+<td><a href="http://localhost:3001">http://localhost:3001</a></td>
+<td><code>admin</code> / <code>admin</code> — 8 dashboards pré-carregados</td>
+</tr>
+<tr>
+<td><strong>Console do MinIO</strong></td>
+<td><a href="http://localhost:9001">http://localhost:9001</a></td>
+<td><code>mapex_admin</code> / <code>mapex_admin_secret_change_me</code></td>
+</tr>
+</tbody>
+</table>
+<p>Para servir a UI a outras máquinas da sua rede, defina o host público:</p>
+<pre><code class="language-bash">MAPEXOS_PUBLIC_HOST=192.168.0.50 docker compose up -d
+</code></pre>
+<blockquote>
+<p>Uma linha vermelha de <code>[SECURITY WARNING]</code> por serviço nos logs é <strong>esperada</strong> no modo local — ela está apenas avisando que a stack está rodando com os defaults de dev. Veja <a href="#indo-para-produ%C3%A7%C3%A3o">Indo para produção</a> para endurecer a configuração.</p>
+</blockquote>
+<h2 id="o-que-fica-rodando">O que fica rodando</h2>
+<p><strong>Serviços da aplicação</strong> (código-fonte em <a href="https://github.com/Mapex-Solutions/mapexOS"><code>mapexOS</code></a>):</p>
+<table>
+<thead>
+<tr>
+<th>Serviço</th>
+<th>Porta</th>
+<th>Propósito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td>80</td>
+<td>Console Vue 3 + Quasar</td>
+</tr>
+<tr>
+<td>mapex-iam</td>
+<td>5000</td>
+<td>Users, organizations, roles, auth</td>
+</tr>
+<tr>
+<td>http-gateway</td>
+<td>5001</td>
+<td>Ingestão de webhooks, registry de datasources</td>
+</tr>
+<tr>
+<td>assets</td>
+<td>5002</td>
+<td>Assets, templates, campos EVA, PKI de dispositivos + presence</td>
+</tr>
+<tr>
+<td>router</td>
+<td>5003</td>
+<td>Roteamento de eventos, regras de match, fan-out</td>
+</tr>
+<tr>
+<td>events</td>
+<td>5004</td>
+<td>Armazenamento no ClickHouse, retenção</td>
+</tr>
+<tr>
+<td>triggers</td>
+<td>5006</td>
+<td>Executors de saída (HTTP, MQTT, NATS, …)</td>
+</tr>
+<tr>
+<td>workflow</td>
+<td>5007</td>
+<td>Workflow Engine durável de DAGs + plugins</td>
+</tr>
+<tr>
+<td>mapex-vault</td>
+<td>5010</td>
+<td>Vault de credenciais, autoridade de PKI</td>
+</tr>
+<tr>
+<td>js-executor</td>
+<td>8000</td>
+<td>Isolates V8 para scripts de asset</td>
+</tr>
+<tr>
+<td>js-wf-executor</td>
+<td>8001</td>
+<td>Isolates V8 para nodes de code de workflow</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Infraestrutura:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Serviço</th>
+<th>Porta</th>
+<th>Imagem</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MongoDB</td>
+<td>27017</td>
+<td><code>mongo:7.0.34</code> (replica-set <code>rs0</code>)</td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>6379</td>
+<td><code>redis:7.4-alpine</code></td>
+</tr>
+<tr>
+<td>ClickHouse</td>
+<td>8123 / 9440</td>
+<td><code>clickhouse/clickhouse-server</code></td>
+</tr>
+<tr>
+<td>MinIO</td>
+<td>9000 / 9001</td>
+<td><code>minio/minio</code></td>
+</tr>
+<tr>
+<td>NATS</td>
+<td>4222 / 8222</td>
+<td><code>nats:2-alpine</code> (JetStream)</td>
+</tr>
+<tr>
+<td>MQTT Broker</td>
+<td>1883</td>
+<td><code>mapexos/mapex-broker-mqtt</code></td>
+</tr>
+<tr>
+<td>Prometheus</td>
+<td>9090</td>
+<td><code>prom/prometheus</code></td>
+</tr>
+<tr>
+<td>Grafana</td>
+<td>3001</td>
+<td><code>grafana/grafana</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="pegada-de-recursos">Pegada de recursos</h2>
+<p>Todo serviço de longa duração traz um bloco <code>deploy.resources.limits</code> <strong>dimensionado para caber em um único notebook de ~4 cores / 8 GB</strong> — os limites somam aproximadamente <strong>10,5 vCPU / ~5 GB de RAM</strong>. Esses são <strong>tetos, não reservas</strong>: o Docker nunca reserva os cores ou a RAM, então os totais podem ultrapassar o host e a stack continua rodando tranquilamente — o scheduler compartilha os cores reais no tempo e containers ociosos não custam nada. MongoDB e ClickHouse ainda são ajustados internamente (<code>--wiredTigerCacheSizeGB</code>, <code>max_server_memory_usage</code>) para que seus caches respeitem o limite do container. Os one-shots de init são deixados sem limite de propósito.</p>
+<h2 id="parar-e-resetar">Parar e resetar</h2>
+<pre><code class="language-bash">docker compose down       # stop containers, keep data
+docker compose down -v    # stop + drop volumes (full reset)
+</code></pre>
+<h2 id="indo-para-produo">Indo para produção</h2>
+<p>Os defaults existem para que a stack caiba em um notebook — <strong>não</strong> para que ela aguente carga. Para produção:</p>
+<ol>
+<li>Crie um arquivo de env de verdade: <code>cp infra/envs/production.example.env infra/envs/production.env</code> e então preencha todos os valores (o template inclui geradores, ex.: <code>openssl rand -hex 32</code> para o <code>AUTH_SECRET</code>).</li>
+<li>Aponte os arquivos de compose para o <code>production.env</code> e defina <code>GO_ENV=prod</code>.</li>
+<li>Rode em um <strong>cluster Kubernetes</strong>, onde você dimensiona <code>resources.requests</code>/<code>limits</code> (e HPA/VPA) à demanda real — dê a MongoDB/ClickHouse/Prometheus uma folga de verdade.</li>
+</ol>
+<p>Todo serviço Mapex tem um <strong>security guard</strong> que se recusa a subir quando <code>GO_ENV</code>/<code>NODE_ENV</code> não é um valor de dev <strong>e</strong> alguma variável sensível (<code>AUTH_SECRET</code>, <code>INTERNAL_API_KEY</code>, <code>NATS_PASSWORD</code>, …) está faltando ou ainda é igual ao seu default de dev — um erro fatal e barulhento em vez de um boot silencioso com um segredo vazado.</p>
+<blockquote>
+<p>O <code>infra/envs/production.env</code> é ignorado pelo git. Nunca faça commit dele.</p>
+</blockquote>
+<h2 id="prximo">Próximo</h2>
+<p>→ <a href="/docs/1.0.0/pt-br/getting-started/quickstart">Quickstart</a> — conecte seu primeiro sensor de ponta a ponta.</p>

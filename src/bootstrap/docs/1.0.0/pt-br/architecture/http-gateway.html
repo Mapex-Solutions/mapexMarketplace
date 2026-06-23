@@ -1,0 +1,172 @@
+<h1 id="http-gateway">HTTP Gateway</h1>
+<p>O HTTP Gateway é a <strong>porta de entrada</strong> do MapexOS. É por aqui que o mundo externo <em>entra</em>: webhooks, telemetria de dispositivos e chamadas de API vindas de gateways e sistemas de negócio chegam por HTTP. Sua função é estreita e essencial — <strong>autenticar cada requisição conforme a política da sua fonte, gerar um correlation id e admitir um payload limpo e mínimo no pipeline</strong>. Ele não decodifica, não transforma e não roteia; autentica e encaminha, depois repassa para os estágios de <a href="/docs/1.0.0/pt-br/architecture/js-execution">JS execution</a> → <a href="/docs/1.0.0/pt-br/architecture/router">Router</a> via NATS.</p>
+<p>Tudo o que o gateway faz se apoia em um único conceito: a <strong>DataSource</strong>.</p>
+<blockquote>
+<p><strong>Porta</strong> <code>5001</code> · <strong>Go</strong> (DDD + Hexagonal) · <strong>MongoDB</strong> (registro de DataSources) + <strong>Redis</strong> (cache-aside) · publica em <strong>NATS JetStream</strong> · sem NATS de entrada — toda a entrada é HTTP.</p>
+</blockquote>
+<hr>
+<h2 id="a-datasource--um-ponto-de-entrada-governado">A DataSource — um ponto de entrada governado</h2>
+<p>Toda integração externa é modelada como uma <strong>DataSource</strong>: um registro de configuração que diz <em>quem</em> pode enviar dados, <em>como</em> se autentica e <em>a qual</em> asset os dados pertencem. Uma frota de dispositivos publicando com uma API key, um sistema parceiro usando OAuth2, um gateway on-prem restrito a uma faixa de IP — cada um é a sua própria DataSource, governada de forma independente.</p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Papel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auth</code></td>
+<td>A estratégia de autenticação dessa fonte (veja abaixo).</td>
+</tr>
+<tr>
+<td><code>assetBind</code></td>
+<td>Como um payload de entrada é mapeado para um Asset.</td>
+</tr>
+<tr>
+<td><code>enabled</code></td>
+<td>Um kill switch — uma fonte desabilitada é recusada antes que qualquer outra coisa rode.</td>
+</tr>
+<tr>
+<td><code>orgId</code> / <code>pathKey</code></td>
+<td>O tenant ao qual essa fonte pertence — a âncora de confiança.</td>
+</tr>
+</tbody>
+</table>
+<p>As DataSources são gerenciadas por uma superfície REST governada (<code>/api/v1/data_sources</code>, com controle de permissão e escopo de organização, com paginação, filtragem e projeção) e lidas no caminho crítico de ingestão por uma camada de <strong>cache-aside no Redis</strong> (TTL de 24 horas, com métricas de hit/miss), de modo que admitir uma requisição quase nunca toca o MongoDB.</p>
+<hr>
+<h2 id="autenticao-por-fonte-na-borda">Autenticação por fonte na borda</h2>
+<p>O gateway não impõe um esquema de autenticação global único. <strong>Cada DataSource carrega o seu próprio</strong>, e o middleware de ingestão decide com base nele a cada requisição:</p>
+<table>
+<thead>
+<tr>
+<th>Estratégia</th>
+<th>Como autentica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apiKey</code></td>
+<td>Uma chave em um header ou campo de query configurado.</td>
+</tr>
+<tr>
+<td><code>jwt</code></td>
+<td>Um JWT assinado validado contra um segredo compartilhado (header configurável).</td>
+</tr>
+<tr>
+<td><code>oauth2</code></td>
+<td>Um bearer token validado contra um endpoint JWKS (no estilo OIDC).</td>
+</tr>
+<tr>
+<td><code>ip_whitelist</code></td>
+<td>O IP do chamador precisa estar dentro das faixas CIDR permitidas.</td>
+</tr>
+<tr>
+<td><code>none</code></td>
+<td>Ingestão aberta, para fontes em rede confiável.</td>
+</tr>
+</tbody>
+</table>
+<p>Antes de qualquer uma dessas etapas rodar, uma <strong>DataSource desabilitada é rejeitada de imediato</strong> — o kill switch não custa nada. O mesmo vale para um tipo de autenticação desconhecido: recusado, nunca admitido por padrão.</p>
+<pre><code>POST /api/v1/events?ds={id}
+   │
+   ├─ resolve DataSource (Redis → MongoDB)
+   ├─ disabled?            → 403   (+ audit)
+   ├─ authenticate by type → 401 on failure (+ audit)
+   └─ admitted             → publish to the pipeline → 201
+</code></pre>
+<hr>
+<h2 id="trfego-rejeitado--registrado-no-apenas-descartado">Tráfego rejeitado é registrado, não apenas descartado</h2>
+<p>Segurança em uma borda de ingestão vale tanto quanto a sua visibilidade. <strong>Toda rejeição</strong> — uma fonte desabilitada, uma chave inválida, um IP fora da faixa — dispara um <code>RawEventDTO{ success: false }</code> para <code>events.raw</code> em uma goroutine desacoplada, sem atrasar o <code>401</code>/<code>403</code> que é devolvido ao chamador. Esse registro chega ao ClickHouse pelo serviço de <a href="/docs/1.0.0/pt-br/architecture/events">Events</a>, de modo que tentativas falhas e forjadas viram uma <strong>trilha de auditoria consultável</strong>, e não um descarte silencioso.</p>
+<hr>
+<h2 id="o-correlation-id-nasce-aqui">O correlation id nasce aqui</h2>
+<p>A cada requisição aceita, o gateway gera um novo <strong><code>eventTrackerId</code></strong> (um UUID) e o anexa ao payload. Esse id então percorre js-execution → router → triggers → workflow → storage — é o fio condutor que torna um evento <strong>rastreável de ponta a ponta</strong>. Quando o serviço de Events permite reconstruir toda a jornada de um evento por um único id, é <em>aqui</em> que esse id começa.</p>
+<hr>
+<h2 id="um-repasse-deliberadamente-mnimo">Um repasse deliberadamente mínimo</h2>
+<p>O que o gateway encaminha para o pipeline é intencionalmente enxuto. O payload publicado em <code>processor.js.execute</code> carrega apenas:</p>
+<ul>
+<li><code>sourceType: &quot;http&quot;</code> — a origem,</li>
+<li>o <code>orgId</code> e o <code>assetBind</code> da DataSource — o suficiente para resolver o Asset,</li>
+<li>o corpo bruto do <code>event</code>,</li>
+<li>o <code>eventTrackerId</code>.</li>
+</ul>
+<p>Ele deliberadamente omite o nome, a descrição e o <code>pathKey</code> do asset — <strong>js-execution lê isso do cache do Asset, a fonte da verdade.</strong> Nada que a plataforma já conhece é duplicado no fio; a borda permanece fina e o Asset permanece a autoridade.</p>
+<hr>
+<h2 id="heartbeats--presena-sem-spoofing">Heartbeats — presença sem spoofing</h2>
+<p>Além da telemetria, o gateway aceita um <strong>heartbeat</strong> explícito (<code>POST /api/v1/heartbeat?ds={id}</code>, corpo <code>{ assetUUID }</code>) que governa o estado online de um asset. Ele publica em <code>asset.heartbeat.{orgId}</code> para o monitor de saúde do Assets. O ponto crucial: o <strong><code>orgId</code> e o <code>pathKey</code> vêm da DataSource já resolvida (pós-autenticação), nunca do corpo da requisição</strong> — então um corpo forjado não consegue fazer um tenant reportar presença em nome de outro.</p>
+<hr>
+<h2 id="entradas-e-sadas">Entradas e saídas</h2>
+<p><strong>HTTP (entrada):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Rota</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST /api/v1/events?ds={id}</code></td>
+<td>Admite telemetria → <code>201 { success: true }</code>.</td>
+</tr>
+<tr>
+<td><code>POST /api/v1/heartbeat?ds={id}</code></td>
+<td>Governa presença → <code>200 { success: true }</code>.</td>
+</tr>
+<tr>
+<td><code>/api/v1/data_sources</code> (CRUD)</td>
+<td>Gerencia fontes — com autenticação e controle de permissão.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>NATS (saída):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Propósito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>processor.js.execute</code></td>
+<td>Evento admitido → o pipeline de js-execution (JetStream, com ack).</td>
+</tr>
+<tr>
+<td><code>events.raw</code></td>
+<td>Registro de auditoria de falha de autenticação (fire-and-forget).</td>
+</tr>
+<tr>
+<td><code>asset.heartbeat.{orgId}</code></td>
+<td>Sinal de presença → o monitor de saúde do Assets (publicação core).</td>
+</tr>
+</tbody>
+</table>
+<p>O gateway consome <strong>nada</strong> do NATS — toda a sua superfície de entrada é HTTP.</p>
+<hr>
+<h2 id="observabilidade">Observabilidade</h2>
+<p>As métricas do Prometheus cobrem os resultados de autenticação <strong>por estratégia</strong> (incluindo o gate de <code>disabled</code>), a duração da autenticação, o hit/miss do cache de DataSource e os resultados de publicação — além de <code>/health</code> e <code>/swagger</code>. Você consegue ver, por fonte e por tipo de autenticação, exatamente o que está sendo admitido e o que está sendo barrado.</p>
+<hr>
+<h2 id="para-onde-ir-agora">Para onde ir agora</h2>
+<table>
+<thead>
+<tr>
+<th>Para se aprofundar em…</th>
+<th>Vá para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O que acontece com um evento admitido</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/js-execution">JS Execution</a></td>
+</tr>
+<tr>
+<td>Onde vive o modelo de asset</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/overview">Visão Geral da Arquitetura</a></td>
+</tr>
+<tr>
+<td>Onde ficam os registros de tráfego rejeitado</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/events">Events</a></td>
+</tr>
+</tbody>
+</table>

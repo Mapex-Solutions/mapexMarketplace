@@ -1,0 +1,411 @@
+<h1 id="conceitos-fundamentais">Conceitos Fundamentais</h1>
+<p>Esta página define os blocos de construção do MapexOS — as palavras usadas em todo o resto da documentação. Leia uma vez antes de seguir adiante e volte sempre que um termo não estiver claro.</p>
+<blockquote>
+<p><strong>O que já é realidade hoje.</strong> O MapexOS ingere dados por <strong>HTTP, MQTT e LoRaWAN</strong>, executa o pipeline de transformar → rotear → automatizar → armazenar e entrega toda a pilha de governança multi-tenant. Protocolos adicionais (como o CoAP) e as camadas de catálogo/IA estão no roadmap.</p>
+</blockquote>
+<hr>
+<h2 id="as-cinco-camadas-do-mapexos">As cinco camadas do MapexOS</h2>
+<p>Tudo no MapexOS pertence a uma das cinco camadas. O restante da página detalha cada uma delas.</p>
+<table>
+<thead>
+<tr>
+<th>Camada</th>
+<th>O que é</th>
+<th>Conceitos-chave</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tenancy e identidade</strong></td>
+<td>Quem pode fazer o quê, restrito a qual parte da organização</td>
+<td>Organization · User · Group · Role</td>
+</tr>
+<tr>
+<td><strong>Fontes de dados</strong></td>
+<td>O que produz eventos</td>
+<td>Asset · Asset Template · Dynamic Fields (EVA)</td>
+</tr>
+<tr>
+<td><strong>Pipeline de eventos</strong></td>
+<td>O caminho que todo evento percorre</td>
+<td>Standard Event · Router · Route Group</td>
+</tr>
+<tr>
+<td><strong>Automação</strong></td>
+<td>O que acontece depois que um evento chega</td>
+<td>Workflow · Node · Trigger · Plugin</td>
+</tr>
+<tr>
+<td><strong>Armazenamento e segredos</strong></td>
+<td>Onde vivem o estado e as credenciais</td>
+<td>Events Service · Persistent Log · Credential · Vault</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="tenancy-e-identidade">Tenancy e identidade</h2>
+<h3 id="organization">Organization</h3>
+<p>Uma <strong>organization</strong> é uma unidade de propriedade dentro do MapexOS. Todo evento, asset, template, workflow e regra pertence a exatamente uma organization. Permissões, retenção e visibilidade seguem essa fronteira.</p>
+<p>As organizations formam uma <strong>árvore hierárquica</strong>, e cada nó carrega um <code>pathKey</code> desnormalizado — um prefixo que codifica sua posição na árvore, de modo que a plataforma consiga resolver &quot;tudo abaixo desta org&quot; com uma consulta de prefixo rápida, em vez de uma varredura recursiva. Os rótulos de nível são convenções; a plataforma não se importa com o nome que você dá a eles:</p>
+<pre><code>Vendor → Customer → Site → Building → Floor → Zone
+</code></pre>
+<p>Em todos os casos as regras são as mesmas:</p>
+<ul>
+<li>Cada nível herda o contexto do seu pai.</li>
+<li>Templates, regras e assets definidos em uma organization pai podem ser <strong>compartilhados árvore abaixo</strong> com os descendentes.</li>
+<li>Retenção (TTL), permissões e fronteiras de auditoria são aplicadas <strong>na organization dona do dado</strong>.</li>
+</ul>
+<h3 id="user-group-role">User, Group, Role</h3>
+<ul>
+<li>Um <strong>user</strong> é uma identidade individual que se autentica e opera a plataforma. Um user pode pertencer a várias organizations, com papéis diferentes em cada uma.</li>
+<li>Um <strong>group</strong> é uma coleção nomeada de users; as permissões concedidas a um group valem para todos os membros.</li>
+<li>Um <strong>role</strong> é um conjunto reutilizável de permissões, <strong>definido dentro de uma organization</strong> — o role <em>Operator</em> no <em>Customer A</em> e o role <em>Operator</em> no <em>Customer B</em> são definições separadas. É isso que impede que tenants vazem permissões uns para os outros.</li>
+</ul>
+<p>A concessão de acesso completa é uma tripla — <strong>assignee + role + organization</strong> — e a herança de roles árvore abaixo é controlada por organization através de uma <code>rolePolicy</code> (os roles de um pai só alcançam um descendente quando esse descendente opta por recebê-los):</p>
+<table>
+<thead>
+<tr>
+<th>Assignee (user ou group)</th>
+<th>Role</th>
+<th>Organization (escopo)</th>
+<th>Acesso efetivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>João</td>
+<td>Operator</td>
+<td><em>Site: Planta São Paulo</em></td>
+<td>Operar assets na Planta São Paulo</td>
+</tr>
+<tr>
+<td><em>Grupo de Manutenção</em></td>
+<td>Technician</td>
+<td><em>Building: Armazém Principal</em></td>
+<td>Cada membro mantém os assets daquele building</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="fontes-de-dados">Fontes de dados</h2>
+<h3 id="asset">Asset</h3>
+<p>Um <strong>Asset</strong> é qualquer coisa que produz eventos no MapexOS. O nome é deliberadamente mais amplo do que &quot;dispositivo&quot;:</p>
+<ul>
+<li>Um sensor IoT, um gateway ou uma máquina reportando seu estado.</li>
+<li>Uma plataforma de terceiros enviando webhooks, ou uma aplicação customizada emitindo eventos de negócio.</li>
+<li>Uma área ou zona lógica que agrega outros assets.</li>
+</ul>
+<p>Todo asset pertence a uma organization, usa um <strong>Asset Template</strong> e carrega sua identidade, sua localização opcional na árvore da org, metadados customizados e credenciais de conectividade.</p>
+<h3 id="asset-template">Asset Template</h3>
+<p>Um <strong>Asset Template</strong> define como uma <em>classe</em> de asset é integrada — de modo que onboardar um novo vendor ou modelo é <strong>configuração</strong>, não um novo ramo de código. Um único template pode atender centenas ou milhares de assets em muitas organizations.</p>
+<p>Cada template carrega três scripts que rodam <strong>em sequência</strong> para cada payload recebido — executados em um isolate V8 isolado em sandbox — além de um script de teste opcional usado durante a autoria:</p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Propósito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Preprocessor</strong></td>
+<td>Decodificar / normalizar o formato de transporte (parsear binário, Base64, descomprimir) — opcional</td>
+</tr>
+<tr>
+<td><strong>Validation</strong></td>
+<td>Rejeitar entradas malformadas (campos obrigatórios, faixas, schema)</td>
+</tr>
+<tr>
+<td><strong>Conversion</strong></td>
+<td>Produzir o Standard Event — mapear o payload do vendor para o contrato do MapexOS</td>
+</tr>
+</tbody>
+</table>
+<pre><code>Raw payload → Preprocessor → Validation → Conversion → Standard Event
+</code></pre>
+<p>Os templates podem ser do tipo <strong>system</strong> (que acompanham o MapexOS), <strong>organization</strong> (privados) ou <strong>shared</strong> (criados por uma org e compartilhados árvore abaixo).</p>
+<h3 id="dynamic-fields-eva">Dynamic Fields (EVA)</h3>
+<p>Um template pode declarar <strong>Dynamic Fields</strong> — valores tipados extraídos do payload. Cada campo tem um <strong>name</strong> lógico, um <strong>type</strong>, um <strong>payload path</strong> e um <strong><code>fieldId</code></strong> numérico estável e imutável (um template pode conter até 200):</p>
+<pre><code class="language-json">{ &quot;sensor&quot;: { &quot;readings&quot;: { &quot;temp&quot;: 23.5, &quot;humidity&quot;: 65 } } }
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>fieldId</th>
+<th>Field name</th>
+<th>Type</th>
+<th>Payload path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>temperature</code></td>
+<td>number</td>
+<td><code>sensor.readings.temp</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>humidity</code></td>
+<td>number</td>
+<td><code>sensor.readings.humidity</code></td>
+</tr>
+</tbody>
+</table>
+<p>O <code>fieldId</code> é a ideia central: os eventos são armazenados em <strong>colunas tipadas indexadas por esse id</strong>, então um valor mantém seu significado para sempre, mesmo que o rótulo mude. É isso que torna eventos de vendors diferentes <strong>consultáveis como um único conjunto</strong> — você pede <code>temperature</code> em toda a frota, independentemente de como cada payload bruto nomeou esse campo.</p>
+<hr>
+<h2 id="pipeline-de-eventos">Pipeline de eventos</h2>
+<h3 id="standard-event">Standard Event</h3>
+<p>Todo payload que entra no MapexOS — por HTTP, MQTT ou LoRaWAN — é convertido pelo seu template em um único <strong>Standard Event</strong>. Esse é o contrato exato, validado por schema, sobre o qual o resto da plataforma opera:</p>
+<pre><code class="language-ts">{
+  eventType: string,        // classification, e.g. &quot;telemetry.temperature&quot;
+  eventId: string,          // unique id for this event
+  data: Record&lt;string, any&gt;,// the normalized payload
+  metadata?: Record&lt;string, any&gt;, // optional context (org, asset, location, correlation ids)
+  created: string           // ISO 8601 timestamp
+}
+</code></pre>
+<p>Roteamento, automação, armazenamento e auditoria operam todos sobre Standard Events — nunca sobre payloads brutos de vendors.</p>
+<h3 id="router-e-route-group">Router e Route Group</h3>
+<p>O <strong>Router</strong> recebe Standard Events e despacha cada um para um ou mais destinos, <strong>em paralelo</strong>, com base em regras configuradas. Um mesmo evento pode ser persistido, enviado a um workflow e encaminhado a um trigger no mesmo passo.</p>
+<p>Um <strong>Route Group</strong> é um conjunto nomeado de regras de roteamento anexado à configuração de um asset. Cada regra é uma <strong>condição de match</strong> somada a um <strong>tipo de destino</strong>:</p>
+<ul>
+<li>Uma <strong>condição de match</strong> é uma lista de cláusulas — um campo em dot-path (ex.: <code>data.temperature</code>), um de oito operadores (<code>eq</code>, <code>neq</code>, <code>gt</code>, <code>gte</code>, <code>lt</code>, <code>lte</code>, <code>in</code>, <code>nin</code>) e um valor — combinadas com uma política de <code>all</code> (AND) ou <code>any</code> (OR).</li>
+<li>Um <strong>tipo de destino</strong> roteia o evento correspondente para um destino como o <strong>events store</strong>, um <strong>workflow</strong>, um <strong>trigger</strong> ou um sink de <strong>lake-house</strong>. Toda decisão de roteamento também gera um registro de <strong>routing-history</strong>.</li>
+</ul>
+<pre><code>Always                     → events store   (persist)
+If data.temperature ≥ 80   → workflow        (handle escalation)
+If data.alert in [&quot;high&quot;]  → trigger         (notify operations)
+</code></pre>
+<hr>
+<h2 id="automao">Automação</h2>
+<p>É aqui que a plataforma transforma telemetria em ação de negócio.</p>
+<h3 id="workflow">Workflow</h3>
+<p>Um <strong>workflow</strong> é um grafo acíclico dirigido (DAG) de <strong>nodes</strong> que roda quando disparado por um evento ou por uma chamada de API. Os workflows são <strong>duráveis</strong>: cada passo tem checkpoint em um key-value store do NATS, então um workflow que está no meio do caminho quando um worker cai <strong>retoma a partir do último node</strong>, não do começo. Timers, retries e waits também sobrevivem a reinícios. A lógica com estado — condições, contadores, cooldowns, janelas de persistência — vive inteiramente dentro do workflow (nos nodes <code>condition</code> e <code>set_state</code>); não há um serviço de regras separado.</p>
+<p>Um workflow tem três entidades, em ordem crescente de concretude: uma <strong>Definition</strong> (o blueprint do DAG), uma <strong>Instance</strong> (uma definition vinculada a entradas específicas) e uma <strong>Execution</strong> (uma execução real, com seu próprio estado, status e histórico) — <code>Definition 1→N Instance 1→N Execution</code>.</p>
+<p>O <strong>estado do workflow</strong> vem em dois sabores, e a distinção importa:</p>
+<table>
+<thead>
+<tr>
+<th>Estado</th>
+<th>Escopo</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>State</strong> (variáveis)</td>
+<td><strong>Persistente</strong> por toda a execução</td>
+<td>Contadores, valores acumulados, flags — mutados por <code>set_state</code> (set / increment / append / remove)</td>
+</tr>
+<tr>
+<td><strong>NodeStates</strong></td>
+<td><strong>Efêmero</strong>, por node</td>
+<td>Índice de loop, tentativa de retry, info de wait — limpos quando o node conclui</td>
+</tr>
+</tbody>
+</table>
+<h3 id="node">Node</h3>
+<p>Um <strong>node</strong> é uma unidade de trabalho em um workflow. O MapexOS entrega <strong>17 tipos de node nativos</strong> e aceita novos como plugins:</p>
+<table>
+<thead>
+<tr>
+<th>Grupo</th>
+<th>Nodes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Entrada e saída</strong></td>
+<td><code>trigger_event</code>, <code>start</code>, <code>end</code></td>
+</tr>
+<tr>
+<td><strong>Lógica e dados</strong></td>
+<td><code>condition</code>, <code>switch</code>, <code>set_state</code>, <code>log</code>, <code>code</code> (JavaScript do usuário em um isolate V8)</td>
+</tr>
+<tr>
+<td><strong>Controle de fluxo</strong></td>
+<td><code>fanout</code>, <code>merge</code>, <code>sequence</code>, <code>loop</code>, <code>goto</code>, <code>subworkflow</code></td>
+</tr>
+<tr>
+<td><strong>Tempo e sinais</strong></td>
+<td><code>delay</code>, <code>wait_signal</code>, <code>wait_for</code></td>
+</tr>
+</tbody>
+</table>
+<p>Dois deles são recursos de assinatura:</p>
+<ul>
+<li><strong>Condições</strong> (<code>condition</code>, <code>switch</code>, <code>wait_for</code>) avaliam <strong>grupos aninháveis de AND / OR / NAND / NOR</strong> com 18 operadores (comparação, string, datetime, faixa) — o suficiente para expressar lógica operacional real, não apenas um único limiar.</li>
+<li>O <strong>Goto</strong> permite referenciar um passo pelo nome através de <strong>&quot;portais&quot; emparelhados de sender/receiver</strong>, em vez de arrastar um fio pelo canvas, mantendo um DAG grande legível.</li>
+</ul>
+<h3 id="trigger">Trigger</h3>
+<p>Duas coisas no MapexOS são chamadas de &quot;trigger&quot; — e elas não são a mesma:</p>
+<table>
+<thead>
+<tr>
+<th>Termo</th>
+<th>O que significa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Workflow trigger</strong> (node <code>trigger_event</code>)</td>
+<td>O node de entrada de um workflow — define o que o dispara</td>
+</tr>
+<tr>
+<td><strong>Trigger</strong> (executor)</td>
+<td>Uma <strong>ação de saída</strong> independente, disparada pelo router ou de dentro de um workflow</td>
+</tr>
+</tbody>
+</table>
+<p>Um trigger executor entrega uma ação por um de <strong>oito transportes nativos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Categoria</th>
+<th>Executors</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Técnicos</strong></td>
+<td>HTTP, MQTT, RabbitMQ, NATS, WebSocket</td>
+</tr>
+<tr>
+<td><strong>Comunicação</strong></td>
+<td>Email, Microsoft Teams, Slack</td>
+</tr>
+</tbody>
+</table>
+<h3 id="plugin">Plugin</h3>
+<p>Um <strong>plugin</strong> adiciona novos tipos de node de workflow ou de trigger <strong>sem rebuildar o frontend</strong>. Um plugin é um <strong>manifest</strong> declarativo (credenciais, busca dinâmica de opções, tipos de node e seus campos, templates de operação); o editor de workflow o carrega em runtime e renderiza o formulário automaticamente. O modelo é inspirado no ecossistema de nodes do n8n, adaptado às restrições de durabilidade de workflow e multi-tenancy do MapexOS — de modo que um novo conector (um ITSM, um payment gateway, um banco de dados) é um manifest, não um release de plataforma.</p>
+<hr>
+<h2 id="armazenamento-e-segredos">Armazenamento e segredos</h2>
+<h3 id="events-service-e-persistent-log">Events Service e Persistent Log</h3>
+<p>O <strong>Events Service</strong> é o sink terminal: ele consome Standard Events do backbone NATS e os armazena no <strong>ClickHouse</strong>, nas colunas EVA tipadas descritas acima, com <strong>retenção (TTL) configurável por organization</strong>. Como toda avaliação e ação também é registrada, o resultado é um <strong>persistent log</strong> — uma trilha imutável e consultável do <em>que aconteceu</em>, pesquisável por asset, por site, por janela de tempo, por resultado. A evidência de compliance vira uma consulta, não uma montagem manual.</p>
+<h3 id="credential-e-vault">Credential e Vault</h3>
+<p>Uma <strong>credential</strong> é uma referência a um segredo — um token de API, um par usuário/senha, uma chave privada, um certificado. O <strong>Vault</strong> armazena credenciais com <strong>criptografia de envelope</strong> (uma chave por registro envolvida por uma master key, AES-256-GCM) e nunca serializa o texto plano em uma resposta de API. Ele também emite material de chave da plataforma e assina <strong>certificados X.509 por asset</strong> para a conectividade dos dispositivos. O data plane (workflows, triggers, templates) só enxerga referências como <code>{{credential.&lt;id&gt;.&lt;field&gt;}}</code>, resolvidas em runtime.</p>
+<hr>
+<h2 id="como-os-conceitos-se-conectam">Como os conceitos se conectam</h2>
+<pre><code class="language-text">Organization
+  ├── Users / Groups / Roles                (who can do what, where — scoped by pathKey)
+  └── Assets
+        └── use → Asset Template
+                  ├── scripts → Preprocessor → Validation → Conversion
+                  └── defines → Dynamic Fields (EVA, typed, fieldId-keyed)
+
+Event flow
+  Raw payload
+    → Asset Template pipeline
+    → Standard Event { eventType, eventId, data, metadata, created }
+    → Router  (fan-out by Route Group rules: dot-path + operators, all/any)
+        → Events Service     (persist in ClickHouse + EVA query + per-org TTL)
+        → Workflow           (durable DAG of nodes, checkpointed)
+              ├─ condition / switch   (AND/OR/NAND/NOR groups, 18 operators)
+              ├─ set_state            (persistent State) · NodeStates (ephemeral)
+              ├─ code                 (user JS in a V8 isolate)
+              ├─ goto                 (sender/receiver portals)
+              └─ trigger_event / plugin nodes  (act)
+        → Trigger            (direct outbound action — 8 executors)
+
+Secrets
+  Workflow / Trigger / Template
+    → {{credential.&lt;id&gt;.&lt;field&gt;}}
+        → Vault (envelope-encrypted; device X.509 PKI; never plaintext on the data plane)
+</code></pre>
+<hr>
+<h2 id="resumo">Resumo</h2>
+<table>
+<thead>
+<tr>
+<th>Conceito</th>
+<th>Propósito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Organization</strong></td>
+<td>Unidade multi-tenant hierárquica (com <code>pathKey</code>); a fronteira de permissões, retenção e visibilidade</td>
+</tr>
+<tr>
+<td><strong>User / Group / Role</strong></td>
+<td>Identidade e controle de acesso, com escopo por organization</td>
+</tr>
+<tr>
+<td><strong>Asset</strong></td>
+<td>Uma entidade que produz dados (sensor, máquina, aplicação, área)</td>
+</tr>
+<tr>
+<td><strong>Asset Template</strong></td>
+<td>Integração reutilizável: Preprocessor → Validation → Conversion + Dynamic Fields</td>
+</tr>
+<tr>
+<td><strong>Dynamic Fields (EVA)</strong></td>
+<td>Extrações tipadas e indexadas por <code>fieldId</code> — tornam eventos heterogêneos consultáveis como um único conjunto</td>
+</tr>
+<tr>
+<td><strong>Standard Event</strong></td>
+<td>O contrato normalizado <code>{eventType, eventId, data, metadata, created}</code> sobre o qual todo serviço opera</td>
+</tr>
+<tr>
+<td><strong>Router / Route Group</strong></td>
+<td>Motor de fan-out; regras fazem match em campos dot-path (8 operadores, all/any) para tipos de destino</td>
+</tr>
+<tr>
+<td><strong>Workflow</strong></td>
+<td>DAG durável de nodes que automatiza a resposta a um evento</td>
+</tr>
+<tr>
+<td><strong>State / NodeStates</strong></td>
+<td>Variáveis persistentes da execução vs. dados efêmeros por node</td>
+</tr>
+<tr>
+<td><strong>Node</strong></td>
+<td>Uma unidade de trabalho — 17 tipos nativos (condition, switch, set_state, code, goto, fanout, loop, …) mais plugins</td>
+</tr>
+<tr>
+<td><strong>Trigger</strong></td>
+<td>O node de entrada de um workflow, ou uma ação de saída independente (8 executors)</td>
+</tr>
+<tr>
+<td><strong>Plugin</strong></td>
+<td>Extensão servida por manifest que adiciona nodes/triggers sem um release de frontend</td>
+</tr>
+<tr>
+<td><strong>Events Service / Persistent Log</strong></td>
+<td>Armazenamento em ClickHouse com retenção por org e uma trilha de auditoria imutável</td>
+</tr>
+<tr>
+<td><strong>Credential / Vault</strong></td>
+<td>Referências de segredo resolvidas por um vault de criptografia de envelope que também roda a PKI dos dispositivos</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="para-onde-ir-em-seguida">Para onde ir em seguida</h2>
+<table>
+<thead>
+<tr>
+<th>Para se aprofundar em…</th>
+<th>Vá para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O pipeline e o store de eventos</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/events">Architecture → Events</a></td>
+</tr>
+<tr>
+<td>Identidade e multi-tenancy</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/mapexiam">Architecture → mapexIam</a></td>
+</tr>
+<tr>
+<td>Assets, templates e backend de dispositivos</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/assets">Architecture → Assets</a></td>
+</tr>
+<tr>
+<td>Como a plataforma é construída</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/overview">Architecture Overview</a></td>
+</tr>
+</tbody>
+</table>

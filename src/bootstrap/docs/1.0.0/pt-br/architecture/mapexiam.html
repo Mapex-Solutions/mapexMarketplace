@@ -1,0 +1,88 @@
+<h1 id="mapexiam">mapexIam</h1>
+<p>O mapexIam é o <strong>control plane de identidade e controle de acesso</strong> do MapexOS — a fundação sobre a qual todo outro serviço se apoia. Ele é dono de <em>quem</em> são os usuários, da <em>hierarquia de organizações</em> à qual eles pertencem e <em>do que podem fazer</em>, e computa os dois caches que todo outro serviço lê para <strong>autorizar e escopar cada requisição</strong>. Toda vez que outra página diz que uma rota é &quot;permission-gated e coverage-aware&quot;, <strong>é este o serviço que torna isso verdade</strong>. Ele fica fora do caminho de telemetria; é o control plane que o governa.</p>
+<blockquote>
+<p><strong>Porta</strong> <code>5000</code> · <strong>Go</strong> (DDD + Hexagonal) · <strong>MongoDB</strong> (sistema de registro) + <strong>Redis</strong> (sessões, locks, caches de autorização e coverage) + <strong>NATS JetStream</strong> (barramento de invalidação auto-consumido) · JWT + bcrypt.</p>
+</blockquote>
+<hr>
+<h2 id="a-rvore-de-organizaes--multi-tenancy-hierrquica">A árvore de organizações — multi-tenancy hierárquica</h2>
+<p>Todo tenant é um nó em uma <strong>árvore de organizações</strong> de profundidade ilimitada:</p>
+<pre><code>vendor → customer → site → building → floor → zone
+</code></pre>
+<p>Cada organização — e cada role, grupo e membership escopado a ela — carrega um <strong><code>pathKey</code></strong> desnormalizado (ex.: <code>000001/000001/0001</code>) e um <strong><code>depth</code></strong>. Isso transforma lookups de ancestrais e descendentes em <strong>prefix matches</strong>, não em joins recursivos: &quot;tudo abaixo deste customer&quot; é uma única range query sobre <code>pathKey</code>. É isso que permite a <strong>um único deploy servir dezenas de customers com zero visibilidade compartilhada</strong>, e se manter rápido conforme a árvore cresce.</p>
+<hr>
+<h2 id="dois-caches-que-protegem-cada-requisio--em-todo-lugar">Dois caches que protegem cada requisição — em todo lugar</h2>
+<p>A autorização no MapexOS não é reavaliada do zero a cada chamada. O mapexIam computa dois caches no Redis que o <strong>middleware compartilhado em todo outro serviço</strong> lê:</p>
+<table>
+<thead>
+<tr>
+<th>Cache</th>
+<th>Responde</th>
+<th>Como é chaveado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Autorização</strong></td>
+<td><em>O que este usuário pode <strong>fazer</strong> nesta org?</em> — um conjunto resolvido de strings de permissão</td>
+<td>um ponteiro <strong>versionado</strong> <code>auth:org:{orgId}:user:{userId}:v{n}</code> (a versão faz round-robin de 1–100, TTL de 30 dias)</td>
+</tr>
+<tr>
+<td><strong>Coverage</strong></td>
+<td><em>Quais orgs este usuário pode <strong>ver</strong>?</em> — a subárvore alcançável</td>
+<td><code>coverage:user:{userId}</code></td>
+</tr>
+</tbody>
+</table>
+<p>A chave de autorização versionada é a parte engenhosa: <strong>invalidar é só incrementar o número da versão</strong> — uma operação O(1) — e as versões antigas expiram por conta própria. Ambos os caches são construídos sob um <strong>lock distribuído do Redis com um padrão de poll-for-result</strong>, então uma avalanche de requisições concorrentes dispara exatamente um rebuild, não um por requisição.</p>
+<p>Quando você viu o Router, os Triggers, o Assets, o Vault e o resto descreverem seus CRUDs como <em>permission-gated e coverage-scoped</em>, <strong>são esses middlewares lendo estes dois caches</strong> — computados aqui, uma vez, e atualizados na mudança.</p>
+<hr>
+<h2 id="herana-recursiva-de-roles--controlada-por-merge--strict">Herança recursiva de roles — controlada por <code>merge</code> / <code>strict</code></h2>
+<p>A regra real de RBAC não é &quot;roles cascateiam árvore abaixo&quot; — é <strong>cascata opt-in</strong>. Um membership marcado como <code>scope = recursive</code> em uma org ancestral contribui com seus roles para uma org descendente <strong>apenas se o <code>AccessPolicy.RolePolicy</code> desse descendente for <code>merge</code></strong>. Uma org configurada como <strong><code>strict</code></strong> interrompe a herança na sua fronteira — seu acesso é exatamente o que é concedido diretamente sobre ela. A expansão de coverage aplica o mesmo filtro ao caminhar pela subárvore.</p>
+<p>Assim, o role de um administrador de vendor pode fluir para baixo até cada site que opta por <code>merge</code>, enquanto um site sensível configurado como <code>strict</code> permanece selado — governado, não acidental.</p>
+<hr>
+<h2 id="grupos-roles-e-memberships">Grupos, roles e memberships</h2>
+<p>O acesso é montado a partir de três peças de primeira classe:</p>
+<ul>
+<li>Um <strong>membership</strong> concede um <strong>role</strong> a um destinatário que é <strong>ou um usuário ou um grupo</strong> (<code>assigneeType</code>). Resolver as permissões de um usuário faz a união dos seus memberships <strong>diretos</strong> <strong>e</strong> dos memberships de <strong>todo grupo ao qual ele pertence</strong> — os membros de grupo vivem em sua própria collection de junção, projetada para 100K+ tenants em vez de arrays embutidos.</li>
+<li>Um <strong>role</strong> é um conjunto nomeado de <strong>strings de permissão</strong> (ex.: <code>organizations.create</code>). Os roles são <strong>customizados</strong>, não um enum fixo, e escopados como o resto da plataforma: templates de <strong>sistema</strong> (MAPEX global), <strong>templates de vendor/customer</strong> (<code>isTemplate</code>, compartilhados árvore abaixo) ou <strong>org-local</strong>.</li>
+</ul>
+<hr>
+<h2 id="autenticao">Autenticação</h2>
+<p>O login é <strong>e-mail + senha bcrypt</strong>, cunhando um <strong>access JWT</strong> e um <strong>refresh JWT</strong> (HS256). O refresh token é armazenado por sessão no Redis; o <code>/auth/refresh</code> o <strong>rotaciona</strong> e valida o token apresentado contra o cacheado para bloquear replay, e uma conta desabilitada é recusada. O <code>/auth/me/permissions</code> (lendo um header <code>X-Org-Context</code>) retorna as permissões resolvidas de quem chama e a versão de cache em que foram computadas.</p>
+<hr>
+<h2 id="o-barramento-de-invalidao-auto-consumido">O barramento de invalidação auto-consumido</h2>
+<p>A autorização só é tão correta quanto é fresca. Sempre que um <strong>role, grupo, membership, access-policy de org ou hierarquia de org</strong> muda, o mapexIam publica um evento de invalidação de cache em um stream do NATS JetStream (<code>MAPEXIAM-CACHE-INVALIDATION</code>). Ele <strong>consome o seu próprio stream</strong> para reconstruir os caches afetados no Redis — e todo serviço downstream assina o <strong>mesmo wildcard</strong> para descartar suas cópias obsoletas. Uma mudança, e a visão de toda a plataforma sobre &quot;quem pode fazer o quê, onde&quot; converge. Ele também publica eventos <code>organization.created</code> e de atualização de nome de lista para que outros serviços mantenham suas referências desnormalizadas em sincronia.</p>
+<hr>
+<h2 id="entradas-e-sadas">Entradas e saídas</h2>
+<p><strong>HTTP:</strong></p>
+<ul>
+<li><strong>Auth:</strong> <code>POST /auth/login</code> · <code>/auth/logout</code> · <code>/auth/refresh</code>; <code>GET /auth/me/permissions</code> · <code>/auth/users/me/coverage</code>.</li>
+<li><strong>Internal (API-key):</strong> <code>POST /internal/auth/build-authorization</code> · <code>/internal/auth/build-coverage</code> — os construtores de cache que os outros serviços chamam.</li>
+<li><strong>Resources</strong> sob <code>/api/v1</code>: <code>organizations</code> (+ <code>/tree</code>, com paginação por cursor), <code>users</code> (+ <code>/me</code>), <code>groups</code>, <code>memberships</code>, <code>roles</code>, <code>lists</code> e um orquestrador de <code>onboarding</code> — todos permission-gated e coverage-scoped.</li>
+</ul>
+<p><strong>NATS:</strong> produz <strong>e</strong> consome o wildcard <code>cache.invalidation.&gt;</code> (<code>MAPEXIAM-CACHE-INVALIDATION</code>, com DLQ); publica eventos <code>organization.created</code> e de atualização de nome de lista para sincronização entre serviços.</p>
+<p><strong>Stores:</strong> MongoDB (users, organizations, roles, groups, group-members, memberships, lists), Redis (sessões, locks, os dois caches, contadores).</p>
+<hr>
+<h2 id="para-onde-ir-em-seguida">Para onde ir em seguida</h2>
+<table>
+<thead>
+<tr>
+<th>Para mergulhar em…</th>
+<th>Vá para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Como tenancy e RBAC moldam a plataforma</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/overview">Visão Geral da Arquitetura</a></td>
+</tr>
+<tr>
+<td>O modelo de segurança cross-cutting</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/security">Segurança</a></td>
+</tr>
+<tr>
+<td>Onde essas permissões são impostas</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/router">Router</a> · <a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a></td>
+</tr>
+</tbody>
+</table>

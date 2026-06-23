@@ -1,0 +1,79 @@
+<h1 id="execuo-de-js-em-workflows">Execução de JS em Workflows</h1>
+<p>A Execução de JS em Workflows é o <strong>substrato de computação para os nós <code>code</code> do workflow</strong>. Quando um <a href="/docs/1.0.0/pt-br/architecture/workflow">workflow</a> chega a um nó que roda JavaScript customizado, o engine não o executa inline — ele <strong>suspende o nó</strong>, despacha o script para cá e estaciona. Este serviço roda o código em um sandbox V8 endurecido e <strong>publica o resultado de volta no subject de resume do workflow</strong>, acordando exatamente aquele nó para que o DAG continue. É o mesmo contrato de suspender → rodar em outro lugar → retomar que você viu nos <a href="/docs/1.0.0/pt-br/architecture/triggers">Triggers</a>, aplicado à computação dentro do grafo.</p>
+<p>Ele compartilha seu <strong>sandbox engine</strong> com a <a href="/docs/1.0.0/pt-br/architecture/js-execution">Execução de JS</a> — os mesmos isolates V8 do <code>isolated-vm</code> sobre um pool de workers Piscina, os mesmos limites rígidos (<strong>heap de 32 MB</strong>, <strong>timeout de 10 segundos</strong>, isolate reciclado a cada 10.000 execuções, sem acesso ao Node, à rede ou ao filesystem). O que muda é o <strong>contrato</strong>: este serviço roda <em>um script arbitrário do usuário por nó</em>, com o estado do workflow em escopo, e não o pipeline fixo de decode→validação→transform. Como no seu irmão, o código roda sobre o <strong>V8 completo</strong> — o <strong>ECMAScript (ES2015+)</strong> moderno é nativo (classes, arrow functions, destructuring, <code>Map</code>/<code>Set</code>, os built-ins padrão), limitado apenas pelo orçamento de <strong>32 MB</strong> do isolate.</p>
+<blockquote>
+<p><strong>Porta</strong> <code>8001</code> · <strong>Node.js + TypeScript</strong> · isolates V8 do <strong><code>isolated-vm</code></strong> sobre <strong>Piscina</strong> · movido inteiramente por NATS — sem superfície HTTP funcional · stateless.</p>
+</blockquote>
+<hr>
+<h2 id="o-contrato-do-n-de-cdigo">O contrato do nó de código</h2>
+<p>Cada requisição injeta quatro globais no isolate, dando ao script o contexto do workflow em execução:</p>
+<table>
+<thead>
+<tr>
+<th>Global</th>
+<th>O que carrega</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>event</code></td>
+<td>O event que dispara a execução.</td>
+</tr>
+<tr>
+<td><code>state</code></td>
+<td>O estado persistente do workflow.</td>
+</tr>
+<tr>
+<td><code>inputs</code></td>
+<td>Os inputs já resolvidos do nó.</td>
+</tr>
+<tr>
+<td><code>nodes</code></td>
+<td>As saídas dos nós anteriores.</td>
+</tr>
+</tbody>
+</table>
+<p>O script retorna duas coisas — <strong><code>output</code></strong> (consumido pelos nós seguintes) e <strong><code>statePatch</code></strong> (mesclado ao estado do workflow). Há duas formas de retorná-los, e o engine aceita as duas:</p>
+<pre><code class="language-js">// explicit
+result = { output: { celsius }, statePatch: { lastReading: celsius } };
+
+// or convenience — a bare object return is wrapped as { output: &lt;value&gt;, statePatch: {} }
+return { celsius };
+</code></pre>
+<p>O serviço então publica um <code>WorkflowScriptCallback</code> — <code>{ status: 'success' | 'error', output?, statePatch?, error? }</code> — no <code>callbackSubject</code> que o runtime forneceu, no stream de <strong>resume</strong> do workflow. <strong>Exatamente um callback é publicado por requisição</strong>, de sucesso ou de erro (incluindo um <code>SCRIPT_NOT_FOUND</code> quando o source de um nó está ausente), de modo que um nó de workflow nunca fica pendurado esperando por um resultado que não vai chegar.</p>
+<hr>
+<h2 id="cold-starts-mais-rpidos--cache-de-bytecode-do-v8">Cold starts mais rápidos — cache de bytecode do V8</h2>
+<p>Diferente do pipeline de assets por event, este serviço <strong>persiste o bytecode V8 compilado entre cold starts</strong>. Numa compilação fresca, o worker emite o <code>cachedData</code> do script, que é armazenado (fire-and-forget) em um <strong>cache de bytecode</strong> em camadas (RAM → disco → MinIO); na próxima vez que um worker compilar aquele nó — mesmo em outro pod após um restart — ele devolve o bytecode ao V8 para uma compilação de <strong>~1–5 ms</strong> em vez de <strong>~10–50 ms</strong>. O bytecode é <strong>escopado por definição</strong> e reaproveitado em todas as instâncias em execução de um workflow; em caso de incompatibilidade de versão do V8, ele silenciosamente recai numa compilação fresca. Source e bytecode são buscados <strong>em paralelo</strong> para manter o caminho frio curto.</p>
+<p>O próprio source JavaScript do nó vem de um cache em camadas (<code>{orgId}/{workflowId}/scripts/{nodeId}</code>), mantido atualizado por um broadcast <strong>FANOUT</strong> que o Workflow Engine emite quando uma definição muda — então editar um nó de código entra em vigor sem restart.</p>
+<hr>
+<h2 id="tratamento-de-falhas">Tratamento de falhas</h2>
+<p>O engine trata código mal-comportado como rotina, com a mesma disciplina do executor de assets:</p>
+<ul>
+<li>Um script que <strong>esgota o heap de 32 MB</strong> descarta seu isolate; o worker reporta a condição de out-of-memory e a mensagem recebe <strong>NACK para retry com backoff</strong> num isolate novo.</li>
+<li><strong>Qualquer outro erro de script</strong> publica um callback de <em>erro</em> no workflow e dá <strong>ACK</strong> na mensagem — o nó do workflow recebe a falha na sua aresta <code>error</code>, em vez de o script ser retentado para sempre.</li>
+</ul>
+<hr>
+<h2 id="entradas-e-sadas">Entradas e saídas</h2>
+<p><strong>Consome (NATS JetStream):</strong> <code>workflow.js.code</code> (stream <code>JSWORKFLOWEXECUTOR-CODE</code>, consumer de fila com balanceamento de carga) — uma mensagem por disparo de nó de código; e <code>fanout.workflow.definition.invalidate</code> (FANOUT) para descartar sources/bytecode em cache obsoletos.</p>
+<p><strong>Produz (NATS):</strong> um <code>WorkflowScriptCallback</code> no <code>callbackSubject</code> fornecido pelo runtime, no stream de <strong>resume</strong> do workflow. O serviço não fixa nenhum subject de saída no código — ele ecoa de volta para onde o runtime mandou.</p>
+<p>Ele não expõe <strong>nenhuma API HTTP funcional</strong> — apenas <code>/health</code> e <code>/metrics</code>. Toda interação é via NATS, movida pelo Workflow Engine.</p>
+<hr>
+<h2 id="para-onde-ir-agora">Para onde ir agora</h2>
+<table>
+<thead>
+<tr>
+<th>Para se aprofundar em…</th>
+<th>Vá para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O engine que despacha estes nós</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/workflow">Workflow Engine</a></td>
+</tr>
+<tr>
+<td>O sandbox irmão para payloads de dispositivos</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/js-execution">Execução de JS</a></td>
+</tr>
+</tbody>
+</table>

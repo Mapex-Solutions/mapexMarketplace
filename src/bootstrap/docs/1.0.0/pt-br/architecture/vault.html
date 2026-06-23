@@ -1,0 +1,85 @@
+<h1 id="vault">Vault</h1>
+<p>mapexVault é a <strong>raiz de confiança</strong> do MapexOS. Ele guarda o que jamais pode vazar: <strong>credenciais</strong> de terceiros, as <strong>chaves</strong> que permitem a outros serviços cifrarem seus próprios segredos, e a <strong>autoridade certificadora</strong> por trás de toda identidade de dispositivo. Ele fica fora do caminho da telemetria — não ingere eventos nem roteia nada — mas o resto da segurança da plataforma é construído sobre ele. Sua regra mestra é simples: <strong>um segredo entra, e o texto puro nunca volta numa resposta de API</strong> — apenas para um serviço interno nomeado, por um canal interno autenticado, e somente enquanto a requisição durar.</p>
+<p>Ele faz três trabalhos, em três módulos: <strong>credentials</strong>, <strong>KEK</strong> e <strong>PKI</strong>.</p>
+<blockquote>
+<p><strong>Port</strong> <code>5010</code> · <strong>Go</strong> (DDD + Hexagonal) · <strong>MongoDB</strong> (cifrado em repouso) · <strong>NATS JetStream</strong> (refresh de token agendado) · cifragem em envelope <strong>AES-256-GCM</strong> · CA com <strong>crypto/x509</strong>. O material secreto é marcado com <code>json:&quot;-&quot;</code> — ele não consegue serializar para uma resposta.</p>
+</blockquote>
+<hr>
+<h2 id="credentials--cifragem-em-envelope-de-duas-camadas">Credentials — cifragem em envelope de duas camadas</h2>
+<p>Uma credential é um segredo de terceiros — um token de API, um grant OAuth, um usuário/senha (<code>manual</code> · <code>oauth2</code> · <code>userAndPass</code>). Ela é armazenada sob <strong>duas camadas de cifragem em envelope</strong>:</p>
+<pre><code> master key  ──wraps──▶  per-record DEK  ──encrypts──▶  the secret data
+ (in Vault only)         (stored encrypted)              (AES-256-GCM)
+</code></pre>
+<p>Uma única <strong>master key</strong> (mantida apenas pelo Vault) envelopa uma <strong>data-encryption key por registro</strong>; essa DEK cifra o payload. Apenas os quatro campos de envelope são persistidos (<code>encryptedDEK</code>, <code>dekNonce</code>, <code>encryptedData</code>, <code>dataNonce</code>) — todos marcados com <code>json:&quot;-&quot;</code>, de modo que o segredo <strong>fisicamente não pode</strong> ser serializado numa resposta de API. O texto puro é entregue por um único caminho: um <code>GET /internal/credentials/:id/decrypt</code> oculto e gated por API-key, usado pelo motor de <a href="/docs/1.0.0/pt-br/architecture/workflow">Workflow</a> para executar a action de um plugin — e mesmo ali ele só vive durante a requisição.</p>
+<p>Como cada registro tem sua própria DEK, comprometer a chave de um registro expõe um registro — não o cofre inteiro.</p>
+<hr>
+<h2 id="refresh-de-token--agendado-nunca-por-polling">Refresh de token — agendado, nunca por polling</h2>
+<p>Credenciais OAuth e de token expiram, então o Vault as mantém vivas <strong>sem um cron de polling</strong>. Quando uma credential é armazenada, o Vault agenda uma única <strong>mensagem NATS JetStream</strong> para disparar em <strong><code>expiry − 15 minutos</code></strong>; quando dispara, o Vault executa a troca de token e <strong>rearma o próximo timer</strong>. Um <strong>reconciler</strong> de hora em hora resemeia qualquer timer perdido num restart ou drift do NATS, e credenciais já expiradas são reagendadas para refresh quase imediatamente no boot.</p>
+<p>A parte engenhosa é a separação: o <strong><code>providerConfig</code></strong> de uma credential — <em>como</em> refrescá-la (o método HTTP, a URL, os headers e onde na resposta mora o novo token) — é armazenado <strong>sem cifragem de propósito</strong>. Os valores secretos são injetados apenas no momento da execução, através de placeholders <code>{{credential.*}}</code>. Assim, o worker de refresh sabe <em>onde e como</em> refrescar <strong>sem nunca decifrar o segredo</strong> para descobrir.</p>
+<hr>
+<h2 id="kek--deixe-os-servios-cifrarem-localmente-sem-a-master-key">KEK — deixe os serviços cifrarem localmente, sem a master key</h2>
+<p>Nem todo serviço deveria chamar o Vault para cifrar cada segredo, e nenhum deveria jamais segurar a master key. Por isso o Vault distribui <strong>key-encryption keys</strong>: uma chave AES-256 escopada por contexto (por exemplo <code>lorawan_device_keys</code>) servida por <code>GET /internal/kek/:context</code>. Um serviço busca sua KEK uma vez e então roda <strong>sua própria cifragem em envelope local</strong> com ela — do jeito que o <a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a> sela as chaves de dispositivo LoRaWAN antes de armazená-las.</p>
+<p>A master key nunca sai do Vault; o serviço consumidor segura apenas uma chave escopada para seu próprio contexto. As KEKs são semeadas no momento do deploy, não criadas em runtime, e o endpoint retorna <code>503</code> até um contexto ser semeado — um claro &quot;ainda não pronto&quot; contra o qual o chamador pode tentar de novo.</p>
+<hr>
+<h2 id="pki--a-autoridade-certificadora-sob-demanda">PKI — a autoridade certificadora sob demanda</h2>
+<p>O Vault é a <strong>autoridade certificadora</strong> sob toda identidade de dispositivo. Ele armazena a <strong>CA root e a intermediária</strong> com suas chaves privadas <strong>cifradas em envelope em repouso</strong>, e expõe três operações internas:</p>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Retorna</th>
+<th>Consumido por</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /internal/pki/intermediate_ca_bundle</code></td>
+<td>o cert + a chave da CA intermediária</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a> — mantida em RAM para assinar certs de cliente por dispositivo</td>
+</tr>
+<tr>
+<td><code>GET /internal/pki/ca_chain</code></td>
+<td>a cadeia pública root + intermediária</td>
+<td>qualquer um que verifique um cert do MapexOS</td>
+</tr>
+<tr>
+<td><code>POST /internal/pki/sign_server</code></td>
+<td>um certificado de servidor assinado</td>
+<td>a identidade TLS do <a href="/docs/1.0.0/pt-br/architecture/mqtt-broker">MQTT broker</a></td>
+</tr>
+</tbody>
+</table>
+<p>A propriedade definidora: <strong>a chave privada da CA é decifrada a cada requisição e descartada</strong> — ela nunca fica em cache na memória entre chamadas, e espera-se que o chamador a descarte no instante em que a usa. Toda a história de device-PKI que você viu em <a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a> — certs ECDSA por dispositivo assinados por uma CA intermediária mantida em RAM — <strong>tem sua raiz aqui</strong>: o Assets busca o bundle uma vez no boot, e o Vault é de onde a confiança desse bundle realmente vem.</p>
+<hr>
+<h2 id="multi-tenant-por-padro">Multi-tenant por padrão</h2>
+<p>Toda operação de credential externa é escopada ao <code>orgId</code> do chamador e ao <code>pathKey</code> hierárquico do contexto da requisição — uma organização nunca pode ler ou refrescar os segredos de outra. Templates de credential são excluídos das leituras de owned e não podem ser criados ou alternados pela API externa.</p>
+<hr>
+<h2 id="entradas--sadas">Entradas &amp; saídas</h2>
+<p><strong>HTTP (externo, JWT + permissões)</strong> sob <code>/api/v1/credentials</code>: <code>POST</code> · <code>GET</code> · <code>GET /:id</code> · <code>PATCH /:id</code> · <code>DELETE /:id</code>.</p>
+<p><strong>HTTP (interno, API-key, oculto):</strong> <code>/internal/credentials/:id/decrypt</code> (→ Workflow), <code>/internal/kek/:context</code> (→ Assets), <code>/internal/pki/intermediate_ca_bundle</code> (→ Assets), <code>/internal/pki/ca_chain</code>, <code>/internal/pki/sign_server</code> (→ MQTT broker).</p>
+<p><strong>NATS (auto-entregue):</strong> agendamentos de refresh por credential em <code>MAPEXVAULT-SCHEDULE</code>, e o stream do reconciler que os mantém semeados.</p>
+<p>Ele não publica nada no bus cross-service e não consome telemetria — o Vault é infraestrutura que os outros serviços <em>chamam</em>, não um estágio do pipeline.</p>
+<hr>
+<h2 id="para-onde-ir-em-seguida">Para onde ir em seguida</h2>
+<table>
+<thead>
+<tr>
+<th>Para se aprofundar em…</th>
+<th>Vá para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quem usa a CA e a KEK LoRaWAN</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a></td>
+</tr>
+<tr>
+<td>Quem decifra credentials para executar plugins</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/workflow">Workflow Engine</a></td>
+</tr>
+<tr>
+<td>O broker cujo cert de servidor o Vault assina</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/mqtt-broker">MQTT Broker</a></td>
+</tr>
+</tbody>
+</table>

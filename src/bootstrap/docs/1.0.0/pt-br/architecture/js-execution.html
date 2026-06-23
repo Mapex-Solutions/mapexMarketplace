@@ -1,0 +1,139 @@
+<h1 id="js-execution">JS Execution</h1>
+<p>JS Execution é o <strong>motor de normalização</strong> do MapexOS. É onde um payload bruto de dispositivo — seja qual for o formato que um vendor inventou — vira o único <strong>Standard Event</strong> da plataforma. Todo <a href="/docs/1.0.0/pt-br/architecture/assets">Asset Template</a> carrega o JavaScript que sabe ler seus dispositivos; este serviço roda esse código, por evento, dentro de um <strong>sandbox V8 endurecido</strong>, e entrega o resultado normalizado ao <a href="/docs/1.0.0/pt-br/architecture/router">Router</a>. É o estágio de <em>transformação</em>: entre a ingestão — <strong>qualquer fonte externa que entra na plataforma</strong> (<a href="/docs/1.0.0/pt-br/architecture/http-gateway">HTTP</a>, <a href="/docs/1.0.0/pt-br/architecture/mqtt-broker">MQTT</a>, <a href="/docs/1.0.0/pt-br/architecture/lns">LoRaWAN</a>, e o que mais vier) — a montante e o roteamento a jusante. O motor é <strong>agnóstico de fonte</strong>: cada evento é etiquetado com seu <code>sourceType</code> (<code>http</code> · <code>mqtt</code> · <code>lorawan</code>), mas o <strong>mesmo</strong> pipeline de decode→validation→transform roda independentemente disso — então fazer o onboarding de um novo protocolo de ingestão não exige mudança alguma aqui.</p>
+<p>Seu problema mais difícil é que o código que ele roda é <strong>escrito por clientes</strong>, não pela plataforma — então todo o design gira em torno de rodar código não confiável <strong>com segurança, de forma determinística e rápido</strong>.</p>
+<blockquote>
+<p><strong>Port</strong> <code>8000</code> · <strong>Node.js + TypeScript</strong> (DDD + Hexagonal) · isolates V8 com <strong><code>isolated-vm</code></strong> sobre um worker pool <strong>Piscina</strong> · lê os scripts de asset/template de um tiered cache (MinIO como source of truth) · sem banco de dados próprio.</p>
+</blockquote>
+<hr>
+<h2 id="o-pipeline--decode--validation--transform">O pipeline — decode → validation → transform</h2>
+<p>Cada evento roda um pipeline fixo de três fases, montado a partir dos scripts do template:</p>
+<table>
+<thead>
+<tr>
+<th>Fase</th>
+<th>Script do template</th>
+<th>Papel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>decode</strong></td>
+<td><code>scriptProcessor</code> <em>(opcional)</em></td>
+<td>Faz o parse do payload bruto — desempacota um frame hex, separa um CSV, decodifica base64.</td>
+</tr>
+<tr>
+<td><strong>validation</strong></td>
+<td><code>scriptValidator</code> <em>(opcional)</em></td>
+<td>Confere os dados decodificados contra o esperado antes que avancem.</td>
+</tr>
+<tr>
+<td><strong>transform</strong></td>
+<td><code>scriptConversion</code> <em>(obrigatório)</em></td>
+<td>Emite o <strong>Standard Event</strong> — o formato normalizado e tipado que o resto do MapexOS fala.</td>
+</tr>
+</tbody>
+</table>
+<p>A saída JSON de cada fase vira o <code>payload</code> de entrada da fase seguinte; apenas a saída final de <strong>transform</strong> é o resultado padronizado. Como a lógica por dispositivo mora num template, o mesmo motor normaliza um sensor de solo LoRaWAN e uma catraca HTTP <strong>sem nenhum branch por dispositivo na plataforma</strong> — fazer o onboarding de um novo vendor é escrever três scripts pequenos, não mudar este serviço.</p>
+<hr>
+<h2 id="um-sandbox-de-verdade--o-cdigo-do-cliente-no-consegue-escapar">Um sandbox de verdade — o código do cliente não consegue escapar</h2>
+<p>Todo script roda dentro de um <strong>isolate V8 <code>isolated-vm</code></strong> numa thread de worker do Piscina, com limites rígidos:</p>
+<ul>
+<li><strong>teto de heap de 32 MB</strong> por isolate,</li>
+<li><strong>timeout de execução de 10 segundos</strong> por script,</li>
+<li><strong>sem acesso ao Node, à rede ou ao filesystem</strong> — o worker importa apenas a primitiva de isolamento e <code>worker_threads</code>; nada da aplicação atravessa para dentro do sandbox.</li>
+</ul>
+<p>Dentro desses limites o código roda em <strong>V8 completo</strong> — o <strong>ECMAScript (ES2015+)</strong> moderno está disponível nativamente, sem transpilação: classes, arrow functions, template literals, destructuring, <code>Map</code>/<code>Set</code> e os built-ins padrão. O único teto é o orçamento de memória de <strong>32 MB</strong> do isolate — um script que aloca além disso é parado, não truncado em silêncio.</p>
+<p>Cada evento recebe um <strong>contexto V8 fresco</strong> (seu <code>payload</code> injetado por cópia e liberado em seguida), de modo que um evento nunca pode ver o estado de outro. O isolate em si é <strong>reciclado a cada 10.000 eventos</strong> para limitar a memória ao longo do tempo. Scripts compilados ficam em cache por worker e por template, então o caminho crítico compila o código de cada template uma vez, não uma vez por evento.</p>
+<hr>
+<h2 id="resiliente-a-cdigo-ruim">Resiliente a código ruim</h2>
+<p>Código não confiável se comporta mal, e o motor trata isso como normal:</p>
+<ul>
+<li>Um script que <strong>esgota o heap</strong> descarta seu isolate; o worker reporta a condição de out-of-memory, <strong>reconstrói um isolate fresco</strong>, e o evento é <strong>NACK'd para retry</strong> — uma falha transitória, não um evento perdido.</li>
+<li>Um script com um <strong>erro de parse ou de schema</strong> é uma falha <em>permanente</em>: a mensagem é rejeitada (para a dead-letter queue) em vez de retentada, porque retentar não resolve.</li>
+<li>Uma falha registra em qual fase falhou (<code>decode</code> / <code>validation</code> / <code>transform</code>) e emite um log de debug para o serviço de <a href="/docs/1.0.0/pt-br/architecture/events">Events</a>, de modo que um script quebrado seja diagnosticável, não silencioso.</li>
+</ul>
+<p>Scripts de validação ganham um helper injetado, <strong><code>$mv</code></strong> (MapexValidator), com checagens tipadas (<code>string</code> / <code>number</code> / <code>boolean</code> / <code>date</code> / <code>array</code> / <code>object</code>) e um ponto de entrada <code>validate(value, schema)</code> — para que os autores validem de forma declarativa em vez de escrever guards na mão.</p>
+<hr>
+<h2 id="construdo-para-throughput">Construído para throughput</h2>
+<p>O motor puxa eventos em <strong>lotes</strong> e é ajustado por um único botão. O <code>CPU_LIMIT</code> deriva a quantidade de workers, o tamanho do lote e os limites de in-flight; o processo se recusa a subir se o <code>CPU_LIMIT</code> exceder as CPUs realmente disponíveis, então ele nunca consegue sobrecarregar seu host. Dentro de um lote ele <strong>deduplica os lookups de asset</strong>, roda cada evento pelo worker pool em paralelo e <strong>faz o flush de todas as publicações a jusante de uma vez</strong> antes de dar o ack — transformando uma rajada de eventos numa única rodada de escrita, em vez de uma por evento.</p>
+<hr>
+<h2 id="alimentado-pela-source-of-truth-do-assets">Alimentado pela source of truth do Assets</h2>
+<p>O JS Execution não tem banco de dados próprio. Ele resolve o asset de cada evento e seus scripts de template a partir de um <strong>tiered cache</strong> (RAM → disk → MinIO), cuja source of truth é o read-model do <a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a>. Dois consumidores <strong>FANOUT</strong> (<code>asset.invalidate</code>, <code>template.invalidate</code>) descartam entradas obsoletas no instante em que um asset ou template muda a montante — então uma edição de script entra em efeito sem restart, e nenhum worker jamais roda contra um template obsoleto.</p>
+<hr>
+<h2 id="entradas--sadas">Entradas &amp; saídas</h2>
+<p><strong>Consome (NATS JetStream, em lotes):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Fonte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>processor.js.execute</code></td>
+<td>Eventos de datasource do HTTP-gateway.</td>
+</tr>
+<tr>
+<td><code>mqtt.data.&gt;</code></td>
+<td>Telemetria MQTT do <a href="/docs/1.0.0/pt-br/architecture/mqtt-broker">MQTT broker</a>.</td>
+</tr>
+<tr>
+<td><code>lorawan.data.&gt;</code></td>
+<td>Uplinks LoRaWAN do <a href="/docs/1.0.0/pt-br/architecture/lns">LNS</a>.</td>
+</tr>
+<tr>
+<td><code>fanout.asset.invalidate</code> · <code>fanout.template.invalidate</code></td>
+<td>Coerência de cache.</td>
+</tr>
+</tbody>
+</table>
+<p>Cada borda de ingresso publica no <strong>seu próprio stream de protocolo</strong>, e toda mensagem carrega seu <code>orgId</code> / <code>assetUUID</code> e uma tag <code>sourceType</code> — então o motor resolve o asset e roda o pipeline idêntico não importa como o dado chegou.</p>
+<p><strong>Produz (NATS, fire-and-forget, flushed uma vez por lote):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Propósito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>route.execute</code></td>
+<td>O evento padronizado (<code>eventSource: &quot;assetEvent&quot;</code>) → o <a href="/docs/1.0.0/pt-br/architecture/router">Router</a>.</td>
+</tr>
+<tr>
+<td><code>events.logs.jsexecutor</code> · <code>events.raw</code></td>
+<td>Logs de execução / debug → o serviço de <a href="/docs/1.0.0/pt-br/architecture/events">Events</a>.</td>
+</tr>
+<tr>
+<td><code>asset.heartbeat.{orgId}</code></td>
+<td>Um sinal implícito de liveness (quando o asset usa o modo de heartbeat implícito) → <a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>HTTP</strong> (port <code>8000</code>): endpoints de <strong>test</strong> de script e de <strong>sample-payload</strong> usados pelo editor de template e pelo test runner, mais <code>/health</code> e <code>/metrics</code>.</p>
+<hr>
+<h2 id="para-onde-ir-em-seguida">Para onde ir em seguida</h2>
+<table>
+<thead>
+<tr>
+<th>Para se aprofundar em…</th>
+<th>Vá para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Onde os scripts e campos são definidos</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/assets">Assets</a></td>
+</tr>
+<tr>
+<td>O que admite os eventos que ele consome</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/http-gateway">HTTP Gateway</a></td>
+</tr>
+<tr>
+<td>Para onde sua saída é roteada</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/router">Router</a></td>
+</tr>
+</tbody>
+</table>

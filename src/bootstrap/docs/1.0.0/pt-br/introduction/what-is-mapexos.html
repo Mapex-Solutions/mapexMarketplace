@@ -1,0 +1,171 @@
+<h1 id="o-que--o-mapexos">O que é o MapexOS?</h1>
+<blockquote>
+<p><strong>A camada operacional da sua operação conectada.</strong>
+IoT em primeiro lugar, mas não só IoT — o MapexOS não enxerga dispositivos, ele enxerga <strong>Assets</strong>:
+qualquer fonte, qualquer protocolo, um único modelo governado.</p>
+<p><strong>Conecte. Automatize. Escale.</strong></p>
+</blockquote>
+<hr>
+<h2 id="a-resposta-curta">A resposta curta</h2>
+<p><strong>O MapexOS é uma plataforma self-hosted e multi-tenant que transforma cada sinal que sua operação
+produz — sensores, gateways, APIs, sistemas de negócio — em um único fluxo governado de eventos que
+você ingere, normaliza, roteia, automatiza e audita, de ponta a ponta.</strong> Uma plataforma só, rodando
+na infraestrutura que você controla, no lugar de uma pilha de ferramentas costuradas umas nas outras.</p>
+<p>Ela foi feita para organizações que já passaram do ponto de usar ferramentas avulsas e precisam de um
+sistema que dá para <em>operar</em> de verdade: com identidade, permissões, multi-tenancy, durabilidade e
+trilha de auditoria como partes nativas da plataforma — não como remendos pendurados em volta.</p>
+<hr>
+<h2 id="o-problema-que-ela-elimina">O problema que ela elimina</h2>
+<p>Uma operação conectada séria normalmente acaba virando umas sete coisas amarradas entre si: uma
+ferramenta para ingerir, outra para identidade, um banco para regras, uma fila para eventos, algo para
+automação, um dashboard, e uma pilha de código de cola segurando tudo de pé. Cada uma é forte no seu
+pedaço — e cada uma é um sistema para operar, proteger, integrar e manter em sincronia.</p>
+<p>Funciona até a hora em que não funciona mais: integrações apodrecem, as regras de negócio acabam
+morando em três lugares diferentes, a estrutura multi-organização é modelada projeto a projeto, e
+ninguém consegue responder a uma solicitação de auditoria sem um malabarismo de planilha.</p>
+<p><strong>O MapexOS condensa tudo isso em uma única arquitetura</strong> — a mesma escalabilidade em cada capacidade,
+sem duplicação de dados, e sem integrações para o seu time construir e manter na mão.</p>
+<hr>
+<h2 id="como-funciona--um-pipeline-de-ponta-a-ponta">Como funciona — um pipeline, de ponta a ponta</h2>
+<p>Cada sinal, venha de onde vier, segue o mesmo caminho governado. Cada etapa é um serviço real, em
+execução.</p>
+<table>
+<thead>
+<tr>
+<th>Etapa</th>
+<th>O que ela faz pela sua operação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ingest</strong></td>
+<td>Entrada autenticada por <strong>HTTP</strong>, <strong>MQTT</strong> e <strong>LoRaWAN</strong> (network server como overlay sobre o The Things Stack). Toda fonte é um ponto de entrada autenticado e governado.</td>
+</tr>
+<tr>
+<td><strong>Transform</strong></td>
+<td>A lógica de <strong>decode → validate → convert</strong> por Asset roda em JavaScript em sandbox, transformando o payload de qualquer fabricante em um único evento normalizado e tipado — sem um ramo de código por dispositivo.</td>
+</tr>
+<tr>
+<td><strong>Route</strong></td>
+<td>Os eventos são avaliados contra as suas regras e entregues só aos sistemas que precisam vê-los — sinal, não ruído.</td>
+</tr>
+<tr>
+<td><strong>Automate</strong></td>
+<td>Um <strong>workflow engine durável</strong> e os triggers de saída transformam eventos em ação: tickets, notificações, escalações, comandos para dispositivos.</td>
+</tr>
+<tr>
+<td><strong>Store</strong></td>
+<td>Cada evento é guardado em um store tipado e consultável, com <strong>retenção por Asset</strong> — uma trilha de auditoria completa e pesquisável, por padrão.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="o-que-voc-realmente-ganha">O que você realmente ganha</h2>
+<h3 id="automatize-a-operao--no-s-os-alertas">Automatize a operação — não só os alertas</h3>
+<p>O workflow engine é um runtime durável de verdade, não uma caixinha de regras. Ele modela lógica
+operacional real — <strong>condições aninhadas AND / OR / NAND / NOR</strong> com 18 operadores, <strong>variáveis
+persistentes e efêmeras</strong>, loops, sub-workflows, timers, fan-out/merge e <strong>nós de plugin instaláveis</strong>.
+Os fluxos <strong>sobrevivem a reinícios de processo</strong> salvando um checkpoint a cada passo, e continuam
+legíveis em escala com <strong>links Goto</strong> em vez de fios cruzando o canvas. O mesmo engine que abre um
+ticket de manutenção a partir de uma tendência de vibração consegue escalar um pedido de alto valor com
+pagamento recusado — um único livro de regras para IoT e sistemas de negócio.</p>
+<h3 id="saiba-o-estado-de-tudo">Saiba o estado de tudo</h3>
+<p>Cada Asset reporta <strong>online / offline e último contato de forma nativa</strong>, calculado a partir de
+heartbeats e da presença no broker. A operação enxerga o que está realmente ativo sem precisar montar
+nenhum encanamento de heartbeat.</p>
+<h3 id="opere-muitos-tenants-em-uma-plataforma-s">Opere muitos tenants em uma plataforma só</h3>
+<p>Cada evento, Asset, template e regra pertence a uma <strong>organização</strong> em uma hierarquia sem limite de
+profundidade (vendor → customer → site → building → floor → zone). Permissões, retenção e visibilidade
+seguem essa árvore via controle de acesso baseado em papéis — <strong>uma única instalação atende dezenas de
+clientes</strong>, sem nenhuma visibilidade compartilhada entre eles.</p>
+<h3 id="pronto-para-auditoria-por-padro">Pronto para auditoria por padrão</h3>
+<p>Cada evento e cada ação fica guardado e consultável por Asset, por site, por janela de tempo. A
+evidência de compliance vira uma consulta, não um projeto trimestral.</p>
+<h3 id="seguro-e-soberano">Seguro e soberano</h3>
+<p>Os segredos são <strong>cifrados com envelope encryption</strong> e nunca saem numa resposta de API. Os dispositivos
+recebem <strong>certificados X.509 por Asset</strong> de uma CA interna. O código do cliente roda em <strong>sandboxes
+isolados</strong> com limites rígidos. E como o MapexOS é <strong>self-hosted</strong>, o dado operacional nunca sai da
+infraestrutura que você controla.</p>
+<h3 id="integre-em-dias-no-em-trimestres">Integre em dias, não em trimestres</h3>
+<p>Um <strong>Asset Template</strong> reutilizável converte o que quer que a fonte mande em um evento padrão, então um
+novo fabricante ou modelo é uma <em>configuração</em>, não um novo ramo de código — um único template servindo
+centenas de Assets em centenas de sites.</p>
+<hr>
+<h2 id="na-prtica-o-que-muda">Na prática: o que muda</h2>
+<p>Um operador regional de cadeia fria tem 400 freezers espalhados por 60 sites. Antes do MapexOS, o sensor
+de cada fabricante tinha o seu próprio portal, os alertas disparavam a cada abertura de porta, e os
+auditores montavam a evidência na mão a cada trimestre.</p>
+<p>No MapexOS, um único <strong>Asset Template</strong> normaliza cada marca no mesmo evento de temperatura; um
+<strong>workflow</strong> correlaciona temperatura com o estado da porta e só escala depois que uma violação de
+verdade se mantém; um <strong>trigger</strong> abre um único ticket de ITSM por incidente; o <strong>event store</strong> guarda
+cada avaliação — pesquisável e defensável; e um segundo operador roda na <strong>mesma instalação</strong>, com
+isolamento total.</p>
+<p>O resultado que os times de operação relatam: solicitações de auditoria respondidas em uma tarde, ruído
+de alerta bem menor, e onboarding de fabricante medido em dias. <strong>É esse resultado repetível que o
+MapexOS existe para entregar.</strong></p>
+<hr>
+<h2 id="onde-o-mapexos-se-encaixa">Onde o MapexOS se encaixa</h2>
+<table>
+<thead>
+<tr>
+<th>Se você vinha usando…</th>
+<th>…o MapexOS acrescenta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Uma plataforma de IoT tradicional</strong> (ingestão + dashboards + alertas)</td>
+<td>Workflows duráveis, governança multi-tenant, extensibilidade por plugin e automação de eventos de negócio — não só gráficos de sensor.</td>
+</tr>
+<tr>
+<td><strong>Um pipeline caseiro</strong> (broker + functions + um banco + cola)</td>
+<td>Tudo que você ia acabar construindo de qualquer jeito: identidade, RBAC, auditoria, segredos, templates reutilizáveis, durabilidade de workflow e uma UI de operador.</td>
+</tr>
+<tr>
+<td><strong>Um event broker genérico</strong> (NATS, Kafka, RabbitMQ)</td>
+<td>A camada de aplicação acima do transporte: ingestão, normalização, roteamento, automação durável, auditoria, identidade.</td>
+</tr>
+<tr>
+<td><strong>Uma ferramenta de automação no-code</strong> (Zapier, Make, n8n)</td>
+<td>Isolamento multi-tenant, workflows duráveis que sobrevivem a reinícios, código em sandbox, self-hosting e credenciais guardadas no vault.</td>
+</tr>
+</tbody>
+</table>
+<p>O MapexOS não substitui o seu broker, banco ou dashboard. Ele é a camada governada que conecta tudo isso
+e dá aos operadores um único lugar para controlar o que flui entre eles.</p>
+<hr>
+<h2 id="rode-do-seu-jeito">Rode do seu jeito</h2>
+<p>O MapexOS é entregue como um monorepo de <strong>dez serviços de backend</strong> e um console em <strong>Vue 3</strong>, com
+repositórios satélite para o broker MQTT, o network server LoRaWAN e o SDK compartilhado. A stack inteira
+sobe com <strong>um único comando</strong> e é publicada em <strong>multi-arch</strong> — de um Raspberry Pi num site remoto a um
+cluster <code>x86_64</code> no seu data center.</p>
+<p>É distribuído sob a <strong>Business Source License (BSL 1.1)</strong>: leia o código, modifique e rode em produção
+para a sua própria organização; na Change Date ele converte para Apache 2.0.</p>
+<hr>
+<h2 id="para-onde-ir-agora">Para onde ir agora</h2>
+<table>
+<thead>
+<tr>
+<th>Se você está…</th>
+<th>Comece aqui</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Avaliando o MapexOS</td>
+<td><a href="/docs/1.0.0/pt-br/introduction/why-mapexos">Por que MapexOS?</a> — a dor que ele resolve e as decisões por trás</td>
+</tr>
+<tr>
+<td>Aprendendo o vocabulário</td>
+<td><a href="/docs/1.0.0/pt-br/getting-started/concepts">Conceitos Centrais</a></td>
+</tr>
+<tr>
+<td>Mapeando a arquitetura</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/overview">Visão Geral da Arquitetura</a></td>
+</tr>
+<tr>
+<td>Pronto para rodar</td>
+<td><a href="/docs/1.0.0/pt-br/getting-started/quickstart">Quickstart</a></td>
+</tr>
+</tbody>
+</table>

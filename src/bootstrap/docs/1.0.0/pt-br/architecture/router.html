@@ -1,0 +1,270 @@
+<h1 id="router">Router</h1>
+<p>O Router é o <strong>despachante do MapexOS</strong>. Ele fica no estágio de <em>route</em> — entre o transform a montante e o automate/persist a jusante — e responde a uma única pergunta para cada evento: <strong>para onde isto vai?</strong> Um único evento que chega aqui pode fazer fan-out para persistência, um data lake, uma notificação, um <a href="/docs/1.0.0/pt-br/architecture/triggers">trigger</a> de saída e um <a href="/docs/1.0.0/pt-br/architecture/workflow">workflow</a> — tudo ao mesmo tempo, ou para nenhum deles, decidido regra a regra.</p>
+<p>É isso que torna a plataforma <strong>dinâmica</strong>: o comportamento de roteamento é <strong>dado, não código</strong>. Você muda para onde os eventos vão editando RouteGroups pela API — sem redeploy, sem restart. O mesmo fluxo de eventos alimenta topologias a jusante completamente diferentes para dois tenants, porque as regras de cada um dizem isso.</p>
+<blockquote>
+<p><strong>Porta</strong> <code>5003</code> · <strong>Go</strong> (DDD + Hexagonal) · consumidor <strong>NATS JetStream</strong> WorkQueue · <strong>MongoDB</strong> (regras, fonte da verdade) + <strong>Redis</strong> (cache-aside) + <strong>TieredCache</strong> (RAM → Disk → MinIO) · instrumentação <strong>Prometheus</strong>.</p>
+</blockquote>
+<hr>
+<h2 id="o-modelo-routegroup--routers--regras-de-match">O modelo: RouteGroup → Routers → regras de match</h2>
+<table>
+<thead>
+<tr>
+<th>Conceito</th>
+<th>O que é</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RouteGroup</strong></td>
+<td>Um conjunto nomeado e versionado de Routers, vinculado a assets. Um asset pode carregar vários.</td>
+</tr>
+<tr>
+<td><strong>Router</strong></td>
+<td>Um destino — um <code>kind</code> mais uma condição <code>match</code> opcional. Se a condição passa, o evento vai para esse kind.</td>
+</tr>
+<tr>
+<td><strong>Regra de match</strong></td>
+<td>Uma condição: <code>{ field, operator, value }</code>. Os Routers combinam regras com uma política <code>all</code> (AND) ou <code>any</code> (OR). Um Router sem configuração de match <strong>sempre dispara</strong>.</td>
+</tr>
+</tbody>
+</table>
+<p>Esse é todo o dinamismo em três camadas: assets apontam para RouteGroups, RouteGroups contêm Routers, Routers carregam condições. Edite qualquer camada — como dado — e o roteamento muda no próximo evento.</p>
+<hr>
+<h2 id="regras-de-match--as-condies-exatamente-como-so-avaliadas">Regras de match — as condições, exatamente como são avaliadas</h2>
+<p>Uma regra é <code>{ field, operator, value }</code>. O <strong>field</strong> é um <strong>dot-path</strong> dentro do evento (<code>data.temperature</code>, <code>metadata.site</code>), resolvido percorrendo mapas aninhados — rápido e previsível. O <strong>operator</strong> é um de oito:</p>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Significado</th>
+<th>Como compara</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>eq</code></td>
+<td>igual a</td>
+<td>igualdade profunda</td>
+</tr>
+<tr>
+<td><code>neq</code></td>
+<td>diferente de</td>
+<td>igualdade profunda, negada</td>
+</tr>
+<tr>
+<td><code>gt</code></td>
+<td>maior que</td>
+<td>numérico</td>
+</tr>
+<tr>
+<td><code>gte</code></td>
+<td>maior ou igual a</td>
+<td>numérico</td>
+</tr>
+<tr>
+<td><code>lt</code></td>
+<td>menor que</td>
+<td>numérico</td>
+</tr>
+<tr>
+<td><code>lte</code></td>
+<td>menor ou igual a</td>
+<td>numérico</td>
+</tr>
+<tr>
+<td><code>in</code></td>
+<td>é um dentre</td>
+<td>pertencimento a uma lista</td>
+</tr>
+<tr>
+<td><code>nin</code></td>
+<td>não é um dentre</td>
+<td>pertencimento a uma lista, negado</td>
+</tr>
+</tbody>
+</table>
+<p>As regras combinam sob uma política:</p>
+<table>
+<thead>
+<tr>
+<th>Política</th>
+<th>Comportamento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>all</code></td>
+<td>toda regra precisa passar (AND)</td>
+</tr>
+<tr>
+<td><code>any</code></td>
+<td>ao menos uma regra precisa passar (OR)</td>
+</tr>
+</tbody>
+</table>
+<p>Um field que o evento não contém faz aquela regra falhar com <code>field not found</code> — comportamento previsível sob dados parciais, nunca um crash. Um Router sem regra alguma é <strong>sempre permitido</strong>.</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;Cold-chain breach&quot;,
+  &quot;routers&quot;: [
+    {
+      &quot;kind&quot;: &quot;workflow&quot;,
+      &quot;match&quot;: {
+        &quot;policy&quot;: &quot;all&quot;,
+        &quot;rules&quot;: [
+          { &quot;field&quot;: &quot;data.temperature&quot;, &quot;operator&quot;: &quot;gt&quot;,  &quot;value&quot;: 8 },
+          { &quot;field&quot;: &quot;data.doorState&quot;,   &quot;operator&quot;: &quot;eq&quot;,  &quot;value&quot;: &quot;open&quot; }
+        ]
+      }
+    }
+  ]
+}
+</code></pre>
+<p>Esse Router inicia um workflow somente quando a temperatura passa de 8 <strong>e</strong> a porta está aberta — todo outro evento passa por ele sem ser tocado.</p>
+<hr>
+<h2 id="os-cinco-destinos">Os cinco destinos</h2>
+<p>Um Router que deu match publica o evento enriquecido no subject do seu kind. Esses cinco subjects são como o Router conecta o pipeline de ingestão a cada capacidade a jusante:</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Subject</th>
+<th>Vai para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>save_event</code></td>
+<td><code>events.save</code></td>
+<td>o serviço de <a href="/docs/1.0.0/pt-br/architecture/events">Events</a> → ClickHouse (persistência)</td>
+</tr>
+<tr>
+<td><code>lake_house</code></td>
+<td><code>events.lake_house</code></td>
+<td>o sink analítico do lake-house</td>
+</tr>
+<tr>
+<td><code>notification</code></td>
+<td><code>events.notification</code></td>
+<td>o caminho de notificação</td>
+</tr>
+<tr>
+<td><code>trigger</code></td>
+<td><code>trigger.router.execute</code></td>
+<td>o serviço de <a href="/docs/1.0.0/pt-br/architecture/triggers">Triggers</a> (ação de saída autônoma)</td>
+</tr>
+<tr>
+<td><code>workflow</code></td>
+<td><code>workflow.execution.router</code></td>
+<td>o engine de <a href="/docs/1.0.0/pt-br/architecture/workflow">Workflow</a> (inicia um run durável)</td>
+</tr>
+</tbody>
+</table>
+<p>Um único evento pode dar match em vários Routers e fazer fan-out para vários kinds ao mesmo tempo. Cada dispatch é deduplicado no JetStream por um message id <code>{eventTrackerId}-{routerIndex}</code>, de modo que uma reentrega nunca roteia em duplicidade.</p>
+<hr>
+<h2 id="o-roteamento--decidido-a-partir-do-estado-confivel-no-do-payload">O roteamento é decidido a partir do estado confiável, não do payload</h2>
+<p>O Router nunca lê <em>quais</em> RouteGroups se aplicam a partir da mensagem de entrada. Ele resolve o asset do evento pelo cache e pega os ids de RouteGroup <strong>do próprio asset</strong>. Um remetente não consegue forjar o próprio roteamento enfiando ids no payload — o roteamento é governado pela configuração do asset, que só a plataforma controla.</p>
+<pre><code>event { assetUUID }  →  resolve asset (cache)  →  asset.RouteGroupIds  →  evaluate
+                              (source of truth — never the payload)
+</code></pre>
+<hr>
+<h2 id="roteamento-ciente-de-sade">Roteamento ciente de saúde</h2>
+<p>O Router distingue dois tipos de entrada por um discriminador <code>eventSource</code>:</p>
+<ul>
+<li><strong><code>assetEvent</code></strong> — um evento de dados normal → usa os <code>RouteGroupIds</code> do asset.</li>
+<li><strong><code>healthStatus</code></strong> — uma transição online/offline → usa os <code>HealthMonitor.OfflineRouteGroupIds</code> ou <code>OnlineRouteGroupIds</code> do asset, escolhidos conforme a transição.</li>
+</ul>
+<p>Um dispositivo que fica offline pode, portanto, acionar um conjunto de rotas <em>diferente</em> do que sua telemetria aciona. As transições de saúde são deliberadamente permitidas a alcançar apenas os kinds <strong><code>trigger</code></strong> e <strong><code>workflow</code></strong> — uma mudança de presence escala ou automatiza; não inunda o lake-house nem o feed de notificações.</p>
+<hr>
+<h2 id="toda-deciso--explicvel">Toda decisão é explicável</h2>
+<p>Para cada RouteGroup que avalia, o Router emite um <strong>evento de histórico de roteamento</strong> para <code>events.router</code>, registrando o resultado de cada Router e o <strong>raciocínio condição a condição</strong> por trás dele:</p>
+<pre><code>&quot;data.temperature&quot; greater than 8 → allowed
+&quot;data.doorState&quot; equals &quot;open&quot;    → denied (field not found)
+policy: all → 1/2 rules passed    → denied
+</code></pre>
+<p>Você sempre consegue responder <em>por que este evento disparou — ou não — aquele workflow?</em> sem reexecutar nada. O roteamento deixa de ser uma caixa-preta.</p>
+<hr>
+<h2 id="como-um-batch--roteado">Como um batch é roteado</h2>
+<p>O Router puxa eventos em batches (padrão <code>8000</code>, <code>NATS_BATCH_SIZE</code>) de uma <strong>WorkQueue</strong> do JetStream e processa cada batch em três fases:</p>
+<pre><code> Phase 1 — route in parallel       a worker pool (NumCPU × 2) resolves each asset,
+                                    evaluates its RouteGroups, and buffers the
+                                    fan-out publishes
+ Phase 2 — flush once              a single FlushConnection pushes every buffered
+                                    publish to the wire in one round
+ Phase 3 — settle sequentially     Ack / Nack / Reject each message by its result
+</code></pre>
+<p>Os resultados se mapeiam na semântica do JetStream: uma mensagem malformada ou sem <code>orgId</code> / <code>assetUUID</code> / <code>event</code> é <strong>Rejected</strong> direto para a dead-letter queue (retentar não resolve); uma falha transitória, como um cache miss, recebe <strong>Nack</strong> e é reentregue. A entrega via WorkQueue garante que cada evento seja roteado por exatamente uma réplica.</p>
+<hr>
+<h2 id="contexto-do-asset--um-tiered-cache-mantido-coerente">Contexto do asset — um tiered cache mantido coerente</h2>
+<p>Rotear cada evento exige o asset completo, rápido. O Router o resolve por um <strong>TieredCache</strong> que cai progressivamente para tiers mais baratos-porém-mais-frios:</p>
+<pre><code>L0  RAM   (256 MB, 5 min)  →  L1  Disk (/tmp/mapexos/cache)  →  L2  MinIO/S3  →  HTTP fallback → Assets
+</code></pre>
+<p>Para manter o cache de cada réplica honesto, o Router roda consumidores <strong>FANOUT</strong>: quando o serviço de Assets altera um asset ou um template, ele transmite uma invalidação que cada réplica aplica ao seu L0/L1 local. Nenhuma réplica roteia com um asset desatualizado.</p>
+<hr>
+<h2 id="governana-e-multi-tenancy">Governança e multi-tenancy</h2>
+<p>Os RouteGroups são gerenciados por uma superfície REST governada. Toda rota é <strong>controlada por permissão</strong> e <strong>ciente de cobertura</strong> — as listagens são restritas à fatia da árvore da organização que o chamador pode enxergar, por <code>pathKey</code>. Como os triggers, um RouteGroup pode ser um template <strong>system</strong> (global), um <strong>vendor/customer template</strong> herdado pelos descendentes (<code>isTemplate</code>), ou <strong>org-local</strong> — de modo que uma política de roteamento definida uma vez no alto da hierarquia se aplica a cada site abaixo dela. As configs são lidas via cache-aside no Redis (TTL de 60 minutos) e aquecidas na escrita, então o caminho crítico de roteamento quase nunca toca o MongoDB.</p>
+<hr>
+<h2 id="entradas-e-sadas">Entradas e saídas</h2>
+<p><strong>Consome (NATS JetStream):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Stream</th>
+<th>Propósito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>route.execute</code></td>
+<td><code>ROUTE-GROUPS</code> (WorkQueue + DLQ)</td>
+<td>Um evento de asset ou transição de saúde a rotear.</td>
+</tr>
+<tr>
+<td><code>mapexos.fanout.asset.invalidate</code></td>
+<td>FANOUT</td>
+<td>Despeja um asset do L0/L1 local.</td>
+</tr>
+<tr>
+<td><code>mapexos.fanout.template.invalidate</code></td>
+<td>FANOUT</td>
+<td>Despeja um template do L0/L1 local.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Produz (NATS):</strong> <code>events.save</code>, <code>events.lake_house</code>, <code>events.notification</code>, <code>trigger.router.execute</code>, <code>workflow.execution.router</code> e <code>events.router</code> (histórico de roteamento). Os dispatches são deduplicados por message id.</p>
+<p><strong>HTTP</strong> (porta <code>5003</code>):</p>
+<ul>
+<li><code>GET/POST /api/v1/route_groups</code>, <code>GET /api/v1/route_groups/counter</code>, <code>GET/PATCH/DELETE /api/v1/route_groups/:id</code> — JWT, com controle de permissão e escopo de cobertura.</li>
+<li><code>GET /internal/route_groups?ids=…&amp;projection=…</code> — API-key, lookup em massa serviço a serviço.</li>
+</ul>
+<hr>
+<h2 id="observabilidade">Observabilidade</h2>
+<p>Cada estágio é medido no Prometheus: eventos recebidos / roteados / falhos com histogramas de latência, hit/miss do TieredCache <strong>por tier</strong>, taxa de acerto do cache de RouteGroup, avaliações de match e seus resultados, e contagens/latência de publicação <strong>por subject a jusante</strong>. Aliado ao histórico de roteamento por decisão, você enxerga tanto o fluxo agregado quanto a razão por trás de qualquer decisão de roteamento individual.</p>
+<hr>
+<h2 id="para-onde-ir-agora">Para onde ir agora</h2>
+<table>
+<thead>
+<tr>
+<th>Para se aprofundar em…</th>
+<th>Vá para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Onde as ações de saída que deram match rodam</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/triggers">Triggers</a></td>
+</tr>
+<tr>
+<td>Onde os workflows que deram match executam</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/workflow">Workflow Engine</a></td>
+</tr>
+<tr>
+<td>Onde os eventos roteados são armazenados</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/events">Events</a></td>
+</tr>
+<tr>
+<td>Contexto completo da plataforma</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/overview">Visão Geral da Arquitetura</a></td>
+</tr>
+</tbody>
+</table>

@@ -1,0 +1,210 @@
+<h1 id="triggers">Triggers</h1>
+<p>O Triggers é <strong>como o MapexOS alcança o mundo externo</strong>. Tudo o que vem antes — ingest, transform, route, automate — acontece dentro da plataforma; o Triggers é o <strong>único ponto de saída</strong> onde um event vira uma ação real contra um sistema externo: um webhook HTTP, um publish MQTT, um e-mail, uma mensagem no Slack. É o único serviço do MapexOS que faz I/O de saída.</p>
+<p>Ele alcança o mundo externo de <strong>duas formas</strong>, e roda em <strong>dois modos</strong> — por conta própria, movido pelo Router, ou integrado ao Workflow engine por um resume totalmente assíncrono. O mesmo catálogo de conectores sustenta os dois.</p>
+<blockquote>
+<p><strong>Porta</strong> <code>5006</code> · <strong>Go</strong> (DDD + Hexagonal) · <strong>8 conectores de protocolo</strong> atrás de uma porta · consumers <strong>NATS JetStream</strong> + <strong>MongoDB</strong> (fonte da verdade) + <strong>Redis</strong> (cache-aside) · instrumentação <strong>Prometheus</strong>.</p>
+</blockquote>
+<hr>
+<h2 id="duas-formas-de-alcanar-o-mundo-externo">Duas formas de alcançar o mundo externo</h2>
+<table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>O que é</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Stored triggers</strong></td>
+<td>Uma definição persistida e reutilizável — o catálogo configurado de efeitos colaterais. Criada pela API REST, armazenada no MongoDB, cacheada no Redis e <strong>disparada por id</strong>. É o que o Router usa: &quot;uma regra deu match → dispara o trigger <code>X</code>.&quot;</td>
+</tr>
+<tr>
+<td><strong>Generic connector calls</strong></td>
+<td>Uma ação totalmente resolvida que chega via NATS e é despachada direto para um conector — <strong>sem consulta ao banco</strong>. É o caminho que dá vida aos <strong>plugins</strong>: a ação é montada em outro lugar (o Workflow engine) e o Triggers simplesmente a executa.</td>
+</tr>
+</tbody>
+</table>
+<p>Os dois caminhos convergem para o mesmo <strong>catálogo de conectores</strong>. A diferença é apenas <em>de onde vem a ação</em> — uma definição armazenada buscada por id, ou uma ação pronta entregue na rede.</p>
+<hr>
+<h2 id="dois-modos-de-operao">Dois modos de operação</h2>
+<h3 id="standalone--movido-pelo-router">Standalone — movido pelo Router</h3>
+<p>O Router avalia regras de match contra cada event e faz fan-out para os triggers que devem disparar. Ele publica em <code>trigger.router.execute</code>; o Triggers busca cada stored trigger por id, resolve seus placeholders e o despacha. Sem workflow, sem orquestração — um reflexo direto de <strong>event → ação</strong>.</p>
+<pre><code>Event → Router (match rules, fan-out) → trigger.router.execute → Triggers → external system
+</code></pre>
+<h3 id="integrado--movido-pelo-workflow-engine">Integrado — movido pelo Workflow engine</h3>
+<p>Um nó de workflow que precisa de uma ação de saída <strong>não a executa inline</strong>. O engine suspende o nó, entrega a ação resolvida ao Triggers em <code>trigger.workflow.execute</code> e <strong>estaciona</strong> — passando um <code>callbackSubject</code> que aponta de volta para seu próprio stream de resume. O Triggers executa e então publica o resultado nesse subject, que acorda exatamente aquele nó e dá continuidade ao fluxo.</p>
+<pre><code>Workflow node suspends (waitType: callback)
+   │  resolved action + callbackSubject  →  trigger.workflow.execute
+   ▼
+Triggers   (dispatch through the connector → outbound I/O)
+   │  result  →  callbackSubject  (workflow.resume.*)
+   ▼
+Workflow RESUME  →  the parked node wakes and the flow continues
+</code></pre>
+<p>É isso que torna a execução de workflow <strong>100% assíncrona</strong>: o worker de workflow nunca bloqueia esperando por uma chamada externa. Ele estaciona, o Triggers conversa com o mundo, e o resume retoma de onde parou. (Veja a outra metade desse contrato em <a href="/docs/1.0.0/pt-br/architecture/workflow">Workflow Engine → suspensão e resume</a>.)</p>
+<p>O caminho do workflow carrega dois modos num único subject, roteados por um campo <code>mode</code>: <code>trigger</code> (disparar um stored trigger por id) e <code>plugin</code> (rodar uma ação totalmente resolvida, sem busca).</p>
+<hr>
+<h2 id="o-catlogo-de-conectores--8-adapters-uma-porta">O catálogo de conectores — 8 adapters, uma porta</h2>
+<p>Todo conector implementa uma única porta <code>TriggerExecutor</code> e é registrado por uma string de tipo na inicialização. O dispatch é uma consulta em runtime por <code>triggerType</code> — <strong>um novo conector é um novo executor, não uma mudança no serviço</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Categoria</th>
+<th>Conectores</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Técnicos</strong></td>
+<td><code>http</code> · <code>mqtt</code> · <code>rabbitmq</code> · <code>nats</code> · <code>websocket</code></td>
+</tr>
+<tr>
+<td><strong>Comunicação</strong></td>
+<td><code>email</code> · <code>teams</code> · <code>slack</code></td>
+</tr>
+</tbody>
+</table>
+<p>Se um event nomear um tipo sem executor registrado, a mensagem é rejeitada para a dead-letter queue, em vez de ser silenciosamente descartada.</p>
+<hr>
+<h2 id="templates-que-descem-pela-rvore-organizacional">Templates que descem pela árvore organizacional</h2>
+<p>Um trigger nem sempre é um objeto de nível folha. Seu escopo é um de três níveis, então uma integração pode ser <strong>definida uma vez e herdada</strong>, em vez de copiada para cada site:</p>
+<table>
+<thead>
+<tr>
+<th>Nível</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>System</strong> (<code>isSystem</code>)</td>
+<td>Um template global do MapexOS — sem organização, disponível em todo lugar.</td>
+</tr>
+<tr>
+<td><strong>Template</strong> (<code>isTemplate</code>)</td>
+<td>Um template de vendor / customer — <strong>herdado por todo descendente</strong> na hierarquia organizacional.</td>
+</tr>
+<tr>
+<td><strong>Local</strong></td>
+<td>Um trigger específico de organização, escopado ao seu <code>orgId</code> e <code>pathKey</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Defina uma escalada no Slack ou um webhook de ITSM uma única vez no nível de vendor, e cada customer, site e floor abaixo dele herda a mesma ação — sem duplicá-la sessenta vezes.</p>
+<hr>
+<h2 id="resoluo-de-placeholders--triggers-so-templates">Resolução de placeholders — triggers são templates</h2>
+<p>Uma config de trigger carrega placeholders <code>{{path.to.field}}</code> que são resolvidos contra o payload do event de entrada por navegação dot-path, logo antes da execução. Um único stored trigger atende milhares de events, cada um preenchido com seus próprios dados.</p>
+<p>Dado um payload de event:</p>
+<pre><code class="language-json">{ &quot;assetName&quot;: &quot;Pump-A3&quot;, &quot;data&quot;: { &quot;temperature&quot;: 87.5 } }
+</code></pre>
+<p>e um template de corpo de trigger:</p>
+<pre><code class="language-json">{ &quot;text&quot;: &quot;Alert: {{assetName}} reached {{data.temperature}} C&quot; }
+</code></pre>
+<p>o corpo despachado fica:</p>
+<pre><code class="language-json">{ &quot;text&quot;: &quot;Alert: Pump-A3 reached 87.5 C&quot; }
+</code></pre>
+<hr>
+<h2 id="como-um-batch-executa--trs-fases">Como um batch executa — três fases</h2>
+<p>O Triggers puxa trabalho em batches e processa cada batch em <strong>três fases deliberadas</strong>, de modo que uma rajada de ações custe uma ida à rede, e não uma por mensagem:</p>
+<pre><code> Phase 1 — execute in parallel     every message runs on its own goroutine,
+                                    bounded by a worker semaphore (default 50)
+ Phase 2 — flush once              a single FlushConnection pushes all the
+                                    fire-and-forget publishes to the wire
+                                    in one TCP round
+ Phase 3 — settle sequentially     Ack / Nack / Reject each message by its result
+</code></pre>
+<p>O semáforo limita a concorrência para que um endpoint lento não esgote o processo; o flush único transforma N publishes em uma ida e volta; a fase de settle é onde o destino de cada mensagem é decidido.</p>
+<hr>
+<h2 id="tratamento-de-falhas--mapeado-para-a-semntica-do-jetstream">Tratamento de falhas — mapeado para a semântica do JetStream</h2>
+<p>Os desfechos mapeiam de forma limpa para o modelo de entrega do JetStream, de modo que os retries sejam significativos e becos sem saída não sejam retentados para sempre:</p>
+<table>
+<thead>
+<tr>
+<th>Desfecho</th>
+<th>O que acontece</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Erro permanente</strong> (mensagem malformada, conector desconhecido, config ruim / placeholder não resolvido)</td>
+<td><strong>Reject</strong> → direto para a dead-letter queue. Sem retries inúteis.</td>
+</tr>
+<tr>
+<td><strong>Erro transiente</strong> (a chamada de saída falhou, a config não pôde ser buscada)</td>
+<td><strong>Nack</strong> → o JetStream reentrega; esgotadas as tentativas de entrega, a mensagem cai na dead-letter queue.</td>
+</tr>
+<tr>
+<td><strong>Trigger desabilitado</strong></td>
+<td><strong>Ack</strong> sem ação — um no-op, não um erro.</td>
+</tr>
+</tbody>
+</table>
+<p>Todo desfecho é registrado (veja <a href="#observabilidade">Observabilidade</a>), então uma mensagem na DLQ é sempre explicada por uma linha de auditoria persistida.</p>
+<hr>
+<h2 id="seguro-por-padro">Seguro por padrão</h2>
+<p>A borda de saída é onde uma plataforma é mais fácil de enfraquecer — então os conectores não enfraquecem. O TLS é <strong>verificado, não pulado</strong> (<code>InsecureSkipVerify</code> fica desligado), cada conector impõe seus próprios timeouts de connect e publish (ex.: MQTT connect 10s / publish 5s), e as credenciais são fornecidas por conector (HTTP <code>Authorization</code> / Bearer, TLS do broker). O MapexOS não entrega nenhum conector que desabilite a verificação de certificado.</p>
+<hr>
+<h2 id="governana-e-multi-tenancy">Governança e multi-tenancy</h2>
+<p>A superfície de CRUD é governada de ponta a ponta. Toda rota é <strong>permission-gated</strong> (<code>TriggerList</code>, <code>TriggerRead</code>, <code>TriggerCreate</code>, <code>TriggerUpdate</code>, <code>TriggerDelete</code>) e <strong>ciente de cobertura</strong>: um middleware hierárquico escopa toda listagem à fatia da árvore organizacional que o chamador tem permissão de ver, por <code>pathKey</code>. As configs de trigger são lidas através de uma camada <strong>cache-aside</strong> (Redis, TTL de 60 minutos) e invalidadas em update ou delete, então a execução raramente toca o MongoDB e ainda assim se mantém atualizada.</p>
+<hr>
+<h2 id="entradas-e-sadas">Entradas e saídas</h2>
+<p><strong>Consome (NATS JetStream, stream <code>TRIGGERS</code>):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Origem</th>
+<th>Propósito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>trigger.router.execute</code></td>
+<td>Router</td>
+<td>Disparar um stored trigger por id (modo standalone).</td>
+</tr>
+<tr>
+<td><code>trigger.workflow.execute</code></td>
+<td>Workflow</td>
+<td>Execução movida por workflow, roteada por <code>mode</code> (<code>trigger</code> / <code>plugin</code>).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Produz:</strong></p>
+<ul>
+<li><strong>Efeitos colaterais de saída</strong> para sistemas externos através do conector selecionado — o trabalho de fato do serviço.</li>
+<li><strong>Event de auditoria</strong> → <code>events.trigger</code> (por execução: trigger, type, success, duração, error), de-duplicado no JetStream por um message id <code>{eventTrackerId}-triggerlog</code>, consumido pelo serviço <a href="/docs/1.0.0/pt-br/architecture/events">Events</a> → ClickHouse.</li>
+<li><strong>Resume de workflow</strong> → o <code>callbackSubject</code> dinâmico no stream de resume do workflow, acordando o nó estacionado.</li>
+</ul>
+<p><strong>HTTP</strong> (porta <code>5006</code>, sob <code>/api/v1/triggers</code>): <code>GET /</code>, <code>GET /counter</code>, <code>POST /</code>, <code>GET /:id</code>, <code>PATCH /:id</code>, <code>DELETE /:id</code>.</p>
+<hr>
+<h2 id="observabilidade">Observabilidade</h2>
+<p>Toda execução é medida. Counters e histogramas do Prometheus acompanham o tamanho do batch, a <strong>duração do executor por tipo de conector</strong>, hit/miss de cache, resoluções de placeholder, desfechos de publish e contagens de DLQ — e o <strong>caminho movido por workflow carrega seu próprio conjunto dedicado de métricas</strong> (incluindo os publishes de resume), de modo que o tráfego standalone e o integrado nunca se misturem. Combinado com a linha de auditoria idempotente por execução, você consegue responder <em>o que disparou, para onde foi o tempo e por quê</em> — por protocolo e por origem.</p>
+<hr>
+<h2 id="para-onde-ir-agora">Para onde ir agora</h2>
+<table>
+<thead>
+<tr>
+<th>Para se aprofundar em…</th>
+<th>Vá para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quem decide que um trigger deve disparar</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/router">Router</a></td>
+</tr>
+<tr>
+<td>O contrato assíncrono do lado do workflow</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/workflow">Workflow Engine</a></td>
+</tr>
+<tr>
+<td>Onde as linhas de auditoria são armazenadas e consultadas</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/events">Events</a></td>
+</tr>
+<tr>
+<td>Contexto completo da plataforma</td>
+<td><a href="/docs/1.0.0/pt-br/architecture/overview">Visão Geral da Arquitetura</a></td>
+</tr>
+</tbody>
+</table>

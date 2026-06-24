@@ -99,6 +99,7 @@ func GetAsset(service ports.DevicesServicePort) web.Handler {
 			return err
 		}
 		c.Set(contentTypeHeader, contentType)
+		c.Set("Cache-Control", "public, max-age=86400") // bundle assets rarely change
 		return c.Send(data)
 	}
 }

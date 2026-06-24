@@ -24,6 +24,14 @@ import (
 //   - group: the router group to register the routes on
 //   - service: the DevicesServicePort implementation
 func RegisterRoutes(group web.Router, service ports.DevicesServicePort) {
+	// The catalog is read-only and only changes on redeploy, so let browsers
+	// and any CDN cache the responses briefly. Static bundle assets override
+	// this with a longer window in their handler.
+	group.Use(func(c *web.Ctx) error {
+		c.Set("Cache-Control", "public, max-age=300")
+		return c.Next()
+	})
+
 	group.Get("/", handlers.ListDevices(service))
 	group.Get("/facets", handlers.GetFacets(service))
 

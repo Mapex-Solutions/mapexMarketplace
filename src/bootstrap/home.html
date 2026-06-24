@@ -172,6 +172,19 @@
   .proto-b { font-family: var(--mono); font-size: 12px; font-weight: 600; padding: 9px 14px; border-radius: 10px; border: 1px solid var(--border-2); background: rgba(255,255,255,0.03); color: var(--text); }
   .proto-b b { color: var(--green-br); }
 
+  /* ===== Simulator downloads ===== */
+  .dl-block { margin-top: 44px; }
+  .dl-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+  .dl-title { font-size: 18px; font-weight: 750; }
+  .dl-ver { font-family: var(--mono); font-size: 12px; color: var(--faint); }
+  .dl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(218px, 1fr)); gap: 12px; }
+  .dl-btn { display: flex; align-items: center; gap: 13px; border: 1px solid var(--border-2); background: rgba(255,255,255,0.025); border-radius: 12px; padding: 14px 16px; color: var(--text); transition: border-color .2s, transform .2s, background .2s; }
+  .dl-btn:hover { border-color: var(--green); background: rgba(76,175,125,0.06); transform: translateY(-2px); text-decoration: none; }
+  .dl-btn .dl-ic { font-size: 22px; line-height: 1; }
+  .dl-btn .dl-txt { display: flex; flex-direction: column; min-width: 0; }
+  .dl-btn .dl-txt b { font-size: 14.5px; font-weight: 650; }
+  .dl-btn .dl-sz { font-family: var(--mono); font-size: 11.5px; color: var(--faint); }
+
   /* ===== Marketplace live ===== */
   .mkt-stats { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
   .mkt-stat { border: 1px solid var(--border); background: rgba(255,255,255,0.022); border-radius: 12px; padding: 14px 18px; min-width: 116px; }
@@ -588,6 +601,14 @@
       </div>
     </div>
 
+    <div class="dl-block">
+      <div class="dl-head">
+        <h3 class="dl-title" data-i18n="sim.dlh">Download the simulator</h3>
+        <span class="dl-ver" id="dl-ver"></span>
+      </div>
+      <div class="dl-grid" id="sim-downloads"></div>
+    </div>
+
     <div class="gallery" id="gal-sim" style="margin-top:48px">
       <div class="gframe">
         <div class="gbar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="url gurl">simulator</span></div>
@@ -876,6 +897,7 @@
     "sim.vh1": "Fala no fio",
     "sim.vh2": "Aponte para onde quiser",
     "sim.vp": "Feito para o MapexOS, mas neutro a fornecedor: The Things Stack, ChirpStack, um endpoint IoT na nuvem ou seu próprio broker — simplesmente funciona.",
+    "sim.dlh": "Baixar o simulador",
 
     "clx.lead": "Uma plataforma que não entrega só conectividade. Ela entrega —",
     "clx.words": '<span>Estrutura</span><span>Organização</span><span>Permissões</span><span>Templates</span><span>Workflow</span><span>Regras de negócio</span><span>Observabilidade</span><span>Escalabilidade</span>',
@@ -929,11 +951,32 @@
     var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }); }, { threshold: 0.1 });
     Array.prototype.forEach.call(document.querySelectorAll(".fade"), function (n) { io.observe(n); });
   }
+  /* ============ Simulator downloads (binaries served by nginx at /downloads) ============ */
+  var DL_LABELS = { macos: "macOS · Apple Silicon", windows: "Windows", "linux-deb": "Linux · Debian/Ubuntu", "linux-rpm": "Linux · Fedora/RHEL" };
+  var DL_ICON = { macos: "🍎", windows: "🪟", "linux-deb": "🐧", "linux-rpm": "🐧" };
+  function initDownloads() {
+    var box = document.getElementById("sim-downloads");
+    if (!box) return;
+    function hide() { var b = document.querySelector(".dl-block"); if (b) b.style.display = "none"; }
+    fetch("/downloads/manifest.json").then(function (r) { return r.ok ? r.json() : null; }).then(function (m) {
+      if (!m || !m.builds || !m.builds.length) { hide(); return; }
+      var ver = document.getElementById("dl-ver");
+      if (ver && m.version) ver.textContent = "v" + m.version;
+      box.innerHTML = m.builds.map(function (b) {
+        var label = DL_LABELS[b.os] || b.os, icon = DL_ICON[b.os] || "⬇";
+        return '<a class="dl-btn" href="/downloads/' + encodeURI(b.file) + '" download>' +
+          '<span class="dl-ic">' + icon + '</span>' +
+          '<span class="dl-txt"><b>' + label + '</b><span class="dl-sz">' + (b.size || "") + '</span></span></a>';
+      }).join("");
+    }).catch(hide);
+  }
+
   function boot() {
     initLang();
     startStream();
     initGallery(document.getElementById("gal-mapex"), MAPEX_SHOTS);
     initGallery(document.getElementById("gal-sim"), SIM_SHOTS);
+    initDownloads();
     initReveal();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);

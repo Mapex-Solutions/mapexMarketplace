@@ -1,0 +1,43 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "elsys-elt-radar-distance",
+	"model": "ELT-Radar",
+	"name": {
+		"en-US": "ELT-Radar Elsys LoRaWAN Radar Distance Sensor",
+		"pt-BR": "ELT-Radar Sensor de Distância por Radar LoRaWAN Elsys"
+	},
+	"description": {
+		"en-US": "Elsys ELT-Radar — LoRaWAN (Class A) indoor sensor that monitors distance, temperature and humidity. Uplinks are Elsys TLV frames on FPort 5.",
+		"pt-BR": "Elsys ELT-Radar — sensor LoRaWAN (Classe A) de ambiente interno que monitora distância, temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"distance",
+		"temperature",
+		"humidity"
+	],
+	"tags": [
+		"distance",
+		"temperature",
+		"humidity",
+		"elsys"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "elsys",
+		"name": "Elsys",
+		"site": "https://www.elsys.se",
+		"support": "https://www.elsys.se/en/support/"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"datasheetUrl": "https://elsys.se/public/datasheets/ELT_Radar_Datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"manualUrl": "https://elsys.se/public/manuals/New/Technical-manual-Radar-module-1.pdf"
+	},
+	"collectedAt": "2026-06-24T00:00:00.000Z",
+	"_sourceUrl": "https://www.elsys.se/en/elt-radar-distance-sensor/"
+}

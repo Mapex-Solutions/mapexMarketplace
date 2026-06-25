@@ -1,0 +1,45 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "elsys-ers-eye",
+	"model": "ERS-Eye",
+	"name": {
+		"en-US": "ERS-Eye Elsys LoRaWAN Eye Occupancy Sensor",
+		"pt-BR": "ERS-Eye Sensor de Ocupação Eye LoRaWAN Elsys"
+	},
+	"description": {
+		"en-US": "Elsys ERS-Eye — LoRaWAN (Class A) indoor sensor that monitors motion, temperature, humidity and light. Uplinks are Elsys TLV frames on FPort 5.",
+		"pt-BR": "Elsys ERS-Eye — sensor LoRaWAN (Classe A) de ambiente interno que monitora movimento, temperatura, umidade e luz. Os uplinks são quadros TLV Elsys no FPort 5."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"motion",
+		"temperature",
+		"humidity",
+		"light"
+	],
+	"tags": [
+		"motion",
+		"temperature",
+		"humidity",
+		"light",
+		"elsys"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "elsys",
+		"name": "Elsys",
+		"site": "https://www.elsys.se",
+		"support": "https://www.elsys.se/en/support/"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"datasheetUrl": "https://elsys.se/public/datasheets/ERS_Eye_datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"manualUrl": "https://elsys.se/public/manuals/Operating%20Manual%20ERS%20Eye.pdf"
+	},
+	"collectedAt": "2026-06-24T00:00:00.000Z",
+	"_sourceUrl": "https://www.elsys.se/en/ers-eye/"
+}

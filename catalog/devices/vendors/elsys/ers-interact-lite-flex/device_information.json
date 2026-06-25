@@ -1,0 +1,43 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "elsys-ers-interact-lite-flex",
+	"model": "ERS-Interact-Flex",
+	"name": {
+		"en-US": "ERS-Interact-Flex Elsys LoRaWAN Interact Flex Panel",
+		"pt-BR": "ERS-Interact-Flex Painel Interact Flex LoRaWAN Elsys"
+	},
+	"description": {
+		"en-US": "Elsys ERS-Interact-Flex — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity and button presses. Uplinks are Elsys TLV frames on FPort 5.",
+		"pt-BR": "Elsys ERS-Interact-Flex — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e acionamentos de botão. Os uplinks são quadros TLV Elsys no FPort 5."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature",
+		"humidity",
+		"button"
+	],
+	"tags": [
+		"temperature",
+		"humidity",
+		"button",
+		"elsys"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "elsys",
+		"name": "Elsys",
+		"site": "https://www.elsys.se",
+		"support": "https://www.elsys.se/en/support/"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"datasheetUrl": "https://elsys.se/public/datasheets/ERS%20Interact%20series%20LoRa%20Datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"manualUrl": "https://elsys.se/public/manuals/New/Operating%20manual%20-%20ERS%20Interact%20series%20LoRa.pdf"
+	},
+	"collectedAt": "2026-06-24T00:00:00.000Z",
+	"_sourceUrl": "https://www.elsys.se/en/ers-interact-lite-flex-lora/"
+}

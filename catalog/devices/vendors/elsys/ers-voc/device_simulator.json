@@ -1,0 +1,42 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Elsys ERS-VOC",
+	"protocolId": "lorawan",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "lorawan",
+		"gatewayId": "",
+		"region": "EU868",
+		"macVersion": "1.0.3",
+		"class": "A",
+		"activation": "otaa",
+		"devEui": "A81758FFFE039104",
+		"joinEui": "0000000000000000",
+		"appKey": "00000000000000000000000000000000",
+		"nwkKey": "",
+		"devAddr": "",
+		"nwkSKey": "",
+		"appSKey": ""
+	},
+	"attributes": {
+		"manufacturer": "Elsys",
+		"model": "ERS-VOC"
+	},
+	"events": [
+		{
+			"id": "uplink",
+			"name": "Sensor data uplink",
+			"lorawan": {
+				"fport": 5,
+				"confirmed": false,
+				"payloadHex": "0100e602370401900502070e10"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 15,
+				"unit": "minutes"
+			}
+		}
+	]
+}

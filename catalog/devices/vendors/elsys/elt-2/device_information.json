@@ -1,0 +1,43 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "elsys-elt-2",
+	"model": "ELT-2",
+	"name": {
+		"en-US": "ELT-2 Elsys LoRaWAN Multipurpose Sensor",
+		"pt-BR": "ELT-2 Sensor Multiuso LoRaWAN Elsys"
+	},
+	"description": {
+		"en-US": "Elsys ELT-2 — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity and light. It also exposes external probe inputs (analog, digital, temperature, distance). Uplinks are Elsys TLV frames on FPort 5.",
+		"pt-BR": "Elsys ELT-2 — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e luz. Também expõe entradas externas (analógica, digital, temperatura, distância). Os uplinks são quadros TLV Elsys no FPort 5."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature",
+		"humidity",
+		"light"
+	],
+	"tags": [
+		"temperature",
+		"humidity",
+		"light",
+		"elsys"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "elsys",
+		"name": "Elsys",
+		"site": "https://www.elsys.se",
+		"support": "https://www.elsys.se/en/support/"
+	},
+	"images": {
+		"device": "images/device.jpg"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://elsys.se/public/datasheets/ELT2_Datasheet.pdf",
+		"manualUrl": "https://elsys.se/public/manuals/Operating%20Manual%20ELT-2.pdf"
+	},
+	"collectedAt": "2026-06-24T00:00:00.000Z",
+	"_sourceUrl": "https://www.elsys.se/en/elt-2/"
+}

@@ -1,0 +1,43 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "elsys-ems-door",
+	"model": "EMS-Door",
+	"name": {
+		"en-US": "EMS-Door Elsys LoRaWAN Door Sensor",
+		"pt-BR": "EMS-Door Sensor de Porta LoRaWAN Elsys"
+	},
+	"description": {
+		"en-US": "Elsys EMS-Door — LoRaWAN (Class A) indoor sensor that monitors open/close (door) status, temperature and humidity. Uplinks are Elsys TLV frames on FPort 5.",
+		"pt-BR": "Elsys EMS-Door — sensor LoRaWAN (Classe A) de ambiente interno que monitora status de abertura/fechamento (porta), temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"door",
+		"temperature",
+		"humidity"
+	],
+	"tags": [
+		"door",
+		"temperature",
+		"humidity",
+		"elsys"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "elsys",
+		"name": "Elsys",
+		"site": "https://www.elsys.se",
+		"support": "https://www.elsys.se/en/support/"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://elsys.se/public/datasheets/EMS_Series_LoRa_Datasheet.pdf",
+		"manualUrl": "https://elsys.se/public/manuals/New/Operating-Manual-EMS-series-LoRa-2.0.pdf"
+	},
+	"collectedAt": "2026-06-24T00:00:00.000Z",
+	"_sourceUrl": "https://www.elsys.se/en/ems-door/"
+}

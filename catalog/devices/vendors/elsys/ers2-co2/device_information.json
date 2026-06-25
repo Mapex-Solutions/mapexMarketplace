@@ -1,0 +1,47 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "elsys-ers2-co2",
+	"model": "ERS2-CO2",
+	"name": {
+		"en-US": "ERS2-CO2 Elsys LoRaWAN CO₂ Room Sensor",
+		"pt-BR": "ERS2-CO2 Sensor de Ambiente com CO₂ LoRaWAN Elsys"
+	},
+	"description": {
+		"en-US": "Elsys ERS2-CO2 — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity, light, motion and CO₂. Uplinks are Elsys TLV frames on FPort 5.",
+		"pt-BR": "Elsys ERS2-CO2 — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz, movimento e CO₂. Os uplinks são quadros TLV Elsys no FPort 5."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature",
+		"humidity",
+		"light",
+		"motion",
+		"co2"
+	],
+	"tags": [
+		"temperature",
+		"humidity",
+		"light",
+		"motion",
+		"co2",
+		"elsys"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "elsys",
+		"name": "Elsys",
+		"site": "https://www.elsys.se",
+		"support": "https://www.elsys.se/en/support/"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://elsys.se/public/datasheets/ERS_Series_LoRa_Datasheet.pdf",
+		"manualUrl": "https://elsys.se/public/manuals/New/Operating-Manual-ERS-Series-LoRa1.pdf"
+	},
+	"collectedAt": "2026-06-24T00:00:00.000Z",
+	"_sourceUrl": "https://www.elsys.se/en/ers-co2/"
+}

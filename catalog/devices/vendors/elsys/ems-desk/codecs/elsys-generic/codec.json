@@ -1,0 +1,12 @@
+{
+	"$schema": "mapex-device-codec/v1",
+	"id": "elsys-generic",
+	"name": "Elsys Generic (official protocol)",
+	"source": "vendor",
+	"official": true,
+	"default": true,
+	"target": "generic",
+	"language": "javascript",
+	"files": { "decoder": "decoder.js" },
+	"sourceUrl": "https://elsys.se/public/documents/Sensor_payload.pdf"
+}

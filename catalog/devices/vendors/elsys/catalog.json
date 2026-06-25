@@ -1,0 +1,719 @@
+{
+	"$schema": "mapex-device-vendor-catalog/v1",
+	"vendor": {
+		"slug": "elsys",
+		"name": "Elsys",
+		"site": "https://www.elsys.se",
+		"support": "https://www.elsys.se/en/support/"
+	},
+	"items": [
+		{
+			"id": "elsys-eco-co2",
+			"model": "ECO-CO2",
+			"slug": "eco-co2",
+			"name": {
+				"en-US": "ECO-CO2 Elsys LoRaWAN Eco CO₂ Sensor",
+				"pt-BR": "ECO-CO2 Sensor Eco CO₂ LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ECO-CO2 — LoRaWAN (Class A) indoor sensor that monitors CO₂, temperature and humidity. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ECO-CO2 — sensor LoRaWAN (Classe A) de ambiente interno que monitora CO₂, temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"co2",
+				"temperature",
+				"humidity"
+			],
+			"tags": [
+				"co2",
+				"temperature",
+				"humidity",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-elt-2",
+			"model": "ELT-2",
+			"slug": "elt-2",
+			"name": {
+				"en-US": "ELT-2 Elsys LoRaWAN Multipurpose Sensor",
+				"pt-BR": "ELT-2 Sensor Multiuso LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ELT-2 — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity and light. It also exposes external probe inputs (analog, digital, temperature, distance). Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ELT-2 — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e luz. Também expõe entradas externas (analógica, digital, temperatura, distância). Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"light"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"light",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.jpg",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-elt-internal-antenna",
+			"model": "ELT-2-IA",
+			"slug": "elt-internal-antenna",
+			"name": {
+				"en-US": "ELT-2-IA Elsys LoRaWAN Multipurpose Sensor (Internal Antenna)",
+				"pt-BR": "ELT-2-IA Sensor Multiuso (Antena Interna) LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ELT-2-IA — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity and light. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ELT-2-IA — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e luz. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"light"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"light",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.jpg",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-elt-lite",
+			"model": "ELT-Lite",
+			"slug": "elt-lite",
+			"name": {
+				"en-US": "ELT-Lite Elsys LoRaWAN Lite Multipurpose Sensor",
+				"pt-BR": "ELT-Lite Sensor Multiuso Lite LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ELT-Lite — LoRaWAN (Class A) indoor sensor that monitors temperature and humidity. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ELT-Lite — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.jpg",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-elt-radar-distance",
+			"model": "ELT-Radar",
+			"slug": "elt-radar-distance",
+			"name": {
+				"en-US": "ELT-Radar Elsys LoRaWAN Radar Distance Sensor",
+				"pt-BR": "ELT-Radar Sensor de Distância por Radar LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ELT-Radar — LoRaWAN (Class A) indoor sensor that monitors distance, temperature and humidity. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ELT-Radar — sensor LoRaWAN (Classe A) de ambiente interno que monitora distância, temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance",
+				"temperature",
+				"humidity"
+			],
+			"tags": [
+				"distance",
+				"temperature",
+				"humidity",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-elt-ultrasonic",
+			"model": "ELT-Ultrasonic",
+			"slug": "elt-ultrasonic",
+			"name": {
+				"en-US": "ELT-Ultrasonic Elsys LoRaWAN Ultrasonic Distance Sensor",
+				"pt-BR": "ELT-Ultrasonic Sensor de Distância Ultrassônico LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ELT-Ultrasonic — LoRaWAN (Class A) indoor sensor that monitors distance, temperature and humidity. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ELT-Ultrasonic — sensor LoRaWAN (Classe A) de ambiente interno que monitora distância, temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"distance",
+				"temperature",
+				"humidity"
+			],
+			"tags": [
+				"distance",
+				"temperature",
+				"humidity",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ems",
+			"model": "EMS",
+			"slug": "ems",
+			"name": {
+				"en-US": "EMS Elsys LoRaWAN Mini Room Sensor",
+				"pt-BR": "EMS Mini Sensor de Ambiente LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys EMS — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity, light and motion. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys EMS — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz e movimento. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ems-desk",
+			"model": "EMS-Desk",
+			"slug": "ems-desk",
+			"name": {
+				"en-US": "EMS-Desk Elsys LoRaWAN Desk Occupancy Sensor",
+				"pt-BR": "EMS-Desk Sensor de Ocupação de Mesa LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys EMS-Desk — LoRaWAN (Class A) indoor sensor that monitors motion and temperature. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys EMS-Desk — sensor LoRaWAN (Classe A) de ambiente interno que monitora movimento e temperatura. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"motion",
+				"temperature"
+			],
+			"tags": [
+				"motion",
+				"temperature",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ems-door",
+			"model": "EMS-Door",
+			"slug": "ems-door",
+			"name": {
+				"en-US": "EMS-Door Elsys LoRaWAN Door Sensor",
+				"pt-BR": "EMS-Door Sensor de Porta LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys EMS-Door — LoRaWAN (Class A) indoor sensor that monitors open/close (door) status, temperature and humidity. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys EMS-Door — sensor LoRaWAN (Classe A) de ambiente interno que monitora status de abertura/fechamento (porta), temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"door",
+				"temperature",
+				"humidity"
+			],
+			"tags": [
+				"door",
+				"temperature",
+				"humidity",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ems-lite",
+			"model": "EMS-Lite",
+			"slug": "ems-lite",
+			"name": {
+				"en-US": "EMS-Lite Elsys LoRaWAN Mini Lite Sensor",
+				"pt-BR": "EMS-Lite Mini Sensor Lite LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys EMS-Lite — LoRaWAN (Class A) indoor sensor that monitors temperature and humidity. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys EMS-Lite — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ers-display-lora",
+			"model": "ERS-Display",
+			"slug": "ers-display-lora",
+			"name": {
+				"en-US": "ERS-Display Elsys LoRaWAN Display Room Sensor",
+				"pt-BR": "ERS-Display Sensor de Ambiente com Display LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS-Display — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity, light and motion. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ERS-Display — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz e movimento. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ers-display-co2-lora",
+			"model": "ERS-Display-CO2",
+			"slug": "ers-display-co2-lora",
+			"name": {
+				"en-US": "ERS-Display-CO2 Elsys LoRaWAN CO₂ Display Room Sensor",
+				"pt-BR": "ERS-Display-CO2 Sensor de Ambiente CO₂ com Display LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS-Display-CO2 — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity, light, motion and CO₂. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ERS-Display-CO2 — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz, movimento e CO₂. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion",
+				"co2"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion",
+				"co2",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ers-display-co2-lite-lora",
+			"model": "ERS-Display-CO2-Lite",
+			"slug": "ers-display-co2-lite-lora",
+			"name": {
+				"en-US": "ERS-Display-CO2-Lite Elsys LoRaWAN CO₂ Lite Display Room Sensor",
+				"pt-BR": "ERS-Display-CO2-Lite Sensor de Ambiente CO₂ Lite com Display LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS-Display-CO2-Lite — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity and CO₂. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ERS-Display-CO2-Lite — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e CO₂. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"co2"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"co2",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ers-display-lite-lora",
+			"model": "ERS-Display-Lite",
+			"slug": "ers-display-lite-lora",
+			"name": {
+				"en-US": "ERS-Display-Lite Elsys LoRaWAN Lite Display Room Sensor",
+				"pt-BR": "ERS-Display-Lite Sensor de Ambiente Lite com Display LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS-Display-Lite — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity and light. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ERS-Display-Lite — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e luz. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"light"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"light",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ers-eye",
+			"model": "ERS-Eye",
+			"slug": "ers-eye",
+			"name": {
+				"en-US": "ERS-Eye Elsys LoRaWAN Eye Occupancy Sensor",
+				"pt-BR": "ERS-Eye Sensor de Ocupação Eye LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS-Eye — LoRaWAN (Class A) indoor sensor that monitors motion, temperature, humidity and light. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ERS-Eye — sensor LoRaWAN (Classe A) de ambiente interno que monitora movimento, temperatura, umidade e luz. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"motion",
+				"temperature",
+				"humidity",
+				"light"
+			],
+			"tags": [
+				"motion",
+				"temperature",
+				"humidity",
+				"light",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ers-interact-lite-comfort",
+			"model": "ERS-Interact-Comfort",
+			"slug": "ers-interact-lite-comfort",
+			"name": {
+				"en-US": "ERS-Interact-Comfort Elsys LoRaWAN Interact Comfort Panel",
+				"pt-BR": "ERS-Interact-Comfort Painel Interact Comfort LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS-Interact-Comfort — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity and button presses. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ERS-Interact-Comfort — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e acionamentos de botão. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"button"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"button",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ers-interact-lite-flex",
+			"model": "ERS-Interact-Flex",
+			"slug": "ers-interact-lite-flex",
+			"name": {
+				"en-US": "ERS-Interact-Flex Elsys LoRaWAN Interact Flex Panel",
+				"pt-BR": "ERS-Interact-Flex Painel Interact Flex LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS-Interact-Flex — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity and button presses. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ERS-Interact-Flex — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e acionamentos de botão. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"button"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"button",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ers-sound",
+			"model": "ERS-Sound",
+			"slug": "ers-sound",
+			"name": {
+				"en-US": "ERS-Sound Elsys LoRaWAN Sound Room Sensor",
+				"pt-BR": "ERS-Sound Sensor de Ambiente com Som LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS-Sound — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity, light, motion and sound level. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ERS-Sound — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz, movimento e nível de som. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion",
+				"noise"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion",
+				"noise",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ers-voc",
+			"model": "ERS-VOC",
+			"slug": "ers-voc",
+			"name": {
+				"en-US": "ERS-VOC Elsys LoRaWAN VOC Room Sensor",
+				"pt-BR": "ERS-VOC Sensor de Ambiente com VOC LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS-VOC — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity, light, motion and air quality (VOC). Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ERS-VOC — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz, movimento e qualidade do ar (VOC). Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion",
+				"air_quality"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion",
+				"air_quality",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ers2",
+			"model": "ERS2",
+			"slug": "ers2",
+			"name": {
+				"en-US": "ERS2 Elsys LoRaWAN Room Sensor",
+				"pt-BR": "ERS2 Sensor de Ambiente LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS2 — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity, light and motion. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ERS2 — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz e movimento. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ers2-co2",
+			"model": "ERS2-CO2",
+			"slug": "ers2-co2",
+			"name": {
+				"en-US": "ERS2-CO2 Elsys LoRaWAN CO₂ Room Sensor",
+				"pt-BR": "ERS2-CO2 Sensor de Ambiente com CO₂ LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS2-CO2 — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity, light, motion and CO₂. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ERS2-CO2 — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz, movimento e CO₂. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion",
+				"co2"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion",
+				"co2",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ers-co2-lite",
+			"model": "ERS2-CO2-Lite",
+			"slug": "ers-co2-lite",
+			"name": {
+				"en-US": "ERS2-CO2-Lite Elsys LoRaWAN CO₂ Lite Room Sensor",
+				"pt-BR": "ERS2-CO2-Lite Sensor de Ambiente CO₂ Lite LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS2-CO2-Lite — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity and CO₂. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ERS2-CO2-Lite — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e CO₂. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"co2"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"co2",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ers-lite",
+			"model": "ERS2-Lite",
+			"slug": "ers-lite",
+			"name": {
+				"en-US": "ERS2-Lite Elsys LoRaWAN Lite Room Sensor",
+				"pt-BR": "ERS2-Lite Sensor de Ambiente Lite LoRaWAN Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS2-Lite — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity and light. Uplinks are Elsys TLV frames on FPort 5.",
+				"pt-BR": "Elsys ERS2-Lite — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e luz. Os uplinks são quadros TLV Elsys no FPort 5."
+			},
+			"protocol": "lorawan",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"light"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"light",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": true,
+			"hasManual": true
+		}
+	]
+}

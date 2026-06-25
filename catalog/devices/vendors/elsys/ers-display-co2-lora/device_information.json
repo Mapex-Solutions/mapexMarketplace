@@ -1,0 +1,47 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "elsys-ers-display-co2-lora",
+	"model": "ERS-Display-CO2",
+	"name": {
+		"en-US": "ERS-Display-CO2 Elsys LoRaWAN CO₂ Display Room Sensor",
+		"pt-BR": "ERS-Display-CO2 Sensor de Ambiente CO₂ com Display LoRaWAN Elsys"
+	},
+	"description": {
+		"en-US": "Elsys ERS-Display-CO2 — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity, light, motion and CO₂. Uplinks are Elsys TLV frames on FPort 5.",
+		"pt-BR": "Elsys ERS-Display-CO2 — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz, movimento e CO₂. Os uplinks são quadros TLV Elsys no FPort 5."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature",
+		"humidity",
+		"light",
+		"motion",
+		"co2"
+	],
+	"tags": [
+		"temperature",
+		"humidity",
+		"light",
+		"motion",
+		"co2",
+		"elsys"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "elsys",
+		"name": "Elsys",
+		"site": "https://www.elsys.se",
+		"support": "https://www.elsys.se/en/support/"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"datasheetUrl": "https://elsys.se/public/datasheets/ERS_Display_Series_Datasheet_V.2.0.pdf",
+		"manual": "files/manual.pdf",
+		"manualUrl": "https://elsys.se/public/manuals/New/ERS_Display_Lora_2.2.pdf"
+	},
+	"collectedAt": "2026-06-24T00:00:00.000Z",
+	"_sourceUrl": "https://www.elsys.se/en/ers-display-co2-lora/"
+}

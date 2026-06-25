@@ -1,0 +1,45 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "elsys-ers-display-lora",
+	"model": "ERS-Display",
+	"name": {
+		"en-US": "ERS-Display Elsys LoRaWAN Display Room Sensor",
+		"pt-BR": "ERS-Display Sensor de Ambiente com Display LoRaWAN Elsys"
+	},
+	"description": {
+		"en-US": "Elsys ERS-Display — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity, light and motion. Uplinks are Elsys TLV frames on FPort 5.",
+		"pt-BR": "Elsys ERS-Display — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz e movimento. Os uplinks são quadros TLV Elsys no FPort 5."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature",
+		"humidity",
+		"light",
+		"motion"
+	],
+	"tags": [
+		"temperature",
+		"humidity",
+		"light",
+		"motion",
+		"elsys"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "elsys",
+		"name": "Elsys",
+		"site": "https://www.elsys.se",
+		"support": "https://www.elsys.se/en/support/"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"datasheetUrl": "https://elsys.se/public/datasheets/ERS_Display_Series_Datasheet_V.2.0.pdf",
+		"manual": "files/manual.pdf",
+		"manualUrl": "https://elsys.se/public/manuals/New/ERS_Display_Lora_2.2.pdf"
+	},
+	"collectedAt": "2026-06-24T00:00:00.000Z",
+	"_sourceUrl": "https://www.elsys.se/en/ers-display-lora/"
+}

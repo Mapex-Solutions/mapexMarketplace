@@ -1,0 +1,42 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Elsys ERS-Display-Lite",
+	"protocolId": "lorawan",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "lorawan",
+		"gatewayId": "",
+		"region": "EU868",
+		"macVersion": "1.0.3",
+		"class": "A",
+		"activation": "otaa",
+		"devEui": "A81758FFFE592250",
+		"joinEui": "0000000000000000",
+		"appKey": "00000000000000000000000000000000",
+		"nwkKey": "",
+		"devAddr": "",
+		"nwkSKey": "",
+		"appSKey": ""
+	},
+	"attributes": {
+		"manufacturer": "Elsys",
+		"model": "ERS-Display-Lite"
+	},
+	"events": [
+		{
+			"id": "uplink",
+			"name": "Sensor data uplink",
+			"lorawan": {
+				"fport": 5,
+				"confirmed": false,
+				"payloadHex": "0100e60237040190070e10"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 15,
+				"unit": "minutes"
+			}
+		}
+	]
+}

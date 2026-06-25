@@ -1,0 +1,41 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "elsys-ems-desk",
+	"model": "EMS-Desk",
+	"name": {
+		"en-US": "EMS-Desk Elsys LoRaWAN Desk Occupancy Sensor",
+		"pt-BR": "EMS-Desk Sensor de Ocupação de Mesa LoRaWAN Elsys"
+	},
+	"description": {
+		"en-US": "Elsys EMS-Desk — LoRaWAN (Class A) indoor sensor that monitors motion and temperature. Uplinks are Elsys TLV frames on FPort 5.",
+		"pt-BR": "Elsys EMS-Desk — sensor LoRaWAN (Classe A) de ambiente interno que monitora movimento e temperatura. Os uplinks são quadros TLV Elsys no FPort 5."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"motion",
+		"temperature"
+	],
+	"tags": [
+		"motion",
+		"temperature",
+		"elsys"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "elsys",
+		"name": "Elsys",
+		"site": "https://www.elsys.se",
+		"support": "https://www.elsys.se/en/support/"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"datasheetUrl": "https://elsys.se/public/datasheets/EMS_Desk_datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"manualUrl": "https://elsys.se/public/manuals/Operating%20Manual%20EMS.pdf"
+	},
+	"collectedAt": "2026-06-24T00:00:00.000Z",
+	"_sourceUrl": "https://www.elsys.se/en/ems-desk/"
+}

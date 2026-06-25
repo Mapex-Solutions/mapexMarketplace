@@ -1,0 +1,47 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "elsys-ers-voc",
+	"model": "ERS-VOC",
+	"name": {
+		"en-US": "ERS-VOC Elsys LoRaWAN VOC Room Sensor",
+		"pt-BR": "ERS-VOC Sensor de Ambiente com VOC LoRaWAN Elsys"
+	},
+	"description": {
+		"en-US": "Elsys ERS-VOC — LoRaWAN (Class A) indoor sensor that monitors temperature, humidity, light, motion and air quality (VOC). Uplinks are Elsys TLV frames on FPort 5.",
+		"pt-BR": "Elsys ERS-VOC — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz, movimento e qualidade do ar (VOC). Os uplinks são quadros TLV Elsys no FPort 5."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"temperature",
+		"humidity",
+		"light",
+		"motion",
+		"air_quality"
+	],
+	"tags": [
+		"temperature",
+		"humidity",
+		"light",
+		"motion",
+		"air_quality",
+		"elsys"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "elsys",
+		"name": "Elsys",
+		"site": "https://www.elsys.se",
+		"support": "https://www.elsys.se/en/support/"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"datasheetUrl": "https://elsys.se/public/datasheets/ERS_VOC_datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"manualUrl": "https://elsys.se/public/manuals/New/Operating-Manual-ERS-Series-LoRa1.pdf"
+	},
+	"collectedAt": "2026-06-24T00:00:00.000Z",
+	"_sourceUrl": "https://www.elsys.se/en/ers-voc/"
+}

@@ -1,0 +1,43 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "elsys-eco-co2",
+	"model": "ECO-CO2",
+	"name": {
+		"en-US": "ECO-CO2 Elsys LoRaWAN Eco CO₂ Sensor",
+		"pt-BR": "ECO-CO2 Sensor Eco CO₂ LoRaWAN Elsys"
+	},
+	"description": {
+		"en-US": "Elsys ECO-CO2 — LoRaWAN (Class A) indoor sensor that monitors CO₂, temperature and humidity. Uplinks are Elsys TLV frames on FPort 5.",
+		"pt-BR": "Elsys ECO-CO2 — sensor LoRaWAN (Classe A) de ambiente interno que monitora CO₂, temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
+	},
+	"protocol": "lorawan",
+	"readingTypes": [
+		"co2",
+		"temperature",
+		"humidity"
+	],
+	"tags": [
+		"co2",
+		"temperature",
+		"humidity",
+		"elsys"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "elsys",
+		"name": "Elsys",
+		"site": "https://www.elsys.se",
+		"support": "https://www.elsys.se/en/support/"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"datasheetUrl": "https://elsys.se/public/datasheets/ERS_Eco_CO2_Datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"manualUrl": "https://elsys.se/public/manuals/New/Operating-Manual-ERS-Eco-series-LoRa-1.pdf"
+	},
+	"collectedAt": "2026-06-24T00:00:00.000Z",
+	"_sourceUrl": "https://www.elsys.se/en/eco-co2/"
+}

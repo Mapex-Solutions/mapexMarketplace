@@ -304,6 +304,40 @@
 			"hasManual": true
 		},
 		{
+			"id": "elsys-ers-co2-nb-iot-lte-m",
+			"model": "ERS-CO2-NB-IoT",
+			"slug": "ers-co2-nb-iot-lte-m",
+			"name": {
+				"en-US": "ERS-CO2-NB-IoT Elsys CO₂ Room Sensor (NB-IoT/LTE-M)",
+				"pt-BR": "ERS-CO2-NB-IoT Sensor de Ambiente CO₂ (NB-IoT/LTE-M) Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS-CO2-NB-IoT — NB-IoT/LTE-M indoor sensor that monitors temperature, humidity, light, motion and CO₂. Reports a JSON measurement array (Elsys ELTP) over MQTT/UDP.",
+				"pt-BR": "Elsys ERS-CO2-NB-IoT — sensor NB-IoT/LTE-M de ambiente interno que monitora temperatura, umidade, luz, movimento e CO₂. Reporta um array JSON de medições (Elsys ELTP) via MQTT/UDP."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion",
+				"co2"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"light",
+				"motion",
+				"co2",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": false,
+			"hasManual": true
+		},
+		{
 			"id": "elsys-ers-display-lora",
 			"model": "ERS-Display",
 			"slug": "ers-display-lora",
@@ -519,6 +553,36 @@
 			"image": "images/device.png",
 			"hasImage": true,
 			"hasCodec": true,
+			"hasManual": true
+		},
+		{
+			"id": "elsys-ers-lite-nb-iot-lte-m",
+			"model": "ERS-Lite-NB-IoT",
+			"slug": "ers-lite-nb-iot-lte-m",
+			"name": {
+				"en-US": "ERS-Lite-NB-IoT Elsys Lite Room Sensor (NB-IoT/LTE-M)",
+				"pt-BR": "ERS-Lite-NB-IoT Sensor de Ambiente Lite (NB-IoT/LTE-M) Elsys"
+			},
+			"description": {
+				"en-US": "Elsys ERS-Lite-NB-IoT — NB-IoT/LTE-M indoor sensor that monitors temperature, humidity and light. Reports a JSON measurement array (Elsys ELTP) over MQTT/UDP.",
+				"pt-BR": "Elsys ERS-Lite-NB-IoT — sensor NB-IoT/LTE-M de ambiente interno que monitora temperatura, umidade e luz. Reporta um array JSON de medições (Elsys ELTP) via MQTT/UDP."
+			},
+			"protocol": "nbiot",
+			"readingTypes": [
+				"temperature",
+				"humidity",
+				"light"
+			],
+			"tags": [
+				"temperature",
+				"humidity",
+				"light",
+				"elsys"
+			],
+			"icon": "",
+			"image": "images/device.png",
+			"hasImage": true,
+			"hasCodec": false,
 			"hasManual": true
 		},
 		{

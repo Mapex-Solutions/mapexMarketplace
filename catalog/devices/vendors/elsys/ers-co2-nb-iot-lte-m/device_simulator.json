@@ -1,0 +1,44 @@
+{
+	"$schema": "mapex-device-simulator/v1",
+	"name": "Elsys ERS-CO2-NB-IoT",
+	"protocolId": "mqtt",
+	"enabled": true,
+	"storeLogs": true,
+	"config": {
+		"kind": "mqtt",
+		"brokerUrl": "",
+		"clientId": "",
+		"baseTopic": "elsys/ers-co2-nb-iot-lte-m",
+		"authMode": "none",
+		"username": "",
+		"password": "",
+		"tlsCertPem": "",
+		"tlsKeyPem": "",
+		"tlsCaPem": "",
+		"receiveEnabled": false,
+		"subscriptions": []
+	},
+	"attributes": {
+		"manufacturer": "Elsys",
+		"model": "ERS-CO2-NB-IoT"
+	},
+	"events": [
+		{
+			"id": "uplink",
+			"name": "Sensor data uplink (JSON)",
+			"mqtt": {
+				"topic": "elsys/ers-co2-nb-iot-lte-m/up",
+				"qos": 0,
+				"retain": false,
+				"bodyMode": "raw",
+				"bodyFields": [],
+				"body": "[{\"t\":\"temp\",\"v\":{{randInt(18,28)}}.{{randInt(0,9)}},\"ts\":1727356800},{\"t\":\"hum\",\"v\":{{randInt(35,65)}},\"ts\":1727356800},{\"t\":\"light\",\"v\":{{randInt(100,800)}},\"ts\":1727356800},{\"t\":\"pir\",\"v\":{{randInt(0,5)}},\"ts\":1727356800},{\"t\":\"co2\",\"v\":{{randInt(450,1200)}},\"ts\":1727356800},{\"t\":\"vdd\",\"v\":3.{{randInt(40,72)}},\"ts\":1727356800}]"
+			},
+			"schedule": {
+				"enabled": false,
+				"every": 15,
+				"unit": "minutes"
+			}
+		}
+	]
+}

@@ -1,0 +1,47 @@
+{
+	"$schema": "mapex-device-information/v1",
+	"id": "elsys-ers-co2-nb-iot-lte-m",
+	"model": "ERS-CO2-NB-IoT",
+	"name": {
+		"en-US": "ERS-CO2-NB-IoT Elsys CO₂ Room Sensor (NB-IoT/LTE-M)",
+		"pt-BR": "ERS-CO2-NB-IoT Sensor de Ambiente CO₂ (NB-IoT/LTE-M) Elsys"
+	},
+	"description": {
+		"en-US": "Elsys ERS-CO2-NB-IoT — NB-IoT/LTE-M indoor sensor that monitors temperature, humidity, light, motion and CO₂. Reports a JSON measurement array (Elsys ELTP) over MQTT/UDP.",
+		"pt-BR": "Elsys ERS-CO2-NB-IoT — sensor NB-IoT/LTE-M de ambiente interno que monitora temperatura, umidade, luz, movimento e CO₂. Reporta um array JSON de medições (Elsys ELTP) via MQTT/UDP."
+	},
+	"protocol": "nbiot",
+	"readingTypes": [
+		"temperature",
+		"humidity",
+		"light",
+		"motion",
+		"co2"
+	],
+	"tags": [
+		"temperature",
+		"humidity",
+		"light",
+		"motion",
+		"co2",
+		"elsys"
+	],
+	"version": "1.0.0",
+	"vendor": {
+		"slug": "elsys",
+		"name": "Elsys",
+		"site": "https://www.elsys.se",
+		"support": "https://www.elsys.se/en/support/"
+	},
+	"images": {
+		"device": "images/device.png"
+	},
+	"files": {
+		"datasheet": "files/datasheet.pdf",
+		"manual": "files/manual.pdf",
+		"datasheetUrl": "https://elsys.se/public/datasheets/ERS_Series_NB-IoT-LTE-M_Datasheet.pdf",
+		"manualUrl": "https://elsys.se/public/manuals/New/Operating%20manual%20-%20ERS%20Series%20NB-IoT%20LTE-M.pdf"
+	},
+	"collectedAt": "2026-06-25T00:00:00.000Z",
+	"_sourceUrl": "https://www.elsys.se/en/ers-co2-nb-iot-lte-m/"
+}

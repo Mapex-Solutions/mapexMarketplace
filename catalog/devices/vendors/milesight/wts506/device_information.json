@@ -11,6 +11,7 @@
 		"pt-BR": "Milesight WTS506 — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, velocidade e direção do vento, pressão barométrica e chuva. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"temperature",
 		"humidity",

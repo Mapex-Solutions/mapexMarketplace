@@ -11,6 +11,7 @@
 		"pt-BR": "Milesight AM305L — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, CO₂, luz / iluminância e presença / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"temperature",
 		"humidity",

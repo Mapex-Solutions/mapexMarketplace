@@ -11,6 +11,7 @@
 		"pt-BR": "Sensor NB-IoT que monitora ângulo de inclinação. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 	},
 	"protocol": "nbiot",
+	"category": "iot",
 	"readingTypes": [
 		"tilt"
 	],

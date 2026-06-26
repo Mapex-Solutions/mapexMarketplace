@@ -11,6 +11,7 @@
 		"pt-BR": "Milesight WS156 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"button"
 	],

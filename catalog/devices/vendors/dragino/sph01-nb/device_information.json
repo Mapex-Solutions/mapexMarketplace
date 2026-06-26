@@ -11,6 +11,7 @@
 		"pt-BR": "Sensor NB-IoT que monitora pH e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 	},
 	"protocol": "nbiot",
+	"category": "iot",
 	"readingTypes": [
 		"ph",
 		"temperature"

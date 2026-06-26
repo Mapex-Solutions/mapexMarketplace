@@ -11,6 +11,7 @@
 		"pt-BR": "Elsys ERS-Sound — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz, movimento e nível de som. Os uplinks são quadros TLV Elsys no FPort 5."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"temperature",
 		"humidity",

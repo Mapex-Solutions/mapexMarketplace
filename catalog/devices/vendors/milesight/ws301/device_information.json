@@ -11,6 +11,7 @@
 		"pt-BR": "Milesight WS301 — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"door"
 	],

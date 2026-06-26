@@ -11,6 +11,7 @@
 		"pt-BR": "Milesight WS201 — sensor LoRaWAN (Classe A) que monitora distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"distance"
 	],

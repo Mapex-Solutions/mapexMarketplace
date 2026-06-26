@@ -11,6 +11,7 @@
 		"pt-BR": "Sensor LoRaWAN (Classe A) que monitora pH e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"ph",
 		"temperature"

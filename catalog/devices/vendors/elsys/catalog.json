@@ -20,6 +20,7 @@
 				"pt-BR": "Elsys ECO-CO2 — sensor LoRaWAN (Classe A) de ambiente interno que monitora CO₂, temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"co2",
 				"temperature",
@@ -50,6 +51,7 @@
 				"pt-BR": "Elsys ELT-2 — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e luz. Também expõe entradas externas (analógica, digital, temperatura, distância). Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -80,6 +82,7 @@
 				"pt-BR": "Elsys ELT-2-IA — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e luz. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -110,6 +113,7 @@
 				"pt-BR": "Elsys ELT-Lite — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity"
@@ -138,6 +142,7 @@
 				"pt-BR": "Elsys ELT-Radar — sensor LoRaWAN (Classe A) de ambiente interno que monitora distância, temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance",
 				"temperature",
@@ -168,6 +173,7 @@
 				"pt-BR": "Elsys ELT-Ultrasonic — sensor LoRaWAN (Classe A) de ambiente interno que monitora distância, temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance",
 				"temperature",
@@ -198,6 +204,7 @@
 				"pt-BR": "Elsys EMS — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz e movimento. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -230,6 +237,7 @@
 				"pt-BR": "Elsys EMS-Desk — sensor LoRaWAN (Classe A) de ambiente interno que monitora movimento e temperatura. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"motion",
 				"temperature"
@@ -258,6 +266,7 @@
 				"pt-BR": "Elsys EMS-Door — sensor LoRaWAN (Classe A) de ambiente interno que monitora status de abertura/fechamento (porta), temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"door",
 				"temperature",
@@ -288,6 +297,7 @@
 				"pt-BR": "Elsys EMS-Lite — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity"
@@ -316,6 +326,7 @@
 				"pt-BR": "Elsys ERS-CO2-NB-IoT — sensor NB-IoT/LTE-M de ambiente interno que monitora temperatura, umidade, luz, movimento e CO₂. Reporta um array JSON de medições (Elsys ELTP) via MQTT/UDP."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -350,6 +361,7 @@
 				"pt-BR": "Elsys ERS-Display — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz e movimento. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -382,6 +394,7 @@
 				"pt-BR": "Elsys ERS-Display-CO2 — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz, movimento e CO₂. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -416,6 +429,7 @@
 				"pt-BR": "Elsys ERS-Display-CO2-Lite — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e CO₂. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -446,6 +460,7 @@
 				"pt-BR": "Elsys ERS-Display-Lite — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e luz. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -476,6 +491,7 @@
 				"pt-BR": "Elsys ERS-Eye — sensor LoRaWAN (Classe A) de ambiente interno que monitora movimento, temperatura, umidade e luz. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"motion",
 				"temperature",
@@ -508,6 +524,7 @@
 				"pt-BR": "Elsys ERS-Interact-Comfort — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e acionamentos de botão. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -538,6 +555,7 @@
 				"pt-BR": "Elsys ERS-Interact-Flex — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e acionamentos de botão. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -568,6 +586,7 @@
 				"pt-BR": "Elsys ERS-Lite-NB-IoT — sensor NB-IoT/LTE-M de ambiente interno que monitora temperatura, umidade e luz. Reporta um array JSON de medições (Elsys ELTP) via MQTT/UDP."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -598,6 +617,7 @@
 				"pt-BR": "Elsys ERS-Sound — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz, movimento e nível de som. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -632,6 +652,7 @@
 				"pt-BR": "Elsys ERS-VOC — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz, movimento e qualidade do ar (VOC). Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -666,6 +687,7 @@
 				"pt-BR": "Elsys ERS2 — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz e movimento. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -698,6 +720,7 @@
 				"pt-BR": "Elsys ERS2-CO2 — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz, movimento e CO₂. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -732,6 +755,7 @@
 				"pt-BR": "Elsys ERS2-CO2-Lite — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e CO₂. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -762,6 +786,7 @@
 				"pt-BR": "Elsys ERS2-Lite — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade e luz. Os uplinks são quadros TLV Elsys no FPort 5."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",

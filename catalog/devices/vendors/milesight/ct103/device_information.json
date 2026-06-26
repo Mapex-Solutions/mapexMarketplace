@@ -11,6 +11,7 @@
 		"pt-BR": "Milesight CT103 — sensor LoRaWAN (Classe A) que monitora corrente elétrica e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"current",
 		"temperature"

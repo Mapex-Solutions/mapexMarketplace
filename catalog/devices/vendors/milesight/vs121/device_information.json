@@ -11,6 +11,7 @@
 		"pt-BR": "Milesight VS121 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"passage_counter"
 	],

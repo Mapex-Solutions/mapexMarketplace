@@ -11,6 +11,7 @@
 		"pt-BR": "Milesight VS135-P — sensor HTTP que monitora contagem de pessoas. Reporta JSON periódico via HTTP/MQTT."
 	},
 	"protocol": "http",
+	"category": "iot",
 	"readingTypes": [
 		"passage_counter"
 	],

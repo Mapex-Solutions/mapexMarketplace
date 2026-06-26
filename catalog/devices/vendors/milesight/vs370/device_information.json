@@ -11,6 +11,7 @@
 		"pt-BR": "Milesight VS370 — sensor LoRaWAN (Classe A) que monitora presença / movimento e luz / iluminância. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"motion",
 		"light"

@@ -11,6 +11,7 @@
 		"pt-BR": "Elsys EMS-Desk — sensor LoRaWAN (Classe A) de ambiente interno que monitora movimento e temperatura. Os uplinks são quadros TLV Elsys no FPort 5."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"motion",
 		"temperature"

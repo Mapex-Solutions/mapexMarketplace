@@ -11,6 +11,7 @@
 		"pt-BR": "Milesight AT101 — sensor LoRaWAN (Classe A) que monitora localização GPS, temperatura e presença / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"location",
 		"temperature",

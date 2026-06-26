@@ -20,6 +20,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora contagem de passagem. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"passage_counter"
 			],
@@ -48,6 +49,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora CO₂, temperatura, umidade e qualidade do ar. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"co2",
 				"temperature",
@@ -79,6 +81,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura e umidade. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity"
@@ -108,6 +111,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento e estado de contato seco. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"door",
 				"dry_contact"
@@ -137,6 +141,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora status de abertura/fechamento e estado de contato seco. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"door",
 				"dry_contact"
@@ -166,6 +171,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora corrente elétrica. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"current"
 			],
@@ -194,6 +200,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora corrente elétrica. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"current"
 			],
@@ -223,6 +230,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -250,6 +258,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -277,6 +286,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -304,6 +314,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -332,6 +343,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -360,6 +372,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -388,6 +401,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -417,6 +431,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance",
 				"temperature"
@@ -446,6 +461,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora distância / nível e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"distance",
 				"temperature"
@@ -476,6 +492,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance",
 				"temperature"
@@ -505,6 +522,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora distância / nível e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"distance",
 				"temperature"
@@ -535,6 +553,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -563,6 +582,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -591,6 +611,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"door"
 			],
@@ -618,6 +639,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora status de abertura/fechamento. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"door"
 			],
@@ -646,6 +668,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance",
 				"temperature"
@@ -675,6 +698,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora corrente elétrica e estado de contato seco. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"current",
 				"dry_contact"
@@ -704,6 +728,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora corrente elétrica e estado de contato seco. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"current",
 				"dry_contact"
@@ -734,6 +759,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora peso. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"weight"
 			],
@@ -762,6 +788,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -790,6 +817,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -817,6 +845,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -843,6 +872,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -870,6 +900,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -896,6 +927,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -923,6 +955,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura, umidade, status de abertura/fechamento e vazamento de água. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -955,6 +988,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora vibração e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"vibration",
 				"temperature"
@@ -983,6 +1017,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura e umidade. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity"
@@ -1011,6 +1046,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora umidade foliar e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"leaf_moisture",
 				"temperature"
@@ -1039,6 +1075,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora umidade foliar e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"leaf_moisture",
 				"temperature"
@@ -1068,6 +1105,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -1094,6 +1132,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -1121,6 +1160,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -1147,6 +1187,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -1174,6 +1215,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora vazamento de água. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"water_leak"
 			],
@@ -1200,6 +1242,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -1226,6 +1269,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -1253,6 +1297,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -1279,6 +1324,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -1306,6 +1352,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -1333,6 +1380,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora distância / nível. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -1359,6 +1407,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora distância / nível. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -1386,6 +1435,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora acionamentos de botão. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"button"
 			],
@@ -1412,6 +1462,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora acionamentos de botão. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"button"
 			],
@@ -1438,6 +1489,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora contagem de passagem e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"passage_counter",
 				"temperature"
@@ -1466,6 +1518,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora tensão analógica. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"voltage"
 			],
@@ -1493,6 +1546,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora pressão. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"pressure"
 			],
@@ -1520,6 +1574,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora pressão. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"pressure"
 			],
@@ -1546,6 +1601,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora pressão. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"pressure"
 			],
@@ -1572,6 +1628,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora tensão analógica. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"voltage"
 			],
@@ -1599,6 +1656,7 @@
 				"pt-BR": "Conversor NB-IoT com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [],
 			"tags": [
 				"nb-iot",
@@ -1623,6 +1681,7 @@
 				"pt-BR": "Conversor LoRaWAN (Classe A) com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [],
 			"tags": [
 				"dragino"
@@ -1646,6 +1705,7 @@
 				"pt-BR": "Conversor NB-IoT com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [],
 			"tags": [
 				"nb-iot",
@@ -1670,6 +1730,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora temperatura e umidade. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity"
@@ -1699,6 +1760,7 @@
 				"pt-BR": "Conversor NB-IoT com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [],
 			"tags": [
 				"nb-iot",
@@ -1723,6 +1785,7 @@
 				"pt-BR": "Conversor NB-IoT com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [],
 			"tags": [
 				"nb-iot",
@@ -1747,6 +1810,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora umidade do solo, condutividade elétrica (EC) e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"soil_moisture",
 				"conductivity",
@@ -1777,6 +1841,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora umidade do solo, condutividade elétrica (EC) e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"soil_moisture",
 				"conductivity",
@@ -1808,6 +1873,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora umidade do solo, condutividade elétrica (EC) e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"soil_moisture",
 				"conductivity",
@@ -1838,6 +1904,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora umidade do solo, condutividade elétrica (EC) e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"soil_moisture",
 				"conductivity",
@@ -1869,6 +1936,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora umidade do solo, condutividade elétrica (EC) e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"soil_moisture",
 				"conductivity",
@@ -1899,6 +1967,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora umidade do solo, condutividade elétrica (EC) e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"soil_moisture",
 				"conductivity",
@@ -1930,6 +1999,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -1957,6 +2027,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora pH e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"ph",
 				"temperature"
@@ -1985,6 +2056,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora pH e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"ph",
 				"temperature"
@@ -2014,6 +2086,7 @@
 				"pt-BR": "Conversor LoRaWAN (Classe A) com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [],
 			"tags": [
 				"dragino"
@@ -2037,6 +2110,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora vazão. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"flow"
 			],
@@ -2063,6 +2137,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora vazão. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"flow"
 			],
@@ -2090,6 +2165,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -2116,6 +2192,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -2142,6 +2219,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora localização GPS. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"location"
 			],
@@ -2168,6 +2246,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora ângulo de inclinação. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"tilt"
 			],
@@ -2194,6 +2273,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora ângulo de inclinação. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"tilt"
 			],
@@ -2221,6 +2301,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora vazamento de água. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"water_leak"
 			],
@@ -2247,6 +2328,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora vazamento de água. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"water_leak"
 			],
@@ -2274,6 +2356,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora pH, condutividade elétrica (EC) e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"ph",
 				"conductivity",
@@ -2305,6 +2388,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora pH, condutividade elétrica (EC) e temperatura. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"ph",
 				"conductivity",
@@ -2335,6 +2419,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora pH, condutividade elétrica (EC) e temperatura. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"ph",
 				"conductivity",
@@ -2366,6 +2451,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura, umidade, pressão, vento e chuva. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -2400,6 +2486,7 @@
 				"pt-BR": "Sensor LoRaWAN (Classe A) que monitora temperatura, umidade, pressão, vento, chuva e nível de ruído. As leituras são enviadas como uplinks LoRaWAN (dados no FPort 2, status do dispositivo no FPort 5)."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -2436,6 +2523,7 @@
 				"pt-BR": "Sensor NB-IoT que monitora temperatura, umidade, pressão, vento, chuva e nível de ruído. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 			},
 			"protocol": "nbiot",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",

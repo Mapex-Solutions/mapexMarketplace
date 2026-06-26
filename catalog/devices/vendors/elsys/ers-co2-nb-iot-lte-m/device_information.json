@@ -11,6 +11,7 @@
 		"pt-BR": "Elsys ERS-CO2-NB-IoT — sensor NB-IoT/LTE-M de ambiente interno que monitora temperatura, umidade, luz, movimento e CO₂. Reporta um array JSON de medições (Elsys ELTP) via MQTT/UDP."
 	},
 	"protocol": "nbiot",
+	"category": "iot",
 	"readingTypes": [
 		"temperature",
 		"humidity",

@@ -11,6 +11,7 @@
 		"pt-BR": "Elsys ERS-Display — sensor LoRaWAN (Classe A) de ambiente interno que monitora temperatura, umidade, luz e movimento. Os uplinks são quadros TLV Elsys no FPort 5."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"temperature",
 		"humidity",

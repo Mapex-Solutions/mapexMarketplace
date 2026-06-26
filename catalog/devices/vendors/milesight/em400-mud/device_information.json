@@ -11,6 +11,7 @@
 		"pt-BR": "Milesight EM400-MUD — sensor LoRaWAN (Classe A) que monitora distância / nível, temperatura e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"distance",
 		"temperature",

@@ -11,6 +11,7 @@
 		"pt-BR": "Conversor NB-IoT com entradas de sensor configuráveis — as leituras dependem da sonda acoplada. As leituras são publicadas em um servidor IoT via NB-IoT (MQTT/CoAP/UDP)."
 	},
 	"protocol": "nbiot",
+	"category": "iot",
 	"readingTypes": [],
 	"tags": [
 		"nb-iot",

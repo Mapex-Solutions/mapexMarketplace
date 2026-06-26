@@ -20,6 +20,7 @@
 				"pt-BR": "Milesight AM102 — sensor LoRaWAN (Classe A) que monitora temperatura e umidade. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity"
@@ -48,6 +49,7 @@
 				"pt-BR": "Milesight AM103-AM103L — sensor LoRaWAN (Classe A) que monitora temperatura, umidade e CO₂. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -78,6 +80,7 @@
 				"pt-BR": "Milesight AM304L — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, luz / iluminância e presença / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -110,6 +113,7 @@
 				"pt-BR": "Milesight AM305L — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, CO₂, luz / iluminância e presença / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -144,6 +148,7 @@
 				"pt-BR": "Milesight AM307 — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, CO₂, qualidade do ar, luz / iluminância, presença / movimento e pressão barométrica. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -182,6 +187,7 @@
 				"pt-BR": "Milesight AM307L — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, CO₂, qualidade do ar, luz / iluminância, presença / movimento e pressão barométrica. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -220,6 +226,7 @@
 				"pt-BR": "Milesight AM308 — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, CO₂, qualidade do ar, luz / iluminância, presença / movimento e pressão barométrica. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -258,6 +265,7 @@
 				"pt-BR": "Milesight AM308L — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, CO₂, qualidade do ar, luz / iluminância, presença / movimento e pressão barométrica. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -296,6 +304,7 @@
 				"pt-BR": "Milesight AT101 — sensor LoRaWAN (Classe A) que monitora localização GPS, temperatura e presença / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"location",
 				"temperature",
@@ -326,6 +335,7 @@
 				"pt-BR": "Milesight CT101 — sensor LoRaWAN (Classe A) que monitora corrente elétrica e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"current",
 				"temperature"
@@ -354,6 +364,7 @@
 				"pt-BR": "Milesight CT103 — sensor LoRaWAN (Classe A) que monitora corrente elétrica e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"current",
 				"temperature"
@@ -382,6 +393,7 @@
 				"pt-BR": "Milesight CT105 — sensor LoRaWAN (Classe A) que monitora corrente elétrica e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"current",
 				"temperature"
@@ -410,6 +422,7 @@
 				"pt-BR": "Milesight CT303 — sensor LoRaWAN (Classe A) que monitora corrente elétrica e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"current",
 				"temperature"
@@ -438,6 +451,7 @@
 				"pt-BR": "Milesight CT305 — sensor LoRaWAN (Classe A) que monitora corrente elétrica e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"current",
 				"temperature"
@@ -466,6 +480,7 @@
 				"pt-BR": "Milesight CT310 — sensor LoRaWAN (Classe A) que monitora corrente elétrica e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"current",
 				"temperature"
@@ -494,6 +509,7 @@
 				"pt-BR": "Milesight CTH01 — sensor LoRaWAN (Classe A) que monitora corrente elétrica, tensão / energia e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"current",
 				"voltage",
@@ -524,6 +540,7 @@
 				"pt-BR": "Milesight EM300-CL — sensor LoRaWAN (Classe A) que monitora distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -550,6 +567,7 @@
 				"pt-BR": "Milesight EM300-DI — sensor LoRaWAN (Classe A) que monitora temperatura, umidade e entradas dry-contact / pulso. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -580,6 +598,7 @@
 				"pt-BR": "Milesight EM300-MCS — sensor LoRaWAN (Classe A) que monitora temperatura, umidade e status de abertura/fechamento. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -610,6 +629,7 @@
 				"pt-BR": "Milesight EM300-MLD — sensor LoRaWAN (Classe A) que monitora vazamento de água. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"water_leak"
 			],
@@ -636,6 +656,7 @@
 				"pt-BR": "Milesight EM300-SLD-ZLD — sensor LoRaWAN (Classe A) que monitora vazamento de água. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"water_leak"
 			],
@@ -662,6 +683,7 @@
 				"pt-BR": "Milesight EM300-TH — sensor LoRaWAN (Classe A) que monitora temperatura e umidade. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity"
@@ -690,6 +712,7 @@
 				"pt-BR": "Milesight EM320-TH — sensor LoRaWAN (Classe A) que monitora temperatura e umidade. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity"
@@ -718,6 +741,7 @@
 				"pt-BR": "Milesight EM320-TILT — sensor LoRaWAN (Classe A) que monitora inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"tilt"
 			],
@@ -744,6 +768,7 @@
 				"pt-BR": "Milesight EM400-MUD — sensor LoRaWAN (Classe A) que monitora distância / nível, temperatura e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance",
 				"temperature",
@@ -774,6 +799,7 @@
 				"pt-BR": "Milesight EM400-TLD — sensor LoRaWAN (Classe A) que monitora distância / nível, temperatura e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance",
 				"temperature",
@@ -804,6 +830,7 @@
 				"pt-BR": "Milesight EM400-UDL — sensor LoRaWAN (Classe A) que monitora distância / nível, temperatura e inclinação / ângulo. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance",
 				"temperature",
@@ -834,6 +861,7 @@
 				"pt-BR": "Milesight EM410-RDL — sensor LoRaWAN (Classe A) que monitora distância / nível e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance",
 				"temperature"
@@ -862,6 +890,7 @@
 				"pt-BR": "Milesight EM500-CO2 — sensor LoRaWAN (Classe A) que monitora CO₂, temperatura, umidade e pressão barométrica. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"co2",
 				"temperature",
@@ -894,6 +923,7 @@
 				"pt-BR": "Milesight EM500-LGT — sensor LoRaWAN (Classe A) que monitora luz / iluminância. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"light"
 			],
@@ -920,6 +950,7 @@
 				"pt-BR": "Milesight EM500-PP — sensor LoRaWAN (Classe A) que monitora pressão barométrica. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"pressure"
 			],
@@ -946,6 +977,7 @@
 				"pt-BR": "Milesight EM500-PT100 — sensor LoRaWAN (Classe A) que monitora temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -972,6 +1004,7 @@
 				"pt-BR": "Milesight EM500-SMTC — sensor LoRaWAN (Classe A) que monitora temperatura, umidade do solo e condutividade do solo (EC). Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"soil_moisture",
@@ -1002,6 +1035,7 @@
 				"pt-BR": "Milesight EM500-SWL — sensor LoRaWAN (Classe A) que monitora distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -1028,6 +1062,7 @@
 				"pt-BR": "Milesight EM500-UDL — sensor LoRaWAN (Classe A) que monitora distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -1054,6 +1089,7 @@
 				"pt-BR": "Milesight GS301 — sensor LoRaWAN (Classe A) que monitora temperatura, umidade e qualidade do ar. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -1084,6 +1120,7 @@
 				"pt-BR": "Milesight TS101 — sensor LoRaWAN (Classe A) que monitora temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -1110,6 +1147,7 @@
 				"pt-BR": "Milesight TS201 — sensor LoRaWAN (Classe A) que monitora temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -1136,6 +1174,7 @@
 				"pt-BR": "Milesight TS301 — sensor LoRaWAN (Classe A) que monitora temperatura e status de abertura/fechamento. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"door"
@@ -1164,6 +1203,7 @@
 				"pt-BR": "Milesight TS302 — sensor LoRaWAN (Classe A) que monitora temperatura e status de abertura/fechamento. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"door"
@@ -1192,6 +1232,7 @@
 				"pt-BR": "Milesight TS601 — sensor LoRaWAN (Classe A) que monitora temperatura e umidade. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity"
@@ -1220,6 +1261,7 @@
 				"pt-BR": "Milesight TS602 — sensor LoRaWAN (Classe A) que monitora temperatura e umidade. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity"
@@ -1248,6 +1290,7 @@
 				"pt-BR": "Milesight VS121 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"passage_counter"
 			],
@@ -1274,6 +1317,7 @@
 				"pt-BR": "Milesight VS121-P — sensor HTTP que monitora contagem de pessoas. Reporta JSON periódico via HTTP/MQTT."
 			},
 			"protocol": "http",
+			"category": "iot",
 			"readingTypes": [
 				"passage_counter"
 			],
@@ -1300,6 +1344,7 @@
 				"pt-BR": "Milesight VS133 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"passage_counter"
 			],
@@ -1326,6 +1371,7 @@
 				"pt-BR": "Milesight VS133-P — sensor HTTP que monitora contagem de pessoas. Reporta JSON periódico via HTTP/MQTT."
 			},
 			"protocol": "http",
+			"category": "iot",
 			"readingTypes": [
 				"passage_counter"
 			],
@@ -1352,6 +1398,7 @@
 				"pt-BR": "Milesight VS135 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"passage_counter"
 			],
@@ -1378,6 +1425,7 @@
 				"pt-BR": "Milesight VS135-P — sensor HTTP que monitora contagem de pessoas. Reporta JSON periódico via HTTP/MQTT."
 			},
 			"protocol": "http",
+			"category": "iot",
 			"readingTypes": [
 				"passage_counter"
 			],
@@ -1404,6 +1452,7 @@
 				"pt-BR": "Milesight VS330 — sensor LoRaWAN (Classe A) que monitora distância / nível e presença / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance",
 				"motion"
@@ -1432,6 +1481,7 @@
 				"pt-BR": "Milesight VS340 — sensor LoRaWAN (Classe A) que monitora presença / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"motion"
 			],
@@ -1458,6 +1508,7 @@
 				"pt-BR": "Milesight VS341 — sensor LoRaWAN (Classe A) que monitora presença / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"motion"
 			],
@@ -1484,6 +1535,7 @@
 				"pt-BR": "Milesight VS350 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"passage_counter",
 				"temperature"
@@ -1512,6 +1564,7 @@
 				"pt-BR": "Milesight VS351 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"passage_counter",
 				"temperature"
@@ -1540,6 +1593,7 @@
 				"pt-BR": "Milesight VS360 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"passage_counter"
 			],
@@ -1566,6 +1620,7 @@
 				"pt-BR": "Milesight VS361 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"passage_counter"
 			],
@@ -1592,6 +1647,7 @@
 				"pt-BR": "Milesight VS370 — sensor LoRaWAN (Classe A) que monitora presença / movimento e luz / iluminância. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"motion",
 				"light"
@@ -1620,6 +1676,7 @@
 				"pt-BR": "Milesight VS373 — sensor LoRaWAN (Classe A) que monitora presença / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"motion"
 			],
@@ -1646,6 +1703,7 @@
 				"pt-BR": "Milesight WS101 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"button"
 			],
@@ -1672,6 +1730,7 @@
 				"pt-BR": "Milesight WS156 — sensor LoRaWAN (Classe A) que monitora acionamentos de botão. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"button"
 			],
@@ -1698,6 +1757,7 @@
 				"pt-BR": "Milesight WS201 — sensor LoRaWAN (Classe A) que monitora distância / nível. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"distance"
 			],
@@ -1724,6 +1784,7 @@
 				"pt-BR": "Milesight WS202 — sensor LoRaWAN (Classe A) que monitora presença / movimento e luz / iluminância. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"motion",
 				"light"
@@ -1752,6 +1813,7 @@
 				"pt-BR": "Milesight WS203 — sensor LoRaWAN (Classe A) que monitora temperatura, umidade e presença / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -1782,6 +1844,7 @@
 				"pt-BR": "Milesight WS301 — sensor LoRaWAN (Classe A) que monitora status de abertura/fechamento. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"door"
 			],
@@ -1808,6 +1871,7 @@
 				"pt-BR": "Milesight WS302 — sensor LoRaWAN (Classe A) que monitora nível de som. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"noise"
 			],
@@ -1834,6 +1898,7 @@
 				"pt-BR": "Milesight WS303 — sensor LoRaWAN (Classe A) que monitora vazamento de água. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"water_leak"
 			],
@@ -1860,6 +1925,7 @@
 				"pt-BR": "Milesight WS501 — sensor LoRaWAN (Classe A) que monitora entradas dry-contact / pulso e acionamentos de botão. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"dry_contact",
 				"button"
@@ -1888,6 +1954,7 @@
 				"pt-BR": "Milesight WS502 — sensor LoRaWAN (Classe A) que monitora entradas dry-contact / pulso e acionamentos de botão. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"dry_contact",
 				"button"
@@ -1916,6 +1983,7 @@
 				"pt-BR": "Milesight WS503 — sensor LoRaWAN (Classe A) que monitora entradas dry-contact / pulso e acionamentos de botão. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"dry_contact",
 				"button"
@@ -1944,6 +2012,7 @@
 				"pt-BR": "Milesight WS513 — sensor LoRaWAN (Classe A) que monitora corrente elétrica, tensão / energia e entradas dry-contact / pulso. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"current",
 				"voltage",
@@ -1974,6 +2043,7 @@
 				"pt-BR": "Milesight WS515 — sensor LoRaWAN (Classe A) que monitora corrente elétrica, tensão / energia e entradas dry-contact / pulso. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"current",
 				"voltage",
@@ -2004,6 +2074,7 @@
 				"pt-BR": "Milesight WS523 — sensor LoRaWAN (Classe A) que monitora corrente elétrica, tensão / energia e entradas dry-contact / pulso. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"current",
 				"voltage",
@@ -2034,6 +2105,7 @@
 				"pt-BR": "Milesight WS558 — sensor LoRaWAN (Classe A) que monitora corrente elétrica, tensão / energia e entradas dry-contact / pulso. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"current",
 				"voltage",
@@ -2064,6 +2136,7 @@
 				"pt-BR": "Milesight WT101 — sensor LoRaWAN (Classe A) que monitora temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature"
 			],
@@ -2090,6 +2163,7 @@
 				"pt-BR": "Milesight WT201 — sensor LoRaWAN (Classe A) que monitora temperatura e umidade. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity"
@@ -2118,6 +2192,7 @@
 				"pt-BR": "Milesight WT303-WT304 — sensor LoRaWAN (Classe A) que monitora temperatura e umidade. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity"
@@ -2146,6 +2221,7 @@
 				"pt-BR": "Milesight WT401 — sensor LoRaWAN (Classe A) que monitora temperatura, umidade e presença / movimento. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",
@@ -2176,6 +2252,7 @@
 				"pt-BR": "Milesight WTS506 — sensor LoRaWAN (Classe A) que monitora temperatura, umidade, velocidade e direção do vento, pressão barométrica e chuva. Os uplinks são quadros channel-TLV no FPort 85."
 			},
 			"protocol": "lorawan",
+			"category": "iot",
 			"readingTypes": [
 				"temperature",
 				"humidity",

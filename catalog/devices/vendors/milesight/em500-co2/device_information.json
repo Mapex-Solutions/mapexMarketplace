@@ -11,6 +11,7 @@
 		"pt-BR": "Milesight EM500-CO2 — sensor LoRaWAN (Classe A) que monitora CO₂, temperatura, umidade e pressão barométrica. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"co2",
 		"temperature",

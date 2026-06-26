@@ -11,6 +11,7 @@
 		"pt-BR": "Milesight VS350 — sensor LoRaWAN (Classe A) que monitora contagem de pessoas e temperatura. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"passage_counter",
 		"temperature"

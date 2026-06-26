@@ -11,6 +11,7 @@
 		"pt-BR": "Elsys ERS-Eye — sensor LoRaWAN (Classe A) de ambiente interno que monitora movimento, temperatura, umidade e luz. Os uplinks são quadros TLV Elsys no FPort 5."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"motion",
 		"temperature",

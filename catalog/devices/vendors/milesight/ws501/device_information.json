@@ -11,6 +11,7 @@
 		"pt-BR": "Milesight WS501 — sensor LoRaWAN (Classe A) que monitora entradas dry-contact / pulso e acionamentos de botão. Os uplinks são quadros channel-TLV no FPort 85."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"dry_contact",
 		"button"

@@ -11,6 +11,7 @@
 		"pt-BR": "Elsys ELT-Ultrasonic — sensor LoRaWAN (Classe A) de ambiente interno que monitora distância, temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"distance",
 		"temperature",

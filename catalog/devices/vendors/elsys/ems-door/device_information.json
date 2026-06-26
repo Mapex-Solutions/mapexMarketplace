@@ -11,6 +11,7 @@
 		"pt-BR": "Elsys EMS-Door — sensor LoRaWAN (Classe A) de ambiente interno que monitora status de abertura/fechamento (porta), temperatura e umidade. Os uplinks são quadros TLV Elsys no FPort 5."
 	},
 	"protocol": "lorawan",
+	"category": "iot",
 	"readingTypes": [
 		"door",
 		"temperature",

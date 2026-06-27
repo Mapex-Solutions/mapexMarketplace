@@ -1,0 +1,232 @@
+{
+  "$schema": "mapex-plugin",
+  "pluginId": "mqtt",
+  "name": "MQTT",
+  "description": "Publish messages to MQTT brokers with configurable QoS and retain",
+  "enabled": true,
+  "version": "1.0.0",
+  "category": "iot",
+  "icon": "sensors",
+  "color": "#660066",
+  "author": "Mapex Solutions",
+  "tags": [
+    "iot",
+    "mqtt",
+    "broker",
+    "publish",
+    "devices"
+  ],
+  "defaults": {
+    "timeout": 30000
+  },
+  "metadata": {
+    "brandIcon": "mqtt/icon.svg",
+    "color": "#660066",
+    "docs": "https://mqtt.org/mqtt-specification/"
+  },
+  "credentials": [
+    {
+      "id": "mqttBroker",
+      "name": "MQTT Broker",
+      "fields": [
+        {
+          "name": "host",
+          "displayName": "Broker Host",
+          "type": "string",
+          "required": true,
+          "hint": "e.g., broker.hivemq.com, localhost"
+        },
+        {
+          "name": "port",
+          "displayName": "Broker Port",
+          "type": "number",
+          "required": true,
+          "hint": "1883 (plain) or 8883 (TLS)"
+        },
+        {
+          "name": "username",
+          "displayName": "Username",
+          "type": "string",
+          "required": false,
+          "hint": "Leave empty if no authentication"
+        },
+        {
+          "name": "password",
+          "displayName": "Password",
+          "type": "string",
+          "required": false,
+          "isSecret": true
+        },
+        {
+          "name": "clientId",
+          "displayName": "Client ID",
+          "type": "string",
+          "required": false,
+          "hint": "Auto-generated if empty"
+        },
+        {
+          "name": "useTLS",
+          "displayName": "Use TLS",
+          "type": "boolean",
+          "required": false,
+          "hint": "Enable TLS/SSL encryption"
+        }
+      ],
+      "test": {
+        "type": "mqtt",
+        "mqtt": {
+          "action": "connect"
+        }
+      },
+      "type": "manual"
+    }
+  ],
+  "nodeTypes": [
+    {
+      "type": "mqtt/publish",
+      "label": "MQTT Publish",
+      "icon": "sensors",
+      "color": "#660066",
+      "description": "Publish messages to MQTT topics",
+      "timeout": {
+        "duration": 30,
+        "unit": "seconds",
+        "enableOutput": false
+      },
+      "inputs": [
+        {
+          "id": "in",
+          "label": "In",
+          "position": "top"
+        }
+      ],
+      "outputs": [
+        {
+          "id": "success",
+          "label": "Success",
+          "position": "bottom",
+          "color": "#4caf50"
+        },
+        {
+          "id": "error",
+          "label": "Error",
+          "position": "bottom",
+          "color": "#ef5350"
+        }
+      ],
+      "properties": [
+        {
+          "name": "operation",
+          "displayName": "Operation",
+          "type": "options",
+          "default": "publish",
+          "options": [
+            {
+              "label": "Publish Message",
+              "value": "publish"
+            }
+          ]
+        },
+        {
+          "name": "topic",
+          "displayName": "Topic",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "allowedSources": [
+            "literal",
+            "state",
+            "event",
+            "nodeOutput"
+          ],
+          "hint": "MQTT topic (e.g., devices/sensor01/commands)"
+        },
+        {
+          "name": "payload",
+          "displayName": "Payload",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "rendering": {
+            "multiline": true,
+            "rows": 6
+          },
+          "allowedSources": [
+            "literal",
+            "state",
+            "event",
+            "nodeOutput"
+          ],
+          "hint": "Message payload (string or JSON)"
+        },
+        {
+          "name": "qos",
+          "displayName": "QoS Level",
+          "type": "options",
+          "default": "0",
+          "options": [
+            {
+              "label": "0 — At most once (fire and forget)",
+              "value": "0"
+            },
+            {
+              "label": "1 — At least once (acknowledged)",
+              "value": "1"
+            },
+            {
+              "label": "2 — Exactly once (assured delivery)",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "name": "retain",
+          "displayName": "Retain Message",
+          "type": "boolean",
+          "default": false,
+          "hint": "Broker stores the last message for new subscribers"
+        }
+      ],
+      "operations": {
+        "publish": {
+          "type": "mqtt",
+          "mqtt": {
+            "host": "{{credentials.host}}",
+            "port": "{{credentials.port}}",
+            "username": "{{credentials.username}}",
+            "password": "{{credentials.password}}",
+            "clientId": "{{credentials.clientId}}",
+            "useTLS": "{{credentials.useTLS}}",
+            "topic": "{{config.topic}}",
+            "payload": "{{config.payload}}",
+            "qos": "{{config.qos}}",
+            "retain": "{{config.retain}}"
+          }
+        }
+      },
+      "availableOutputs": [
+        {
+          "path": "topic",
+          "description": "Topic the message was published to"
+        },
+        {
+          "path": "messageId",
+          "description": "MQTT packet identifier (QoS 1/2 only)"
+        }
+      ],
+      "errorHandler": {
+        "enabled": false,
+        "maxAttempts": 3,
+        "initialInterval": 5,
+        "intervalUnit": "seconds",
+        "backoffMultiplier": 2.0
+      }
+    }
+  ]
+}

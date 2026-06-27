@@ -1,0 +1,37 @@
+{
+	"$schema": "mapex-plugin-catalog-config/v1",
+	"categories": [
+		{
+			"value": "messaging",
+			"label": "Messaging",
+			"icon": "mdi-chat"
+		},
+		{
+			"value": "email",
+			"label": "Email",
+			"icon": "mdi-email"
+		},
+		{
+			"value": "iot",
+			"label": "IoT",
+			"icon": "mdi-access-point"
+		},
+		{
+			"value": "integration",
+			"label": "Integration",
+			"icon": "mdi-api"
+		}
+	],
+	"capabilities": [
+		{
+			"value": "action",
+			"label": "Action",
+			"icon": "mdi-play"
+		},
+		{
+			"value": "trigger",
+			"label": "Trigger",
+			"icon": "mdi-flash"
+		}
+	]
+}

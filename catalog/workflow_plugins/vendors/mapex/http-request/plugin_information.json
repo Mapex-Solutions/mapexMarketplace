@@ -1,0 +1,329 @@
+{
+  "$schema": "mapex-plugin",
+  "pluginId": "http-request",
+  "name": "HTTP Request",
+  "description": "Make HTTP requests to any REST API with configurable method, headers and authentication",
+  "enabled": true,
+  "version": "1.0.0",
+  "category": "integration",
+  "icon": "language",
+  "color": "#FF6D00",
+  "author": "Mapex Solutions",
+  "tags": [
+    "http",
+    "rest",
+    "api",
+    "webhook",
+    "integration"
+  ],
+  "defaults": {
+    "timeout": 30000
+  },
+  "metadata": {
+    "brandIcon": "http-request/icon.svg",
+    "color": "#FF6D00",
+    "docs": "https://developer.mozilla.org/en-US/docs/Web/HTTP"
+  },
+  "credentials": [
+    {
+      "id": "noAuth",
+      "name": "No Authentication",
+      "fields": [],
+      "type": "manual"
+    },
+    {
+      "id": "bearerToken",
+      "name": "Bearer Token",
+      "fields": [
+        {
+          "name": "token",
+          "displayName": "Token",
+          "type": "string",
+          "required": true,
+          "isSecret": true,
+          "hint": "Bearer token value (without the 'Bearer ' prefix)"
+        }
+      ],
+      "type": "manual"
+    },
+    {
+      "id": "basicAuth",
+      "name": "Basic Authentication",
+      "fields": [
+        {
+          "name": "username",
+          "displayName": "Username",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "password",
+          "displayName": "Password",
+          "type": "string",
+          "required": true,
+          "isSecret": true
+        }
+      ],
+      "type": "manual"
+    },
+    {
+      "id": "apiKey",
+      "name": "API Key",
+      "fields": [
+        {
+          "name": "headerName",
+          "displayName": "Header Name",
+          "type": "string",
+          "required": true,
+          "hint": "e.g., X-API-Key, Authorization"
+        },
+        {
+          "name": "headerValue",
+          "displayName": "Header Value",
+          "type": "string",
+          "required": true,
+          "isSecret": true
+        }
+      ],
+      "type": "manual"
+    }
+  ],
+  "nodeTypes": [
+    {
+      "type": "http-request/request",
+      "label": "HTTP Request",
+      "icon": "language",
+      "color": "#FF6D00",
+      "description": "Make HTTP requests to any REST API endpoint",
+      "timeout": {
+        "duration": 30,
+        "unit": "seconds",
+        "enableOutput": false
+      },
+      "inputs": [
+        {
+          "id": "in",
+          "label": "In",
+          "position": "top"
+        }
+      ],
+      "outputs": [
+        {
+          "id": "success",
+          "label": "Success",
+          "position": "bottom",
+          "color": "#4caf50"
+        },
+        {
+          "id": "error",
+          "label": "Error",
+          "position": "bottom",
+          "color": "#ef5350"
+        }
+      ],
+      "properties": [
+        {
+          "name": "operation",
+          "displayName": "Operation",
+          "type": "options",
+          "default": "request",
+          "options": [
+            {
+              "label": "Make Request",
+              "value": "request"
+            }
+          ]
+        },
+        {
+          "name": "method",
+          "displayName": "Method",
+          "type": "options",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            },
+            {
+              "label": "HEAD",
+              "value": "HEAD"
+            }
+          ]
+        },
+        {
+          "name": "url",
+          "displayName": "URL",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "allowedSources": [
+            "literal",
+            "state",
+            "event",
+            "nodeOutput"
+          ],
+          "hint": "Full URL including protocol (e.g., https://api.example.com/endpoint)"
+        },
+        {
+          "name": "headers",
+          "displayName": "Headers (JSON)",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "rendering": {
+            "multiline": true,
+            "rows": 4
+          },
+          "allowedSources": [
+            "literal",
+            "state",
+            "event",
+            "nodeOutput"
+          ],
+          "hint": "JSON object with custom headers (e.g., {\"X-Custom\": \"value\"})"
+        },
+        {
+          "name": "body",
+          "displayName": "Body",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "rendering": {
+            "multiline": true,
+            "rows": 8
+          },
+          "allowedSources": [
+            "literal",
+            "state",
+            "event",
+            "nodeOutput"
+          ],
+          "hint": "Request body (JSON, form data, or plain text)",
+          "displayOptions": {
+            "show": {
+              "method": [
+                "POST",
+                "PUT",
+                "PATCH"
+              ]
+            }
+          }
+        },
+        {
+          "name": "contentType",
+          "displayName": "Content-Type",
+          "type": "options",
+          "default": "application/json",
+          "options": [
+            {
+              "label": "JSON (application/json)",
+              "value": "application/json"
+            },
+            {
+              "label": "Form URL-Encoded",
+              "value": "application/x-www-form-urlencoded"
+            },
+            {
+              "label": "Plain Text",
+              "value": "text/plain"
+            },
+            {
+              "label": "XML",
+              "value": "application/xml"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "method": [
+                "POST",
+                "PUT",
+                "PATCH"
+              ]
+            }
+          }
+        },
+        {
+          "name": "timeout",
+          "displayName": "Timeout (ms)",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": "30000"
+          },
+          "hint": "Request timeout in milliseconds"
+        },
+        {
+          "name": "followRedirects",
+          "displayName": "Follow Redirects",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "name": "ignoreSslErrors",
+          "displayName": "Ignore SSL Errors",
+          "type": "boolean",
+          "default": false,
+          "hint": "Not recommended for production"
+        }
+      ],
+      "operations": {
+        "request": {
+          "type": "http",
+          "http": {
+            "method": "{{config.method}}",
+            "path": "{{config.url}}",
+            "headers": "{{config.headers}}",
+            "body": "{{config.body}}",
+            "timeout": "{{config.timeout}}",
+            "followRedirects": "{{config.followRedirects}}",
+            "ignoreSslErrors": "{{config.ignoreSslErrors}}"
+          }
+        }
+      },
+      "availableOutputs": [
+        {
+          "path": "statusCode",
+          "description": "HTTP status code"
+        },
+        {
+          "path": "headers",
+          "description": "Response headers object"
+        },
+        {
+          "path": "body",
+          "description": "Response body (parsed JSON or raw text)"
+        }
+      ],
+      "errorHandler": {
+        "enabled": false,
+        "maxAttempts": 3,
+        "initialInterval": 5,
+        "intervalUnit": "seconds",
+        "backoffMultiplier": 2.0
+      }
+    }
+  ]
+}

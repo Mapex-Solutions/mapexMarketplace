@@ -2,6 +2,7 @@ package configMod
 
 import (
 	devicesModule "mapexmarketplace/src/modules/devices"
+	workflowpluginsModule "mapexmarketplace/src/modules/workflowplugins"
 )
 
 // ModuleDefinition describes a marketplace module's init phases. Each phase
@@ -23,5 +24,11 @@ var Modules = []ModuleDefinition{
 		InitRepositories: devicesModule.InitRepositories,
 		InitServices:     devicesModule.InitServices,
 		InitInterfaces:   devicesModule.InitInterfaces,
+	},
+	{
+		Name:             "WorkflowPlugins",
+		InitRepositories: workflowpluginsModule.InitRepositories,
+		InitServices:     workflowpluginsModule.InitServices,
+		InitInterfaces:   workflowpluginsModule.InitInterfaces,
 	},
 }

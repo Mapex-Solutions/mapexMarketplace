@@ -1,0 +1,211 @@
+{
+  "$schema": "mapex-plugin",
+  "pluginId": "teams",
+  "name": "Microsoft Teams",
+  "description": "Send messages and Adaptive Cards to Microsoft Teams channels via Workflows",
+  "enabled": true,
+  "version": "1.0.0",
+  "category": "messaging",
+  "icon": "groups",
+  "color": "#6264A7",
+  "author": "Mapex Solutions",
+  "tags": [
+    "messaging",
+    "chat",
+    "notifications",
+    "enterprise"
+  ],
+  "defaults": {
+    "timeout": 30000
+  },
+  "metadata": {
+    "brandIcon": "teams/icon.svg",
+    "color": "#6264A7",
+    "docs": "https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook"
+  },
+  "credentials": [
+    {
+      "id": "teamsWorkflow",
+      "name": "Teams Workflow Webhook",
+      "fields": [
+        {
+          "name": "webhookUrl",
+          "displayName": "Workflow Webhook URL",
+          "type": "string",
+          "required": true,
+          "isSecret": true,
+          "hint": "From Teams → Channel → Workflows → 'Post to a channel when a webhook request is received'"
+        }
+      ],
+      "type": "manual"
+    }
+  ],
+  "nodeTypes": [
+    {
+      "type": "teams/message",
+      "label": "Teams Message",
+      "icon": "groups",
+      "color": "#6264A7",
+      "description": "Send messages and Adaptive Cards to Microsoft Teams channels",
+      "timeout": {
+        "duration": 30,
+        "unit": "seconds",
+        "enableOutput": false
+      },
+      "inputs": [
+        {
+          "id": "in",
+          "label": "In",
+          "position": "top"
+        }
+      ],
+      "outputs": [
+        {
+          "id": "success",
+          "label": "Success",
+          "position": "bottom",
+          "color": "#4caf50"
+        },
+        {
+          "id": "error",
+          "label": "Error",
+          "position": "bottom",
+          "color": "#ef5350"
+        }
+      ],
+      "properties": [
+        {
+          "name": "operation",
+          "displayName": "Operation",
+          "type": "options",
+          "default": "sendText",
+          "options": [
+            {
+              "label": "Send Text",
+              "value": "sendText"
+            },
+            {
+              "label": "Send Adaptive Card",
+              "value": "sendAdaptiveCard"
+            }
+          ]
+        },
+        {
+          "name": "text",
+          "displayName": "Text",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "rendering": {
+            "multiline": true,
+            "rows": 4
+          },
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendText"
+              ]
+            }
+          }
+        },
+        {
+          "name": "cardPayload",
+          "displayName": "Adaptive Card JSON",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "rendering": {
+            "multiline": true,
+            "rows": 12
+          },
+          "hint": "Adaptive Card JSON. Design at https://adaptivecards.io/designer/",
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendAdaptiveCard"
+              ]
+            }
+          }
+        }
+      ],
+      "operations": {
+        "sendText": {
+          "type": "http",
+          "http": {
+            "method": "POST",
+            "path": "{{credentials.webhookUrl}}",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "type": "message",
+              "attachments": [
+                {
+                  "contentType": "application/vnd.microsoft.card.adaptive",
+                  "contentUrl": null,
+                  "content": {
+                    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                    "type": "AdaptiveCard",
+                    "version": "1.4",
+                    "body": [
+                      {
+                        "type": "TextBlock",
+                        "text": "{{config.text}}",
+                        "wrap": true
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "output": {
+            "dataPath": ""
+          }
+        },
+        "sendAdaptiveCard": {
+          "type": "http",
+          "http": {
+            "method": "POST",
+            "path": "{{credentials.webhookUrl}}",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "type": "message",
+              "attachments": [
+                {
+                  "contentType": "application/vnd.microsoft.card.adaptive",
+                  "contentUrl": null,
+                  "content": "{{config.cardPayload}}"
+                }
+              ]
+            }
+          },
+          "output": {
+            "dataPath": ""
+          }
+        }
+      },
+      "availableOutputs": [
+        {
+          "path": "statusCode",
+          "description": "HTTP status code (202 = accepted)"
+        }
+      ],
+      "errorHandler": {
+        "enabled": false,
+        "maxAttempts": 3,
+        "initialInterval": 5,
+        "intervalUnit": "seconds",
+        "backoffMultiplier": 2.0
+      }
+    }
+  ]
+}

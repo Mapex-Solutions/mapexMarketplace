@@ -1,0 +1,652 @@
+{
+  "$schema": "mapex-plugin",
+  "pluginId": "telegram",
+  "name": "Telegram",
+  "description": "Send messages, photos and manage chats via Telegram Bot API",
+  "enabled": true,
+  "version": "1.0.0",
+  "category": "messaging",
+  "icon": "send",
+  "color": "#0088CC",
+  "author": "Mapex Solutions",
+  "tags": [
+    "messaging",
+    "chat",
+    "bot",
+    "notifications"
+  ],
+  "defaults": {
+    "baseUrl": "https://api.telegram.org",
+    "timeout": 30000
+  },
+  "metadata": {
+    "brandIcon": "telegram/icon.svg",
+    "color": "#0088CC",
+    "docs": "https://core.telegram.org/bots/api"
+  },
+  "credentials": [
+    {
+      "id": "telegramApi",
+      "name": "Telegram Bot API",
+      "fields": [
+        {
+          "name": "botToken",
+          "displayName": "Bot Token",
+          "type": "string",
+          "required": true,
+          "isSecret": true,
+          "hint": "Obtain from @BotFather on Telegram"
+        }
+      ],
+      "test": {
+        "type": "http",
+        "http": {
+          "method": "GET",
+          "path": "/bot{{botToken}}/getMe"
+        }
+      },
+      "type": "manual"
+    }
+  ],
+  "fetchOptions": {
+    "getChats": {
+      "type": "http",
+      "http": {
+        "method": "GET",
+        "path": "/bot{{credentials.botToken}}/getUpdates?limit=200"
+      },
+      "output": {
+        "transform": "function transform(data) { var seen = {}; var result = []; for (var i = 0; i < data.result.length; i++) { var msg = data.result[i].message || data.result[i].edited_message || data.result[i].channel_post; if (!msg || !msg.chat) continue; var id = String(msg.chat.id); if (seen[id]) continue; seen[id] = true; result.push({ label: msg.chat.title || msg.chat.first_name || id, value: id }); } return result; }"
+      }
+    }
+  },
+  "nodeTypes": [
+    {
+      "type": "telegram/message",
+      "label": "Telegram Message",
+      "icon": "send",
+      "color": "#0088CC",
+      "description": "Send and manage messages via Telegram Bot API",
+      "timeout": {
+        "duration": 30,
+        "unit": "seconds",
+        "enableOutput": false
+      },
+      "inputs": [
+        {
+          "id": "in",
+          "label": "In",
+          "position": "top"
+        }
+      ],
+      "outputs": [
+        {
+          "id": "success",
+          "label": "Success",
+          "position": "bottom",
+          "color": "#4caf50"
+        },
+        {
+          "id": "error",
+          "label": "Error",
+          "position": "bottom",
+          "color": "#ef5350"
+        }
+      ],
+      "properties": [
+        {
+          "name": "operation",
+          "displayName": "Operation",
+          "type": "options",
+          "default": "sendText",
+          "options": [
+            {
+              "label": "Send Text",
+              "value": "sendText"
+            },
+            {
+              "label": "Send Photo",
+              "value": "sendPhoto"
+            },
+            {
+              "label": "Send Video",
+              "value": "sendVideo"
+            },
+            {
+              "label": "Send Document",
+              "value": "sendDocument"
+            },
+            {
+              "label": "Edit Text",
+              "value": "editText"
+            },
+            {
+              "label": "Delete",
+              "value": "delete"
+            }
+          ]
+        },
+        {
+          "name": "chatIdNotice",
+          "displayName": "Chat Discovery",
+          "type": "notice",
+          "default": "The chat list is populated from recent Telegram updates (last 24h). If no chats appear, switch to Manual and enter the Chat ID directly.",
+          "noticeType": "info"
+        },
+        {
+          "name": "chatId",
+          "displayName": "Chat ID",
+          "type": "fieldSource",
+          "default": {
+            "type": "fetchOptions",
+            "value": ""
+          },
+          "required": true,
+          "allowedSources": [
+            "fetchOptions",
+            "literal",
+            "state",
+            "event",
+            "nodeOutput"
+          ],
+          "fetchOptions": {
+            "rules": [
+              {
+                "when": {},
+                "key": "getChats",
+                "label": "Search Chats"
+              }
+            ]
+          },
+          "hint": "Numeric chat ID or @username of channel"
+        },
+        {
+          "name": "text",
+          "displayName": "Text",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "rendering": {
+            "multiline": true,
+            "rows": 4
+          },
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendText"
+              ]
+            }
+          }
+        },
+        {
+          "name": "photo",
+          "displayName": "Photo URL",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "hint": "Public image URL",
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendPhoto"
+              ]
+            }
+          }
+        },
+        {
+          "name": "video",
+          "displayName": "Video URL",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "hint": "Public video URL or file_id. Telegram supports MP4 videos.",
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendVideo"
+              ]
+            }
+          }
+        },
+        {
+          "name": "document",
+          "displayName": "Document URL",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "hint": "Public file URL or file_id",
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendDocument"
+              ]
+            }
+          }
+        },
+        {
+          "name": "caption",
+          "displayName": "Caption",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "rendering": {
+            "multiline": true
+          },
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendPhoto",
+                "sendVideo",
+                "sendDocument"
+              ]
+            }
+          }
+        },
+        {
+          "name": "messageId",
+          "displayName": "Message ID",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "editText",
+                "delete"
+              ]
+            }
+          }
+        },
+        {
+          "name": "newText",
+          "displayName": "New Text",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "rendering": {
+            "multiline": true,
+            "rows": 4
+          },
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "editText"
+              ]
+            }
+          }
+        },
+        {
+          "name": "parseMode",
+          "displayName": "Parse Mode",
+          "type": "options",
+          "default": "HTML",
+          "options": [
+            {
+              "label": "None",
+              "value": ""
+            },
+            {
+              "label": "HTML",
+              "value": "HTML"
+            },
+            {
+              "label": "MarkdownV2",
+              "value": "MarkdownV2"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendText",
+                "sendPhoto",
+                "sendVideo",
+                "sendDocument",
+                "editText"
+              ]
+            }
+          }
+        },
+        {
+          "name": "disableNotification",
+          "displayName": "Silent Message",
+          "type": "boolean",
+          "default": false,
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendText",
+                "sendPhoto",
+                "sendVideo",
+                "sendDocument"
+              ]
+            }
+          }
+        },
+        {
+          "name": "protectContent",
+          "displayName": "Protect Content",
+          "type": "boolean",
+          "default": false,
+          "hint": "Prevents forwarding and saving",
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendText",
+                "sendPhoto",
+                "sendVideo",
+                "sendDocument"
+              ]
+            }
+          }
+        }
+      ],
+      "operations": {
+        "sendText": {
+          "type": "http",
+          "http": {
+            "method": "POST",
+            "path": "{{manifest.defaults.baseUrl}}/bot{{credentials.botToken}}/sendMessage",
+            "body": {
+              "chat_id": "{{config.chatId}}",
+              "text": "{{config.text}}",
+              "parse_mode": "{{config.parseMode}}",
+              "disable_notification": "{{config.disableNotification}}",
+              "protect_content": "{{config.protectContent}}"
+            }
+          },
+          "output": {
+            "dataPath": "result"
+          }
+        },
+        "sendPhoto": {
+          "type": "http",
+          "http": {
+            "method": "POST",
+            "path": "{{manifest.defaults.baseUrl}}/bot{{credentials.botToken}}/sendPhoto",
+            "body": {
+              "chat_id": "{{config.chatId}}",
+              "photo": "{{config.photo}}",
+              "caption": "{{config.caption}}",
+              "parse_mode": "{{config.parseMode}}",
+              "disable_notification": "{{config.disableNotification}}",
+              "protect_content": "{{config.protectContent}}"
+            }
+          },
+          "output": {
+            "dataPath": "result"
+          }
+        },
+        "sendVideo": {
+          "type": "http",
+          "http": {
+            "method": "POST",
+            "path": "{{manifest.defaults.baseUrl}}/bot{{credentials.botToken}}/sendVideo",
+            "body": {
+              "chat_id": "{{config.chatId}}",
+              "video": "{{config.video}}",
+              "caption": "{{config.caption}}",
+              "parse_mode": "{{config.parseMode}}",
+              "disable_notification": "{{config.disableNotification}}",
+              "protect_content": "{{config.protectContent}}"
+            }
+          },
+          "output": {
+            "dataPath": "result"
+          }
+        },
+        "sendDocument": {
+          "type": "http",
+          "http": {
+            "method": "POST",
+            "path": "{{manifest.defaults.baseUrl}}/bot{{credentials.botToken}}/sendDocument",
+            "body": {
+              "chat_id": "{{config.chatId}}",
+              "document": "{{config.document}}",
+              "caption": "{{config.caption}}",
+              "parse_mode": "{{config.parseMode}}",
+              "disable_notification": "{{config.disableNotification}}",
+              "protect_content": "{{config.protectContent}}"
+            }
+          },
+          "output": {
+            "dataPath": "result"
+          }
+        },
+        "editText": {
+          "type": "http",
+          "http": {
+            "method": "POST",
+            "path": "{{manifest.defaults.baseUrl}}/bot{{credentials.botToken}}/editMessageText",
+            "body": {
+              "chat_id": "{{config.chatId}}",
+              "message_id": "{{config.messageId}}",
+              "text": "{{config.newText}}",
+              "parse_mode": "{{config.parseMode}}"
+            }
+          },
+          "output": {
+            "dataPath": "result"
+          }
+        },
+        "delete": {
+          "type": "http",
+          "http": {
+            "method": "POST",
+            "path": "{{manifest.defaults.baseUrl}}/bot{{credentials.botToken}}/deleteMessage",
+            "body": {
+              "chat_id": "{{config.chatId}}",
+              "message_id": "{{config.messageId}}"
+            }
+          },
+          "output": {
+            "dataPath": "result"
+          }
+        }
+      },
+      "availableOutputs": [
+        {
+          "path": "message_id",
+          "description": "ID of the sent message"
+        },
+        {
+          "path": "chat.id",
+          "description": "Chat ID"
+        },
+        {
+          "path": "date",
+          "description": "Unix timestamp"
+        },
+        {
+          "path": "text",
+          "description": "Text content of the sent message"
+        },
+        {
+          "path": "from.id",
+          "description": "Bot user ID (sender)"
+        },
+        {
+          "path": "from.username",
+          "description": "Bot username (sender)"
+        }
+      ],
+      "errorHandler": {
+        "enabled": false,
+        "maxAttempts": 3,
+        "initialInterval": 5,
+        "intervalUnit": "seconds",
+        "backoffMultiplier": 2.0
+      }
+    },
+    {
+      "type": "telegram/chat",
+      "label": "Telegram Chat",
+      "icon": "forum",
+      "color": "#0088CC",
+      "description": "Get chat info and manage Telegram chats",
+      "timeout": {
+        "duration": 30,
+        "unit": "seconds",
+        "enableOutput": false
+      },
+      "inputs": [
+        {
+          "id": "in",
+          "label": "In",
+          "position": "top"
+        }
+      ],
+      "outputs": [
+        {
+          "id": "success",
+          "label": "Success",
+          "position": "bottom",
+          "color": "#4caf50"
+        },
+        {
+          "id": "error",
+          "label": "Error",
+          "position": "bottom",
+          "color": "#ef5350"
+        }
+      ],
+      "properties": [
+        {
+          "name": "operation",
+          "displayName": "Operation",
+          "type": "options",
+          "default": "getInfo",
+          "options": [
+            {
+              "label": "Get Info",
+              "value": "getInfo"
+            },
+            {
+              "label": "Get Admins",
+              "value": "getAdmins"
+            },
+            {
+              "label": "Get Member Count",
+              "value": "getMemberCount"
+            }
+          ]
+        },
+        {
+          "name": "chatIdNotice",
+          "displayName": "Chat Discovery",
+          "type": "notice",
+          "default": "The chat list is populated from recent Telegram updates (last 24h). If no chats appear, switch to Manual and enter the Chat ID directly.",
+          "noticeType": "info"
+        },
+        {
+          "name": "chatId",
+          "displayName": "Chat ID",
+          "type": "fieldSource",
+          "default": {
+            "type": "fetchOptions",
+            "value": ""
+          },
+          "required": true,
+          "allowedSources": [
+            "fetchOptions",
+            "literal",
+            "state",
+            "event",
+            "nodeOutput"
+          ],
+          "fetchOptions": {
+            "rules": [
+              {
+                "when": {},
+                "key": "getChats",
+                "label": "Search Chats"
+              }
+            ]
+          },
+          "hint": "Numeric chat ID or @username of channel"
+        }
+      ],
+      "operations": {
+        "getInfo": {
+          "type": "http",
+          "http": {
+            "method": "GET",
+            "path": "{{manifest.defaults.baseUrl}}/bot{{credentials.botToken}}/getChat",
+            "body": {
+              "chat_id": "{{config.chatId}}"
+            }
+          },
+          "output": {
+            "dataPath": "result"
+          }
+        },
+        "getAdmins": {
+          "type": "http",
+          "http": {
+            "method": "GET",
+            "path": "{{manifest.defaults.baseUrl}}/bot{{credentials.botToken}}/getChatAdministrators",
+            "body": {
+              "chat_id": "{{config.chatId}}"
+            }
+          },
+          "output": {
+            "dataPath": "result"
+          }
+        },
+        "getMemberCount": {
+          "type": "http",
+          "http": {
+            "method": "GET",
+            "path": "{{manifest.defaults.baseUrl}}/bot{{credentials.botToken}}/getChatMemberCount",
+            "body": {
+              "chat_id": "{{config.chatId}}"
+            }
+          },
+          "output": {
+            "dataPath": "result"
+          }
+        }
+      },
+      "availableOutputs": [
+        {
+          "path": "id",
+          "description": "Chat ID"
+        },
+        {
+          "path": "title",
+          "description": "Chat title"
+        },
+        {
+          "path": "type",
+          "description": "Chat type (private, group, supergroup, channel)"
+        }
+      ],
+      "errorHandler": {
+        "enabled": false,
+        "maxAttempts": 3,
+        "initialInterval": 5,
+        "intervalUnit": "seconds",
+        "backoffMultiplier": 2.0
+      }
+    }
+  ]
+}

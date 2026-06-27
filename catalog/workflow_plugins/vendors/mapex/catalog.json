@@ -1,0 +1,252 @@
+{
+	"$schema": "mapex-plugin-vendor-catalog/v1",
+	"vendor": {
+		"slug": "mapex",
+		"name": "Mapex Solutions",
+		"site": "https://mapexos.io",
+		"support": "https://mapexos.io"
+	},
+	"items": [
+		{
+			"id": "mapex-telegram",
+			"pluginId": "telegram",
+			"slug": "telegram",
+			"name": {
+				"en-US": "Telegram",
+				"pt-BR": "Telegram"
+			},
+			"description": {
+				"en-US": "Send messages, photos and manage chats via Telegram Bot API",
+				"pt-BR": "Envie mensagens, fotos e gerencie chats via Telegram Bot API"
+			},
+			"category": "messaging",
+			"capabilities": [
+				"action",
+				"trigger"
+			],
+			"tags": [
+				"messaging",
+				"chat",
+				"bot",
+				"notifications"
+			],
+			"icon": "send",
+			"color": "#0088CC",
+			"image": "icon.svg",
+			"version": "1.0.0",
+			"author": "Mapex Solutions",
+			"requiresCredentials": true,
+			"nodeCount": 2,
+			"triggerCount": 1,
+			"informationFile": "plugin_information.json",
+			"hasEvents": true,
+			"hasImage": true
+		},
+		{
+			"id": "mapex-slack",
+			"pluginId": "slack",
+			"slug": "slack",
+			"name": {
+				"en-US": "Slack",
+				"pt-BR": "Slack"
+			},
+			"description": {
+				"en-US": "Send messages, files and manage channels via Slack API",
+				"pt-BR": "Envie mensagens, arquivos e gerencie canais via Slack API"
+			},
+			"category": "messaging",
+			"capabilities": [
+				"action"
+			],
+			"tags": [
+				"messaging",
+				"chat",
+				"notifications",
+				"team"
+			],
+			"icon": "tag",
+			"color": "#4A154B",
+			"image": "icon.svg",
+			"version": "1.0.0",
+			"author": "Mapex Solutions",
+			"requiresCredentials": true,
+			"nodeCount": 1,
+			"triggerCount": 0,
+			"informationFile": "plugin_information.json",
+			"hasEvents": false,
+			"hasImage": true
+		},
+		{
+			"id": "mapex-discord",
+			"pluginId": "discord",
+			"slug": "discord",
+			"name": {
+				"en-US": "Discord",
+				"pt-BR": "Discord"
+			},
+			"description": {
+				"en-US": "Send messages, embeds and manage channels via Discord API",
+				"pt-BR": "Envie mensagens, embeds e gerencie canais via Discord API"
+			},
+			"category": "messaging",
+			"capabilities": [
+				"action"
+			],
+			"tags": [
+				"messaging",
+				"chat",
+				"notifications",
+				"community"
+			],
+			"icon": "forum",
+			"color": "#5865F2",
+			"image": "icon.svg",
+			"version": "1.0.0",
+			"author": "Mapex Solutions",
+			"requiresCredentials": true,
+			"nodeCount": 1,
+			"triggerCount": 0,
+			"informationFile": "plugin_information.json",
+			"hasEvents": false,
+			"hasImage": true
+		},
+		{
+			"id": "mapex-teams",
+			"pluginId": "teams",
+			"slug": "teams",
+			"name": {
+				"en-US": "Microsoft Teams",
+				"pt-BR": "Microsoft Teams"
+			},
+			"description": {
+				"en-US": "Send messages and Adaptive Cards to Microsoft Teams channels via Workflows",
+				"pt-BR": "Envie mensagens e Adaptive Cards para canais do Microsoft Teams via Workflows"
+			},
+			"category": "messaging",
+			"capabilities": [
+				"action"
+			],
+			"tags": [
+				"messaging",
+				"chat",
+				"notifications",
+				"enterprise"
+			],
+			"icon": "groups",
+			"color": "#6264A7",
+			"image": "icon.svg",
+			"version": "1.0.0",
+			"author": "Mapex Solutions",
+			"requiresCredentials": true,
+			"nodeCount": 1,
+			"triggerCount": 0,
+			"informationFile": "plugin_information.json",
+			"hasEvents": false,
+			"hasImage": true
+		},
+		{
+			"id": "mapex-email",
+			"pluginId": "email",
+			"slug": "email",
+			"name": {
+				"en-US": "Email (SMTP)",
+				"pt-BR": "Email (SMTP)"
+			},
+			"description": {
+				"en-US": "Send emails via SMTP with text or HTML content, attachments and multiple recipients",
+				"pt-BR": "Envie e-mails via SMTP com conteúdo texto ou HTML, anexos e múltiplos destinatários"
+			},
+			"category": "email",
+			"capabilities": [
+				"action"
+			],
+			"tags": [
+				"email",
+				"smtp",
+				"notifications",
+				"alerts"
+			],
+			"icon": "email",
+			"color": "#EA4335",
+			"image": "icon.svg",
+			"version": "1.0.0",
+			"author": "Mapex Solutions",
+			"requiresCredentials": true,
+			"nodeCount": 1,
+			"triggerCount": 0,
+			"informationFile": "plugin_information.json",
+			"hasEvents": false,
+			"hasImage": true
+		},
+		{
+			"id": "mapex-mqtt",
+			"pluginId": "mqtt",
+			"slug": "mqtt",
+			"name": {
+				"en-US": "MQTT",
+				"pt-BR": "MQTT"
+			},
+			"description": {
+				"en-US": "Publish messages to MQTT brokers with configurable QoS and retain",
+				"pt-BR": "Publique mensagens em brokers MQTT com QoS e retain configuráveis"
+			},
+			"category": "iot",
+			"capabilities": [
+				"action"
+			],
+			"tags": [
+				"iot",
+				"mqtt",
+				"broker",
+				"publish",
+				"devices"
+			],
+			"icon": "sensors",
+			"color": "#660066",
+			"image": "icon.svg",
+			"version": "1.0.0",
+			"author": "Mapex Solutions",
+			"requiresCredentials": true,
+			"nodeCount": 1,
+			"triggerCount": 0,
+			"informationFile": "plugin_information.json",
+			"hasEvents": false,
+			"hasImage": true
+		},
+		{
+			"id": "mapex-http-request",
+			"pluginId": "http-request",
+			"slug": "http-request",
+			"name": {
+				"en-US": "HTTP Request",
+				"pt-BR": "HTTP Request"
+			},
+			"description": {
+				"en-US": "Make HTTP requests to any REST API with configurable method, headers and authentication",
+				"pt-BR": "Faça requisições HTTP para qualquer API REST com método, headers e autenticação configuráveis"
+			},
+			"category": "integration",
+			"capabilities": [
+				"action"
+			],
+			"tags": [
+				"http",
+				"rest",
+				"api",
+				"webhook",
+				"integration"
+			],
+			"icon": "language",
+			"color": "#FF6D00",
+			"image": "icon.svg",
+			"version": "1.0.0",
+			"author": "Mapex Solutions",
+			"requiresCredentials": false,
+			"nodeCount": 1,
+			"triggerCount": 0,
+			"informationFile": "plugin_information.json",
+			"hasEvents": false,
+			"hasImage": true
+		}
+	]
+}

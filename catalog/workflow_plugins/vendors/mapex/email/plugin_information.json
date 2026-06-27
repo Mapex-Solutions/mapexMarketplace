@@ -1,0 +1,325 @@
+{
+  "$schema": "mapex-plugin",
+  "pluginId": "email",
+  "name": "Email (SMTP)",
+  "description": "Send emails via SMTP with text or HTML content, attachments and multiple recipients",
+  "enabled": true,
+  "version": "1.0.0",
+  "category": "email",
+  "icon": "email",
+  "color": "#EA4335",
+  "author": "Mapex Solutions",
+  "tags": [
+    "email",
+    "smtp",
+    "notifications",
+    "alerts"
+  ],
+  "defaults": {
+    "timeout": 30000
+  },
+  "metadata": {
+    "brandIcon": "email/icon.svg",
+    "color": "#EA4335",
+    "docs": "https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol"
+  },
+  "credentials": [
+    {
+      "id": "smtp",
+      "name": "SMTP Server",
+      "fields": [
+        {
+          "name": "host",
+          "displayName": "SMTP Host",
+          "type": "string",
+          "required": true,
+          "hint": "e.g., smtp.gmail.com, smtp.office365.com"
+        },
+        {
+          "name": "port",
+          "displayName": "SMTP Port",
+          "type": "number",
+          "required": true,
+          "hint": "587 (TLS) or 465 (SSL) or 25 (plain)"
+        },
+        {
+          "name": "username",
+          "displayName": "Username",
+          "type": "string",
+          "required": true,
+          "hint": "Usually your email address"
+        },
+        {
+          "name": "password",
+          "displayName": "Password",
+          "type": "string",
+          "required": true,
+          "isSecret": true,
+          "hint": "Password or App Password"
+        },
+        {
+          "name": "fromAddress",
+          "displayName": "From Address",
+          "type": "string",
+          "required": true,
+          "hint": "Sender email address"
+        },
+        {
+          "name": "fromName",
+          "displayName": "From Name",
+          "type": "string",
+          "required": false,
+          "hint": "Display name for the sender"
+        },
+        {
+          "name": "useTLS",
+          "displayName": "Use TLS",
+          "type": "boolean",
+          "required": false,
+          "hint": "Enable STARTTLS encryption (recommended)"
+        }
+      ],
+      "test": {
+        "type": "smtp",
+        "smtp": {
+          "action": "verify"
+        }
+      },
+      "type": "manual"
+    }
+  ],
+  "nodeTypes": [
+    {
+      "type": "email/send",
+      "label": "Send Email",
+      "icon": "email",
+      "color": "#EA4335",
+      "description": "Send emails via SMTP with text or HTML content",
+      "timeout": {
+        "duration": 30,
+        "unit": "seconds",
+        "enableOutput": false
+      },
+      "inputs": [
+        {
+          "id": "in",
+          "label": "In",
+          "position": "top"
+        }
+      ],
+      "outputs": [
+        {
+          "id": "success",
+          "label": "Success",
+          "position": "bottom",
+          "color": "#4caf50"
+        },
+        {
+          "id": "error",
+          "label": "Error",
+          "position": "bottom",
+          "color": "#ef5350"
+        }
+      ],
+      "properties": [
+        {
+          "name": "operation",
+          "displayName": "Operation",
+          "type": "options",
+          "default": "sendText",
+          "options": [
+            {
+              "label": "Send Text Email",
+              "value": "sendText"
+            },
+            {
+              "label": "Send HTML Email",
+              "value": "sendHtml"
+            }
+          ]
+        },
+        {
+          "name": "to",
+          "displayName": "To",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "hint": "Comma-separated email addresses"
+        },
+        {
+          "name": "cc",
+          "displayName": "CC",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "hint": "Comma-separated email addresses"
+        },
+        {
+          "name": "bcc",
+          "displayName": "BCC",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "hint": "Comma-separated email addresses"
+        },
+        {
+          "name": "subject",
+          "displayName": "Subject",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true
+        },
+        {
+          "name": "textBody",
+          "displayName": "Text Body",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "rendering": {
+            "multiline": true,
+            "rows": 6
+          },
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendText"
+              ]
+            }
+          }
+        },
+        {
+          "name": "htmlBody",
+          "displayName": "HTML Body",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "rendering": {
+            "multiline": true,
+            "rows": 10
+          },
+          "hint": "Full HTML content for the email body",
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendHtml"
+              ]
+            }
+          }
+        },
+        {
+          "name": "replyTo",
+          "displayName": "Reply-To",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "hint": "Reply-to email address (if different from sender)"
+        },
+        {
+          "name": "priority",
+          "displayName": "Priority",
+          "type": "options",
+          "default": "normal",
+          "options": [
+            {
+              "label": "High",
+              "value": "high"
+            },
+            {
+              "label": "Normal",
+              "value": "normal"
+            },
+            {
+              "label": "Low",
+              "value": "low"
+            }
+          ]
+        }
+      ],
+      "operations": {
+        "sendText": {
+          "type": "smtp",
+          "smtp": {
+            "host": "{{credentials.host}}",
+            "port": "{{credentials.port}}",
+            "username": "{{credentials.username}}",
+            "password": "{{credentials.password}}",
+            "useTLS": "{{credentials.useTLS}}",
+            "from": "{{credentials.fromName}} <{{credentials.fromAddress}}>",
+            "to": "{{config.to}}",
+            "cc": "{{config.cc}}",
+            "bcc": "{{config.bcc}}",
+            "replyTo": "{{config.replyTo}}",
+            "subject": "{{config.subject}}",
+            "text": "{{config.textBody}}",
+            "priority": "{{config.priority}}"
+          }
+        },
+        "sendHtml": {
+          "type": "smtp",
+          "smtp": {
+            "host": "{{credentials.host}}",
+            "port": "{{credentials.port}}",
+            "username": "{{credentials.username}}",
+            "password": "{{credentials.password}}",
+            "useTLS": "{{credentials.useTLS}}",
+            "from": "{{credentials.fromName}} <{{credentials.fromAddress}}>",
+            "to": "{{config.to}}",
+            "cc": "{{config.cc}}",
+            "bcc": "{{config.bcc}}",
+            "replyTo": "{{config.replyTo}}",
+            "subject": "{{config.subject}}",
+            "html": "{{config.htmlBody}}",
+            "priority": "{{config.priority}}"
+          }
+        }
+      },
+      "availableOutputs": [
+        {
+          "path": "messageId",
+          "description": "SMTP message ID"
+        },
+        {
+          "path": "accepted",
+          "description": "Array of accepted recipient addresses (renders as JSON list)"
+        },
+        {
+          "path": "accepted.0",
+          "description": "First accepted recipient address (use .1, .2, ... for others)"
+        },
+        {
+          "path": "rejected",
+          "description": "Array of rejected recipient addresses (renders as JSON list, empty when all OK)"
+        },
+        {
+          "path": "rejected.0",
+          "description": "First rejected recipient address (use .1, .2, ... for others)"
+        }
+      ],
+      "errorHandler": {
+        "enabled": false,
+        "maxAttempts": 3,
+        "initialInterval": 5,
+        "intervalUnit": "seconds",
+        "backoffMultiplier": 2.0
+      }
+    }
+  ]
+}

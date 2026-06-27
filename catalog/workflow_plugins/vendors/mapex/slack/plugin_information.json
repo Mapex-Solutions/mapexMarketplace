@@ -1,0 +1,453 @@
+{
+  "$schema": "mapex-plugin",
+  "pluginId": "slack",
+  "name": "Slack",
+  "description": "Send messages, files and manage channels via Slack API",
+  "enabled": true,
+  "version": "1.0.0",
+  "category": "messaging",
+  "icon": "tag",
+  "color": "#4A154B",
+  "author": "Mapex Solutions",
+  "tags": [
+    "messaging",
+    "chat",
+    "notifications",
+    "team"
+  ],
+  "defaults": {
+    "baseUrl": "https://slack.com/api",
+    "timeout": 30000
+  },
+  "metadata": {
+    "brandIcon": "slack/icon.svg",
+    "color": "#4A154B",
+    "docs": "https://api.slack.com/methods"
+  },
+  "credentials": [
+    {
+      "id": "slackWebhook",
+      "name": "Slack Incoming Webhook",
+      "fields": [
+        {
+          "name": "webhookUrl",
+          "displayName": "Webhook URL",
+          "type": "string",
+          "required": true,
+          "isSecret": true,
+          "hint": "From Slack → Apps → Incoming Webhooks → Add New Webhook"
+        }
+      ],
+      "test": {
+        "type": "http",
+        "http": {
+          "method": "POST",
+          "path": "{{webhookUrl}}",
+          "body": {
+            "text": "Mapex connection test"
+          }
+        }
+      },
+      "type": "manual"
+    },
+    {
+      "id": "slackBot",
+      "name": "Slack Bot Token",
+      "fields": [
+        {
+          "name": "botToken",
+          "displayName": "Bot OAuth Token",
+          "type": "string",
+          "required": true,
+          "isSecret": true,
+          "hint": "Starts with xoxb-. From Slack App → OAuth & Permissions"
+        }
+      ],
+      "test": {
+        "type": "http",
+        "http": {
+          "method": "POST",
+          "path": "/auth.test",
+          "headers": {
+            "Authorization": "Bearer {{botToken}}"
+          }
+        }
+      },
+      "type": "manual"
+    }
+  ],
+  "fetchOptions": {
+    "getChannels": {
+      "type": "http",
+      "http": {
+        "method": "GET",
+        "path": "/conversations.list?types=public_channel&limit=200",
+        "headers": {
+          "Authorization": "Bearer {{credentials.botToken}}"
+        }
+      },
+      "output": {
+        "transform": "function transform(data) { if (!data.channels) return []; return data.channels.map(function(c) { return { label: '#' + c.name, value: c.id }; }); }"
+      }
+    },
+    "getUsers": {
+      "type": "http",
+      "http": {
+        "method": "GET",
+        "path": "/users.list?limit=200",
+        "headers": {
+          "Authorization": "Bearer {{credentials.botToken}}"
+        }
+      },
+      "output": {
+        "transform": "function transform(data) { if (!data.members) return []; return data.members.filter(function(m) { return !m.deleted && !m.is_bot; }).map(function(m) { return { label: m.real_name || m.name, value: m.id }; }); }"
+      }
+    }
+  },
+  "nodeTypes": [
+    {
+      "type": "slack/message",
+      "label": "Slack Message",
+      "icon": "tag",
+      "color": "#4A154B",
+      "description": "Send and manage messages in Slack channels and DMs",
+      "timeout": {
+        "duration": 30,
+        "unit": "seconds",
+        "enableOutput": false
+      },
+      "inputs": [
+        {
+          "id": "in",
+          "label": "In",
+          "position": "top"
+        }
+      ],
+      "outputs": [
+        {
+          "id": "success",
+          "label": "Success",
+          "position": "bottom",
+          "color": "#4caf50"
+        },
+        {
+          "id": "error",
+          "label": "Error",
+          "position": "bottom",
+          "color": "#ef5350"
+        }
+      ],
+      "properties": [
+        {
+          "name": "operation",
+          "displayName": "Operation",
+          "type": "options",
+          "default": "sendText",
+          "options": [
+            {
+              "label": "Send Text",
+              "value": "sendText"
+            },
+            {
+              "label": "Send Blocks",
+              "value": "sendBlocks"
+            },
+            {
+              "label": "Update Message",
+              "value": "updateMessage"
+            },
+            {
+              "label": "Delete Message",
+              "value": "deleteMessage"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "displayName": "Send To",
+          "type": "options",
+          "default": "channel",
+          "options": [
+            {
+              "label": "Channel",
+              "value": "channel"
+            },
+            {
+              "label": "Direct Message",
+              "value": "dm"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendText",
+                "sendBlocks"
+              ]
+            }
+          }
+        },
+        {
+          "name": "channel",
+          "displayName": "Channel / User",
+          "type": "fieldSource",
+          "default": {
+            "type": "fetchOptions",
+            "value": ""
+          },
+          "required": true,
+          "allowedSources": [
+            "fetchOptions",
+            "literal",
+            "state",
+            "event",
+            "nodeOutput"
+          ],
+          "fetchOptions": {
+            "rules": [
+              {
+                "when": {
+                  "destination": [
+                    "channel"
+                  ]
+                },
+                "key": "getChannels",
+                "label": "Search Channels"
+              },
+              {
+                "when": {
+                  "destination": [
+                    "dm"
+                  ]
+                },
+                "key": "getUsers",
+                "label": "Search Users"
+              }
+            ]
+          },
+          "hint": "Channel ID or User ID — Slack sends DM automatically when a user ID is provided",
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendText",
+                "sendBlocks",
+                "updateMessage",
+                "deleteMessage"
+              ]
+            }
+          }
+        },
+        {
+          "name": "text",
+          "displayName": "Text",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "rendering": {
+            "multiline": true,
+            "rows": 4
+          },
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendText"
+              ]
+            }
+          }
+        },
+        {
+          "name": "blocks",
+          "displayName": "Blocks (JSON)",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "rendering": {
+            "multiline": true,
+            "rows": 8
+          },
+          "hint": "Slack Block Kit JSON array. Use https://app.slack.com/block-kit-builder",
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendBlocks"
+              ]
+            }
+          }
+        },
+        {
+          "name": "messageTs",
+          "displayName": "Message Timestamp",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "hint": "The ts value of the message to update or delete",
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "updateMessage",
+                "deleteMessage"
+              ]
+            }
+          }
+        },
+        {
+          "name": "newText",
+          "displayName": "New Text",
+          "type": "fieldSource",
+          "default": {
+            "type": "literal",
+            "value": ""
+          },
+          "required": true,
+          "rendering": {
+            "multiline": true,
+            "rows": 4
+          },
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "updateMessage"
+              ]
+            }
+          }
+        },
+        {
+          "name": "unfurlLinks",
+          "displayName": "Unfurl Links",
+          "type": "boolean",
+          "default": true,
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendText"
+              ]
+            }
+          }
+        },
+        {
+          "name": "unfurlMedia",
+          "displayName": "Unfurl Media",
+          "type": "boolean",
+          "default": true,
+          "displayOptions": {
+            "show": {
+              "operation": [
+                "sendText"
+              ]
+            }
+          }
+        }
+      ],
+      "operations": {
+        "sendText": {
+          "type": "http",
+          "http": {
+            "method": "POST",
+            "path": "{{manifest.defaults.baseUrl}}/chat.postMessage",
+            "headers": {
+              "Authorization": "Bearer {{credentials.botToken}}",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "channel": "{{config.channel}}",
+              "text": "{{config.text}}",
+              "unfurl_links": "{{config.unfurlLinks}}",
+              "unfurl_media": "{{config.unfurlMedia}}"
+            }
+          },
+          "output": {
+            "dataPath": ""
+          }
+        },
+        "sendBlocks": {
+          "type": "http",
+          "http": {
+            "method": "POST",
+            "path": "{{manifest.defaults.baseUrl}}/chat.postMessage",
+            "headers": {
+              "Authorization": "Bearer {{credentials.botToken}}",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "channel": "{{config.channel}}",
+              "blocks": "{{config.blocks}}"
+            }
+          },
+          "output": {
+            "dataPath": ""
+          }
+        },
+        "updateMessage": {
+          "type": "http",
+          "http": {
+            "method": "POST",
+            "path": "{{manifest.defaults.baseUrl}}/chat.update",
+            "headers": {
+              "Authorization": "Bearer {{credentials.botToken}}",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "channel": "{{config.channel}}",
+              "ts": "{{config.messageTs}}",
+              "text": "{{config.newText}}"
+            }
+          },
+          "output": {
+            "dataPath": ""
+          }
+        },
+        "deleteMessage": {
+          "type": "http",
+          "http": {
+            "method": "POST",
+            "path": "{{manifest.defaults.baseUrl}}/chat.delete",
+            "headers": {
+              "Authorization": "Bearer {{credentials.botToken}}",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "channel": "{{config.channel}}",
+              "ts": "{{config.messageTs}}"
+            }
+          },
+          "output": {
+            "dataPath": ""
+          }
+        }
+      },
+      "availableOutputs": [
+        {
+          "path": "ok",
+          "description": "Whether the call was successful"
+        },
+        {
+          "path": "channel",
+          "description": "Channel ID"
+        },
+        {
+          "path": "ts",
+          "description": "Message timestamp (used as message ID)"
+        },
+        {
+          "path": "message.text",
+          "description": "Text of the sent message"
+        }
+      ],
+      "errorHandler": {
+        "enabled": false,
+        "maxAttempts": 3,
+        "initialInterval": 5,
+        "intervalUnit": "seconds",
+        "backoffMultiplier": 2.0
+      }
+    }
+  ]
+}

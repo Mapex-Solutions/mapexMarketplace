@@ -1,0 +1,182 @@
+{
+  "$schema": "mapex-plugin-events/v1",
+  "pluginId": "telegram",
+  "events": [
+    {
+      "value": "message",
+      "label": "New Message",
+      "category": "messages",
+      "description": "Triggered when a new message is received (text, photo, video, document, sticker, etc.)"
+    },
+    {
+      "value": "edited_message",
+      "label": "Edited Message",
+      "category": "messages",
+      "description": "Triggered when a previously sent message is edited by the sender"
+    },
+    {
+      "value": "channel_post",
+      "label": "Channel Post",
+      "category": "messages",
+      "description": "Triggered when a new post is published in a channel where the bot is a member"
+    },
+    {
+      "value": "edited_channel_post",
+      "label": "Edited Channel Post",
+      "category": "messages",
+      "description": "Triggered when a channel post is edited"
+    },
+    {
+      "value": "callback_query",
+      "label": "Callback Query",
+      "category": "interactions",
+      "description": "Triggered when a user clicks an inline keyboard button. Contains the button's callback data."
+    },
+    {
+      "value": "inline_query",
+      "label": "Inline Query",
+      "category": "interactions",
+      "description": "Triggered when a user types @botname in any chat. Used for inline mode responses."
+    },
+    {
+      "value": "chosen_inline_result",
+      "label": "Chosen Inline Result",
+      "category": "interactions",
+      "description": "Triggered when the user selects a result from an inline query response"
+    },
+    {
+      "value": "message_reaction",
+      "label": "Message Reaction",
+      "category": "interactions",
+      "description": "Triggered when a user adds or removes a reaction to a message"
+    },
+    {
+      "value": "message_reaction_count",
+      "label": "Reaction Count Changed",
+      "category": "interactions",
+      "description": "Triggered when the anonymous reaction count on a message changes"
+    },
+    {
+      "value": "my_chat_member",
+      "label": "Bot Status Changed",
+      "category": "members",
+      "description": "Triggered when the bot's membership status changes (added to group, removed, promoted, restricted)"
+    },
+    {
+      "value": "chat_member",
+      "label": "Member Status Changed",
+      "category": "members",
+      "description": "Triggered when another chat member's status changes (joined, left, promoted, restricted)"
+    },
+    {
+      "value": "chat_join_request",
+      "label": "Join Request",
+      "category": "members",
+      "description": "Triggered when a user sends a join request to a chat where the bot can approve members"
+    },
+    {
+      "value": "chat_boost",
+      "label": "Chat Boost",
+      "category": "members",
+      "description": "Triggered when a chat receives a new boost or an existing boost is changed"
+    },
+    {
+      "value": "removed_chat_boost",
+      "label": "Boost Removed",
+      "category": "members",
+      "description": "Triggered when a boost is removed from a chat"
+    },
+    {
+      "value": "shipping_query",
+      "label": "Shipping Query",
+      "category": "payments",
+      "description": "Triggered when a user needs to provide shipping information during a Telegram Payment flow"
+    },
+    {
+      "value": "pre_checkout_query",
+      "label": "Pre-Checkout Query",
+      "category": "payments",
+      "description": "Triggered before a payment is finalized. The bot must confirm or reject within 10 seconds."
+    },
+    {
+      "value": "purchased_paid_media",
+      "label": "Paid Media Purchased",
+      "category": "payments",
+      "description": "Triggered when a user purchases paid media content sent by the bot"
+    },
+    {
+      "value": "poll",
+      "label": "Poll Updated",
+      "category": "polls",
+      "description": "Triggered when a poll's state changes (new votes, poll closed). Only for polls sent by the bot."
+    },
+    {
+      "value": "poll_answer",
+      "label": "Poll Answer",
+      "category": "polls",
+      "description": "Triggered when a user votes or changes their vote in a non-anonymous poll"
+    },
+    {
+      "value": "business_connection",
+      "label": "Business Connection",
+      "category": "business",
+      "description": "Triggered when the bot is connected to or disconnected from a Telegram Business account"
+    },
+    {
+      "value": "business_message",
+      "label": "Business Message",
+      "category": "business",
+      "description": "Triggered when a message is received through a connected Telegram Business account"
+    },
+    {
+      "value": "edited_business_message",
+      "label": "Edited Business Message",
+      "category": "business",
+      "description": "Triggered when a business account message is edited"
+    },
+    {
+      "value": "deleted_business_messages",
+      "label": "Business Messages Deleted",
+      "category": "business",
+      "description": "Triggered when messages from a connected business account are deleted"
+    }
+  ],
+  "categories": [
+    {
+      "value": "messages",
+      "label": "Messages",
+      "icon": "chat",
+      "description": "New messages, edits, and channel posts"
+    },
+    {
+      "value": "interactions",
+      "label": "Interactions",
+      "icon": "touch_app",
+      "description": "Button clicks, inline queries, and reactions"
+    },
+    {
+      "value": "members",
+      "label": "Members & Groups",
+      "icon": "group",
+      "description": "Member status changes, join requests, and boosts"
+    },
+    {
+      "value": "payments",
+      "label": "Payments",
+      "icon": "payments",
+      "description": "Telegram Payments flow events"
+    },
+    {
+      "value": "polls",
+      "label": "Polls",
+      "icon": "poll",
+      "description": "Poll state changes and vote tracking"
+    },
+    {
+      "value": "business",
+      "label": "Business",
+      "icon": "business",
+      "description": "Telegram Business account integration events"
+    }
+  ]
+}

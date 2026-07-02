@@ -1,0 +1,57 @@
+{
+	"name": {
+		"en-US": "DOOR & WINDOW - Detects if doors or windows are open or closed in real-time",
+		"pt-BR": "PORTA & JANELA - Detecta em tempo real se portas ou janelas estão abertas ou fechadas"
+	},
+	"description": {
+		"en-US": "Disruptive Technologies Integration. Supports events: touch, connectionStatus, networksStatus, batteryStatus, contact",
+		"pt-BR": "Integração Disruptive Technologies. Suporta os eventos: touch, connectionStatus, networksStatus, batteryStatus, contact"
+	},
+	"categoryId": "507f1f77bcf86cd799439011",
+	"categoryName": "Assets IoT",
+	"manufacturerId": "507f1f77bcf86cd799439015",
+	"manufacturerName": "Disruptive Technologies",
+	"modelId": "5ff6fd3ba143d7f2b9ec25e9",
+	"modelName": "DOOR & WINDOW - Detects if doors or windows are open or closed in real-time",
+	"version": "1.0",
+	"isSystem": true,
+	"isTemplate": false,
+	"assetIdPath": "metadata.deviceId",
+	"scriptTest": "{\n  \"event\": {\n    \"eventId\": \"d4ade2jgj9mc738inbs0\",\n    \"targetName\": \"projects/c8caej0697o000f6gmm0/devices/emud4ade19omr2c73bnoe50\",\n    \"eventType\": \"contact\",\n    \"data\": {\n      \"contact\": {\n        \"state\": \"OPEN\",\n        \"updateTime\": \"2025-11-12T18:50:50.282669Z\"\n      }\n    },\n    \"timestamp\": \"2025-11-12T18:50:50.282669Z\"\n  },\n  \"labels\": {\n    \"name\": \"Door & Window\"\n  },\n  \"metadata\": {\n    \"deviceId\": \"emud4ade19omr2c73bnoe50\",\n    \"projectId\": \"c8caej0697o000f6gmm0\",\n    \"deviceType\": \"contact\",\n    \"productNumber\": \"\"\n  }\n}",
+	"scriptProcessor": "",
+	"scriptValidator": "const schema = $mv.object({\n  event: $mv.object({\n    eventId: $mv.string().required(),\n    targetName: $mv.string().required(),\n    eventType: $mv.string().required(),\n    data: $mv.object().required(),\n    timestamp: $mv.string().required()\n  }).required(),\n  labels: $mv.object({\n    name: $mv.string().required()\n  }).required(),\n  metadata: $mv.object({\n    deviceId: $mv.string().required(),\n    projectId: $mv.string().required(),\n    deviceType: $mv.string().required(),\n    productNumber: $mv.string().optional()\n  }).required()\n}).required();\n\nconst { value, error } = schema.validate(payload, { abortEarly: false, stripUnknown: true });\nif (error) throw new Error('Validation failed: ' + error.message);\nconst result = { ...value, _validated: true, _validationTimestamp: Date.now() };",
+	"scriptConversion": "const result = {\n  eventType: payload.event.eventType,\n  eventId: payload.event.eventId,\n  data: {},\n  metadata: {\n    deviceId: payload.metadata.deviceId,\n    projectId: payload.metadata.projectId,\n    deviceType: payload.metadata.deviceType,\n    productNumber: payload.metadata.productNumber,\n    deviceName: payload.labels.name,\n    targetName: payload.event.targetName\n  },\n  created: new Date().toISOString(),\n  originalTimestamp: payload.event.timestamp\n};\n\n  if (payload.event.eventType === 'touch') {\n    result.data = {\n      updateTime: payload.event.data.touch?.updateTime\n    };\n  } else   if (payload.event.eventType === 'connectionStatus') {\n    result.data = {\n      connection: payload.event.data.connectionStatus?.connection,\n      available: payload.event.data.connectionStatus?.available,\n      updateTime: payload.event.data.connectionStatus?.updateTime\n    };\n  } else   if (payload.event.eventType === 'networkStatus') {\n    result.data = {\n      signalStrength: payload.event.data.networkStatus?.signalStrength,\n      rssi: payload.event.data.networkStatus?.rssi,\n      updateTime: payload.event.data.networkStatus?.updateTime,\n      cloudConnectors: payload.event.data.networkStatus?.cloudConnectors\n    };\n  } else   if (payload.event.eventType === 'batteryStatus') {\n    result.data = {\n      percentage: payload.event.data.batteryStatus?.percentage,\n      updateTime: payload.event.data.batteryStatus?.updateTime\n    };\n  } else   if (payload.event.eventType === 'contact') {\n    result.data = {\n      state: payload.event.data.contact?.state,\n      updateTime: payload.event.data.contact?.updateTime\n    };\n  }",
+	"enabled": true,
+	"dynamicFields": [
+		{
+			"fieldId": 1,
+			"field": "state",
+			"value": "data.state",
+			"type": "string",
+			"status": 1
+		},
+		{
+			"fieldId": 2,
+			"field": "batteryStatus",
+			"value": "data.percentage",
+			"type": "number",
+			"status": 1
+		},
+		{
+			"fieldId": 3,
+			"field": "signalStatus",
+			"value": "data.signalStrength",
+			"type": "number",
+			"status": 1
+		}
+	],
+	"availableFields": [
+		"created",
+		"eventId",
+		"eventType",
+		"data.state",
+		"data.percentage",
+		"data.signalStrength"
+	],
+	"nextFieldId": 4
+}

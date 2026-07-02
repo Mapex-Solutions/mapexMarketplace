@@ -1,0 +1,251 @@
+{
+	"$schema": "mapex-asset-template-vendor-catalog/v1",
+	"vendor": {
+		"slug": "disruptive-technologies",
+		"name": "Disruptive Technologies",
+		"site": "https://www.disruptive-technologies.com/",
+		"support": ""
+	},
+	"items": [
+		{
+			"id": "disruptive-technologies-co2",
+			"marketplaceGuid": "a94d3c44-d119-5fe8-891d-86910942fc6b",
+			"slug": "co2",
+			"name": {
+				"en-US": "CO2 - Measures CO2, temperature, humidity and air pressure",
+				"pt-BR": "CO2 - Mede CO2, temperatura, umidade e pressão do ar"
+			},
+			"description": {
+				"en-US": "Disruptive Technologies Integration. Supports events: touch, connectionStatus, networksStatus, batteryStatus, co2, humidity, temperature, pressure",
+				"pt-BR": "Integração Disruptive Technologies. Suporta os eventos: touch, connectionStatus, networksStatus, batteryStatus, co2, humidity, temperature, pressure"
+			},
+			"category": "iot-platforms",
+			"vendor": "disruptive-technologies",
+			"vendorName": "Disruptive Technologies",
+			"model": "CO2",
+			"version": "1.0",
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"fieldCount": 6,
+			"hasScripts": true,
+			"sha256": "6a0020cbce4cbfb12d06229fb422e36479824eb6e70b021e33dfddf4ae12b413"
+		},
+		{
+			"id": "disruptive-technologies-desk-occupancy",
+			"marketplaceGuid": "3960e1c2-1bdc-55e0-9dbd-11dd232c2188",
+			"slug": "desk-occupancy",
+			"name": {
+				"en-US": "DESK OCCUPANCY - Detects the presence of someone at a desk",
+				"pt-BR": "OCUPAÇÃO DE MESA - Detecta a presença de alguém em uma mesa"
+			},
+			"description": {
+				"en-US": "Disruptive Technologies Integration. Supports events: touch, connectionStatus, networksStatus, batteryStatus, deskOccupancy",
+				"pt-BR": "Integração Disruptive Technologies. Suporta os eventos: touch, connectionStatus, networksStatus, batteryStatus, deskOccupancy"
+			},
+			"category": "iot-platforms",
+			"vendor": "disruptive-technologies",
+			"vendorName": "Disruptive Technologies",
+			"model": "DESK OCCUPANCY",
+			"version": "1.0",
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"fieldCount": 3,
+			"hasScripts": true,
+			"sha256": "42254b49a9b99535afe98582dc509a307a6a5cc81f902577accf1ad2fc42274a"
+		},
+		{
+			"id": "disruptive-technologies-door-window",
+			"marketplaceGuid": "c855e2a4-d324-5960-b340-a2d517427808",
+			"slug": "door-window",
+			"name": {
+				"en-US": "DOOR & WINDOW - Detects if doors or windows are open or closed in real-time",
+				"pt-BR": "PORTA & JANELA - Detecta em tempo real se portas ou janelas estão abertas ou fechadas"
+			},
+			"description": {
+				"en-US": "Disruptive Technologies Integration. Supports events: touch, connectionStatus, networksStatus, batteryStatus, contact",
+				"pt-BR": "Integração Disruptive Technologies. Suporta os eventos: touch, connectionStatus, networksStatus, batteryStatus, contact"
+			},
+			"category": "iot-platforms",
+			"vendor": "disruptive-technologies",
+			"vendorName": "Disruptive Technologies",
+			"model": "DOOR & WINDOW",
+			"version": "1.0",
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"fieldCount": 3,
+			"hasScripts": true,
+			"sha256": "e40067afc7890b10f1d623666d8a36a4e71d6dda2d16141f8007ab9cc1e0dafe"
+		},
+		{
+			"id": "disruptive-technologies-motion",
+			"marketplaceGuid": "654dc568-bfd9-5b49-9ce7-dcd45a6789fd",
+			"slug": "motion",
+			"name": {
+				"en-US": "MOTION - Detects the presence of people in a room",
+				"pt-BR": "MOVIMENTO - Detecta a presença de pessoas em um ambiente"
+			},
+			"description": {
+				"en-US": "Disruptive Technologies Integration. Supports events: touch, connectionStatus, networksStatus, batteryStatus, motion",
+				"pt-BR": "Integração Disruptive Technologies. Suporta os eventos: touch, connectionStatus, networksStatus, batteryStatus, motion"
+			},
+			"category": "iot-platforms",
+			"vendor": "disruptive-technologies",
+			"vendorName": "Disruptive Technologies",
+			"model": "MOTION",
+			"version": "1.0",
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"fieldCount": 3,
+			"hasScripts": true,
+			"sha256": "e02ac3fc74d2deda557aadd28c2bd312b4e508b83293a090d359c3424cc73edd"
+		},
+		{
+			"id": "disruptive-technologies-proximity",
+			"marketplaceGuid": "a45dad0a-6f42-5cbd-b8ad-eb7473c97d7f",
+			"slug": "proximity",
+			"name": {
+				"en-US": "PROXIMITY - Detects when an object is placed or removed within a 5 mm range",
+				"pt-BR": "PROXIMIDADE - Detecta quando um objeto é colocado ou removido em um alcance de 5 mm"
+			},
+			"description": {
+				"en-US": "Disruptive Technologies Integration. Supports events: touch, connectionStatus, networksStatus, batteryStatus, objectPresent, objectPresentCount",
+				"pt-BR": "Integração Disruptive Technologies. Suporta os eventos: touch, connectionStatus, networksStatus, batteryStatus, objectPresent, objectPresentCount"
+			},
+			"category": "iot-platforms",
+			"vendor": "disruptive-technologies",
+			"vendorName": "Disruptive Technologies",
+			"model": "PROXIMITY",
+			"version": "1.0",
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"fieldCount": 4,
+			"hasScripts": true,
+			"sha256": "930a412bb2090f5c833af1f9c4f02ef87d71050d17158536f9b09c8612a5c8df"
+		},
+		{
+			"id": "disruptive-technologies-tactile-touch",
+			"marketplaceGuid": "2d34723f-f8b6-5312-84d5-71c4ba54ec88",
+			"slug": "tactile-touch",
+			"name": {
+				"en-US": "TACTILE TOUCH - Sends an immediate event whenever it is touched",
+				"pt-BR": "TOQUE TÁTIL - Envia um evento imediato sempre que é tocado"
+			},
+			"description": {
+				"en-US": "Disruptive Technologies Integration. Supports events: touch, connectionStatus, networksStatus, batteryStatus",
+				"pt-BR": "Integração Disruptive Technologies. Suporta os eventos: touch, connectionStatus, networksStatus, batteryStatus"
+			},
+			"category": "iot-platforms",
+			"vendor": "disruptive-technologies",
+			"vendorName": "Disruptive Technologies",
+			"model": "TACTILE TOUCH",
+			"version": "1.0",
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"fieldCount": 2,
+			"hasScripts": true,
+			"sha256": "a20559ee400c95470875e940247fe744e7da5d4864ff4edfd5ecc9579604131a"
+		},
+		{
+			"id": "disruptive-technologies-temperature",
+			"marketplaceGuid": "7126b376-15b5-5cac-a186-cc1c73df88a1",
+			"slug": "temperature",
+			"name": {
+				"en-US": "TEMPERATURE - Accurately measures temperature anywhere",
+				"pt-BR": "TEMPERATURA - Mede temperatura com precisão em qualquer lugar"
+			},
+			"description": {
+				"en-US": "Disruptive Technologies Integration. Supports events: touch, connectionStatus, networksStatus, batteryStatus, temperature",
+				"pt-BR": "Integração Disruptive Technologies. Suporta os eventos: touch, connectionStatus, networksStatus, batteryStatus, temperature"
+			},
+			"category": "iot-platforms",
+			"vendor": "disruptive-technologies",
+			"vendorName": "Disruptive Technologies",
+			"model": "TEMPERATURE",
+			"version": "1.0",
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"fieldCount": 3,
+			"hasScripts": true,
+			"sha256": "c669b66335551658e4d62ffe2e8af5e90d36ab8dd48f20dd38960b143fce04a6"
+		},
+		{
+			"id": "disruptive-technologies-temperature-humidity",
+			"marketplaceGuid": "fb0a5972-94e6-5af4-bc7f-d78857cbc1b5",
+			"slug": "temperature-humidity",
+			"name": {
+				"en-US": "TEMPERATURE & HUMIDITY - Measures relative humidity and temperature",
+				"pt-BR": "TEMPERATURA & UMIDADE - Mede umidade relativa e temperatura"
+			},
+			"description": {
+				"en-US": "Disruptive Technologies Integration. Supports events: touch, connectionStatus, networksStatus, batteryStatus, humidity",
+				"pt-BR": "Integração Disruptive Technologies. Suporta os eventos: touch, connectionStatus, networksStatus, batteryStatus, humidity"
+			},
+			"category": "iot-platforms",
+			"vendor": "disruptive-technologies",
+			"vendorName": "Disruptive Technologies",
+			"model": "TEMPERATURE & HUMIDITY",
+			"version": "1.0",
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"fieldCount": 4,
+			"hasScripts": true,
+			"sha256": "831cb2f7cfd43e0d7b40193a4ce9eab2a3f7dce99252d1b8c9f866e8724ade28"
+		},
+		{
+			"id": "disruptive-technologies-temperature-probe",
+			"marketplaceGuid": "02958606-c393-5c4a-819e-8c160311469f",
+			"slug": "temperature-probe",
+			"name": {
+				"en-US": "TEMPERATURE PROBE - Measures temperature in a wide range of environments",
+				"pt-BR": "SONDA DE TEMPERATURA - Mede temperatura em uma ampla variedade de ambientes"
+			},
+			"description": {
+				"en-US": "Disruptive Technologies Integration. Supports events: touch, connectionStatus, networksStatus, batteryStatus, temperature",
+				"pt-BR": "Integração Disruptive Technologies. Suporta os eventos: touch, connectionStatus, networksStatus, batteryStatus, temperature"
+			},
+			"category": "iot-platforms",
+			"vendor": "disruptive-technologies",
+			"vendorName": "Disruptive Technologies",
+			"model": "TEMPERATURE PROBE",
+			"version": "1.0",
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"fieldCount": 3,
+			"hasScripts": true,
+			"sha256": "3a107fc34e33404588701e192b5e2d201db89653c158735acd77313acea34394"
+		},
+		{
+			"id": "disruptive-technologies-water",
+			"marketplaceGuid": "8004bc4b-106e-5c32-88a5-def3c45d1e65",
+			"slug": "water",
+			"name": {
+				"en-US": "WATER - Reports the presence of water on the sensor",
+				"pt-BR": "ÁGUA - Reporta a presença de água no sensor"
+			},
+			"description": {
+				"en-US": "Disruptive Technologies Integration. Supports events: touch, connectionStatus, networksStatus, batteryStatus, waterPresent",
+				"pt-BR": "Integração Disruptive Technologies. Suporta os eventos: touch, connectionStatus, networksStatus, batteryStatus, waterPresent"
+			},
+			"category": "iot-platforms",
+			"vendor": "disruptive-technologies",
+			"vendorName": "Disruptive Technologies",
+			"model": "WATER",
+			"version": "1.0",
+			"icon": "",
+			"image": "",
+			"hasImage": false,
+			"fieldCount": 3,
+			"hasScripts": true,
+			"sha256": "a03c2978084e290b19022ce07ac56e3c6c61b850bd711c2cb4d893b899b6a24a"
+		}
+	]
+}

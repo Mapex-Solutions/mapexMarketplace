@@ -1,0 +1,58 @@
+{
+	"$schema": "mapex-asset-template-catalog-config/v1",
+	"drilldown": [
+		"vendor",
+		"model",
+		"version"
+	],
+	"categories": [
+		{
+			"value": "iot-sensors",
+			"label": {
+				"en-US": "IoT Sensors",
+				"pt-BR": "Sensores IoT"
+			},
+			"icon": "mdi-radar"
+		},
+		{
+			"value": "iot-platforms",
+			"label": {
+				"en-US": "IoT Platforms",
+				"pt-BR": "Plataformas IoT"
+			},
+			"icon": "mdi-cloud-sync"
+		},
+		{
+			"value": "trackers",
+			"label": {
+				"en-US": "Trackers & Fleet",
+				"pt-BR": "Rastreadores & Frota"
+			},
+			"icon": "mdi-map-marker-path"
+		},
+		{
+			"value": "energy",
+			"label": {
+				"en-US": "Energy & Metering",
+				"pt-BR": "Energia & Medição"
+			},
+			"icon": "mdi-flash"
+		},
+		{
+			"value": "industrial",
+			"label": {
+				"en-US": "Industrial / SCADA",
+				"pt-BR": "Industrial / SCADA"
+			},
+			"icon": "mdi-factory"
+		},
+		{
+			"value": "custom",
+			"label": {
+				"en-US": "Custom",
+				"pt-BR": "Personalizado"
+			},
+			"icon": "mdi-puzzle"
+		}
+	]
+}

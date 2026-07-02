@@ -1,6 +1,7 @@
 package configMod
 
 import (
+	assettemplatesModule "mapexmarketplace/src/modules/assettemplates"
 	devicesModule "mapexmarketplace/src/modules/devices"
 	workflowpluginsModule "mapexmarketplace/src/modules/workflowplugins"
 )
@@ -30,5 +31,11 @@ var Modules = []ModuleDefinition{
 		InitRepositories: workflowpluginsModule.InitRepositories,
 		InitServices:     workflowpluginsModule.InitServices,
 		InitInterfaces:   workflowpluginsModule.InitInterfaces,
+	},
+	{
+		Name:             "AssetTemplates",
+		InitRepositories: assettemplatesModule.InitRepositories,
+		InitServices:     assettemplatesModule.InitServices,
+		InitInterfaces:   assettemplatesModule.InitInterfaces,
 	},
 }

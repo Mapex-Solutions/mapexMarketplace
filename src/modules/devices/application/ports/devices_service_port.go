@@ -15,8 +15,9 @@ type DevicesServicePort interface {
 	// List returns a filtered, paginated page of catalog cards.
 	List(ctx context.Context, query *dtos.CatalogQuery) (*dtos.CatalogListResponse, error)
 
-	// Facets returns the available filter options for the listing UI.
-	Facets(ctx context.Context) (*dtos.Facets, error)
+	// Facets returns the available filter options for the listing UI. The
+	// manufacturer narrows the model drill-down (empty = top level).
+	Facets(ctx context.Context, manufacturer string) (*dtos.Facets, error)
 
 	// Codecs returns the codecs available for one model.
 	Codecs(ctx context.Context, vendor, slug string) ([]dtos.Codec, error)

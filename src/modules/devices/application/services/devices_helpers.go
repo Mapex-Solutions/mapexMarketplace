@@ -94,6 +94,7 @@ func (s *DevicesService) mapFacets(set repositories.FacetSet) *dtos.Facets {
 		Protocols:     s.mapFacetList(set.Protocols),
 		ReadingTypes:  s.mapFacetList(set.ReadingTypes),
 		Manufacturers: s.mapFacetList(set.Manufacturers),
+		Models:        s.mapFacetList(set.Models),
 	}
 }
 

@@ -59,6 +59,7 @@ type Facets struct {
 	Protocols     []FacetOption `json:"protocols"`
 	ReadingTypes  []FacetOption `json:"readingTypes"`
 	Manufacturers []FacetOption `json:"manufacturers"`
+	Models        []FacetOption `json:"models"`
 }
 
 // Codec describes one payload codec available for a model. The same device may

@@ -85,7 +85,7 @@ func (a *adapter) Query(ctx context.Context, filter repositories.CatalogFilter) 
 // Facets returns the filter options actually present in the index, labelled and
 // ordered by the catalog config. Protocols/reading types with zero devices are
 // omitted so the UI never shows a filter that yields nothing.
-func (a *adapter) Facets(ctx context.Context) (repositories.FacetSet, error) {
+func (a *adapter) Facets(ctx context.Context, sel repositories.FacetSelection) (repositories.FacetSet, error) {
 	protocols, err := a.presentColumn(ctx, "protocol")
 	if err != nil {
 		return repositories.FacetSet{}, err
@@ -98,10 +98,15 @@ func (a *adapter) Facets(ctx context.Context) (repositories.FacetSet, error) {
 	if err != nil {
 		return repositories.FacetSet{}, err
 	}
+	models, err := a.distinctModels(ctx, sel.Manufacturer)
+	if err != nil {
+		return repositories.FacetSet{}, err
+	}
 	return repositories.FacetSet{
 		Protocols:     filterFacets(a.config.Protocols, protocols),
 		ReadingTypes:  filterFacets(a.config.ReadingTypes, readingTypes),
 		Manufacturers: manufacturers,
+		Models:        models,
 	}, nil
 }
 
@@ -259,6 +264,35 @@ func (a *adapter) replaceIndex(ctx context.Context, items []entities.CatalogItem
 // distinctManufacturers returns the vendor names present in the index as facets.
 func (a *adapter) distinctManufacturers(ctx context.Context) ([]repositories.Facet, error) {
 	rows, err := a.db.QueryContext(ctx, "SELECT DISTINCT vendor_name FROM "+tableDeviceCatalog+" ORDER BY vendor_name")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	facets := []repositories.Facet{}
+	for rows.Next() {
+		var name string
+		if err := rows.Scan(&name); err != nil {
+			return nil, err
+		}
+		facets = append(facets, repositories.Facet{Value: name, Label: name})
+	}
+	return facets, rows.Err()
+}
+
+// distinctModels returns the model names present in the index as facets, the
+// second drill-down level. A non-empty manufacturer narrows the list to that
+// vendor (drill-down: vendor -> model); empty returns every model.
+func (a *adapter) distinctModels(ctx context.Context, manufacturer string) ([]repositories.Facet, error) {
+	query := "SELECT DISTINCT model FROM " + tableDeviceCatalog
+	args := []any{}
+	if manufacturer != "" {
+		query += " WHERE vendor_name = ?"
+		args = append(args, manufacturer)
+	}
+	query += " ORDER BY model"
+
+	rows, err := a.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}

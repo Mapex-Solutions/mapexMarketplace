@@ -17,21 +17,23 @@ import (
 // mockCatalogRepo is an inline mock of the catalog repository port; each field
 // drives the matching method's return, and lastFilter captures what Query saw.
 type mockCatalogRepo struct {
-	items      []entities.CatalogItem
-	total      int
-	lastFilter repositories.CatalogFilter
-	facets     repositories.FacetSet
-	raw        json.RawMessage
-	rawErr     error
-	reloadN    int
-	codecs     []entities.Codec
+	items        []entities.CatalogItem
+	total        int
+	lastFilter   repositories.CatalogFilter
+	facets       repositories.FacetSet
+	lastFacetSel repositories.FacetSelection
+	raw          json.RawMessage
+	rawErr       error
+	reloadN      int
+	codecs       []entities.Codec
 }
 
 func (m *mockCatalogRepo) Query(_ context.Context, f repositories.CatalogFilter) ([]entities.CatalogItem, int, error) {
 	m.lastFilter = f
 	return m.items, m.total, nil
 }
-func (m *mockCatalogRepo) Facets(_ context.Context) (repositories.FacetSet, error) {
+func (m *mockCatalogRepo) Facets(_ context.Context, sel repositories.FacetSelection) (repositories.FacetSet, error) {
+	m.lastFacetSel = sel
 	return m.facets, nil
 }
 func (m *mockCatalogRepo) GetInformation(_ context.Context, _, _ string) (json.RawMessage, error) {
@@ -78,6 +80,32 @@ func TestDevicesService_ListResolvesPaging(t *testing.T) {
 				t.Fatalf("response page/perPage = %d/%d, want %d/%d", res.Page, res.PerPage, tt.wantPage, tt.wantPerPage)
 			}
 		})
+	}
+}
+
+func TestDevicesService_FacetsPassesManufacturerAndMapsModels(t *testing.T) {
+	repo := &mockCatalogRepo{
+		facets: repositories.FacetSet{
+			Manufacturers: []repositories.Facet{{Value: "Dragino", Label: "Dragino"}},
+			Models:        []repositories.Facet{{Value: "LHT65N", Label: "LHT65N"}, {Value: "LDS12", Label: "LDS12"}},
+		},
+	}
+	svc := New(di.DevicesServiceDI{Repo: repo})
+
+	res, err := svc.Facets(context.Background(), "Dragino")
+	if err != nil {
+		t.Fatalf("Facets: %v", err)
+	}
+	// The manufacturer pick must reach the repository as the drill-down selection.
+	if repo.lastFacetSel.Manufacturer != "Dragino" {
+		t.Fatalf("manufacturer not passed to repo: %q", repo.lastFacetSel.Manufacturer)
+	}
+	// The new Models level must be mapped onto the wire DTO.
+	if len(res.Models) != 2 || res.Models[0].Value != "LHT65N" || res.Models[1].Value != "LDS12" {
+		t.Fatalf("models not mapped to DTO: %+v", res.Models)
+	}
+	if len(res.Manufacturers) != 1 || res.Manufacturers[0].Value != "Dragino" {
+		t.Fatalf("manufacturers not mapped: %+v", res.Manufacturers)
 	}
 }
 

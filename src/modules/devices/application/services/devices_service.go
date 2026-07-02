@@ -10,6 +10,7 @@ import (
 	"mapexmarketplace/src/modules/devices/application/di"
 	"mapexmarketplace/src/modules/devices/application/dtos"
 	"mapexmarketplace/src/modules/devices/application/ports"
+	"mapexmarketplace/src/modules/devices/domain/repositories"
 )
 
 // notFound is the 404 the global error handler renders as an envelope. It is
@@ -38,8 +39,8 @@ func (s *DevicesService) List(ctx context.Context, query *dtos.CatalogQuery) (*d
 }
 
 // Facets returns the listing filter options mapped to their wire DTO.
-func (s *DevicesService) Facets(ctx context.Context) (*dtos.Facets, error) {
-	set, err := s.deps.Repo.Facets(ctx)
+func (s *DevicesService) Facets(ctx context.Context, manufacturer string) (*dtos.Facets, error) {
+	set, err := s.deps.Repo.Facets(ctx, repositories.FacetSelection{Manufacturer: manufacturer})
 	if err != nil {
 		return nil, err
 	}

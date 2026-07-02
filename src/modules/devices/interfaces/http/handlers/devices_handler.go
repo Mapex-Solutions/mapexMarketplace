@@ -41,7 +41,7 @@ func ListDevices(service ports.DevicesServicePort) web.Handler {
 // Returns 200 OK with the Facets DTO.
 func GetFacets(service ports.DevicesServicePort) web.Handler {
 	return func(c *web.Ctx) error {
-		retData, err := service.Facets(c.UserContext())
+		retData, err := service.Facets(c.UserContext(), c.Query("manufacturer"))
 		if err != nil {
 			return err
 		}

@@ -23,4 +23,12 @@ type FacetSet struct {
 	Protocols     []Facet
 	ReadingTypes  []Facet
 	Manufacturers []Facet
+	Models        []Facet
+}
+
+// FacetSelection narrows the drill-down facets by the user's current pick.
+// Empty fields impose no narrowing, so a zero selection yields the top level.
+type FacetSelection struct {
+	// Manufacturer narrows Models to that vendor (drill-down: vendor -> model).
+	Manufacturer string
 }

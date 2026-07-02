@@ -20,9 +20,9 @@ type DeviceCatalogRepository interface {
 	// Query returns the page of items matching the filter plus the total count.
 	Query(ctx context.Context, filter CatalogFilter) ([]entities.CatalogItem, int, error)
 
-	// Facets returns the available filter options (protocols, reading types,
-	// manufacturers) actually present in the current catalog.
-	Facets(ctx context.Context) (FacetSet, error)
+	// Facets returns the available filter options actually present in the catalog.
+	// The selection narrows the drill-down levels (e.g. manufacturer -> models).
+	Facets(ctx context.Context, sel FacetSelection) (FacetSet, error)
 
 	// ListCodecs returns the codecs shipped with one model, read from its
 	// codecs/{id}/codec.json folders.

@@ -22,7 +22,7 @@ type CatalogItem struct {
 	Image         string
 	HasImage      bool
 	// FieldCount is the number of fields the template defines; HasScripts flags
-	// whether the template ships device scripts.
+	// whether the template ships scripts.
 	FieldCount int
 	HasScripts bool
 	Sha256     string

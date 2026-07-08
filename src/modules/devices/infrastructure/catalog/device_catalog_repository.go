@@ -14,6 +14,7 @@ import (
 
 	"mapexmarketplace/src/modules/devices/domain/entities"
 	"mapexmarketplace/src/modules/devices/domain/repositories"
+	"mapexmarketplace/src/shared/bundle"
 )
 
 // The catalog index is a bespoke search store, not entity CRUD: its queries need
@@ -168,7 +169,7 @@ func (a *adapter) GetAsset(ctx context.Context, vendor, slug, name string) ([]by
 		return nil, "", err
 	}
 	full := filepath.Join(dir, filepath.Clean("/"+name))
-	if full != dir && !pathWithin(dir, full) {
+	if full != dir && !bundle.PathWithin(dir, full) {
 		return nil, "", repositories.ErrNotFound
 	}
 	data, err := os.ReadFile(full)
@@ -234,14 +235,12 @@ func (a *adapter) readManifests() ([]entities.CatalogItem, error) {
 	return items, nil
 }
 
-// replaceIndex clears the table and inserts every item in one transaction.
+// replaceIndex inserts every item in one transaction. Reload recreates the table
+// (DROP + CREATE) immediately before this, so it is already empty — no clear step
+// is needed here.
 func (a *adapter) replaceIndex(ctx context.Context, items []entities.CatalogItem) (int, error) {
 	tx, err := a.db.BeginTx(ctx, nil)
 	if err != nil {
-		return 0, err
-	}
-	if _, err := tx.ExecContext(ctx, "DELETE FROM "+tableDeviceCatalog); err != nil {
-		_ = tx.Rollback()
 		return 0, err
 	}
 	for i := range items {
@@ -427,19 +426,4 @@ func scanItems(rows *sql.Rows) ([]entities.CatalogItem, error) {
 		items = append(items, item)
 	}
 	return items, rows.Err()
-}
-
-// pathWithin reports whether target sits inside base (after cleaning), guarding
-// asset reads against directory traversal.
-func pathWithin(base, target string) bool {
-	rel, err := filepath.Rel(base, target)
-	if err != nil {
-		return false
-	}
-	return rel != ".." && !filepath.IsAbs(rel) && !hasParentPrefix(rel)
-}
-
-// hasParentPrefix reports whether a relative path escapes upward ("../...").
-func hasParentPrefix(rel string) bool {
-	return rel == ".." || (len(rel) >= 3 && rel[:3] == ".."+string(filepath.Separator))
 }

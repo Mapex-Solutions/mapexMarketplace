@@ -30,7 +30,10 @@ type CatalogQuery struct {
 	Protocol     string `json:"protocol"`
 	ReadingType  string `json:"readingType"`
 	Manufacturer string `json:"manufacturer"`
-	Search       string `json:"search"`
+	// Model narrows the listing to one model (the second drill-down level after
+	// Manufacturer); empty matches every model.
+	Model  string `json:"model"`
+	Search string `json:"search"`
 	// Lang selects the locale for the resolved card description (e.g. "pt-BR");
 	// empty falls back to en-US.
 	Lang    string `json:"lang"`

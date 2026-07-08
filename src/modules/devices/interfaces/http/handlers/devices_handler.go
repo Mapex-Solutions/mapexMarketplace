@@ -23,6 +23,7 @@ func ListDevices(service ports.DevicesServicePort) web.Handler {
 			Protocol:     c.Query("protocol"),
 			ReadingType:  c.Query("readingType"),
 			Manufacturer: c.Query("manufacturer"),
+			Model:        c.Query("model"),
 			Search:       c.Query("search"),
 			Lang:         c.Query("lang"),
 			Page:         atoi(c.Query("page")),

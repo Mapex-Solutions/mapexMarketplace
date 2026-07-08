@@ -29,7 +29,7 @@
 			"hasImage": false,
 			"fieldCount": 6,
 			"hasScripts": true,
-			"sha256": "6a0020cbce4cbfb12d06229fb422e36479824eb6e70b021e33dfddf4ae12b413"
+			"sha256": "850b6ade35f09ac30db3a2fd68d5a17001a55eb147f0db61e79ded93ea3686fa"
 		},
 		{
 			"id": "disruptive-technologies-desk-occupancy",
@@ -53,7 +53,7 @@
 			"hasImage": false,
 			"fieldCount": 3,
 			"hasScripts": true,
-			"sha256": "42254b49a9b99535afe98582dc509a307a6a5cc81f902577accf1ad2fc42274a"
+			"sha256": "2cf9887c7e8b4e7f0aa67a1542091c9d959216f72950d42f09e5cc210c594e39"
 		},
 		{
 			"id": "disruptive-technologies-door-window",
@@ -77,7 +77,7 @@
 			"hasImage": false,
 			"fieldCount": 3,
 			"hasScripts": true,
-			"sha256": "e40067afc7890b10f1d623666d8a36a4e71d6dda2d16141f8007ab9cc1e0dafe"
+			"sha256": "ecbbf91d16197f82469986e3ad04d36c67b75936c0a142a6e53ec17ed71803ae"
 		},
 		{
 			"id": "disruptive-technologies-motion",
@@ -101,7 +101,7 @@
 			"hasImage": false,
 			"fieldCount": 3,
 			"hasScripts": true,
-			"sha256": "e02ac3fc74d2deda557aadd28c2bd312b4e508b83293a090d359c3424cc73edd"
+			"sha256": "5f683759ce25d860d3fb30b1dbc4a41e4cb086e91619408a8b28f183a9b8c8e7"
 		},
 		{
 			"id": "disruptive-technologies-proximity",
@@ -125,7 +125,7 @@
 			"hasImage": false,
 			"fieldCount": 4,
 			"hasScripts": true,
-			"sha256": "930a412bb2090f5c833af1f9c4f02ef87d71050d17158536f9b09c8612a5c8df"
+			"sha256": "ad243ee705fa339252e0a8786ed6fa6dd060d66c50c216873265755b774c71bd"
 		},
 		{
 			"id": "disruptive-technologies-tactile-touch",
@@ -149,7 +149,7 @@
 			"hasImage": false,
 			"fieldCount": 2,
 			"hasScripts": true,
-			"sha256": "a20559ee400c95470875e940247fe744e7da5d4864ff4edfd5ecc9579604131a"
+			"sha256": "1d87afb6a53d800adaa452fd95573d4f19e83c2835472b066d4b64ba6236a0b4"
 		},
 		{
 			"id": "disruptive-technologies-temperature",
@@ -173,7 +173,7 @@
 			"hasImage": false,
 			"fieldCount": 3,
 			"hasScripts": true,
-			"sha256": "c669b66335551658e4d62ffe2e8af5e90d36ab8dd48f20dd38960b143fce04a6"
+			"sha256": "4233ca900fef35ebdabb10c1d66ecfadbd64f86d0c1197f692b3aff49298678e"
 		},
 		{
 			"id": "disruptive-technologies-temperature-humidity",
@@ -197,7 +197,7 @@
 			"hasImage": false,
 			"fieldCount": 4,
 			"hasScripts": true,
-			"sha256": "831cb2f7cfd43e0d7b40193a4ce9eab2a3f7dce99252d1b8c9f866e8724ade28"
+			"sha256": "bde3a4f4a7fba021282e87dd91605bc6d48f766235b6807d671a208c590334cf"
 		},
 		{
 			"id": "disruptive-technologies-temperature-probe",
@@ -221,7 +221,7 @@
 			"hasImage": false,
 			"fieldCount": 3,
 			"hasScripts": true,
-			"sha256": "3a107fc34e33404588701e192b5e2d201db89653c158735acd77313acea34394"
+			"sha256": "a04d132ce3c23b5aa0acd29c39abbed6925d9f381fa5c00eb4e5bb30ee934743"
 		},
 		{
 			"id": "disruptive-technologies-water",
@@ -245,7 +245,7 @@
 			"hasImage": false,
 			"fieldCount": 3,
 			"hasScripts": true,
-			"sha256": "a03c2978084e290b19022ce07ac56e3c6c61b850bd711c2cb4d893b899b6a24a"
+			"sha256": "a698c6d42fb3b70e0aac963bd86573e25598aafe918e5a09e06aee0a85ff0852"
 		}
 	]
 }

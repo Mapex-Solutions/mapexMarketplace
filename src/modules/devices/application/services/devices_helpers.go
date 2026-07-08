@@ -17,6 +17,7 @@ func (s *DevicesService) buildFilter(query *dtos.CatalogQuery) repositories.Cata
 		Protocol:     query.Protocol,
 		ReadingType:  query.ReadingType,
 		Manufacturer: query.Manufacturer,
+		Model:        query.Model,
 		Search:       query.Search,
 		Limit:        perPage,
 		Offset:       (page - 1) * perPage,

@@ -19,16 +19,16 @@ func notFound() error {
 }
 
 // Compile-time check that the service satisfies its port.
-var _ ports.PluginsServicePort = (*PluginsService)(nil)
+var _ ports.WorkflowPluginsServicePort = (*WorkflowPluginsService)(nil)
 
 // New builds the plugins catalog service over its injected repository port.
-func New(deps di.PluginsServiceDI) ports.PluginsServicePort {
-	return &PluginsService{deps: deps}
+func New(deps di.WorkflowPluginsServiceDI) ports.WorkflowPluginsServicePort {
+	return &WorkflowPluginsService{deps: deps}
 }
 
 // List resolves the query into a repository filter, runs it against the index,
 // and maps the matching rows into a paginated response.
-func (s *PluginsService) List(ctx context.Context, query *dtos.CatalogQuery) (*dtos.CatalogListResponse, error) {
+func (s *WorkflowPluginsService) List(ctx context.Context, query *dtos.CatalogQuery) (*dtos.CatalogListResponse, error) {
 	filter := s.buildFilter(query)
 	items, total, err := s.deps.Repo.Query(ctx, filter)
 	if err != nil {
@@ -38,7 +38,7 @@ func (s *PluginsService) List(ctx context.Context, query *dtos.CatalogQuery) (*d
 }
 
 // Facets returns the listing filter options mapped to their wire DTO.
-func (s *PluginsService) Facets(ctx context.Context) (*dtos.Facets, error) {
+func (s *WorkflowPluginsService) Facets(ctx context.Context) (*dtos.Facets, error) {
 	set, err := s.deps.Repo.Facets(ctx)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func (s *PluginsService) Facets(ctx context.Context) (*dtos.Facets, error) {
 }
 
 // GetInformation returns the plugin's information sheet, or 404 when unknown.
-func (s *PluginsService) GetInformation(ctx context.Context, vendor, slug string) (json.RawMessage, error) {
+func (s *WorkflowPluginsService) GetInformation(ctx context.Context, vendor, slug string) (json.RawMessage, error) {
 	raw, err := s.deps.Repo.GetInformation(ctx, vendor, slug)
 	if err != nil {
 		return nil, s.mapNotFound(err)
@@ -56,7 +56,7 @@ func (s *PluginsService) GetInformation(ctx context.Context, vendor, slug string
 }
 
 // GetEvents returns the plugin's events catalog, or 404 when unknown.
-func (s *PluginsService) GetEvents(ctx context.Context, vendor, slug string) (json.RawMessage, error) {
+func (s *WorkflowPluginsService) GetEvents(ctx context.Context, vendor, slug string) (json.RawMessage, error) {
 	raw, err := s.deps.Repo.GetEvents(ctx, vendor, slug)
 	if err != nil {
 		return nil, s.mapNotFound(err)
@@ -65,7 +65,7 @@ func (s *PluginsService) GetEvents(ctx context.Context, vendor, slug string) (js
 }
 
 // GetAsset returns a bundle asset and its content type, or 404 when unknown.
-func (s *PluginsService) GetAsset(ctx context.Context, vendor, slug, name string) ([]byte, string, error) {
+func (s *WorkflowPluginsService) GetAsset(ctx context.Context, vendor, slug, name string) ([]byte, string, error) {
 	data, contentType, err := s.deps.Repo.GetAsset(ctx, vendor, slug, name)
 	if err != nil {
 		return nil, "", s.mapNotFound(err)

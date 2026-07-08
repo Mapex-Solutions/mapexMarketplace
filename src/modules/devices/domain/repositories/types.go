@@ -6,6 +6,7 @@ type CatalogFilter struct {
 	Protocol     string
 	ReadingType  string
 	Manufacturer string
+	Model        string
 	Search       string
 	Limit        int
 	Offset       int

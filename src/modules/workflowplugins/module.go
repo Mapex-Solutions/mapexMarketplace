@@ -26,13 +26,13 @@ func InitRepositories() {
 	catalogDir, _ := config.GetStringValue("catalog_dir")
 	pluginsDir := filepath.Join(catalogDir, "workflow_plugins")
 
-	if err := c.Provide(func(mgr *sqliteManager.SQLiteManager) repositories.PluginCatalogRepository {
+	if err := c.Provide(func(mgr *sqliteManager.SQLiteManager) repositories.WorkflowPluginCatalogRepository {
 		return catalogRepo.New(mgr, pluginsDir)
 	}); err != nil {
 		logger.Panic("[MODULE:WorkflowPlugins] provide repository: " + err.Error())
 	}
 
-	if err := c.Invoke(func(repo repositories.PluginCatalogRepository) {
+	if err := c.Invoke(func(repo repositories.WorkflowPluginCatalogRepository) {
 		count, err := repo.Reload(context.Background())
 		if err != nil {
 			logger.Panic("[MODULE:WorkflowPlugins] build index: " + err.Error())
@@ -58,7 +58,7 @@ func InitServices() {
 // over the resolved service port.
 func InitInterfaces() {
 	c := container.GetContainer()
-	if err := c.Invoke(func(app *web.App, svc ports.PluginsServicePort) {
+	if err := c.Invoke(func(app *web.App, svc ports.WorkflowPluginsServicePort) {
 		group := app.Group("/api/v1/workflow_plugins")
 		routes.RegisterRoutes(group, svc)
 		logger.Info("[MODULE:WorkflowPlugins] Routes registered")

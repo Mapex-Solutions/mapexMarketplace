@@ -95,10 +95,10 @@ type docView struct {
 func InitDocs(app *web.App) {
 	raw, err := docsFS.ReadFile("docs/versions.json")
 	if err != nil {
-		logger.Panic("[DOCS] read versions.json: " + err.Error())
+		logger.Panic("[INFRA:Docs] read versions.json: " + err.Error())
 	}
 	if err := json.Unmarshal(raw, &docVersions); err != nil {
-		logger.Panic("[DOCS] parse versions.json: " + err.Error())
+		logger.Panic("[INFRA:Docs] parse versions.json: " + err.Error())
 	}
 
 	for _, ver := range docVersions.Versions {
@@ -127,7 +127,7 @@ func InitDocs(app *web.App) {
 
 	docTemplate, err = template.New("docs").Parse(docsLayoutRaw)
 	if err != nil {
-		logger.Panic("[DOCS] parse layout: " + err.Error())
+		logger.Panic("[INFRA:Docs] parse layout: " + err.Error())
 	}
 
 	// /docs and partial paths redirect to a concrete page on the latest version.
@@ -144,7 +144,7 @@ func InitDocs(app *web.App) {
 		return renderDoc(c, c.Params("version"), c.Params("lang"), c.Params("section"), c.Params("page"))
 	})
 
-	logger.Info("[DOCS] routes registered, versions=" + strconv.Itoa(len(docVersions.Versions)) +
+	logger.Info("[INFRA:Docs] routes registered, versions=" + strconv.Itoa(len(docVersions.Versions)) +
 		" latest=" + docVersions.Latest + " bundles=" + strconv.Itoa(len(docBundles)))
 }
 

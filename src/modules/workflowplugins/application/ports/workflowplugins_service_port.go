@@ -7,11 +7,11 @@ import (
 	"mapexmarketplace/src/modules/workflowplugins/application/dtos"
 )
 
-// PluginsServicePort is the driving port for the workflow plugin marketplace. It
+// WorkflowPluginsServicePort is the driving port for the workflow plugin marketplace. It
 // serves the searchable listing and resolves the heavy bundles (information,
 // events, assets) by id; installing a chosen plugin is the consumer's job, not
 // the catalog's.
-type PluginsServicePort interface {
+type WorkflowPluginsServicePort interface {
 	// List returns a filtered, paginated page of catalog cards.
 	List(ctx context.Context, query *dtos.CatalogQuery) (*dtos.CatalogListResponse, error)
 

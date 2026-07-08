@@ -13,6 +13,7 @@ import (
 
 	"mapexmarketplace/src/modules/workflowplugins/domain/entities"
 	"mapexmarketplace/src/modules/workflowplugins/domain/repositories"
+	"mapexmarketplace/src/shared/bundle"
 )
 
 // The catalog index is a bespoke search store, not entity CRUD: its queries need
@@ -22,12 +23,12 @@ import (
 // "wrappers only" rule, scoped to this read-only derived index.
 
 // Compile-time proof the adapter satisfies the repository port.
-var _ repositories.PluginCatalogRepository = (*adapter)(nil)
+var _ repositories.WorkflowPluginCatalogRepository = (*adapter)(nil)
 
 // New builds the plugin catalog repository over the shared SQLite index and the
 // JSON catalog directory. The index is empty until Reload runs (in the module's
 // repository init), keeping construction free of I/O.
-func New(mgr *sqliteManager.SQLiteManager, dir string) repositories.PluginCatalogRepository {
+func New(mgr *sqliteManager.SQLiteManager, dir string) repositories.WorkflowPluginCatalogRepository {
 	return &adapter{db: mgr.DB(), dir: dir}
 }
 
@@ -37,10 +38,10 @@ func New(mgr *sqliteManager.SQLiteManager, dir string) repositories.PluginCatalo
 func (a *adapter) Reload(ctx context.Context) (int, error) {
 	// Drop then recreate so the index always matches the current schema; an older
 	// DB file would otherwise survive CREATE IF NOT EXISTS and fail the insert.
-	if _, err := a.db.ExecContext(ctx, dropPluginCatalog); err != nil {
+	if _, err := a.db.ExecContext(ctx, dropWorkflowPluginCatalog); err != nil {
 		return 0, err
 	}
-	if _, err := a.db.ExecContext(ctx, ddlPluginCatalog); err != nil {
+	if _, err := a.db.ExecContext(ctx, ddlWorkflowPluginCatalog); err != nil {
 		return 0, err
 	}
 	a.loadConfig()
@@ -53,7 +54,7 @@ func (a *adapter) Reload(ctx context.Context) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	logger.Info(fmt.Sprintf("[REPO:PluginCatalog] indexed count=%d dir=%s", count, a.dir))
+	logger.Info(fmt.Sprintf("[REPO:WorkflowPluginCatalog] indexed count=%d dir=%s", count, a.dir))
 	return count, nil
 }
 
@@ -62,11 +63,11 @@ func (a *adapter) Query(ctx context.Context, filter repositories.CatalogFilter) 
 	where, args := buildWhere(filter)
 
 	var total int
-	if err := a.db.QueryRowContext(ctx, "SELECT COUNT(*) FROM "+tablePluginCatalog+where, args...).Scan(&total); err != nil {
+	if err := a.db.QueryRowContext(ctx, "SELECT COUNT(*) FROM "+tableWorkflowPluginCatalog+where, args...).Scan(&total); err != nil {
 		return nil, 0, err
 	}
 
-	listSQL := "SELECT " + selectColumns + " FROM " + tablePluginCatalog + where + " ORDER BY name_en LIMIT ? OFFSET ?"
+	listSQL := "SELECT " + selectColumns + " FROM " + tableWorkflowPluginCatalog + where + " ORDER BY name_en LIMIT ? OFFSET ?"
 	rows, err := a.db.QueryContext(ctx, listSQL, append(args, filter.Limit, filter.Offset)...)
 	if err != nil {
 		return nil, 0, err
@@ -100,12 +101,12 @@ func (a *adapter) Facets(ctx context.Context) (repositories.FacetSet, error) {
 
 // GetInformation returns the plugin's information sheet read lazily from disk.
 func (a *adapter) GetInformation(ctx context.Context, vendor, slug string) (json.RawMessage, error) {
-	return a.readPluginFile(vendor, slug, fileInformation)
+	return a.readWorkflowPluginFile(vendor, slug, fileInformation)
 }
 
 // GetEvents returns the plugin's events catalog read lazily from disk.
 func (a *adapter) GetEvents(ctx context.Context, vendor, slug string) (json.RawMessage, error) {
-	return a.readPluginFile(vendor, slug, fileEvents)
+	return a.readWorkflowPluginFile(vendor, slug, fileEvents)
 }
 
 // GetAsset returns a bundle asset (icon, image) and its content type, guarding
@@ -116,7 +117,7 @@ func (a *adapter) GetAsset(ctx context.Context, vendor, slug, name string) ([]by
 		return nil, "", err
 	}
 	full := filepath.Join(dir, filepath.Clean("/"+name))
-	if full != dir && !pathWithin(dir, full) {
+	if full != dir && !bundle.PathWithin(dir, full) {
 		return nil, "", repositories.ErrNotFound
 	}
 	data, err := os.ReadFile(full)
@@ -135,7 +136,7 @@ func (a *adapter) loadConfig() {
 		return
 	}
 	if err := json.Unmarshal(data, &a.config); err != nil {
-		logger.Error(err, "[REPO:PluginCatalog] parse catalog config")
+		logger.Error(err, "[REPO:WorkflowPluginCatalog] parse catalog config")
 	}
 }
 
@@ -150,12 +151,12 @@ func (a *adapter) readManifests() ([]entities.CatalogItem, error) {
 	for _, file := range matches {
 		data, err := os.ReadFile(file)
 		if err != nil {
-			logger.Error(err, "[REPO:PluginCatalog] read manifest "+file)
+			logger.Error(err, "[REPO:WorkflowPluginCatalog] read manifest "+file)
 			continue
 		}
 		var manifest vendorCatalog
 		if err := json.Unmarshal(data, &manifest); err != nil {
-			logger.Error(err, "[REPO:PluginCatalog] parse manifest "+file)
+			logger.Error(err, "[REPO:WorkflowPluginCatalog] parse manifest "+file)
 			continue
 		}
 		for _, item := range manifest.Items {
@@ -186,19 +187,17 @@ func (a *adapter) readManifests() ([]entities.CatalogItem, error) {
 	return items, nil
 }
 
-// replaceIndex clears the table and inserts every item in one transaction.
+// replaceIndex inserts every item in one transaction. Reload recreates the table
+// (DROP + CREATE) immediately before this, so it is already empty — no clear step
+// is needed here.
 func (a *adapter) replaceIndex(ctx context.Context, items []entities.CatalogItem) (int, error) {
 	tx, err := a.db.BeginTx(ctx, nil)
 	if err != nil {
 		return 0, err
 	}
-	if _, err := tx.ExecContext(ctx, "DELETE FROM "+tablePluginCatalog); err != nil {
-		_ = tx.Rollback()
-		return 0, err
-	}
 	for i := range items {
 		item := items[i]
-		if _, err := tx.ExecContext(ctx, insertPluginCatalog,
+		if _, err := tx.ExecContext(ctx, insertWorkflowPluginCatalog,
 			item.ID, item.Vendor, item.VendorName, item.PluginID, item.Slug, item.NameEN, item.NamePT,
 			item.DescriptionEN, item.DescriptionPT, item.Category, wrapTokens(item.Capabilities), wrapTokens(item.Tags),
 			item.Icon, item.Color, item.Image, boolToInt(item.RequiresCredentials), item.NodeCount, item.TriggerCount,
@@ -217,7 +216,7 @@ func (a *adapter) replaceIndex(ctx context.Context, items []entities.CatalogItem
 // presentColumn returns the distinct non-empty values of a scalar column. The
 // column name is an internal constant, never user input.
 func (a *adapter) presentColumn(ctx context.Context, column string) (map[string]bool, error) {
-	rows, err := a.db.QueryContext(ctx, "SELECT DISTINCT "+column+" FROM "+tablePluginCatalog)
+	rows, err := a.db.QueryContext(ctx, "SELECT DISTINCT "+column+" FROM "+tableWorkflowPluginCatalog)
 	if err != nil {
 		return nil, err
 	}
@@ -239,7 +238,7 @@ func (a *adapter) presentColumn(ctx context.Context, column string) (map[string]
 // presentTokens returns the set of tokens present across all rows of a
 // comma-wrapped multi-value column. The column name is an internal constant.
 func (a *adapter) presentTokens(ctx context.Context, column string) (map[string]bool, error) {
-	rows, err := a.db.QueryContext(ctx, "SELECT "+column+" FROM "+tablePluginCatalog)
+	rows, err := a.db.QueryContext(ctx, "SELECT "+column+" FROM "+tableWorkflowPluginCatalog)
 	if err != nil {
 		return nil, err
 	}
@@ -269,7 +268,7 @@ func (a *adapter) warnUnknownCapabilities(items []entities.CatalogItem) {
 	for _, item := range items {
 		for _, capability := range item.Capabilities {
 			if !known[capability] {
-				logger.Warn(fmt.Sprintf("[REPO:PluginCatalog] unknown capability=%q id=%s (add it to catalog_config.json)", capability, item.ID))
+				logger.Warn(fmt.Sprintf("[REPO:WorkflowPluginCatalog] unknown capability=%q id=%s (add it to catalog_config.json)", capability, item.ID))
 			}
 		}
 	}
@@ -283,9 +282,9 @@ func (a *adapter) pluginDir(vendor, slug string) (string, error) {
 	return filepath.Join(a.dir, "vendors", vendor, slug), nil
 }
 
-// readPluginFile reads a JSON bundle file from a plugin folder, mapping a missing
+// readWorkflowPluginFile reads a JSON bundle file from a plugin folder, mapping a missing
 // file to the not-found sentinel.
-func (a *adapter) readPluginFile(vendor, slug, name string) (json.RawMessage, error) {
+func (a *adapter) readWorkflowPluginFile(vendor, slug, name string) (json.RawMessage, error) {
 	dir, err := a.pluginDir(vendor, slug)
 	if err != nil {
 		return nil, err
@@ -321,19 +320,4 @@ func scanItems(rows *sql.Rows) ([]entities.CatalogItem, error) {
 		items = append(items, item)
 	}
 	return items, rows.Err()
-}
-
-// pathWithin reports whether target sits inside base (after cleaning), guarding
-// asset reads against directory traversal.
-func pathWithin(base, target string) bool {
-	rel, err := filepath.Rel(base, target)
-	if err != nil {
-		return false
-	}
-	return rel != ".." && !filepath.IsAbs(rel) && !hasParentPrefix(rel)
-}
-
-// hasParentPrefix reports whether a relative path escapes upward ("../...").
-func hasParentPrefix(rel string) bool {
-	return rel == ".." || (len(rel) >= 3 && rel[:3] == ".."+string(filepath.Separator))
 }

@@ -55,6 +55,10 @@ func buildWhere(filter repositories.CatalogFilter) (string, []any) {
 		conditions = append(conditions, "vendor_name = ?")
 		args = append(args, filter.Manufacturer)
 	}
+	if filter.Model != "" {
+		conditions = append(conditions, "model = ?")
+		args = append(args, filter.Model)
+	}
 	if filter.Search != "" {
 		conditions = append(conditions, "(name_en LIKE ? OR name_pt LIKE ? OR description_en LIKE ? OR description_pt LIKE ? OR model LIKE ?)")
 		like := "%" + filter.Search + "%"

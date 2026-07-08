@@ -1,6 +1,6 @@
 # Bounded Context: Workflow Plugins Marketplace
 
-Last reviewed: 2026-06-27
+Last reviewed: 2026-07-08
 
 ## Purpose
 
@@ -27,13 +27,13 @@ that belongs to the consuming app.
 
 ## Driving Ports
 
-- `PluginsServicePort` — list (filter + paginate), facets, get information, get
-  events, get asset.
+- `WorkflowPluginsServicePort` — list (filter + paginate), facets, get
+  information, get events, get asset.
 
 ## Driven Ports
 
-- `PluginCatalogRepository` — query/facets over the index, lazy bundle/asset
-  reads from disk, and index rebuild.
+- `WorkflowPluginCatalogRepository` — query/facets over the index, lazy
+  bundle/asset reads from disk, and index rebuild.
 
 ## Invariants
 

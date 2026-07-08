@@ -16,14 +16,14 @@ import (
 //
 //	GET  /                          - List plugins (filters + pagination)
 //	GET  /facets                    - Available filter options
-//	GET  /:vendor/:slug             - Plugin information sheet
-//	GET  /:vendor/:slug/events      - Plugin events catalog
-//	GET  /:vendor/:slug/assets/*    - Plugin bundle asset (icon, image)
+//	GET  /:vendor/:slug             - WorkflowPlugin information sheet
+//	GET  /:vendor/:slug/events      - WorkflowPlugin events catalog
+//	GET  /:vendor/:slug/assets/*    - WorkflowPlugin bundle asset (icon, image)
 //
 // Parameters:
 //   - group: the router group to register the routes on
-//   - service: the PluginsServicePort implementation
-func RegisterRoutes(group web.Router, service ports.PluginsServicePort) {
+//   - service: the WorkflowPluginsServicePort implementation
+func RegisterRoutes(group web.Router, service ports.WorkflowPluginsServicePort) {
 	// The catalog is read-only and only changes on redeploy, so let browsers
 	// and any CDN cache the responses briefly. Static bundle assets override
 	// this with a longer window in their handler.
@@ -32,7 +32,7 @@ func RegisterRoutes(group web.Router, service ports.PluginsServicePort) {
 		return c.Next()
 	})
 
-	group.Get("/", handlers.ListPlugins(service))
+	group.Get("/", handlers.ListWorkflowPlugins(service))
 	group.Get("/facets", handlers.GetFacets(service))
 
 	group.Get("/:vendor/:slug", handlers.GetInformation(service))

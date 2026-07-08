@@ -10,14 +10,11 @@ import (
 	"mapexmarketplace/src/modules/workflowplugins/application/ports"
 )
 
-// contentTypeHeader is the response header GetAsset sets from the resolved type.
-const contentTypeHeader = "Content-Type"
-
-// ListPlugins returns a handler that lists catalog plugins, reading the filters
+// ListWorkflowPlugins returns a handler that lists catalog plugins, reading the filters
 // and pagination from the query string.
 //
 // Returns 200 OK with the paginated CatalogListResponse.
-func ListPlugins(service ports.PluginsServicePort) web.Handler {
+func ListWorkflowPlugins(service ports.WorkflowPluginsServicePort) web.Handler {
 	return func(c *web.Ctx) error {
 		query := &dtos.CatalogQuery{
 			Category:   c.Query("category"),
@@ -39,7 +36,7 @@ func ListPlugins(service ports.PluginsServicePort) web.Handler {
 // GetFacets returns a handler that serves the listing filter options.
 //
 // Returns 200 OK with the Facets DTO.
-func GetFacets(service ports.PluginsServicePort) web.Handler {
+func GetFacets(service ports.WorkflowPluginsServicePort) web.Handler {
 	return func(c *web.Ctx) error {
 		retData, err := service.Facets(c.UserContext())
 		if err != nil {
@@ -52,7 +49,7 @@ func GetFacets(service ports.PluginsServicePort) web.Handler {
 // GetInformation returns a handler that serves a plugin's information sheet.
 //
 // Returns 200 OK with the raw information JSON, or 404 if the plugin is unknown.
-func GetInformation(service ports.PluginsServicePort) web.Handler {
+func GetInformation(service ports.WorkflowPluginsServicePort) web.Handler {
 	return func(c *web.Ctx) error {
 		retData, err := service.GetInformation(c.UserContext(), c.Params("vendor"), c.Params("slug"))
 		if err != nil {
@@ -65,7 +62,7 @@ func GetInformation(service ports.PluginsServicePort) web.Handler {
 // GetEvents returns a handler that serves a plugin's events catalog.
 //
 // Returns 200 OK with the raw events JSON, or 404 if the plugin is unknown.
-func GetEvents(service ports.PluginsServicePort) web.Handler {
+func GetEvents(service ports.WorkflowPluginsServicePort) web.Handler {
 	return func(c *web.Ctx) error {
 		retData, err := service.GetEvents(c.UserContext(), c.Params("vendor"), c.Params("slug"))
 		if err != nil {
@@ -79,7 +76,7 @@ func GetEvents(service ports.PluginsServicePort) web.Handler {
 // content type. The asset path is the wildcard segment.
 //
 // Returns 200 OK with the raw file, or 404 if the asset is unknown.
-func GetAsset(service ports.PluginsServicePort) web.Handler {
+func GetAsset(service ports.WorkflowPluginsServicePort) web.Handler {
 	return func(c *web.Ctx) error {
 		data, contentType, err := service.GetAsset(c.UserContext(), c.Params("vendor"), c.Params("slug"), c.Params("*"))
 		if err != nil {

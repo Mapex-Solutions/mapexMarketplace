@@ -2,6 +2,7 @@ package catalog
 
 import (
 	"context"
+	"crypto/sha256"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -14,6 +15,7 @@ import (
 
 	"mapexmarketplace/src/modules/assettemplates/domain/entities"
 	"mapexmarketplace/src/modules/assettemplates/domain/repositories"
+	"mapexmarketplace/src/shared/bundle"
 )
 
 // The catalog index is a bespoke search store, not entity CRUD: its queries need
@@ -50,6 +52,7 @@ func (a *adapter) Reload(ctx context.Context) (int, error) {
 		return 0, err
 	}
 	a.warnUnknownCategories(items)
+	a.verifyChecksums(items)
 	count, err := a.replaceIndex(ctx, items)
 	if err != nil {
 		return 0, err
@@ -115,6 +118,29 @@ func (a *adapter) GetInformation(ctx context.Context, vendor, slug string) (json
 	return a.readTemplateFile(vendor, slug, fileInformation)
 }
 
+// GetItem returns the single indexed row for one template, or ErrNotFound. It
+// reuses the listing column list and scanner for consistency, with an exact
+// (vendor, slug) match instead of the filtered/paginated list query.
+func (a *adapter) GetItem(ctx context.Context, vendor, slug string) (*entities.CatalogItem, error) {
+	rows, err := a.db.QueryContext(ctx,
+		"SELECT "+selectColumns+" FROM "+tableAssetTemplateCatalog+" WHERE vendor = ? AND slug = ? LIMIT 1",
+		vendor, slug,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	items, err := scanItems(rows)
+	if err != nil {
+		return nil, err
+	}
+	if len(items) == 0 {
+		return nil, repositories.ErrNotFound
+	}
+	return &items[0], nil
+}
+
 // GetAsset returns a bundle asset (icon, image) and its content type, guarding
 // the asset path against traversal outside the template folder.
 func (a *adapter) GetAsset(ctx context.Context, vendor, slug, name string) ([]byte, string, error) {
@@ -123,7 +149,7 @@ func (a *adapter) GetAsset(ctx context.Context, vendor, slug, name string) ([]by
 		return nil, "", err
 	}
 	full := filepath.Join(dir, filepath.Clean("/"+name))
-	if full != dir && !pathWithin(dir, full) {
+	if full != dir && !bundle.PathWithin(dir, full) {
 		return nil, "", repositories.ErrNotFound
 	}
 	data, err := os.ReadFile(full)
@@ -191,14 +217,35 @@ func (a *adapter) readManifests() ([]entities.CatalogItem, error) {
 	return items, nil
 }
 
-// replaceIndex clears the table and inserts every item in one transaction.
+// verifyChecksums warns when an indexed template's published sha256 no longer
+// matches its on-disk information sheet. That sha256 is served as an integrity
+// header the installer hard-verifies against the exact bytes it receives, so a
+// drift (a bundle edited without regenerating catalog.json) would make every
+// client reject an otherwise-valid template. Catching it at index build surfaces
+// the drift in the logs before any install starts failing.
+func (a *adapter) verifyChecksums(items []entities.CatalogItem) {
+	for i := range items {
+		item := items[i]
+		if item.Sha256 == "" {
+			continue
+		}
+		data, err := os.ReadFile(filepath.Join(a.dir, "vendors", item.Vendor, item.Slug, fileInformation))
+		if err != nil {
+			continue
+		}
+		actual := fmt.Sprintf("%x", sha256.Sum256(data))
+		if actual != item.Sha256 {
+			logger.Warn(fmt.Sprintf("[REPO:AssetTemplateCatalog] sha256 drift for %s/%s: catalog=%s file=%s (regenerate catalog.json)", item.Vendor, item.Slug, item.Sha256, actual))
+		}
+	}
+}
+
+// replaceIndex inserts every item in one transaction. Reload recreates the table
+// (DROP + CREATE) immediately before this, so it is already empty — no clear step
+// is needed here.
 func (a *adapter) replaceIndex(ctx context.Context, items []entities.CatalogItem) (int, error) {
 	tx, err := a.db.BeginTx(ctx, nil)
 	if err != nil {
-		return 0, err
-	}
-	if _, err := tx.ExecContext(ctx, "DELETE FROM "+tableAssetTemplateCatalog); err != nil {
-		_ = tx.Rollback()
 		return 0, err
 	}
 	for i := range items {
@@ -383,19 +430,4 @@ func scanItems(rows *sql.Rows) ([]entities.CatalogItem, error) {
 		items = append(items, item)
 	}
 	return items, rows.Err()
-}
-
-// pathWithin reports whether target sits inside base (after cleaning), guarding
-// asset reads against directory traversal.
-func pathWithin(base, target string) bool {
-	rel, err := filepath.Rel(base, target)
-	if err != nil {
-		return false
-	}
-	return rel != ".." && !filepath.IsAbs(rel) && !hasParentPrefix(rel)
-}
-
-// hasParentPrefix reports whether a relative path escapes upward ("../...").
-func hasParentPrefix(rel string) bool {
-	return rel == ".." || (len(rel) >= 3 && rel[:3] == ".."+string(filepath.Separator))
 }

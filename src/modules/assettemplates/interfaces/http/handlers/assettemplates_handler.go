@@ -8,10 +8,8 @@ import (
 
 	"mapexmarketplace/src/modules/assettemplates/application/dtos"
 	"mapexmarketplace/src/modules/assettemplates/application/ports"
+	"mapexmarketplace/src/shared/bundle"
 )
-
-// contentTypeHeader is the response header GetAsset sets from the resolved type.
-const contentTypeHeader = "Content-Type"
 
 // ListTemplates returns a handler that lists catalog asset templates, reading the
 // filters and pagination from the query string.
@@ -56,11 +54,15 @@ func GetFacets(service ports.AssetTemplatesServicePort) web.Handler {
 // Returns 200 OK with the raw information JSON, or 404 if the template is unknown.
 func GetInformation(service ports.AssetTemplatesServicePort) web.Handler {
 	return func(c *web.Ctx) error {
-		retData, err := service.GetInformation(c.UserContext(), c.Params("vendor"), c.Params("slug"))
+		retData, marketplaceGuid, sha256, err := service.GetInformation(c.UserContext(), c.Params("vendor"), c.Params("slug"))
 		if err != nil {
 			return err
 		}
-		return response.Success(c, retData)
+		// Serve the raw on-disk bundle verbatim (never the {status,errors,data}
+		// envelope) so the install can hard-verify the published sha256 against these
+		// exact bytes; the shared helper attaches the identity/integrity headers and
+		// keeps the response out of shared caches that could strip them.
+		return bundle.ServeVerifiableBundle(c, []byte(retData), marketplaceGuid, sha256)
 	}
 }
 

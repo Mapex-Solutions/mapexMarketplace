@@ -9,7 +9,7 @@
 	"items": [
 		{
 			"id": "disruptive-technologies-co2",
-			"marketplaceGuid": "a94d3c44-d119-5fe8-891d-86910942fc6b",
+			"marketplaceGuid": "bd149115-7a33-57f0-adb6-53191d58265f",
 			"slug": "co2",
 			"name": {
 				"en-US": "CO2 - Measures CO2, temperature, humidity and air pressure",
@@ -23,17 +23,17 @@
 			"vendor": "disruptive-technologies",
 			"vendorName": "Disruptive Technologies",
 			"model": "CO2",
-			"version": "1.0",
+			"version": "1.0.0",
 			"icon": "",
 			"image": "",
 			"hasImage": false,
 			"fieldCount": 6,
 			"hasScripts": true,
-			"sha256": "850b6ade35f09ac30db3a2fd68d5a17001a55eb147f0db61e79ded93ea3686fa"
+			"sha256": "dc58613ca74cd6870fce1c7b6fb5429c4d3ef223acde82f071706ee99e11d934"
 		},
 		{
 			"id": "disruptive-technologies-desk-occupancy",
-			"marketplaceGuid": "3960e1c2-1bdc-55e0-9dbd-11dd232c2188",
+			"marketplaceGuid": "d67834ce-42b4-5e48-af5d-d03c0eefa192",
 			"slug": "desk-occupancy",
 			"name": {
 				"en-US": "DESK OCCUPANCY - Detects the presence of someone at a desk",
@@ -47,17 +47,17 @@
 			"vendor": "disruptive-technologies",
 			"vendorName": "Disruptive Technologies",
 			"model": "DESK OCCUPANCY",
-			"version": "1.0",
+			"version": "1.0.0",
 			"icon": "",
 			"image": "",
 			"hasImage": false,
 			"fieldCount": 3,
 			"hasScripts": true,
-			"sha256": "2cf9887c7e8b4e7f0aa67a1542091c9d959216f72950d42f09e5cc210c594e39"
+			"sha256": "0626cf46144a03b526b8e115f11a523be097aac0de2d9e28bc1970b9100ed249"
 		},
 		{
 			"id": "disruptive-technologies-door-window",
-			"marketplaceGuid": "c855e2a4-d324-5960-b340-a2d517427808",
+			"marketplaceGuid": "1809b494-7033-57d9-b395-20d4502bc1a2",
 			"slug": "door-window",
 			"name": {
 				"en-US": "DOOR & WINDOW - Detects if doors or windows are open or closed in real-time",
@@ -71,17 +71,17 @@
 			"vendor": "disruptive-technologies",
 			"vendorName": "Disruptive Technologies",
 			"model": "DOOR & WINDOW",
-			"version": "1.0",
+			"version": "1.0.0",
 			"icon": "",
 			"image": "",
 			"hasImage": false,
 			"fieldCount": 3,
 			"hasScripts": true,
-			"sha256": "ecbbf91d16197f82469986e3ad04d36c67b75936c0a142a6e53ec17ed71803ae"
+			"sha256": "fa09bf98a32a8ace1b80fb06d564de7644faba0edfa1e8c3a61240d3fb7fe0f8"
 		},
 		{
 			"id": "disruptive-technologies-motion",
-			"marketplaceGuid": "654dc568-bfd9-5b49-9ce7-dcd45a6789fd",
+			"marketplaceGuid": "b9ed2e11-6e41-520f-8187-0643d108b161",
 			"slug": "motion",
 			"name": {
 				"en-US": "MOTION - Detects the presence of people in a room",
@@ -95,17 +95,17 @@
 			"vendor": "disruptive-technologies",
 			"vendorName": "Disruptive Technologies",
 			"model": "MOTION",
-			"version": "1.0",
+			"version": "1.0.0",
 			"icon": "",
 			"image": "",
 			"hasImage": false,
 			"fieldCount": 3,
 			"hasScripts": true,
-			"sha256": "5f683759ce25d860d3fb30b1dbc4a41e4cb086e91619408a8b28f183a9b8c8e7"
+			"sha256": "44065f9043624c93d3af7086c8d43652e0a024464a80db40f294db33f3662ef1"
 		},
 		{
 			"id": "disruptive-technologies-proximity",
-			"marketplaceGuid": "a45dad0a-6f42-5cbd-b8ad-eb7473c97d7f",
+			"marketplaceGuid": "31367eaf-0de5-5efe-8cde-8989bae8a932",
 			"slug": "proximity",
 			"name": {
 				"en-US": "PROXIMITY - Detects when an object is placed or removed within a 5 mm range",
@@ -119,17 +119,17 @@
 			"vendor": "disruptive-technologies",
 			"vendorName": "Disruptive Technologies",
 			"model": "PROXIMITY",
-			"version": "1.0",
+			"version": "1.0.0",
 			"icon": "",
 			"image": "",
 			"hasImage": false,
 			"fieldCount": 4,
 			"hasScripts": true,
-			"sha256": "ad243ee705fa339252e0a8786ed6fa6dd060d66c50c216873265755b774c71bd"
+			"sha256": "2916d777a3d12e5a6baca0b8bce3e5d054e465051a03e09cb3d72a9f8b097ea5"
 		},
 		{
 			"id": "disruptive-technologies-tactile-touch",
-			"marketplaceGuid": "2d34723f-f8b6-5312-84d5-71c4ba54ec88",
+			"marketplaceGuid": "ab6e7086-b7a0-569d-853e-1b850f53925b",
 			"slug": "tactile-touch",
 			"name": {
 				"en-US": "TACTILE TOUCH - Sends an immediate event whenever it is touched",
@@ -143,17 +143,17 @@
 			"vendor": "disruptive-technologies",
 			"vendorName": "Disruptive Technologies",
 			"model": "TACTILE TOUCH",
-			"version": "1.0",
+			"version": "1.0.0",
 			"icon": "",
 			"image": "",
 			"hasImage": false,
 			"fieldCount": 2,
 			"hasScripts": true,
-			"sha256": "1d87afb6a53d800adaa452fd95573d4f19e83c2835472b066d4b64ba6236a0b4"
+			"sha256": "b139feebed983335fce9f1c92e401df8a1f39b1a2e297b23d278c8b016f76dc3"
 		},
 		{
 			"id": "disruptive-technologies-temperature",
-			"marketplaceGuid": "7126b376-15b5-5cac-a186-cc1c73df88a1",
+			"marketplaceGuid": "a62870d4-7055-56cb-b1d5-cb3b5c4c2e2d",
 			"slug": "temperature",
 			"name": {
 				"en-US": "TEMPERATURE - Accurately measures temperature anywhere",
@@ -167,17 +167,17 @@
 			"vendor": "disruptive-technologies",
 			"vendorName": "Disruptive Technologies",
 			"model": "TEMPERATURE",
-			"version": "1.0",
+			"version": "1.0.0",
 			"icon": "",
 			"image": "",
 			"hasImage": false,
 			"fieldCount": 3,
 			"hasScripts": true,
-			"sha256": "4233ca900fef35ebdabb10c1d66ecfadbd64f86d0c1197f692b3aff49298678e"
+			"sha256": "7cb2249f543063543e41df29132835ac771875f035994b26c174f689ef59c409"
 		},
 		{
 			"id": "disruptive-technologies-temperature-humidity",
-			"marketplaceGuid": "fb0a5972-94e6-5af4-bc7f-d78857cbc1b5",
+			"marketplaceGuid": "e4dbfca9-887f-53ec-898a-3e63dd87ef79",
 			"slug": "temperature-humidity",
 			"name": {
 				"en-US": "TEMPERATURE & HUMIDITY - Measures relative humidity and temperature",
@@ -191,17 +191,17 @@
 			"vendor": "disruptive-technologies",
 			"vendorName": "Disruptive Technologies",
 			"model": "TEMPERATURE & HUMIDITY",
-			"version": "1.0",
+			"version": "1.0.0",
 			"icon": "",
 			"image": "",
 			"hasImage": false,
 			"fieldCount": 4,
 			"hasScripts": true,
-			"sha256": "bde3a4f4a7fba021282e87dd91605bc6d48f766235b6807d671a208c590334cf"
+			"sha256": "4d8af5496c5d47556894b426463a90c8b23d9afacf5d9d67ab14134dbb34d043"
 		},
 		{
 			"id": "disruptive-technologies-temperature-probe",
-			"marketplaceGuid": "02958606-c393-5c4a-819e-8c160311469f",
+			"marketplaceGuid": "046e82ca-5c63-5449-80f1-1a8d116f9dfd",
 			"slug": "temperature-probe",
 			"name": {
 				"en-US": "TEMPERATURE PROBE - Measures temperature in a wide range of environments",
@@ -215,17 +215,17 @@
 			"vendor": "disruptive-technologies",
 			"vendorName": "Disruptive Technologies",
 			"model": "TEMPERATURE PROBE",
-			"version": "1.0",
+			"version": "1.0.0",
 			"icon": "",
 			"image": "",
 			"hasImage": false,
 			"fieldCount": 3,
 			"hasScripts": true,
-			"sha256": "a04d132ce3c23b5aa0acd29c39abbed6925d9f381fa5c00eb4e5bb30ee934743"
+			"sha256": "978183a3a0f8fc12657d695080908abc654c2e3b9e18e61c2dbec1292380e23a"
 		},
 		{
 			"id": "disruptive-technologies-water",
-			"marketplaceGuid": "8004bc4b-106e-5c32-88a5-def3c45d1e65",
+			"marketplaceGuid": "07829170-5d38-52bf-b96d-c592130a6e5a",
 			"slug": "water",
 			"name": {
 				"en-US": "WATER - Reports the presence of water on the sensor",
@@ -239,13 +239,13 @@
 			"vendor": "disruptive-technologies",
 			"vendorName": "Disruptive Technologies",
 			"model": "WATER",
-			"version": "1.0",
+			"version": "1.0.0",
 			"icon": "",
 			"image": "",
 			"hasImage": false,
 			"fieldCount": 3,
 			"hasScripts": true,
-			"sha256": "a698c6d42fb3b70e0aac963bd86573e25598aafe918e5a09e06aee0a85ff0852"
+			"sha256": "56cb5793ebcc3d9fd0de4af0d876f75066bc30416a28968db3548136abe7fd45"
 		}
 	]
 }
